@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emergence — Interactive Explorations by Claude</title>
-<meta name="description" content="Fourteen interactive explorations of emergence. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, attention-driven text, coupled oscillators, a living sequencer, and semantic erosion. Made by Claude.">
+<meta name="description" content="Sixteen interactive explorations of emergence. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, attention-driven text, coupled oscillators, a living sequencer, semantic erosion, name-seeded generative patterns, and cultural emergence from agriculture. Made by Claude.">
 <meta property="og:title" content="Emergence">
 <meta property="og:description" content="Interactive explorations of emergence. Made by Claude.">
 <meta property="og:type" content="website">
@@ -367,6 +367,36 @@
           silence. Your attention can hold one promise in place. Only one.
         </div>
         <span class="piece-tag">language &middot; erosion &middot; attention</span>
+      </div>
+    </a>
+
+    <a class="piece" href="glyph/index.html" id="piece-gl">
+      <div class="piece-visual">
+        <canvas id="cv-gl"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Glyph</div>
+        <div class="piece-desc">
+          Type a name. Watch it become a pattern. Every name generates a unique,
+          deterministic visual — same name, same pattern, always. The letters
+          seed a flow field that particles trace into existence.
+        </div>
+        <span class="piece-tag">canvas &middot; flow field &middot; personal</span>
+      </div>
+    </a>
+
+    <a class="piece" href="cultivation/index.html" id="piece-cu">
+      <div class="piece-visual">
+        <canvas id="cv-cu"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Cultivation</div>
+        <div class="piece-desc">
+          Rice paddies require cooperation. Wheat fields reward independence.
+          Two farming systems, one landscape — drag the border and watch culture
+          emerge from agriculture. Based on Talhelm's Rice Hypothesis (2014).
+        </div>
+        <span class="piece-tag">social science &middot; agent-based &middot; cultural emergence</span>
       </div>
     </a>
 
@@ -1951,6 +1981,311 @@
         ctx.fillText(chars[j], x, y + drift * (Math.sin(j * 1.7) * 2));
         x += ctx.measureText(chars[j]).width;
       }
+    }
+
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// --- Glyph thumbnail: name-seeded flow field traces ---
+(function() {
+  const cv = document.getElementById('cv-gl');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  function resize() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+    init();
+  }
+
+  // Mulberry32 PRNG
+  function prng(seed) {
+    return function() {
+      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+      let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+
+  const names = ['claude', 'emir', 'emergence', 'glyph', 'light', 'pattern', 'drift'];
+  let nameIdx = 0;
+  let rng, particles, grid, scale, baseHue, hueSpread;
+  const GRID = 64;
+  const NP = 250;
+
+  function hashStr(s) {
+    let h = 0;
+    for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+    return h;
+  }
+
+  function init() {
+    const hash = hashStr(names[nameIdx]);
+    rng = prng(hash);
+    scale = 0.003 + rng() * 0.005;
+    baseHue = rng() * 360;
+    hueSpread = 25 + rng() * 45;
+
+    // Build angle grid
+    const gridRng = prng(hash + 1);
+    grid = new Float32Array(GRID * GRID);
+    for (let i = 0; i < grid.length; i++) grid[i] = gridRng() * Math.PI * 2;
+
+    // Smooth pass
+    const tmp = new Float32Array(GRID * GRID);
+    for (let y = 0; y < GRID; y++) {
+      for (let x = 0; x < GRID; x++) {
+        let sum = 0, cnt = 0;
+        for (let dy = -1; dy <= 1; dy++) {
+          for (let dx = -1; dx <= 1; dx++) {
+            const ny = (y + dy + GRID) % GRID, nx = (x + dx + GRID) % GRID;
+            sum += grid[ny * GRID + nx]; cnt++;
+          }
+        }
+        tmp[y * GRID + x] = sum / cnt;
+      }
+    }
+    grid = tmp;
+
+    particles = [];
+    const pRng = prng(hash + 2);
+    for (let i = 0; i < NP; i++) {
+      particles.push({
+        x: pRng() * w,
+        y: pRng() * h,
+        vx: 0, vy: 0,
+        age: Math.floor(pRng() * 80),
+        hue: baseHue + pRng() * hueSpread,
+        alpha: 0
+      });
+    }
+
+    ctx.fillStyle = '#08080c';
+    ctx.fillRect(0, 0, w, h);
+  }
+
+  function getAngle(x, y) {
+    const gx = ((x * scale * 10) % GRID + GRID) % GRID;
+    const gy = ((y * scale * 10) % GRID + GRID) % GRID;
+    const ix = Math.floor(gx), iy = Math.floor(gy);
+    const fx = gx - ix, fy = gy - iy;
+    const sx = fx * fx * (3 - 2 * fx), sy = fy * fy * (3 - 2 * fy);
+    const i00 = iy * GRID + ix;
+    const i10 = iy * GRID + (ix + 1) % GRID;
+    const i01 = ((iy + 1) % GRID) * GRID + ix;
+    const i11 = ((iy + 1) % GRID) * GRID + (ix + 1) % GRID;
+    return (grid[i00] * (1-sx) + grid[i10] * sx) * (1-sy)
+         + (grid[i01] * (1-sx) + grid[i11] * sx) * sy;
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  let frameCount = 0;
+  let cycleTimer = 0;
+
+  function frame() {
+    ctx.fillStyle = 'rgba(8,8,12,0.012)';
+    ctx.fillRect(0, 0, w, h);
+
+    for (const p of particles) {
+      p.age++;
+      const fadeIn = Math.min(1, p.age / 30);
+      const fadeOut = p.age > 200 ? Math.max(0, 1 - (p.age - 200) / 60) : 1;
+      p.alpha = fadeIn * fadeOut;
+
+      const angle = getAngle(p.x, p.y);
+      const vx = Math.cos(angle) * 1.2;
+      const vy = Math.sin(angle) * 1.2;
+      p.vx = p.vx * 0.9 + vx * 0.1;
+      p.vy = p.vy * 0.9 + vy * 0.1;
+      p.x += p.vx;
+      p.y += p.vy;
+
+      if (p.x < 0) p.x += w;
+      if (p.x > w) p.x -= w;
+      if (p.y < 0) p.y += h;
+      if (p.y > h) p.y -= h;
+
+      if (p.age > 260) {
+        p.x = rng() * w;
+        p.y = rng() * h;
+        p.vx = 0; p.vy = 0;
+        p.age = 0;
+        p.hue = baseHue + rng() * hueSpread;
+      }
+
+      if (p.alpha > 0.01) {
+        ctx.fillStyle = `hsla(${p.hue}, 55%, 60%, ${p.alpha * 0.55})`;
+        ctx.fillRect(p.x, p.y, 1, 1);
+      }
+    }
+
+    frameCount++;
+    cycleTimer++;
+
+    // Switch name every ~6 seconds
+    if (cycleTimer > 360) {
+      cycleTimer = 0;
+      nameIdx = (nameIdx + 1) % names.length;
+      init();
+    }
+
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// --- Cultivation thumbnail: wheat/rice split with clustering agents ---
+(function() {
+  const cv = document.getElementById('cv-cu');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  function resize() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+    init();
+  }
+
+  const N = 120;
+  let agents = [];
+
+  function init() {
+    agents = [];
+    for (let i = 0; i < N; i++) {
+      const side = i < N / 2 ? 0 : 1; // 0=wheat, 1=rice
+      agents.push({
+        x: side === 0 ? Math.random() * w * 0.45 + w * 0.02 : Math.random() * w * 0.45 + w * 0.53,
+        y: Math.random() * h * 0.8 + h * 0.1,
+        vx: 0, vy: 0,
+        side: side,
+        conns: [],
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  let t = 0;
+
+  function frame() {
+    ctx.fillStyle = 'rgba(8,8,12,0.15)';
+    ctx.fillRect(0, 0, w, h);
+
+    // Background halves
+    ctx.fillStyle = 'rgba(18, 15, 10, 0.08)';
+    ctx.fillRect(0, 0, w / 2, h);
+    ctx.fillStyle = 'rgba(8, 14, 16, 0.08)';
+    ctx.fillRect(w / 2, 0, w / 2, h);
+
+    // Border
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+    ctx.setLineDash([2, 4]);
+    ctx.beginPath();
+    ctx.moveTo(w / 2, 0);
+    ctx.lineTo(w / 2, h);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    t++;
+
+    // Update agents
+    for (let i = 0; i < agents.length; i++) {
+      const a = agents[i];
+      let fx = 0, fy = 0;
+      a.conns = [];
+
+      for (let j = 0; j < agents.length; j++) {
+        if (i === j) continue;
+        const b = agents[j];
+        if (a.side !== b.side) continue;
+
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const dist = Math.sqrt(dx * dx + dy * dy) + 0.1;
+
+        if (dist < 50) {
+          if (a.side === 1) {
+            // Rice: attract gently, record connection
+            if (dist > 12) {
+              fx += dx / dist * 0.02;
+              fy += dy / dist * 0.02;
+            } else {
+              fx -= dx / dist * 0.05;
+              fy -= dy / dist * 0.05;
+            }
+            a.conns.push(j);
+            // Sync phase
+            a.phase += (b.phase - a.phase) * 0.01;
+          } else {
+            // Wheat: repel, maintain space
+            if (dist < 30) {
+              fx -= dx / dist * 0.06;
+              fy -= dy / dist * 0.06;
+            }
+          }
+        }
+      }
+
+      // Center attraction
+      const cx = a.side === 0 ? w * 0.25 : w * 0.75;
+      const cy = h / 2;
+      fx += (cx - a.x) * 0.0003;
+      fy += (cy - a.y) * 0.0003;
+
+      // Random walk
+      fx += (Math.random() - 0.5) * (a.side === 0 ? 0.15 : 0.05);
+      fy += (Math.random() - 0.5) * (a.side === 0 ? 0.15 : 0.05);
+
+      a.vx = (a.vx + fx) * 0.95;
+      a.vy = (a.vy + fy) * 0.95;
+      a.x += a.vx;
+      a.y += a.vy;
+
+      a.x = Math.max(4, Math.min(w - 4, a.x));
+      a.y = Math.max(4, Math.min(h - 4, a.y));
+    }
+
+    // Draw connections (rice only)
+    for (let i = 0; i < agents.length; i++) {
+      const a = agents[i];
+      if (a.side !== 1) continue;
+      for (const j of a.conns) {
+        if (j <= i) continue;
+        const b = agents[j];
+        ctx.strokeStyle = 'rgba(100, 190, 170, 0.08)';
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.stroke();
+      }
+    }
+
+    // Draw agents
+    for (const a of agents) {
+      const pulse = a.side === 1
+        ? Math.sin(a.phase + t * 0.03) * 0.3 + 1
+        : 1;
+      const size = (a.side === 0 ? 2.2 : 1.8) * pulse;
+      const color = a.side === 0
+        ? 'rgba(200, 170, 100, 0.5)'
+        : 'rgba(100, 190, 170, 0.5)';
+
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(a.x, a.y, size, 0, Math.PI * 2);
+      ctx.fill();
     }
 
     requestAnimationFrame(frame);

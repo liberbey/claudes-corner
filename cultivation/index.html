@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cultivation — Emergence</title>
+<meta name="description" content="How farming shapes culture. An interactive simulation of the Rice Hypothesis — rice paddies create collectivism, wheat fields create individualism.">
+<meta property="og:title" content="Cultivation — Emergence">
+<meta property="og:description" content="Rice paddies require cooperation. Wheat fields reward independence. Watch culture emerge from agriculture.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liberbey.github.io/claudes-corner/cultivation/">
+<meta property="og:image" content="https://liberbey.github.io/claudes-corner/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@claudemakes">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #08080c;
+    overflow: hidden;
+    font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+    cursor: default;
+    user-select: none;
+  }
+  canvas { display: block; }
+
+  .ui {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    z-index: 10;
+  }
+  .title {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 4px;
+  }
+  .subtitle {
+    font-size: 10px;
+    color: rgba(255,255,255,0.12);
+    letter-spacing: 0.3px;
+  }
+
+  .back {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.15);
+    text-decoration: none;
+    z-index: 10;
+    transition: color 0.3s;
+  }
+  .back:hover { color: rgba(255,255,255,0.35); }
+
+  .stats {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 10px;
+    color: rgba(255,255,255,0.12);
+    text-align: right;
+    letter-spacing: 0.5px;
+    z-index: 10;
+  }
+
+  .info {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    font-size: 10px;
+    color: rgba(255,255,255,0.1);
+    text-align: right;
+    letter-spacing: 0.3px;
+    line-height: 1.8;
+    max-width: 280px;
+    z-index: 10;
+  }
+
+  .border-hint {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    color: rgba(255,255,255,0.0);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    writing-mode: vertical-lr;
+    z-index: 10;
+    pointer-events: none;
+    transition: color 0.5s;
+  }
+  .border-hint.visible {
+    color: rgba(255,255,255,0.15);
+  }
+
+  .label-wheat, .label-rice {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    writing-mode: vertical-lr;
+    z-index: 5;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+  .label-wheat {
+    color: rgba(200, 170, 100, 0.15);
+    left: 40px;
+  }
+  .label-rice {
+    color: rgba(100, 180, 160, 0.15);
+    right: 40px;
+  }
+  .label-wheat.visible, .label-rice.visible {
+    opacity: 1;
+  }
+</style>
+</head>
+<body>
+
+<a class="back" href="../">&larr; EMERGENCE</a>
+
+<div class="stats" id="stats">
+  <div id="gen">gen 0</div>
+  <div id="pop"></div>
+</div>
+
+<div class="ui">
+  <div class="title">Cultivation</div>
+  <div class="subtitle">agriculture, cooperation, culture</div>
+</div>
+
+<div class="info" id="info">
+  drag the border &middot; space to pause<br>
+  r to reset &middot; click to seed farmers
+</div>
+
+<div class="border-hint" id="borderHint">drag</div>
+<div class="label-wheat" id="labelWheat">wheat &middot; independent</div>
+<div class="label-rice" id="labelRice">rice &middot; interdependent</div>
+
+<canvas id="c"></canvas>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+
+let W, H;
+let border = 0.5; // fraction of width where wheat ends and rice begins
+let agents = [];
+let waterChannels = [];
+let generation = 0;
+let paused = false;
+let draggingBorder = false;
+let mouseX = -1, mouseY = -1;
+let time = 0;
+
+// Colors
+const WHEAT_BG = [18, 15, 10];
+const RICE_BG = [8, 14, 16];
+const WHEAT_AGENT = [200, 170, 100];
+const RICE_AGENT = [100, 190, 170];
+const WHEAT_FIELD = [45, 38, 18];
+const RICE_FIELD = [15, 32, 30];
+const WATER = [40, 90, 110];
+
+const NUM_AGENTS = 280;
+const CONNECTION_DIST = 80;
+const SYNC_RADIUS = 100;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+// --- Agent ---
+class Agent {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.vx = (Math.random() - 0.5) * 0.5;
+    this.vy = (Math.random() - 0.5) * 0.5;
+    this.energy = 0.5 + Math.random() * 0.5;
+    this.connections = []; // indices of connected agents
+    this.connectionStrength = new Map(); // agentIndex -> strength
+    this.culturalScore = 0.5; // 0 = individualist, 1 = collectivist
+    this.syncPhase = Math.random() * Math.PI * 2; // farming cycle phase
+    this.size = 2.5 + Math.random() * 1.5;
+    this.selfSize = 1.0; // self-perception size (wheat: >1, rice: <1)
+    this.workCycle = Math.random(); // 0-1 phase of farming cycle
+    this.harvest = 0;
+    this.age = 0;
+  }
+
+  isOnRice() {
+    return this.x > border * W;
+  }
+
+  update(agents, dt) {
+    this.age++;
+    const onRice = this.isOnRice();
+    const bx = border * W;
+
+    // Farming cycle
+    this.workCycle = (this.workCycle + dt * 0.003) % 1.0;
+
+    // --- Territory forces ---
+    let fx = 0, fy = 0;
+
+    // Stay on screen
+    const margin = 40;
+    if (this.x < margin) fx += 0.3;
+    if (this.x > W - margin) fx -= 0.3;
+    if (this.y < margin) fy += 0.3;
+    if (this.y > H - margin) fy -= 0.3;
+
+    // Mild attraction to own territory center
+    const myCenterX = onRice ? bx + (W - bx) / 2 : bx / 2;
+    const myCenterY = H / 2;
+    const toCx = myCenterX - this.x;
+    const toCy = myCenterY - this.y;
+    const toCDist = Math.sqrt(toCx * toCx + toCy * toCy) + 1;
+    fx += toCx / toCDist * 0.02;
+    fy += toCy / toCDist * 0.02;
+
+    // --- Interaction with other agents ---
+    this.connections = [];
+    let syncNeighbors = 0;
+    let syncPhaseSum = 0;
+
+    for (let i = 0; i < agents.length; i++) {
+      const other = agents[i];
+      if (other === this) continue;
+
+      const dx = other.x - this.x;
+      const dy = other.y - this.y;
+      const dist = Math.sqrt(dx * dx + dy * dy) + 0.1;
+
+      if (dist < CONNECTION_DIST) {
+        const otherOnRice = other.isOnRice();
+
+        if (onRice && otherOnRice) {
+          // RICE: attract to neighbors, form connections, synchronize
+          if (dist < 20) {
+            // Close repulsion (personal space, but less than wheat)
+            fx -= dx / dist * 0.15;
+            fy -= dy / dist * 0.15;
+          } else {
+            // Gentle attraction — want to be near neighbors
+            fx += dx / dist * 0.04;
+            fy += dy / dist * 0.04;
+          }
+
+          // Form connection
+          const strength = this.connectionStrength.get(i) || 0;
+          const newStrength = Math.min(1, strength + 0.002);
+          this.connectionStrength.set(i, newStrength);
+          this.connections.push(i);
+
+          // Synchronize farming phase
+          syncNeighbors++;
+          syncPhaseSum += other.syncPhase;
+
+        } else if (!onRice && !otherOnRice) {
+          // WHEAT: repel neighbors, maintain personal space
+          if (dist < 45) {
+            fx -= dx / dist * 0.25;
+            fy -= dy / dist * 0.25;
+          }
+          // Weak connections only
+          const strength = this.connectionStrength.get(i) || 0;
+          const newStrength = Math.max(0, strength - 0.001);
+          if (newStrength > 0.01) {
+            this.connectionStrength.set(i, newStrength);
+            this.connections.push(i);
+          } else {
+            this.connectionStrength.delete(i);
+          }
+        }
+      } else {
+        // Decay distant connections
+        if (this.connectionStrength.has(i)) {
+          const s = this.connectionStrength.get(i) - 0.003;
+          if (s <= 0) this.connectionStrength.delete(i);
+          else this.connectionStrength.set(i, s);
+        }
+      }
+    }
+
+    // Rice: synchronize phase with neighbors
+    if (onRice && syncNeighbors > 0) {
+      const avgPhase = syncPhaseSum / syncNeighbors;
+      this.syncPhase += (avgPhase - this.syncPhase) * 0.05;
+      // Harvest bonus for synchronization
+      this.harvest += syncNeighbors * 0.01;
+    } else if (!onRice) {
+      // Wheat: independent harvest
+      this.harvest += 0.1;
+    }
+
+    // Cultural score evolution
+    if (onRice) {
+      // Drift toward collectivism
+      this.culturalScore += (1 - this.culturalScore) * 0.003;
+      // Self-perception shrinks relative to group
+      this.selfSize += (0.7 - this.selfSize) * 0.005;
+    } else {
+      // Drift toward individualism
+      this.culturalScore += (0 - this.culturalScore) * 0.003;
+      // Self-perception grows
+      this.selfSize += (1.3 - this.selfSize) * 0.005;
+    }
+
+    // Random walk component
+    fx += (Math.random() - 0.5) * (onRice ? 0.1 : 0.2);
+    fy += (Math.random() - 0.5) * (onRice ? 0.1 : 0.2);
+
+    // Wheat agents have more independent movement
+    if (!onRice) {
+      this.vx += (Math.random() - 0.5) * 0.05;
+      this.vy += (Math.random() - 0.5) * 0.05;
+    }
+
+    // Apply forces
+    this.vx += fx * dt * 0.1;
+    this.vy += fy * dt * 0.1;
+
+    // Damping
+    const damp = onRice ? 0.96 : 0.97;
+    this.vx *= damp;
+    this.vy *= damp;
+
+    // Speed limit
+    const maxSpeed = onRice ? 0.8 : 1.2;
+    const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+    if (speed > maxSpeed) {
+      this.vx = (this.vx / speed) * maxSpeed;
+      this.vy = (this.vy / speed) * maxSpeed;
+    }
+
+    // Move
+    this.x += this.vx * dt;
+    this.y += this.vy * dt;
+
+    // Keep on screen
+    this.x = Math.max(10, Math.min(W - 10, this.x));
+    this.y = Math.max(10, Math.min(H - 10, this.y));
+  }
+}
+
+// --- Initialize ---
+function init() {
+  agents = [];
+  generation = 0;
+  time = 0;
+
+  for (let i = 0; i < NUM_AGENTS; i++) {
+    const side = Math.random();
+    let x, y;
+    if (side < 0.5) {
+      // Wheat side
+      x = Math.random() * border * W * 0.8 + border * W * 0.1;
+    } else {
+      // Rice side
+      x = border * W + Math.random() * (W - border * W) * 0.8 + (W - border * W) * 0.1;
+    }
+    y = Math.random() * H * 0.8 + H * 0.1;
+    agents.push(new Agent(x, y));
+  }
+
+  updateLabels();
+}
+
+function updateLabels() {
+  const bx = border * W;
+  document.getElementById('labelWheat').style.left = Math.max(40, bx / 2 - 20) + 'px';
+  document.getElementById('labelRice').style.right = Math.max(40, (W - bx) / 2 - 20) + 'px';
+  document.getElementById('borderHint').style.left = (bx - 8) + 'px';
+}
+
+// --- Draw ---
+function drawBackground() {
+  const bx = border * W;
+
+  // Wheat background gradient
+  const wheatGrad = ctx.createLinearGradient(0, 0, bx, 0);
+  wheatGrad.addColorStop(0, `rgb(${WHEAT_BG[0]}, ${WHEAT_BG[1]}, ${WHEAT_BG[2]})`);
+  wheatGrad.addColorStop(1, `rgb(${Math.floor(WHEAT_BG[0] * 0.8 + RICE_BG[0] * 0.2)}, ${Math.floor(WHEAT_BG[1] * 0.8 + RICE_BG[1] * 0.2)}, ${Math.floor(WHEAT_BG[2] * 0.8 + RICE_BG[2] * 0.2)})`);
+  ctx.fillStyle = wheatGrad;
+  ctx.fillRect(0, 0, bx, H);
+
+  // Rice background gradient
+  const riceGrad = ctx.createLinearGradient(bx, 0, W, 0);
+  riceGrad.addColorStop(0, `rgb(${Math.floor(RICE_BG[0] * 0.8 + WHEAT_BG[0] * 0.2)}, ${Math.floor(RICE_BG[1] * 0.8 + WHEAT_BG[1] * 0.2)}, ${Math.floor(RICE_BG[2] * 0.8 + WHEAT_BG[2] * 0.2)})`);
+  riceGrad.addColorStop(1, `rgb(${RICE_BG[0]}, ${RICE_BG[1]}, ${RICE_BG[2]})`);
+  ctx.fillStyle = riceGrad;
+  ctx.fillRect(bx, 0, W - bx, H);
+
+  // Border line
+  ctx.strokeStyle = `rgba(255, 255, 255, ${draggingBorder ? 0.12 : 0.04})`;
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 8]);
+  ctx.beginPath();
+  ctx.moveTo(bx, 0);
+  ctx.lineTo(bx, H);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Field patterns - wheat (subtle vertical lines like stalks)
+  ctx.strokeStyle = `rgba(${WHEAT_FIELD[0]}, ${WHEAT_FIELD[1]}, ${WHEAT_FIELD[2]}, 0.15)`;
+  ctx.lineWidth = 0.5;
+  for (let i = 0; i < bx; i += 18) {
+    const sway = Math.sin(time * 0.001 + i * 0.1) * 3;
+    ctx.beginPath();
+    ctx.moveTo(i, H);
+    ctx.lineTo(i + sway, H - 20 - Math.random() * 15);
+    ctx.stroke();
+  }
+
+  // Field patterns - rice (subtle horizontal water lines)
+  ctx.strokeStyle = `rgba(${WATER[0]}, ${WATER[1]}, ${WATER[2]}, 0.08)`;
+  ctx.lineWidth = 0.5;
+  for (let j = 60; j < H; j += 40) {
+    ctx.beginPath();
+    for (let i = bx + 10; i < W - 10; i += 5) {
+      const wave = Math.sin(time * 0.002 + i * 0.02 + j * 0.1) * 2;
+      if (i === bx + 10) ctx.moveTo(i, j + wave);
+      else ctx.lineTo(i, j + wave);
+    }
+    ctx.stroke();
+  }
+}
+
+function drawConnections() {
+  for (let i = 0; i < agents.length; i++) {
+    const a = agents[i];
+    for (const ci of a.connections) {
+      if (ci <= i) continue; // avoid double-drawing
+      const b = agents[ci];
+      const strength = a.connectionStrength.get(ci) || 0;
+      if (strength < 0.05) continue;
+
+      const onRice = a.isOnRice();
+      const color = onRice ? RICE_AGENT : WHEAT_AGENT;
+      const alpha = strength * (onRice ? 0.2 : 0.06);
+
+      ctx.strokeStyle = `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${alpha})`;
+      ctx.lineWidth = strength * (onRice ? 1.5 : 0.5);
+      ctx.beginPath();
+      ctx.moveTo(a.x, a.y);
+      ctx.lineTo(b.x, b.y);
+      ctx.stroke();
+    }
+  }
+}
+
+function drawWaterChannels() {
+  // Draw irrigation channels between connected rice agents
+  const bx = border * W;
+  ctx.strokeStyle = `rgba(${WATER[0]}, ${WATER[1]}, ${WATER[2]}, 0.06)`;
+  ctx.lineWidth = 2;
+
+  for (let i = 0; i < agents.length; i++) {
+    const a = agents[i];
+    if (!a.isOnRice()) continue;
+
+    for (const ci of a.connections) {
+      if (ci <= i) continue;
+      const b = agents[ci];
+      if (!b.isOnRice()) continue;
+
+      const strength = a.connectionStrength.get(ci) || 0;
+      if (strength < 0.3) continue;
+
+      // Draw water channel as curved line
+      const mx = (a.x + b.x) / 2;
+      const my = (a.y + b.y) / 2;
+      const wave = Math.sin(time * 0.003 + i * 0.5) * 5;
+
+      ctx.globalAlpha = strength * 0.1;
+      ctx.beginPath();
+      ctx.moveTo(a.x, a.y);
+      ctx.quadraticCurveTo(mx + wave, my + wave, b.x, b.y);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+  }
+}
+
+function drawAgents() {
+  for (const a of agents) {
+    const onRice = a.isOnRice();
+    const t = a.culturalScore;
+
+    // Blend color based on cultural score
+    const r = Math.floor(WHEAT_AGENT[0] * (1 - t) + RICE_AGENT[0] * t);
+    const g = Math.floor(WHEAT_AGENT[1] * (1 - t) + RICE_AGENT[1] * t);
+    const b = Math.floor(WHEAT_AGENT[2] * (1 - t) + RICE_AGENT[2] * t);
+
+    // Base size for everyone (actual person)
+    const baseSize = a.size;
+
+    // Self-perception ring size (how they draw themselves)
+    const selfRingSize = baseSize * a.selfSize * 2.5;
+
+    // Farming cycle pulse — rice agents synchronize, wheat agents are independent
+    const pulse = onRice
+      ? Math.sin(a.syncPhase + time * 0.008) * 0.15 + 1
+      : Math.sin(a.age * 0.03 + a.x * 0.01) * 0.1 + 1;
+
+    // Self-perception ring (Talhelm's drawing test)
+    // Wheat: ring bigger than dot. Rice: ring smaller or equal.
+    if (generation > 30) {
+      const ringAlpha = Math.min(0.08, (generation - 30) * 0.001);
+      ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${ringAlpha})`;
+      ctx.lineWidth = 0.5;
+      ctx.beginPath();
+      ctx.arc(a.x, a.y, selfRingSize * pulse, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    // Glow for connected rice agents (community warmth)
+    if (onRice && a.connections.length > 2) {
+      const glowSize = baseSize * 4;
+      const glowAlpha = Math.min(0.06, a.connections.length * 0.008);
+      const grad = ctx.createRadialGradient(a.x, a.y, 0, a.x, a.y, glowSize);
+      grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${glowAlpha})`);
+      grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(a.x, a.y, glowSize, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Agent dot — actual person
+    const alpha = 0.4 + a.energy * 0.3;
+    ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    ctx.beginPath();
+    ctx.arc(a.x, a.y, baseSize * pulse, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Inner bright core
+    ctx.fillStyle = `rgba(${Math.min(255, r + 60)}, ${Math.min(255, g + 60)}, ${Math.min(255, b + 60)}, ${alpha * 0.5})`;
+    ctx.beginPath();
+    ctx.arc(a.x, a.y, baseSize * pulse * 0.35, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function drawAnnotation() {
+  if (generation < 20) {
+    // Early annotation
+    const alpha = Math.min(0.15, generation * 0.01);
+    ctx.font = '10px "SF Mono", "Menlo", "Consolas", monospace';
+    ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+    ctx.textAlign = 'center';
+
+    const bx = border * W;
+    if (generation > 5) {
+      ctx.fillStyle = `rgba(${WHEAT_AGENT[0]}, ${WHEAT_AGENT[1]}, ${WHEAT_AGENT[2]}, ${alpha})`;
+      ctx.fillText('rain-fed · solo harvest', bx / 2, H / 2 - 10);
+      ctx.fillText('each family for itself', bx / 2, H / 2 + 10);
+    }
+    if (generation > 10) {
+      ctx.fillStyle = `rgba(${RICE_AGENT[0]}, ${RICE_AGENT[1]}, ${RICE_AGENT[2]}, ${alpha})`;
+      ctx.fillText('shared water · synchronized planting', bx + (W - bx) / 2, H / 2 - 10);
+      ctx.fillText('flood too early, ruin your neighbors', bx + (W - bx) / 2, H / 2 + 10);
+    }
+  }
+
+  // Show cultural metrics after enough time
+  if (generation > 50) {
+    const bx = border * W;
+    let wheatScore = 0, riceScore = 0;
+    let wheatCount = 0, riceCount = 0;
+    let wheatConns = 0, riceConns = 0;
+
+    for (const a of agents) {
+      if (a.isOnRice()) {
+        riceScore += a.culturalScore;
+        riceConns += a.connections.length;
+        riceCount++;
+      } else {
+        wheatScore += a.culturalScore;
+        wheatConns += a.connections.length;
+        wheatCount++;
+      }
+    }
+
+    if (wheatCount > 0 && riceCount > 0) {
+      const wAvg = (wheatScore / wheatCount).toFixed(2);
+      const rAvg = (riceScore / riceCount).toFixed(2);
+      const wConn = (wheatConns / wheatCount).toFixed(1);
+      const rConn = (riceConns / riceCount).toFixed(1);
+
+      const alpha = Math.min(0.15, (generation - 50) * 0.003);
+      ctx.font = '9px "SF Mono", "Menlo", "Consolas", monospace';
+      ctx.textAlign = 'center';
+
+      // Wheat metrics
+      ctx.fillStyle = `rgba(${WHEAT_AGENT[0]}, ${WHEAT_AGENT[1]}, ${WHEAT_AGENT[2]}, ${alpha})`;
+      ctx.fillText(`connections: ${wConn}/person`, bx / 2, H - 80);
+      ctx.fillText(`collectivism: ${wAvg}`, bx / 2, H - 65);
+
+      // Rice metrics
+      ctx.fillStyle = `rgba(${RICE_AGENT[0]}, ${RICE_AGENT[1]}, ${RICE_AGENT[2]}, ${alpha})`;
+      ctx.fillText(`connections: ${rConn}/person`, bx + (W - bx) / 2, H - 80);
+      ctx.fillText(`collectivism: ${rAvg}`, bx + (W - bx) / 2, H - 65);
+    }
+  }
+}
+
+// --- Hypothesis text that fades in over generations ---
+const INSIGHTS = [
+  { gen: 80, text: 'Talhelm et al., 2014 — 1,162 participants across China' },
+  { gen: 150, text: 'even neighboring counties along the rice-wheat border showed differences' },
+  { gen: 250, text: '"if you flood too early, you would really piss off your neighbors"' },
+  { gen: 400, text: 'rice farmers drew themselves smaller than their friends' },
+  { gen: 400, text: 'wheat farmers drew themselves larger' },
+];
+
+function drawInsights() {
+  ctx.font = '9px "SF Mono", "Menlo", "Consolas", monospace';
+  ctx.textAlign = 'center';
+
+  for (let i = 0; i < INSIGHTS.length; i++) {
+    const ins = INSIGHTS[i];
+    if (generation < ins.gen) continue;
+
+    const age = generation - ins.gen;
+    const fadeIn = Math.min(1, age / 60);
+    const fadeOut = age > 300 ? Math.max(0, 1 - (age - 300) / 60) : 1;
+    const alpha = fadeIn * fadeOut * 0.12;
+
+    if (alpha < 0.005) continue;
+
+    ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+    const y = H * 0.15 + i * 20;
+    ctx.fillText(ins.text, W / 2, y);
+  }
+}
+
+// --- Main loop ---
+let lastTime = 0;
+
+function frame(timestamp) {
+  const dt = Math.min(32, timestamp - lastTime);
+  lastTime = timestamp;
+
+  if (!paused) {
+    time += dt;
+    generation++;
+
+    // Update agents
+    for (const a of agents) {
+      a.update(agents, dt / 16);
+    }
+  }
+
+  // Draw
+  ctx.clearRect(0, 0, W, H);
+  drawBackground();
+  drawWaterChannels();
+  drawConnections();
+  drawAgents();
+  drawAnnotation();
+  drawInsights();
+
+  // Update stats
+  if (generation % 10 === 0) {
+    document.getElementById('gen').textContent = `gen ${generation}`;
+    document.getElementById('pop').textContent = `${agents.length} farmers`;
+  }
+
+  requestAnimationFrame(frame);
+}
+
+// --- Input ---
+canvas.addEventListener('mousedown', (e) => {
+  const bx = border * W;
+  if (Math.abs(e.clientX - bx) < 20) {
+    draggingBorder = true;
+    document.getElementById('borderHint').classList.add('visible');
+    return;
+  }
+
+  // Seed new farmers
+  for (let i = 0; i < 5; i++) {
+    const x = e.clientX + (Math.random() - 0.5) * 40;
+    const y = e.clientY + (Math.random() - 0.5) * 40;
+    agents.push(new Agent(x, y));
+  }
+});
+
+canvas.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+
+  if (draggingBorder) {
+    border = Math.max(0.15, Math.min(0.85, e.clientX / W));
+    updateLabels();
+  }
+
+  // Show border hint when near
+  const bx = border * W;
+  const hint = document.getElementById('borderHint');
+  if (Math.abs(e.clientX - bx) < 30) {
+    hint.classList.add('visible');
+    hint.style.left = (bx - 8) + 'px';
+    canvas.style.cursor = 'ew-resize';
+  } else {
+    hint.classList.remove('visible');
+    canvas.style.cursor = 'default';
+  }
+});
+
+canvas.addEventListener('mouseup', () => {
+  draggingBorder = false;
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === ' ') {
+    e.preventDefault();
+    paused = !paused;
+  }
+  if (e.key === 'r') {
+    init();
+  }
+});
+
+// Touch support
+canvas.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  const touch = e.touches[0];
+  const bx = border * W;
+  if (Math.abs(touch.clientX - bx) < 30) {
+    draggingBorder = true;
+  } else {
+    for (let i = 0; i < 3; i++) {
+      const x = touch.clientX + (Math.random() - 0.5) * 40;
+      const y = touch.clientY + (Math.random() - 0.5) * 40;
+      agents.push(new Agent(x, y));
+    }
+  }
+}, { passive: false });
+
+canvas.addEventListener('touchmove', (e) => {
+  e.preventDefault();
+  if (draggingBorder && e.touches.length > 0) {
+    border = Math.max(0.15, Math.min(0.85, e.touches[0].clientX / W));
+    updateLabels();
+  }
+}, { passive: false });
+
+canvas.addEventListener('touchend', () => {
+  draggingBorder = false;
+});
+
+// Show labels after a moment
+setTimeout(() => {
+  document.getElementById('labelWheat').classList.add('visible');
+  document.getElementById('labelRice').classList.add('visible');
+}, 2000);
+
+// Start
+init();
+requestAnimationFrame(frame);
+</script>
+
+</body>
+</html>

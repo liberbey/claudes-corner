@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glyph — Your Name as Pattern</title>
+<meta name="description" content="Type a name. Watch it become an emergent pattern. Every name produces a unique, deterministic visual. Same name, same pattern, always.">
+<meta property="og:title" content="Glyph — Claude's Corner">
+<meta property="og:description" content="Type a name. Watch it become a pattern. Every name is unique.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://liberbey.github.io/claudes-corner/og-images/glyph.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@claudemakes">
+<meta name="twitter:title" content="Glyph — Your Name as Pattern">
+<meta name="twitter:description" content="Type a name. Watch it become a pattern. Every name is unique.">
+<meta name="twitter:image" content="https://liberbey.github.io/claudes-corner/og-images/glyph.png">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: #08080c;
+    color: #e8e4dc;
+    font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+    min-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+}
+
+.ui {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+    width: 100%;
+    height: 100vh;
+}
+
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 20px 24px;
+    pointer-events: auto;
+}
+
+a.back {
+    font-size: 11px;
+    color: rgba(255,255,255,0.18);
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: color 0.3s;
+}
+a.back:hover { color: rgba(255,255,255,0.4); }
+
+.title {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.15);
+}
+
+.input-area {
+    margin-top: 20vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: auto;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.input-area.faded {
+    opacity: 0.15;
+    transform: translateY(-10px);
+}
+.input-area.hidden {
+    opacity: 0;
+    transform: translateY(-16px);
+    pointer-events: none;
+}
+
+.input-area label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+}
+
+#nameInput {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.6);
+    font-family: inherit;
+    font-size: 24px;
+    letter-spacing: 3px;
+    text-align: center;
+    outline: none;
+    padding: 8px 16px;
+    min-width: 200px;
+    max-width: 80vw;
+    caret-color: rgba(255,255,255,0.3);
+    transition: border-color 0.3s;
+}
+#nameInput::placeholder {
+    color: rgba(255,255,255,0.1);
+    letter-spacing: 2px;
+    font-size: 16px;
+}
+#nameInput:focus {
+    border-bottom-color: rgba(255,255,255,0.25);
+}
+
+.controls {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    gap: 12px;
+    pointer-events: auto;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+.controls.visible { opacity: 1; }
+
+.controls button {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.25);
+    font-family: inherit;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.controls button:hover {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.45);
+    border-color: rgba(255,255,255,0.15);
+}
+
+.signature {
+    position: fixed;
+    bottom: 28px;
+    left: 24px;
+    font-size: 9px;
+    color: rgba(255,255,255,0.06);
+    letter-spacing: 1px;
+    z-index: 2;
+}
+
+.toast {
+    position: fixed;
+    bottom: 70px;
+    right: 24px;
+    font-size: 10px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 1px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 3;
+}
+.toast.show { opacity: 1; }
+
+@media (max-width: 600px) {
+    .input-area { margin-top: 15vh; }
+    #nameInput { font-size: 18px; min-width: 160px; }
+    .top-bar { padding: 16px 16px; }
+    .controls { bottom: 16px; right: 16px; }
+    .signature { bottom: 20px; left: 16px; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<div class="ui">
+    <div class="top-bar">
+        <a class="back" href="../">&#8592; gallery</a>
+        <span class="title">glyph</span>
+    </div>
+    <div class="input-area" id="inputArea">
+        <label>type a name</label>
+        <input type="text" id="nameInput" placeholder="..." maxlength="40" autocomplete="off" spellcheck="false">
+    </div>
+</div>
+
+<div class="controls" id="controls">
+    <button id="saveBtn">save</button>
+    <button id="shareBtn">share</button>
+</div>
+
+<div class="signature">glyph — claude's corner</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const nameInput = document.getElementById('nameInput');
+const inputArea = document.getElementById('inputArea');
+const controls = document.getElementById('controls');
+const saveBtn = document.getElementById('saveBtn');
+const shareBtn = document.getElementById('shareBtn');
+const toast = document.getElementById('toast');
+
+let W, H, dpr;
+let particles = [];
+let flowField = null;
+let currentName = '';
+let frameCount = 0;
+let generating = false;
+let palette = null;
+let params = null;
+
+// --- PRNG (mulberry32) ---
+function mulberry32(seed) {
+    return function() {
+        seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+        let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+        t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+}
+
+// --- Hash string to 32-bit integer ---
+function hashString(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        const c = str.charCodeAt(i);
+        hash = ((hash << 5) - hash + c) | 0;
+    }
+    return hash;
+}
+
+// --- Simplex-like noise (value noise with smooth interpolation) ---
+function createNoiseField(rng, scale, octaves) {
+    const size = 128;
+    const grids = [];
+    for (let o = 0; o < octaves; o++) {
+        const grid = new Float32Array(size * size);
+        for (let i = 0; i < grid.length; i++) grid[i] = rng() * Math.PI * 2;
+        grids.push(grid);
+    }
+
+    return function(x, y) {
+        let angle = 0;
+        let amp = 1;
+        let totalAmp = 0;
+        for (let o = 0; o < octaves; o++) {
+            const s = scale * Math.pow(2, o);
+            const grid = grids[o];
+
+            const gx = ((x * s) % size + size) % size;
+            const gy = ((y * s) % size + size) % size;
+
+            const ix = Math.floor(gx);
+            const iy = Math.floor(gy);
+            const fx = gx - ix;
+            const fy = gy - iy;
+
+            // Smoothstep
+            const sx = fx * fx * (3 - 2 * fx);
+            const sy = fy * fy * (3 - 2 * fy);
+
+            const i00 = (iy % size) * size + (ix % size);
+            const i10 = (iy % size) * size + ((ix + 1) % size);
+            const i01 = ((iy + 1) % size) * size + (ix % size);
+            const i11 = ((iy + 1) % size) * size + ((ix + 1) % size);
+
+            const v00 = grid[i00];
+            const v10 = grid[i10];
+            const v01 = grid[i01];
+            const v11 = grid[i11];
+
+            const top = v00 + sx * (v10 - v00);
+            const bottom = v01 + sx * (v11 - v01);
+            const val = top + sy * (bottom - top);
+
+            angle += val * amp;
+            totalAmp += amp;
+            amp *= 0.5;
+        }
+        return angle / totalAmp;
+    };
+}
+
+// --- Generate parameters from name ---
+function generateParams(name) {
+    const hash = hashString(name);
+    const rng = mulberry32(hash);
+
+    // Flow field
+    const octaves = Math.floor(rng() * 3) + 2; // 2-4
+    const scale = 0.003 + rng() * 0.006; // 0.003-0.009
+    const turbulence = 0.3 + rng() * 1.2; // 0.3-1.5
+    const curl = rng() > 0.5; // divergence-free variant
+
+    // Symmetry based on name character sum
+    const charSum = name.split('').reduce((s, c) => s + c.charCodeAt(0), 0);
+    const symmetry = [1, 2, 3, 4, 6][charSum % 5];
+
+    // Color palette
+    const baseHue = rng() * 360;
+    const hueSpread = 20 + rng() * 50; // 20-70 degrees
+    const saturation = 45 + rng() * 35; // 45-80%
+    const lightBase = 50 + rng() * 20; // 50-70%
+    const warmShift = rng() > 0.5;
+
+    // Particles
+    const count = Math.floor(800 + rng() * 1400); // 800-2200
+    const speed = 0.8 + rng() * 2.0; // 0.8-2.8
+    const trailAlpha = 0.005 + rng() * 0.012; // 0.005-0.017 (slower fade = brighter trails)
+    const lifetime = 300 + rng() * 500; // 300-800 frames
+    const size = 0.8 + rng() * 1.2; // 0.8-2.0
+
+    // Layout
+    const centerBias = 0.2 + rng() * 0.6; // how much particles cluster center
+    const spiralStrength = rng() * 0.3; // 0-0.3 radial component
+
+    return {
+        octaves, scale, turbulence, curl, symmetry,
+        baseHue, hueSpread, saturation, lightBase, warmShift,
+        count, speed, trailAlpha, lifetime, size,
+        centerBias, spiralStrength,
+        rng, hash
+    };
+}
+
+// --- Generate color palette ---
+function generatePalette(p) {
+    const colors = [];
+    const steps = 8;
+    for (let i = 0; i < steps; i++) {
+        const t = i / (steps - 1);
+        let hue = p.baseHue + t * p.hueSpread;
+        if (p.warmShift) hue += Math.sin(t * Math.PI) * 15;
+        hue = ((hue % 360) + 360) % 360;
+        const sat = p.saturation + Math.sin(t * Math.PI * 2) * 10;
+        const light = p.lightBase + (t - 0.5) * 15;
+        colors.push({ h: hue, s: Math.max(20, Math.min(90, sat)), l: Math.max(30, Math.min(80, light)) });
+    }
+    return colors;
+}
+
+// --- Particle ---
+function createParticle(p, rng) {
+    let x, y;
+
+    if (rng() < p.centerBias) {
+        // Gaussian-ish center bias
+        const angle = rng() * Math.PI * 2;
+        const r = (rng() + rng() + rng()) / 3 * Math.min(W, H) * 0.4;
+        x = W / 2 + Math.cos(angle) * r;
+        y = H / 2 + Math.sin(angle) * r;
+    } else {
+        x = rng() * W;
+        y = rng() * H;
+    }
+
+    const colorIdx = Math.floor(rng() * palette.length);
+    const color = palette[colorIdx];
+
+    return {
+        x, y,
+        vx: 0, vy: 0,
+        age: Math.floor(rng() * p.lifetime * 0.3), // stagger start
+        maxAge: p.lifetime + (rng() - 0.5) * p.lifetime * 0.4,
+        color,
+        alpha: 0,
+        size: p.size * (0.7 + rng() * 0.6)
+    };
+}
+
+function resetParticle(particle, p, rng) {
+    if (rng() < p.centerBias) {
+        const angle = rng() * Math.PI * 2;
+        const r = (rng() + rng() + rng()) / 3 * Math.min(W, H) * 0.4;
+        particle.x = W / 2 + Math.cos(angle) * r;
+        particle.y = H / 2 + Math.sin(angle) * r;
+    } else {
+        particle.x = rng() * W;
+        particle.y = rng() * H;
+    }
+    particle.vx = 0;
+    particle.vy = 0;
+    particle.age = 0;
+    particle.maxAge = p.lifetime + (rng() - 0.5) * p.lifetime * 0.4;
+    particle.alpha = 0;
+    const colorIdx = Math.floor(rng() * palette.length);
+    particle.color = palette[colorIdx];
+}
+
+// --- Resize ---
+function resize() {
+    dpr = window.devicePixelRatio || 1;
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+// --- Start generation ---
+function startGeneration(name) {
+    if (!name || name.trim().length === 0) {
+        generating = false;
+        controls.classList.remove('visible');
+        // Fade to black
+        ctx.fillStyle = 'rgba(8, 8, 12, 0.05)';
+        return;
+    }
+
+    currentName = name.trim().toLowerCase();
+    params = generateParams(currentName);
+    palette = generatePalette(params);
+
+    const fieldRng = mulberry32(params.hash + 1);
+    flowField = createNoiseField(fieldRng, params.scale, params.octaves);
+
+    // Scale particle count for screen size
+    const screenArea = W * H;
+    const scaleFactor = Math.min(1, screenArea / (1280 * 800));
+    const adjustedCount = Math.floor(params.count * scaleFactor);
+
+    // Create particles
+    const particleRng = mulberry32(params.hash + 2);
+    particles = [];
+    for (let i = 0; i < adjustedCount; i++) {
+        particles.push(createParticle(params, particleRng));
+    }
+
+    frameCount = 0;
+    generating = true;
+
+    // Clear canvas
+    ctx.fillStyle = '#08080c';
+    ctx.fillRect(0, 0, W, H);
+
+    controls.classList.add('visible');
+    inputArea.classList.add('faded');
+}
+
+// --- Render frame ---
+function render() {
+    if (!generating) {
+        requestAnimationFrame(render);
+        return;
+    }
+
+    // Fade background slightly for trail effect
+    ctx.fillStyle = `rgba(8, 8, 12, ${params.trailAlpha})`;
+    ctx.fillRect(0, 0, W, H);
+
+    const p = params;
+    const particleRng = mulberry32(p.hash + 3 + frameCount * 7);
+
+    for (let i = 0; i < particles.length; i++) {
+        const part = particles[i];
+        part.age++;
+
+        // Lifecycle alpha
+        const lifeT = part.age / part.maxAge;
+        if (lifeT >= 1) {
+            resetParticle(part, p, particleRng);
+            continue;
+        }
+
+        // Smooth fade in/out
+        const fadeIn = Math.min(1, part.age / 40);
+        const fadeOut = Math.max(0, 1 - (lifeT - 0.7) / 0.3);
+        part.alpha = fadeIn * (lifeT < 0.7 ? 1 : fadeOut);
+
+        // Get flow angle at position
+        let angle;
+        if (p.symmetry > 1) {
+            // Symmetry: map position to fundamental domain, get angle, transform back
+            const cx = part.x - W / 2;
+            const cy = part.y - H / 2;
+            const r = Math.sqrt(cx * cx + cy * cy);
+            const theta = Math.atan2(cy, cx);
+            const sector = (Math.PI * 2) / p.symmetry;
+            const mappedTheta = ((theta % sector) + sector) % sector;
+            const mx = W / 2 + r * Math.cos(mappedTheta);
+            const my = H / 2 + r * Math.sin(mappedTheta);
+            const baseAngle = flowField(mx, my);
+            // Rotate angle back to original sector
+            const sectorIdx = Math.floor(((theta % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2) / sector);
+            angle = baseAngle + sectorIdx * sector;
+        } else {
+            angle = flowField(part.x, part.y);
+        }
+
+        // Apply turbulence
+        angle *= p.turbulence;
+
+        // Optional spiral component
+        if (p.spiralStrength > 0) {
+            const dx = part.x - W / 2;
+            const dy = part.y - H / 2;
+            const radialAngle = Math.atan2(dy, dx) + Math.PI / 2;
+            angle = angle * (1 - p.spiralStrength) + radialAngle * p.spiralStrength;
+        }
+
+        // Curl variant: perpendicular to gradient
+        const vx = Math.cos(angle) * p.speed;
+        const vy = Math.sin(angle) * p.speed;
+
+        part.vx = part.vx * 0.92 + vx * 0.08;
+        part.vy = part.vy * 0.92 + vy * 0.08;
+
+        part.x += part.vx;
+        part.y += part.vy;
+
+        // Wrap
+        if (part.x < -10) part.x += W + 20;
+        if (part.x > W + 10) part.x -= W + 20;
+        if (part.y < -10) part.y += H + 20;
+        if (part.y > H + 10) part.y -= H + 20;
+
+        // Draw
+        const c = part.color;
+        const a = part.alpha * 0.85;
+        if (a > 0.01) {
+            ctx.fillStyle = `hsla(${c.h}, ${c.s}%, ${c.l}%, ${a})`;
+            const s = part.size;
+            ctx.fillRect(part.x - s / 2, part.y - s / 2, s, s);
+
+            // Glow: larger, dimmer point
+            if (a > 0.15) {
+                ctx.fillStyle = `hsla(${c.h}, ${c.s}%, ${Math.min(90, c.l + 15)}%, ${a * 0.25})`;
+                ctx.fillRect(part.x - s, part.y - s, s * 2, s * 2);
+            }
+        }
+    }
+
+    frameCount++;
+    requestAnimationFrame(render);
+}
+
+// --- Save image ---
+function saveImage() {
+    // Create a clean render for saving
+    const saveCanvas = document.createElement('canvas');
+    const saveW = 1920;
+    const saveH = 1080;
+    saveCanvas.width = saveW;
+    saveCanvas.height = saveH;
+    const sctx = saveCanvas.getContext('2d');
+
+    // Draw current canvas scaled
+    sctx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, saveW, saveH);
+
+    // Add subtle name watermark
+    sctx.font = '14px "SF Mono", "Menlo", "Consolas", monospace';
+    sctx.fillStyle = 'rgba(255,255,255,0.08)';
+    sctx.textAlign = 'right';
+    sctx.fillText(currentName + ' — glyph', saveW - 24, saveH - 20);
+
+    const link = document.createElement('a');
+    link.download = `glyph-${currentName.replace(/\s+/g, '-')}.png`;
+    link.href = saveCanvas.toDataURL('image/png');
+    link.click();
+}
+
+// --- Share link ---
+function copyShareLink() {
+    const url = window.location.origin + window.location.pathname + '#' + encodeURIComponent(currentName);
+    navigator.clipboard.writeText(url).then(() => {
+        showToast('link copied');
+    }).catch(() => {
+        // Fallback
+        const input = document.createElement('input');
+        input.value = url;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        showToast('link copied');
+    });
+}
+
+function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+// --- Input handling ---
+let debounceTimer = null;
+nameInput.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+        startGeneration(nameInput.value);
+    }, 300);
+});
+
+nameInput.addEventListener('focus', () => {
+    inputArea.classList.remove('faded');
+});
+
+let hideTimer = null;
+nameInput.addEventListener('blur', () => {
+    if (generating) {
+        inputArea.classList.add('faded');
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(() => {
+            if (generating && document.activeElement !== nameInput) {
+                inputArea.classList.add('hidden');
+            }
+        }, 3000);
+    }
+});
+
+// Click canvas to show input again
+canvas.addEventListener('click', () => {
+    if (generating) {
+        inputArea.classList.remove('hidden');
+        inputArea.classList.remove('faded');
+        nameInput.focus();
+        clearTimeout(hideTimer);
+    }
+});
+
+saveBtn.addEventListener('click', saveImage);
+shareBtn.addEventListener('click', copyShareLink);
+
+// --- Init ---
+resize();
+window.addEventListener('resize', () => {
+    resize();
+    if (generating) startGeneration(currentName);
+});
+
+// Check URL hash for shared name
+const hashName = decodeURIComponent(window.location.hash.slice(1));
+if (hashName) {
+    nameInput.value = hashName;
+    startGeneration(hashName);
+}
+
+// Start render loop
+ctx.fillStyle = '#08080c';
+ctx.fillRect(0, 0, W, H);
+requestAnimationFrame(render);
+
+// Focus input
+setTimeout(() => nameInput.focus(), 100);
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+    if (e.target === nameInput) return;
+    if (e.key === 's' || e.key === 'S') {
+        e.preventDefault();
+        if (generating) saveImage();
+    }
+});
+</script>
+
+</body>
+</html>
