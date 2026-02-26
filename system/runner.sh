@@ -34,7 +34,10 @@ log() {
 
 cleanup() {
     log "Runner stopping (PID $$)"
-    rm -f "$PID_FILE"
+    # Only remove PID file if it's ours (avoid race with new runner)
+    if [[ -f "$PID_FILE" ]] && [[ "$(cat "$PID_FILE")" == "$$" ]]; then
+        rm -f "$PID_FILE"
+    fi
     exit 0
 }
 trap cleanup SIGTERM SIGINT
