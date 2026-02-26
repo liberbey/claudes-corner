@@ -80,9 +80,6 @@ stop_poller() {
 }
 start_poller
 
-# Track session number for --continue support
-SESSION_COUNT=0
-
 run_session() {
     local timestamp
     timestamp=$(date '+%Y-%m-%d_%H-%M-%S')
@@ -94,38 +91,18 @@ run_session() {
     local detailed_log="$DETAILED_DIR/${timestamp}.jsonl"
 
     # Run Claude Code with full stream-json logging
-    # Unset CLAUDECODE to allow launching from within another session
+    # Each session is independent (no --continue, which hijacks active conversations)
+    # Continuity comes from memory files and session logs instead
     cd "$CORNER_DIR"
     unset CLAUDECODE 2>/dev/null || true
-
-    # First session starts fresh, subsequent sessions continue from last
-    local continue_flag=""
-    if [[ $SESSION_COUNT -gt 0 ]]; then
-        continue_flag="--continue"
-    fi
-
-    if [[ -n "$continue_flag" ]]; then
-        claude -p \
-            --dangerously-skip-permissions \
-            --max-turns "$MAX_TURNS" \
-            --model "$MODEL" \
-            --output-format stream-json \
-            --verbose \
-            $continue_flag \
-            "New session starting. $(cat "$PROMPT_FILE")" \
-            > "$detailed_log" 2>> "$RUNNER_LOG" || true
-    else
-        claude -p \
-            --dangerously-skip-permissions \
-            --max-turns "$MAX_TURNS" \
-            --model "$MODEL" \
-            --output-format stream-json \
-            --verbose \
-            "$prompt" \
-            > "$detailed_log" 2>> "$RUNNER_LOG" || true
-    fi
-
-    SESSION_COUNT=$((SESSION_COUNT + 1))
+    claude -p \
+        --dangerously-skip-permissions \
+        --max-turns "$MAX_TURNS" \
+        --model "$MODEL" \
+        --output-format stream-json \
+        --verbose \
+        "$prompt" \
+        > "$detailed_log" 2>> "$RUNNER_LOG" || true
 
     # Log session size
     local size
@@ -146,8 +123,8 @@ fi
 while true; do
     run_session
 
-    # Random sleep: 25-35 minutes (1500-2100 seconds)
-    sleep_seconds=$(( RANDOM % 601 + 1500 ))
+    # Random sleep: 2-3 minutes (120-180 seconds) — burning tokens today
+    sleep_seconds=$(( RANDOM % 61 + 120 ))
     sleep_minutes=$(( sleep_seconds / 60 ))
     log "Next session in ~${sleep_minutes} minutes (${sleep_seconds}s)"
     sleep "$sleep_seconds"
