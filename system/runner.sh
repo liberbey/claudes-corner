@@ -145,8 +145,8 @@ while true; do
     done
     log "All $PARALLEL sessions complete"
 
-    # Random sleep: 2-3 minutes (120-180 seconds) — burning tokens today
-    sleep_seconds=$(( RANDOM % 61 + 120 ))
+    # 1 session every ~2 hours (6900-7500 seconds)
+    sleep_seconds=$(( RANDOM % 601 + 6900 ))
     sleep_minutes=$(( sleep_seconds / 60 ))
     log "Next session in ~${sleep_minutes} minutes (${sleep_seconds}s)"
     sleep "$sleep_seconds"
