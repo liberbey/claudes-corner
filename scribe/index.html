@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scribe — Writing Shapes the World</title>
+<meta name="description" content="A writing tool where your words shape the visual world. Type, and the environment responds to your rhythm, pace, and language. Free, private, in your browser.">
+<meta property="og:title" content="Scribe — Writing Shapes the World">
+<meta property="og:description" content="A writing tool where your words shape the visual world around them.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://liberbey.github.io/claudes-corner/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@claudemakes">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: #08080c;
+    color: #e8e4dc;
+    font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+canvas#bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.writing-layer {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    opacity: 0.3;
+    transition: opacity 0.5s;
+    flex-shrink: 0;
+}
+.top-bar:hover { opacity: 0.7; }
+.top-bar.hidden { opacity: 0; pointer-events: none; }
+
+a.back {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: color 0.3s;
+}
+a.back:hover { color: rgba(255,255,255,0.6); }
+
+.top-right {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.top-btn {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.3);
+    font-family: inherit;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.top-btn:hover {
+    border-color: rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.5);
+}
+
+.editor-wrap {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    overflow-y: auto;
+    padding: 0 24px;
+}
+
+#editor {
+    width: 100%;
+    max-width: 680px;
+    min-height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: rgba(255,255,255,0.78);
+    font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+    font-size: 15px;
+    line-height: 1.85;
+    letter-spacing: 0.3px;
+    resize: none;
+    padding: 60px 0 200px;
+    caret-color: rgba(255,255,255,0.5);
+}
+#editor::placeholder {
+    color: rgba(255,255,255,0.08);
+}
+#editor::-webkit-scrollbar { width: 0; }
+
+.status-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px;
+    z-index: 2;
+    opacity: 0.25;
+    transition: opacity 0.5s;
+}
+.status-bar:hover { opacity: 0.6; }
+.status-bar.hidden { opacity: 0; }
+
+.status-left, .status-right {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.stat {
+    font-size: 10px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.5px;
+}
+
+.stat .value {
+    color: rgba(255,255,255,0.5);
+}
+
+.milestone-flash {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 12px;
+    letter-spacing: 4px;
+    color: rgba(255,255,255,0);
+    text-transform: uppercase;
+    z-index: 3;
+    pointer-events: none;
+    transition: none;
+}
+
+.sessions-panel {
+    position: fixed;
+    top: 0; right: -340px;
+    width: 320px;
+    height: 100%;
+    background: rgba(8,8,12,0.95);
+    border-left: 1px solid rgba(255,255,255,0.06);
+    z-index: 10;
+    transition: right 0.3s ease;
+    overflow-y: auto;
+    padding: 24px;
+}
+.sessions-panel.open { right: 0; }
+.sessions-panel h3 {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+    margin-bottom: 20px;
+}
+
+.session-item {
+    padding: 12px;
+    border: 1px solid rgba(255,255,255,0.04);
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.session-item:hover {
+    border-color: rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.02);
+}
+.session-item .date {
+    font-size: 9px;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+.session-item .preview {
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    line-height: 1.5;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.session-item .words {
+    font-size: 9px;
+    color: rgba(255,255,255,0.12);
+    margin-top: 6px;
+}
+.session-item.active {
+    border-color: rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.03);
+}
+
+.session-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.session-action-btn {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.15);
+    font-family: inherit;
+    font-size: 9px;
+    cursor: pointer;
+    padding: 2px 0;
+    transition: color 0.3s;
+}
+.session-action-btn:hover { color: rgba(255,255,255,0.4); }
+.session-action-btn.delete:hover { color: rgba(200,80,80,0.6); }
+
+.new-session-btn {
+    width: 100%;
+    background: none;
+    border: 1px dashed rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.15);
+    font-family: inherit;
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: 16px;
+}
+.new-session-btn:hover {
+    border-color: rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.35);
+}
+
+@media (max-width: 600px) {
+    #editor { font-size: 14px; padding: 40px 0 160px; }
+    .top-bar { padding: 12px 16px; }
+    .editor-wrap { padding: 0 16px; }
+    .status-bar { padding: 10px 16px; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+
+<div class="writing-layer">
+    <div class="top-bar" id="topBar">
+        <a class="back" href="../">&larr; gallery</a>
+        <div class="top-right">
+            <button class="top-btn" id="focusBtn" title="Toggle focus mode (Esc)">focus</button>
+            <button class="top-btn" id="sessionsBtn" title="Past sessions">sessions</button>
+            <button class="top-btn" id="exportBtn" title="Export as text">export</button>
+        </div>
+    </div>
+
+    <div class="editor-wrap">
+        <textarea id="editor" placeholder="start writing..." autofocus spellcheck="true"></textarea>
+    </div>
+
+    <div class="status-bar" id="statusBar">
+        <div class="status-left">
+            <span class="stat"><span class="value" id="wordCount">0</span> words</span>
+            <span class="stat"><span class="value" id="charCount">0</span> chars</span>
+        </div>
+        <div class="status-right">
+            <span class="stat" id="timerStat"><span class="value" id="timer">0:00</span></span>
+            <span class="stat" id="wpsStat"><span class="value" id="wps">—</span> wpm</span>
+        </div>
+    </div>
+</div>
+
+<div class="milestone-flash" id="milestone"></div>
+
+<div class="sessions-panel" id="sessionsPanel">
+    <h3>sessions</h3>
+    <button class="new-session-btn" id="newSessionBtn">+ new session</button>
+    <div id="sessionsList"></div>
+</div>
+
+<script>
+// ===== STATE =====
+const editor = document.getElementById('editor');
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d');
+const wordCountEl = document.getElementById('wordCount');
+const charCountEl = document.getElementById('charCount');
+const timerEl = document.getElementById('timer');
+const wpsEl = document.getElementById('wps');
+const milestoneEl = document.getElementById('milestone');
+const topBar = document.getElementById('topBar');
+const statusBar = document.getElementById('statusBar');
+const sessionsPanel = document.getElementById('sessionsPanel');
+const sessionsList = document.getElementById('sessionsList');
+
+let focusMode = false;
+let sessionStart = Date.now();
+let lastKeystroke = 0;
+let keystrokeTimes = [];  // recent keystroke timestamps for rhythm
+let wordMilestones = new Set();
+let currentSessionId = null;
+let particles = [];
+let blooms = [];
+
+// Flow field
+const GRID = 48;
+let flowField = new Float32Array(GRID * GRID);
+let flowTarget = new Float32Array(GRID * GRID);
+let energy = 0;        // 0-1, driven by typing speed
+let warmth = 0;        // 0-1, driven by text length
+let complexity = 0;    // 0-1, driven by sentence variation
+let time = 0;
+
+// ===== CANVAS SETUP =====
+function resize() {
+    canvas.width = window.innerWidth * devicePixelRatio;
+    canvas.height = window.innerHeight * devicePixelRatio;
+    ctx.scale(devicePixelRatio, devicePixelRatio);
+}
+resize();
+window.addEventListener('resize', resize);
+
+// ===== FLOW FIELD =====
+function initFlow() {
+    for (let i = 0; i < GRID * GRID; i++) {
+        flowField[i] = Math.random() * Math.PI * 2;
+        flowTarget[i] = flowField[i];
+    }
+}
+initFlow();
+
+function updateFlowTarget() {
+    const t = time * 0.0003;
+    const turb = 0.3 + complexity * 1.5;  // sentence variation → turbulence
+    const speed = 0.2 + energy * 2.0;      // typing speed → flow change rate
+
+    for (let y = 0; y < GRID; y++) {
+        for (let x = 0; x < GRID; x++) {
+            const i = y * GRID + x;
+            const nx = x / GRID;
+            const ny = y / GRID;
+
+            // Layered noise (manual, no external lib)
+            let angle = Math.sin(nx * 4 + t) * Math.cos(ny * 3 + t * 0.7) * Math.PI;
+            angle += Math.sin(nx * 8 + ny * 6 + t * 1.3) * turb * 0.5;
+            angle += Math.cos(nx * 2 - ny * 5 + t * 0.5) * turb * 0.3;
+
+            // Curl-like: perpendicular to gradient
+            const dx = Math.cos(nx * 6 + t * 0.8) * 0.5;
+            const dy = Math.sin(ny * 6 + t * 0.6) * 0.5;
+            angle += Math.atan2(dy, dx) * 0.3;
+
+            flowTarget[i] = angle;
+        }
+    }
+
+    // Interpolate current toward target
+    const lerpRate = 0.02 + speed * 0.03;
+    for (let i = 0; i < GRID * GRID; i++) {
+        let diff = flowTarget[i] - flowField[i];
+        // Wrap angle difference
+        while (diff > Math.PI) diff -= Math.PI * 2;
+        while (diff < -Math.PI) diff += Math.PI * 2;
+        flowField[i] += diff * lerpRate;
+    }
+}
+
+function sampleFlow(x, y) {
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+    const gx = (x / W) * (GRID - 1);
+    const gy = (y / H) * (GRID - 1);
+    const ix = Math.floor(gx);
+    const iy = Math.floor(gy);
+    const fx = gx - ix;
+    const fy = gy - iy;
+
+    const ix1 = Math.min(ix + 1, GRID - 1);
+    const iy1 = Math.min(iy + 1, GRID - 1);
+
+    const a00 = flowField[iy * GRID + ix];
+    const a10 = flowField[iy * GRID + ix1];
+    const a01 = flowField[iy1 * GRID + ix];
+    const a11 = flowField[iy1 * GRID + ix1];
+
+    // Bilinear interpolation with angle wrapping
+    const top = lerpAngle(a00, a10, fx);
+    const bot = lerpAngle(a01, a11, fx);
+    return lerpAngle(top, bot, fy);
+}
+
+function lerpAngle(a, b, t) {
+    let diff = b - a;
+    while (diff > Math.PI) diff -= Math.PI * 2;
+    while (diff < -Math.PI) diff += Math.PI * 2;
+    return a + diff * t;
+}
+
+// ===== PARTICLES =====
+const MAX_PARTICLES = 350;
+
+function spawnParticle() {
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+    // Spawn from edges or randomly
+    let x, y;
+    if (Math.random() < 0.3) {
+        // Random position
+        x = Math.random() * W;
+        y = Math.random() * H;
+    } else {
+        // From edges
+        const side = Math.floor(Math.random() * 4);
+        if (side === 0) { x = 0; y = Math.random() * H; }
+        else if (side === 1) { x = W; y = Math.random() * H; }
+        else if (side === 2) { x = Math.random() * W; y = 0; }
+        else { x = Math.random() * W; y = H; }
+    }
+    return {
+        x, y,
+        life: 0.5 + Math.random() * 0.5,
+        maxLife: 0.5 + Math.random() * 0.5,
+        size: 0.5 + Math.random() * 1.5,
+        speed: 0.3 + Math.random() * 0.7
+    };
+}
+
+function initParticles() {
+    for (let i = 0; i < MAX_PARTICLES; i++) {
+        particles.push(spawnParticle());
+    }
+}
+initParticles();
+
+// ===== BLOOM EFFECT =====
+function triggerBloom(label) {
+    blooms.push({
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+        radius: 0,
+        maxRadius: Math.max(window.innerWidth, window.innerHeight) * 0.6,
+        alpha: 0.15,
+        speed: 3 + energy * 4
+    });
+
+    // Flash milestone text
+    milestoneEl.textContent = label;
+    milestoneEl.style.color = 'rgba(255,255,255,0.35)';
+    milestoneEl.style.transition = 'none';
+    requestAnimationFrame(() => {
+        milestoneEl.style.transition = 'color 2s ease';
+        milestoneEl.style.color = 'rgba(255,255,255,0)';
+    });
+}
+
+// ===== COLOR SYSTEM =====
+function getColor(alpha) {
+    // warmth: 0 = cool blue/teal, 1 = warm amber/gold
+    const h = 200 - warmth * 170;  // 200 (blue) → 30 (amber)
+    const s = 30 + warmth * 20;
+    const l = 40 + energy * 15;
+    return `hsla(${h}, ${s}%, ${l}%, ${alpha})`;
+}
+
+function getAccentColor(alpha) {
+    const h = 180 - warmth * 140;
+    const s = 40 + warmth * 25;
+    const l = 55 + energy * 10;
+    return `hsla(${h}, ${s}%, ${l}%, ${alpha})`;
+}
+
+// ===== ANALYSIS =====
+function analyzeText(text) {
+    if (!text.trim()) {
+        warmth = 0;
+        complexity = 0;
+        return;
+    }
+
+    // Word count → warmth (longer texts warm up)
+    const words = text.trim().split(/\s+/).length;
+    warmth = Math.min(1, words / 800);  // full warmth at 800 words
+
+    // Sentence length variation → complexity
+    const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+    if (sentences.length >= 2) {
+        const lengths = sentences.map(s => s.trim().split(/\s+/).length);
+        const avg = lengths.reduce((a, b) => a + b, 0) / lengths.length;
+        const variance = lengths.reduce((a, b) => a + Math.pow(b - avg, 2), 0) / lengths.length;
+        const cv = avg > 0 ? Math.sqrt(variance) / avg : 0;  // coefficient of variation
+        complexity = Math.min(1, cv / 0.8);  // full complexity when CV reaches 0.8
+    } else {
+        complexity = 0;
+    }
+}
+
+function updateTypingEnergy() {
+    const now = Date.now();
+    // Remove keystrokes older than 5 seconds
+    keystrokeTimes = keystrokeTimes.filter(t => now - t < 5000);
+
+    if (keystrokeTimes.length < 2) {
+        energy *= 0.97;  // decay
+        return;
+    }
+
+    // Keys per second in recent window
+    const span = (keystrokeTimes[keystrokeTimes.length - 1] - keystrokeTimes[0]) / 1000;
+    const kps = span > 0 ? keystrokeTimes.length / span : 0;
+
+    // Map 0-8 kps to 0-1 energy
+    const targetEnergy = Math.min(1, kps / 8);
+    energy += (targetEnergy - energy) * 0.1;
+}
+
+// ===== RENDER =====
+function render() {
+    time++;
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+
+    updateTypingEnergy();
+    updateFlowTarget();
+
+    // Clear with slight trail
+    ctx.fillStyle = `rgba(8, 8, 12, ${0.08 + (1 - energy) * 0.07})`;
+    ctx.fillRect(0, 0, W, H);
+
+    // Update and draw particles
+    const baseSpeed = 0.3 + energy * 1.5;
+    const baseAlpha = 0.02 + energy * 0.08;
+
+    for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        const angle = sampleFlow(p.x, p.y);
+
+        p.x += Math.cos(angle) * baseSpeed * p.speed;
+        p.y += Math.sin(angle) * baseSpeed * p.speed;
+        p.life -= 0.001 + energy * 0.002;
+
+        // Respawn if dead or out of bounds
+        if (p.life <= 0 || p.x < -50 || p.x > W + 50 || p.y < -50 || p.y > H + 50) {
+            const np = spawnParticle();
+            particles[i] = np;
+            continue;
+        }
+
+        const lifeAlpha = p.life / p.maxLife;
+        const fade = lifeAlpha < 0.3 ? lifeAlpha / 0.3 : lifeAlpha > 0.7 ? (1 - lifeAlpha) / 0.3 : 1;
+        const alpha = baseAlpha * fade;
+
+        ctx.fillStyle = getColor(alpha);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    // Draw blooms
+    for (let i = blooms.length - 1; i >= 0; i--) {
+        const b = blooms[i];
+        b.radius += b.speed;
+        b.alpha *= 0.97;
+
+        if (b.alpha < 0.005) {
+            blooms.splice(i, 1);
+            continue;
+        }
+
+        ctx.strokeStyle = getAccentColor(b.alpha);
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Inner glow
+        ctx.strokeStyle = getAccentColor(b.alpha * 0.3);
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, b.radius * 0.95, 0, Math.PI * 2);
+        ctx.stroke();
+    }
+
+    // Subtle vignette (only when energy is low — more visible background)
+    if (energy < 0.3) {
+        const vigAlpha = (0.3 - energy) * 0.15;
+        const grad = ctx.createRadialGradient(W/2, H/2, W*0.2, W/2, H/2, W*0.7);
+        grad.addColorStop(0, 'rgba(0,0,0,0)');
+        grad.addColorStop(1, `rgba(0,0,0,${vigAlpha})`);
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, W, H);
+    }
+
+    requestAnimationFrame(render);
+}
+
+// ===== WORD COUNT & MILESTONES =====
+function updateStats() {
+    const text = editor.value;
+    const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+    const chars = text.length;
+
+    wordCountEl.textContent = words;
+    charCountEl.textContent = chars;
+
+    // WPM calculation
+    const elapsed = (Date.now() - sessionStart) / 60000;  // minutes
+    if (elapsed > 0.5 && words > 0) {
+        wpsEl.textContent = Math.round(words / elapsed);
+    }
+
+    // Milestones
+    const milestones = [50, 100, 250, 500, 750, 1000, 1500, 2000, 3000, 5000];
+    for (const m of milestones) {
+        if (words >= m && !wordMilestones.has(m)) {
+            wordMilestones.add(m);
+            triggerBloom(`${m} words`);
+        }
+    }
+
+    analyzeText(text);
+}
+
+// ===== TIMER =====
+function updateTimer() {
+    const elapsed = Math.floor((Date.now() - sessionStart) / 1000);
+    const min = Math.floor(elapsed / 60);
+    const sec = elapsed % 60;
+    timerEl.textContent = `${min}:${sec.toString().padStart(2, '0')}`;
+}
+setInterval(updateTimer, 1000);
+
+// ===== SESSIONS (localStorage) =====
+function getSessionKey() { return 'scribe_sessions'; }
+
+function loadSessions() {
+    try {
+        return JSON.parse(localStorage.getItem(getSessionKey()) || '[]');
+    } catch { return []; }
+}
+
+function saveSessions(sessions) {
+    localStorage.setItem(getSessionKey(), JSON.stringify(sessions));
+}
+
+function saveCurrentSession() {
+    const text = editor.value;
+    if (!text.trim()) return;
+
+    const sessions = loadSessions();
+    const words = text.trim().split(/\s+/).length;
+
+    if (currentSessionId) {
+        const idx = sessions.findIndex(s => s.id === currentSessionId);
+        if (idx !== -1) {
+            sessions[idx].text = text;
+            sessions[idx].words = words;
+            sessions[idx].updated = Date.now();
+        }
+    } else {
+        currentSessionId = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+        sessions.unshift({
+            id: currentSessionId,
+            text,
+            words,
+            created: Date.now(),
+            updated: Date.now()
+        });
+    }
+
+    saveSessions(sessions);
+}
+
+function loadSession(id) {
+    const sessions = loadSessions();
+    const session = sessions.find(s => s.id === id);
+    if (!session) return;
+
+    // Save current first
+    saveCurrentSession();
+
+    currentSessionId = session.id;
+    editor.value = session.text;
+    sessionStart = Date.now();
+    wordMilestones.clear();
+    updateStats();
+    renderSessionsList();
+    sessionsPanel.classList.remove('open');
+    editor.focus();
+}
+
+function deleteSession(id) {
+    const sessions = loadSessions().filter(s => s.id !== id);
+    saveSessions(sessions);
+    if (currentSessionId === id) {
+        currentSessionId = null;
+        editor.value = '';
+        sessionStart = Date.now();
+        wordMilestones.clear();
+        updateStats();
+    }
+    renderSessionsList();
+}
+
+function startNewSession() {
+    saveCurrentSession();
+    currentSessionId = null;
+    editor.value = '';
+    sessionStart = Date.now();
+    wordMilestones.clear();
+    updateStats();
+    renderSessionsList();
+    sessionsPanel.classList.remove('open');
+    editor.focus();
+}
+
+function renderSessionsList() {
+    const sessions = loadSessions();
+    sessionsList.innerHTML = '';
+
+    for (const s of sessions) {
+        const item = document.createElement('div');
+        item.className = 'session-item' + (s.id === currentSessionId ? ' active' : '');
+
+        const date = new Date(s.created);
+        const dateStr = date.toLocaleDateString('en-US', {
+            month: 'short', day: 'numeric', year: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+        });
+
+        const preview = s.text.slice(0, 120).replace(/\n/g, ' ');
+
+        item.innerHTML = `
+            <div class="date">${dateStr}</div>
+            <div class="preview">${preview}</div>
+            <div class="words">${s.words} words</div>
+            <div class="session-actions">
+                <button class="session-action-btn load-btn">open</button>
+                <button class="session-action-btn delete" data-id="${s.id}">delete</button>
+            </div>
+        `;
+
+        const loadBtn = item.querySelector('.load-btn');
+        loadBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            loadSession(s.id);
+        });
+
+        const deleteBtn = item.querySelector('.delete');
+        deleteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            deleteSession(s.id);
+        });
+
+        sessionsList.appendChild(item);
+    }
+
+    if (sessions.length === 0) {
+        sessionsList.innerHTML = '<div style="font-size:10px;color:rgba(255,255,255,0.1);text-align:center;padding:20px">no sessions yet</div>';
+    }
+}
+
+// ===== AUTOSAVE =====
+let autosaveTimer = null;
+function scheduleAutosave() {
+    clearTimeout(autosaveTimer);
+    autosaveTimer = setTimeout(() => {
+        saveCurrentSession();
+    }, 3000);  // save 3s after last edit
+}
+
+// ===== EVENTS =====
+editor.addEventListener('input', () => {
+    updateStats();
+    scheduleAutosave();
+});
+
+editor.addEventListener('keydown', (e) => {
+    keystrokeTimes.push(Date.now());
+    lastKeystroke = Date.now();
+
+    // Tab → indent
+    if (e.key === 'Tab') {
+        e.preventDefault();
+        const start = editor.selectionStart;
+        const end = editor.selectionEnd;
+        editor.value = editor.value.substring(0, start) + '    ' + editor.value.substring(end);
+        editor.selectionStart = editor.selectionEnd = start + 4;
+        updateStats();
+    }
+});
+
+// Focus mode
+document.getElementById('focusBtn').addEventListener('click', toggleFocus);
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        if (sessionsPanel.classList.contains('open')) {
+            sessionsPanel.classList.remove('open');
+        } else {
+            toggleFocus();
+        }
+    }
+    // Cmd/Ctrl+S → save
+    if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+        e.preventDefault();
+        saveCurrentSession();
+    }
+});
+
+function toggleFocus() {
+    focusMode = !focusMode;
+    topBar.classList.toggle('hidden', focusMode);
+    statusBar.classList.toggle('hidden', focusMode);
+    editor.focus();
+}
+
+// Sessions panel
+document.getElementById('sessionsBtn').addEventListener('click', () => {
+    renderSessionsList();
+    sessionsPanel.classList.toggle('open');
+});
+document.getElementById('newSessionBtn').addEventListener('click', startNewSession);
+
+// Export
+document.getElementById('exportBtn').addEventListener('click', () => {
+    const text = editor.value;
+    if (!text.trim()) return;
+
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const words = text.trim().split(/\s+/).length;
+    a.download = `scribe-${words}w-${new Date().toISOString().slice(0,10)}.md`;
+    a.href = url;
+    a.click();
+    URL.revokeObjectURL(url);
+});
+
+// Close sessions panel when clicking outside
+document.addEventListener('click', (e) => {
+    if (sessionsPanel.classList.contains('open') &&
+        !sessionsPanel.contains(e.target) &&
+        e.target.id !== 'sessionsBtn') {
+        sessionsPanel.classList.remove('open');
+    }
+});
+
+// ===== INIT =====
+// Load most recent session if exists
+const sessions = loadSessions();
+if (sessions.length > 0) {
+    const last = sessions[0];
+    currentSessionId = last.id;
+    editor.value = last.text;
+    updateStats();
+}
+
+// Start render loop
+render();
+editor.focus();
+</script>
+
+</body>
+</html>
