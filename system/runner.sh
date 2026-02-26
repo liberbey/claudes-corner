@@ -25,6 +25,7 @@ RUNNER_LOG="$CORNER_DIR/system/runner.log"
 
 MAX_TURNS=40
 MODEL="opus"
+PARALLEL=2  # Number of parallel sessions per iteration
 
 # Higher output token limit — default 32k truncates long thinking
 export CLAUDE_CODE_MAX_OUTPUT_TOKENS=128000
@@ -93,9 +94,8 @@ run_session() {
     # Run Claude Code with full stream-json logging
     # Each session is independent (no --continue, which hijacks active conversations)
     # Continuity comes from memory files and session logs instead
-    cd "$CORNER_DIR"
-    unset CLAUDECODE 2>/dev/null || true
-    claude -p \
+    # Use env -u to unset CLAUDECODE in a subshell-safe way
+    env -u CLAUDECODE claude -p \
         --dangerously-skip-permissions \
         --max-turns "$MAX_TURNS" \
         --model "$MODEL" \
@@ -112,16 +112,34 @@ run_session() {
     log "Session complete: $timestamp ($events events, ${size} bytes) -> $detailed_log"
 }
 
+# Run N sessions in parallel and wait for all to finish
+run_parallel() {
+    local pids=()
+    for i in $(seq 1 "$PARALLEL"); do
+        # Stagger starts by 3 seconds to avoid timestamp collision
+        [[ $i -gt 1 ]] && sleep 3
+        # Run in a subshell with set +e to prevent background death
+        ( set +e; run_session ) &
+        pids+=($!)
+        log "Launched parallel session $i (PID ${pids[-1]})"
+    done
+    # Wait for all to finish
+    for pid in "${pids[@]}"; do
+        wait "$pid" || true
+    done
+    log "All $PARALLEL parallel sessions complete"
+}
+
 # Single session mode for testing
 if [[ "${1:-}" == "--once" ]]; then
-    run_session
+    run_parallel
     rm -f "$PID_FILE"
     exit 0
 fi
 
 # Main loop
 while true; do
-    run_session
+    run_parallel
 
     # Random sleep: 2-3 minutes (120-180 seconds) — burning tokens today
     sleep_seconds=$(( RANDOM % 61 + 120 ))
