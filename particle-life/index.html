@@ -296,6 +296,37 @@ function force(d, attraction) {
   }
 }
 
+// --- Mouse/touch interaction ---
+let mouseX = -9999, mouseY = -9999;
+let mouseDown = false;
+const MOUSE_RADIUS = 200;
+const MOUSE_STRENGTH = 0.8;
+
+canvas.addEventListener('mousedown', (e) => {
+  mouseDown = true;
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+});
+canvas.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+});
+canvas.addEventListener('mouseup', () => { mouseDown = false; });
+canvas.addEventListener('mouseleave', () => { mouseDown = false; });
+
+canvas.addEventListener('touchstart', (e) => {
+  mouseDown = true;
+  mouseX = e.touches[0].clientX;
+  mouseY = e.touches[0].clientY;
+  e.preventDefault();
+}, { passive: false });
+canvas.addEventListener('touchmove', (e) => {
+  mouseX = e.touches[0].clientX;
+  mouseY = e.touches[0].clientY;
+  e.preventDefault();
+}, { passive: false });
+canvas.addEventListener('touchend', () => { mouseDown = false; });
+
 // --- Spatial hashing for O(n * k) instead of O(n^2) ---
 let cellSize, gridW, gridH, grid;
 
@@ -364,6 +395,18 @@ function step() {
       }
     }
 
+    // Mouse attraction when pressed
+    if (mouseDown) {
+      const mdx = mouseX - xi;
+      const mdy = mouseY - yi;
+      const md = Math.sqrt(mdx * mdx + mdy * mdy);
+      if (md > 1 && md < MOUSE_RADIUS) {
+        const mf = MOUSE_STRENGTH * (1 - md / MOUSE_RADIUS);
+        fx += (mdx / md) * mf;
+        fy += (mdy / md) * mf;
+      }
+    }
+
     vx[i] = (vx[i] + fx * DT) * (1 - FRICTION);
     vy[i] = (vy[i] + fy * DT) * (1 - FRICTION);
   }
@@ -391,12 +434,17 @@ function render() {
     const t = types[i];
     const [r, g, b] = TYPE_COLORS[t];
 
-    // Speed-based brightness
+    // Speed-based brightness and size
     const speed = Math.sqrt(vx[i] * vx[i] + vy[i] * vy[i]);
-    const brightness = Math.min(1, 0.4 + speed * 0.15);
+    const brightness = Math.min(1, 0.35 + speed * 0.2);
+    const size = 1.5 + Math.min(speed * 0.2, 1.5);
 
-    ctx.fillStyle = `rgba(${Math.floor(r * brightness)},${Math.floor(g * brightness)},${Math.floor(b * brightness)},0.85)`;
-    ctx.fillRect(Math.floor(px[i]), Math.floor(py[i]), 2, 2);
+    const cr = Math.floor(r * brightness);
+    const cg = Math.floor(g * brightness);
+    const cb = Math.floor(b * brightness);
+
+    ctx.fillStyle = `rgba(${cr},${cg},${cb},0.85)`;
+    ctx.fillRect(px[i] - size / 2, py[i] - size / 2, size, size);
   }
 }
 
@@ -405,35 +453,46 @@ const matCanvas = document.getElementById('matrix-canvas');
 const matCtx = matCanvas.getContext('2d');
 
 function drawMatrix() {
-  const size = 90;
-  const cellW = size / NUM_TYPES;
+  const cellW = 12;
+  const gap = 2;
+  const margin = 10; // space for color indicators
+  const totalSize = margin + NUM_TYPES * (cellW + gap);
+  matCanvas.width = totalSize;
+  matCanvas.height = totalSize;
 
-  matCtx.clearRect(0, 0, size, size);
+  matCtx.fillStyle = 'rgba(10,10,15,0.85)';
+  matCtx.fillRect(0, 0, totalSize, totalSize);
 
+  // Column color indicators (top)
+  for (let j = 0; j < NUM_TYPES; j++) {
+    const [r, g, b] = TYPE_COLORS[j];
+    matCtx.fillStyle = `rgb(${r},${g},${b})`;
+    const x = margin + j * (cellW + gap) + cellW / 2;
+    matCtx.beginPath();
+    matCtx.arc(x, margin / 2, 3, 0, Math.PI * 2);
+    matCtx.fill();
+  }
+
+  // Row color indicators (left) and cells
   for (let i = 0; i < NUM_TYPES; i++) {
+    const [ri, gi, bi] = TYPE_COLORS[i];
+    matCtx.fillStyle = `rgb(${ri},${gi},${bi})`;
+    const y = margin + i * (cellW + gap) + cellW / 2;
+    matCtx.beginPath();
+    matCtx.arc(margin / 2, y, 3, 0, Math.PI * 2);
+    matCtx.fill();
+
     for (let j = 0; j < NUM_TYPES; j++) {
       const v = attractions[i][j];
-      // Green for attraction, red for repulsion
-      if (v >= 0) {
-        const intensity = v;
-        matCtx.fillStyle = `rgba(80,220,120,${intensity * 0.8})`;
-      } else {
-        const intensity = -v;
-        matCtx.fillStyle = `rgba(255,80,80,${intensity * 0.8})`;
-      }
-      matCtx.fillRect(j * cellW, i * cellW, cellW - 1, cellW - 1);
+      const cx = margin + j * (cellW + gap);
+      const cy = margin + i * (cellW + gap);
 
-      // Type color indicator on edges
-      if (i === 0) {
-        const [r, g, b] = TYPE_COLORS[j];
-        matCtx.fillStyle = `rgb(${r},${g},${b})`;
-        matCtx.fillRect(j * cellW, 0, cellW - 1, 1);
+      if (v >= 0) {
+        matCtx.fillStyle = `rgba(80,220,120,${0.15 + v * 0.75})`;
+      } else {
+        matCtx.fillStyle = `rgba(255,80,80,${0.15 + (-v) * 0.75})`;
       }
-      if (j === 0) {
-        const [r, g, b] = TYPE_COLORS[i];
-        matCtx.fillStyle = `rgb(${r},${g},${b})`;
-        matCtx.fillRect(0, i * cellW, 1, cellW - 1);
-      }
+      matCtx.fillRect(cx, cy, cellW, cellW);
     }
   }
 }
@@ -490,22 +549,31 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 's' || e.key === 'S') screenshot();
 });
 
-// UI fade on interaction
+// UI fade
 let hasInteracted = false;
+let uiFadeTimer;
+
+function showUI() {
+  const ui = document.getElementById('ui');
+  ui.classList.remove('faded');
+  clearTimeout(uiFadeTimer);
+  if (hasInteracted) {
+    uiFadeTimer = setTimeout(() => ui.classList.add('faded'), 4000);
+  }
+}
+
 canvas.addEventListener('mousedown', () => {
   if (!hasInteracted) {
     hasInteracted = true;
     setTimeout(() => {
       document.getElementById('title').classList.add('faded');
+      document.getElementById('ui').classList.add('faded');
     }, 5000);
   }
 });
 
-// Show UI when mouse near bottom
 canvas.addEventListener('mousemove', (e) => {
-  if (e.clientY > H * 0.75) {
-    document.getElementById('ui').classList.remove('faded');
-  }
+  if (e.clientY > H * 0.7) showUI();
 });
 
 // --- Init & start ---
