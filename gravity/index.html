@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Gravity — Physics Puzzle</title>
+<meta name="description" content="Place gravitational wells to guide particle streams through space. A physics puzzle in five levels.">
+<meta property="og:title" content="Gravity — Physics Puzzle">
+<meta property="og:description" content="Place gravitational wells to guide particle streams through space.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #08080c; }
+body { font-family: 'SF Mono', Menlo, Consolas, 'Courier New', monospace; color: #e8e4dc; }
+canvas { display: block; width: 100%; height: 100%; cursor: crosshair; }
+
+#ui {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 10;
+}
+
+.ui-top {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 20px 28px;
+}
+
+.level-info { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.25); }
+.level-name { font-size: 13px; letter-spacing: 3px; color: rgba(255,255,255,0.45); margin-top: 4px; text-transform: uppercase; }
+
+.score-info { text-align: right; font-size: 11px; color: rgba(255,255,255,0.3); letter-spacing: 1px; }
+.score-detail { color: rgba(255,255,255,0.15); margin-top: 2px; }
+
+.wells-info {
+  font-size: 10px; color: rgba(255,255,255,0.2); letter-spacing: 1px; text-align: center;
+  text-transform: uppercase;
+}
+
+.hint {
+  position: fixed; bottom: 72px; left: 50%; transform: translateX(-50%);
+  font-size: 10px; color: rgba(255,255,255,0.12); letter-spacing: 0.5px;
+  text-align: center; white-space: nowrap;
+}
+
+.controls {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 12px; pointer-events: auto;
+}
+
+.btn {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.3); padding: 7px 18px; font-family: inherit;
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  cursor: pointer; transition: all 0.3s;
+}
+.btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: rgba(255,255,255,0.5); }
+.btn-primary { background: rgba(200,160,80,0.1); border-color: rgba(200,160,80,0.25); color: rgba(200,160,80,0.6); }
+.btn-primary:hover { background: rgba(200,160,80,0.2); color: rgba(200,160,80,0.8); }
+
+.mode-toggle { position: fixed; bottom: 20px; right: 28px; pointer-events: auto; }
+.mode-btn {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.25); padding: 7px 14px; font-family: inherit;
+  font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase;
+  cursor: pointer; transition: all 0.3s;
+}
+.mode-btn.attract { border-color: rgba(200,160,80,0.2); color: rgba(200,160,80,0.4); }
+.mode-btn.repel { border-color: rgba(100,150,220,0.2); color: rgba(100,150,220,0.4); }
+
+#overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: rgba(8,8,12,0.88); opacity: 0; transition: opacity 0.6s;
+  pointer-events: none; z-index: 20;
+}
+#overlay.show { opacity: 1; pointer-events: auto; }
+
+.overlay-title {
+  font-size: 13px; letter-spacing: 4px; text-transform: uppercase;
+  color: rgba(255,255,255,0.45); margin-bottom: 20px;
+}
+
+.stars-row { display: flex; gap: 16px; margin-bottom: 12px; }
+.star-icon { transition: all 0.4s ease; }
+
+.overlay-score {
+  font-size: 11px; color: rgba(255,255,255,0.2); letter-spacing: 1px; margin-bottom: 28px;
+}
+
+.overlay-btns { display: flex; gap: 12px; }
+
+.back-link {
+  position: fixed; top: 20px; right: 28px; font-size: 10px;
+  color: rgba(255,255,255,0.12); text-decoration: none; letter-spacing: 1px;
+  transition: color 0.3s; pointer-events: auto; z-index: 30;
+}
+.back-link:hover { color: rgba(255,255,255,0.35); }
+
+/* Title screen */
+#title-screen {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: rgba(8,8,12,0.95); z-index: 25; transition: opacity 0.8s;
+}
+#title-screen.hidden { opacity: 0; pointer-events: none; }
+
+.title-main {
+  font-size: 16px; letter-spacing: 8px; text-transform: uppercase;
+  color: rgba(255,255,255,0.5); margin-bottom: 16px;
+}
+.title-sub {
+  font-size: 11px; color: rgba(255,255,255,0.15); letter-spacing: 1px;
+  margin-bottom: 40px; text-align: center; line-height: 1.8;
+}
+.title-start {
+  background: rgba(200,160,80,0.1); border: 1px solid rgba(200,160,80,0.25);
+  color: rgba(200,160,80,0.6); padding: 10px 32px; font-family: inherit;
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  cursor: pointer; transition: all 0.3s; pointer-events: auto;
+}
+.title-start:hover { background: rgba(200,160,80,0.2); color: rgba(200,160,80,0.8); }
+
+@media (max-width: 600px) {
+  .ui-top { padding: 14px 16px; }
+  .hint { font-size: 9px; bottom: 64px; }
+  .controls { bottom: 16px; }
+  .mode-toggle { bottom: 16px; right: 16px; }
+  .back-link { top: 14px; right: 16px; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+
+<div id="ui">
+  <div class="ui-top">
+    <div>
+      <div class="level-info" id="levelNum"></div>
+      <div class="level-name" id="levelName"></div>
+    </div>
+    <div class="wells-info" id="wellsInfo"></div>
+    <div class="score-info">
+      <div id="captured">Captured: 0</div>
+      <div class="score-detail" id="emitted">Emitted: 0</div>
+    </div>
+  </div>
+  <div class="hint" id="hint"></div>
+</div>
+
+<div class="controls">
+  <button class="btn" id="btnClear">Clear</button>
+  <button class="btn" id="btnRetry">Retry</button>
+</div>
+
+<div class="mode-toggle">
+  <button class="mode-btn attract" id="modeBtn">Attract</button>
+</div>
+
+<div id="overlay">
+  <div class="overlay-title" id="overlayTitle">Level Complete</div>
+  <div class="stars-row" id="starsRow"></div>
+  <div class="overlay-score" id="overlayScore"></div>
+  <div class="overlay-btns">
+    <button class="btn" id="btnRetry2">Retry</button>
+    <button class="btn btn-primary" id="btnNext">Next Level</button>
+  </div>
+</div>
+
+<div id="title-screen">
+  <div class="title-main">Gravity</div>
+  <div class="title-sub">
+    Place gravitational wells to guide particles to their target.<br>
+    Click to place. Shift+click to repel. Click a well to remove it.
+  </div>
+  <button class="title-start" id="btnStart">Begin</button>
+</div>
+
+<a class="back-link" href="../">← back</a>
+
+<script>
+// =================================================================
+// GRAVITY — A Physics Puzzle Game
+// =================================================================
+
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+
+// Virtual coordinate system (resolution-independent)
+const VW = 1000, VH = 600;
+
+// Physics
+const G = 10000;
+const MIN_DIST = 20;
+const SPEED = 2.2;
+const EMIT_INTERVAL = 4;
+const TRAIL_LEN = 12;
+const P_RADIUS = 2.5;
+const WELL_R = 14;
+const MAX_AGE = 600;
+const SPEED_CAP = 7;
+
+// State
+let currentLevel = 0;
+let wells = [];
+let particles = [];
+let emitCount = 0;
+let capturedCount = 0;
+let frame = 0;
+let levelDone = false;
+let mode = 'attract';
+let scale = 1, offX = 0, offY = 0;
+let mouseVX = null, mouseVY = null;
+let effects = [];
+let started = false;
+
+// Audio
+let audio = null;
+
+function initAudio() {
+  if (audio) return;
+  audio = new (window.AudioContext || window.webkitAudioContext)();
+}
+
+function tone(freq, dur, vol, type) {
+  if (!audio) return;
+  const o = audio.createOscillator();
+  const g = audio.createGain();
+  o.connect(g); g.connect(audio.destination);
+  o.type = type || 'sine';
+  o.frequency.setValueAtTime(freq, audio.currentTime);
+  g.gain.setValueAtTime(vol, audio.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + dur);
+  o.start(); o.stop(audio.currentTime + dur);
+}
+
+function sndCapture() {
+  tone(600 + Math.random() * 500, 0.12, 0.04);
+}
+
+function sndPlace() {
+  tone(280, 0.15, 0.03);
+}
+
+function sndRemove() {
+  tone(200, 0.1, 0.02);
+}
+
+function sndComplete() {
+  const t = audio ? audio.currentTime : 0;
+  [523, 659, 784].forEach((f, i) => {
+    setTimeout(() => tone(f, 0.35, 0.05), i * 140);
+  });
+}
+
+// =================================================================
+// LEVELS
+// =================================================================
+
+const levels = [
+  {
+    name: "First Pull",
+    hint: "Click to place an attractor. Guide the stream upward to the target.",
+    source: { x: 80, y: 420, angle: -0.2, spread: 0.1 },
+    target: { x: 860, y: 140, radius: 50 },
+    walls: [],
+    maxWells: 2,
+    stars: [0.3, 0.55, 0.78],
+    total: 50
+  },
+  {
+    name: "Over",
+    hint: "Lift particles over the wall to reach the other side.",
+    source: { x: 80, y: 300, angle: 0, spread: 0.06 },
+    target: { x: 900, y: 300, radius: 50 },
+    walls: [
+      { x1: 480, y1: 120, x2: 480, y2: 480 }
+    ],
+    maxWells: 3,
+    stars: [0.25, 0.48, 0.72],
+    total: 50
+  },
+  {
+    name: "Focus",
+    hint: "The stream is wide. Converge it onto the small target.",
+    source: { x: 80, y: 300, angle: 0, spread: 0.45 },
+    target: { x: 880, y: 300, radius: 28 },
+    walls: [],
+    maxWells: 3,
+    stars: [0.2, 0.42, 0.65],
+    total: 55
+  },
+  {
+    name: "Passage",
+    hint: "Thread particles through the gaps between walls.",
+    source: { x: 80, y: 480, angle: -0.35, spread: 0.08 },
+    target: { x: 900, y: 120, radius: 45 },
+    walls: [
+      { x1: 350, y1: 0, x2: 350, y2: 340 },
+      { x1: 620, y1: 260, x2: 620, y2: 600 }
+    ],
+    maxWells: 4,
+    stars: [0.2, 0.4, 0.62],
+    total: 55
+  },
+  {
+    name: "Return",
+    hint: "The target is behind you. Curve particles in a wide arc.",
+    source: { x: 150, y: 180, angle: 0.05, spread: 0.06 },
+    target: { x: 150, y: 460, radius: 50 },
+    walls: [
+      { x1: 60, y1: 280, x2: 260, y2: 280 }
+    ],
+    maxWells: 5,
+    stars: [0.15, 0.32, 0.55],
+    total: 50
+  }
+];
+
+// =================================================================
+// COORDINATE TRANSFORMS
+// =================================================================
+
+function toScreen(vx, vy) {
+  return [vx * scale + offX, vy * scale + offY];
+}
+
+function toVirtual(sx, sy) {
+  return [(sx - offX) / scale, (sy - offY) / scale];
+}
+
+function resize() {
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = window.innerWidth * dpr;
+  canvas.height = window.innerHeight * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const sw = window.innerWidth, sh = window.innerHeight;
+  scale = Math.min(sw / VW, sh / VH);
+  offX = (sw - VW * scale) / 2;
+  offY = (sh - VH * scale) / 2;
+}
+
+// =================================================================
+// PARTICLES
+// =================================================================
+
+function emitParticle(level) {
+  const src = level.source;
+  // Deterministic spread: cycle through angles
+  const steps = 11;
+  const t = (emitCount % steps) / (steps - 1) - 0.5; // -0.5 to 0.5
+  const angle = src.angle + t * src.spread * 2;
+  return {
+    x: src.x, y: src.y,
+    vx: Math.cos(angle) * SPEED,
+    vy: Math.sin(angle) * SPEED,
+    age: 0, alive: true,
+    trail: []
+  };
+}
+
+function updateParticle(p, level) {
+  if (!p.alive) return;
+
+  p.trail.push({ x: p.x, y: p.y });
+  if (p.trail.length > TRAIL_LEN) p.trail.shift();
+
+  // Gravity from wells
+  for (const w of wells) {
+    const dx = w.x - p.x, dy = w.y - p.y;
+    const d2 = dx * dx + dy * dy;
+    const d = Math.sqrt(d2);
+    const minD = Math.max(d, MIN_DIST);
+    const f = G * w.str / (minD * minD);
+    p.vx += f * dx / minD;
+    p.vy += f * dy / minD;
+  }
+
+  // Speed cap
+  const spd = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+  if (spd > SPEED_CAP) {
+    p.vx = p.vx / spd * SPEED_CAP;
+    p.vy = p.vy / spd * SPEED_CAP;
+  }
+
+  p.x += p.vx;
+  p.y += p.vy;
+
+  // Wall collisions
+  for (const wall of level.walls) {
+    resolveWall(p, wall);
+  }
+
+  // Target capture
+  const tgt = level.target;
+  const tdx = p.x - tgt.x, tdy = p.y - tgt.y;
+  if (tdx * tdx + tdy * tdy < (tgt.radius + 4) * (tgt.radius + 4)) {
+    p.alive = false;
+    capturedCount++;
+    effects.push({ x: p.x, y: p.y, t: 0, type: 'capture' });
+    sndCapture();
+    return;
+  }
+
+  // Bounds / age
+  p.age++;
+  if (p.x < -60 || p.x > VW + 60 || p.y < -60 || p.y > VH + 60 || p.age > MAX_AGE) {
+    p.alive = false;
+  }
+}
+
+function resolveWall(p, wall) {
+  const wx = wall.x2 - wall.x1, wy = wall.y2 - wall.y1;
+  const len2 = wx * wx + wy * wy;
+  if (len2 === 0) return;
+
+  const t = Math.max(0, Math.min(1, ((p.x - wall.x1) * wx + (p.y - wall.y1) * wy) / len2));
+  const cx = wall.x1 + t * wx, cy = wall.y1 + t * wy;
+  const dx = p.x - cx, dy = p.y - cy;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+
+  if (dist < 4) {
+    const len = Math.sqrt(len2);
+    let nx = -wy / len, ny = wx / len;
+    if (dx * nx + dy * ny < 0) { nx = -nx; ny = -ny; }
+    const dot = p.vx * nx + p.vy * ny;
+    p.vx = (p.vx - 2 * dot * nx) * 0.85;
+    p.vy = (p.vy - 2 * dot * ny) * 0.85;
+    const push = 4 - dist + 0.5;
+    p.x += nx * push;
+    p.y += ny * push;
+  }
+}
+
+// =================================================================
+// RENDERING
+// =================================================================
+
+function render(level) {
+  const W = window.innerWidth, H = window.innerHeight;
+
+  ctx.fillStyle = '#08080c';
+  ctx.fillRect(0, 0, W, H);
+
+  // Subtle grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.012)';
+  ctx.lineWidth = 0.5;
+  const gs = 50 * scale;
+  for (let gx = offX % gs; gx < W; gx += gs) {
+    ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke();
+  }
+  for (let gy = offY % gs; gy < H; gy += gs) {
+    ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke();
+  }
+
+  // Walls
+  for (const wall of level.walls) {
+    const [x1, y1] = toScreen(wall.x1, wall.y1);
+    const [x2, y2] = toScreen(wall.x2, wall.y2);
+    ctx.lineCap = 'round';
+    // Glow
+    ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+    ctx.lineWidth = 8 * scale;
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    // Core
+    ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+    ctx.lineWidth = 2 * scale;
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  }
+
+  // Source
+  const [sx, sy] = toScreen(level.source.x, level.source.y);
+  const sPulse = 1 + 0.12 * Math.sin(frame * 0.05);
+  const sR = 7 * scale * sPulse;
+  ctx.beginPath(); ctx.arc(sx, sy, sR * 2.5, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255,255,255,0.02)'; ctx.fill();
+  ctx.beginPath(); ctx.arc(sx, sy, sR, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255,255,255,0.12)'; ctx.fill();
+  // Direction arrow
+  const aLen = 25 * scale;
+  const ax = Math.cos(level.source.angle) * aLen, ay = Math.sin(level.source.angle) * aLen;
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(sx + ax, sy + ay); ctx.stroke();
+
+  // Target
+  const [tx, ty] = toScreen(level.target.x, level.target.y);
+  const tR = level.target.radius * scale;
+  const tPulse = 1 + 0.08 * Math.sin(frame * 0.04);
+  // Glow
+  const tGrad = ctx.createRadialGradient(tx, ty, 0, tx, ty, tR * 2.5);
+  tGrad.addColorStop(0, 'rgba(80,200,120,0.05)');
+  tGrad.addColorStop(1, 'rgba(80,200,120,0)');
+  ctx.beginPath(); ctx.arc(tx, ty, tR * 2.5, 0, Math.PI * 2);
+  ctx.fillStyle = tGrad; ctx.fill();
+  // Ring
+  ctx.beginPath(); ctx.arc(tx, ty, tR * tPulse, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(80,200,120,0.3)'; ctx.lineWidth = 2 * scale; ctx.stroke();
+  // Inner ring
+  ctx.beginPath(); ctx.arc(tx, ty, tR * 0.35, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(80,200,120,0.12)'; ctx.lineWidth = 1; ctx.stroke();
+
+  // Wells
+  for (const w of wells) {
+    const [wx, wy] = toScreen(w.x, w.y);
+    const isA = w.str > 0;
+    const c = isA ? [200, 160, 80] : [100, 150, 220];
+    const pulse = 1 + 0.18 * Math.sin(frame * 0.06 + w.ph);
+    const r = WELL_R * scale * pulse;
+
+    // Glow
+    const wGrad = ctx.createRadialGradient(wx, wy, 0, wx, wy, r * 3.5);
+    wGrad.addColorStop(0, `rgba(${c},0.1)`);
+    wGrad.addColorStop(1, `rgba(${c},0)`);
+    ctx.beginPath(); ctx.arc(wx, wy, r * 3.5, 0, Math.PI * 2);
+    ctx.fillStyle = wGrad; ctx.fill();
+    // Core
+    ctx.beginPath(); ctx.arc(wx, wy, r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${c},0.15)`; ctx.fill();
+    ctx.strokeStyle = `rgba(${c},0.45)`; ctx.lineWidth = 1.5; ctx.stroke();
+    // Symbol
+    ctx.strokeStyle = `rgba(${c},0.35)`;
+    ctx.lineWidth = 1.5;
+    const sR2 = 5 * scale;
+    ctx.beginPath(); ctx.moveTo(wx - sR2, wy); ctx.lineTo(wx + sR2, wy); ctx.stroke();
+    if (isA) {
+      ctx.beginPath(); ctx.moveTo(wx, wy - sR2); ctx.lineTo(wx, wy + sR2); ctx.stroke();
+    }
+    // Rings
+    for (let ring = 1; ring <= 3; ring++) {
+      ctx.beginPath(); ctx.arc(wx, wy, r + ring * 18 * scale, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(${c},${0.03 / ring})`; ctx.lineWidth = 0.5; ctx.stroke();
+    }
+  }
+
+  // Particles
+  for (const p of particles) {
+    if (!p.alive) continue;
+    const alpha = Math.min(1, (MAX_AGE - p.age) / 80);
+
+    // Trail
+    for (let i = 0; i < p.trail.length; i++) {
+      const pt = p.trail[i];
+      const [ptx, pty] = toScreen(pt.x, pt.y);
+      const ta = (i / p.trail.length) * 0.25 * alpha;
+      const tr = ((i + 1) / p.trail.length) * P_RADIUS * scale;
+      ctx.beginPath(); ctx.arc(ptx, pty, tr, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(220,180,100,${ta})`; ctx.fill();
+    }
+
+    // Body
+    const [px, py] = toScreen(p.x, p.y);
+    const spd = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+    const sf = Math.min(1, spd / 5);
+    const cr = Math.round(220 + 35 * sf);
+    const cg = Math.round(180 - 50 * sf);
+    const cb = Math.round(100 - 70 * sf);
+    ctx.beginPath(); ctx.arc(px, py, P_RADIUS * scale * (1 + sf * 0.4), 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${cr},${cg},${cb},${0.85 * alpha})`; ctx.fill();
+  }
+
+  // Capture effects
+  for (let i = effects.length - 1; i >= 0; i--) {
+    const e = effects[i];
+    const [ex, ey] = toScreen(e.x, e.y);
+    const prog = e.t / 25;
+    const ea = (1 - prog) * 0.35;
+    const er = (4 + prog * 30) * scale;
+    ctx.beginPath(); ctx.arc(ex, ey, er, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(80,200,120,${ea})`; ctx.lineWidth = 1.5; ctx.stroke();
+    e.t++;
+    if (e.t > 25) effects.splice(i, 1);
+  }
+
+  // Mouse preview
+  if (mouseVX !== null && !levelDone && started) {
+    const [mx, my] = toScreen(mouseVX, mouseVY);
+    const isA = mode === 'attract';
+    const pc = isA ? '200,160,80' : '100,150,220';
+    ctx.beginPath(); ctx.arc(mx, my, WELL_R * scale, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(${pc},0.18)`; ctx.lineWidth = 1;
+    ctx.setLineDash([3 * scale, 3 * scale]); ctx.stroke(); ctx.setLineDash([]);
+  }
+
+  // Progress bar (bottom of game area)
+  if (started && !levelDone) {
+    const barW = VW * 0.3 * scale;
+    const barH = 2 * scale;
+    const barX = (W - barW) / 2;
+    const barY = offY + VH * scale + 8 * scale;
+    const prog = emitCount / level.total;
+    ctx.fillStyle = 'rgba(255,255,255,0.03)';
+    ctx.fillRect(barX, barY, barW, barH);
+    ctx.fillStyle = 'rgba(200,160,80,0.15)';
+    ctx.fillRect(barX, barY, barW * prog, barH);
+  }
+}
+
+// =================================================================
+// INPUT
+// =================================================================
+
+canvas.addEventListener('mousemove', (e) => {
+  [mouseVX, mouseVY] = toVirtual(e.clientX, e.clientY);
+});
+canvas.addEventListener('mouseleave', () => { mouseVX = mouseVY = null; });
+
+function handlePlace(clientX, clientY, shiftKey) {
+  if (levelDone || !started) return;
+  initAudio();
+  const [vx, vy] = toVirtual(clientX, clientY);
+
+  // Remove if clicking existing well
+  for (let i = wells.length - 1; i >= 0; i--) {
+    const dx = wells[i].x - vx, dy = wells[i].y - vy;
+    if (dx * dx + dy * dy < 28 * 28) {
+      wells.splice(i, 1);
+      sndRemove();
+      updateUI();
+      return;
+    }
+  }
+
+  const level = levels[currentLevel];
+  if (wells.length >= level.maxWells) return;
+
+  // Don't place on source or target
+  const src = level.source, tgt = level.target;
+  const dSrc = (vx - src.x) ** 2 + (vy - src.y) ** 2;
+  const dTgt = (vx - tgt.x) ** 2 + (vy - tgt.y) ** 2;
+  if (dSrc < 30 * 30 || dTgt < tgt.radius * tgt.radius) return;
+
+  const useRepel = shiftKey || mode === 'repel';
+  wells.push({ x: vx, y: vy, str: useRepel ? -1 : 1, ph: Math.random() * Math.PI * 2 });
+  sndPlace();
+  updateUI();
+}
+
+canvas.addEventListener('click', (e) => handlePlace(e.clientX, e.clientY, e.shiftKey));
+canvas.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  const t = e.touches[0];
+  handlePlace(t.clientX, t.clientY, false);
+}, { passive: false });
+
+// =================================================================
+// UI
+// =================================================================
+
+function updateUI() {
+  const level = levels[currentLevel];
+  document.getElementById('levelNum').textContent = `Level ${currentLevel + 1} / ${levels.length}`;
+  document.getElementById('levelName').textContent = level.name;
+  document.getElementById('wellsInfo').textContent = `Wells: ${wells.length} / ${level.maxWells}`;
+  document.getElementById('captured').textContent = `Captured: ${capturedCount}`;
+  document.getElementById('emitted').textContent = `Emitted: ${emitCount} / ${level.total}`;
+  document.getElementById('hint').textContent = level.hint;
+}
+
+function showOverlay() {
+  const level = levels[currentLevel];
+  const rate = emitCount > 0 ? capturedCount / emitCount : 0;
+  const isLast = currentLevel === levels.length - 1;
+
+  document.getElementById('overlayTitle').textContent = isLast ? 'All Levels Complete' : 'Level Complete';
+  document.getElementById('overlayScore').textContent =
+    `${Math.round(rate * 100)}% captured · ${capturedCount} / ${emitCount}`;
+
+  const row = document.getElementById('starsRow');
+  row.innerHTML = '';
+  for (let i = 0; i < 3; i++) {
+    const earned = rate >= level.stars[i];
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('width', '28');
+    svg.setAttribute('height', '28');
+    svg.classList.add('star-icon');
+    svg.style.opacity = earned ? '1' : '0.1';
+    svg.style.transform = 'scale(0.5)';
+    svg.style.transitionDelay = `${i * 0.15}s`;
+    const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+    poly.setAttribute('points', '12,2 15,9 22,9 16.5,14 18.5,21 12,17 5.5,21 7.5,14 2,9 9,9');
+    poly.setAttribute('fill', earned ? 'rgba(220,180,80,0.9)' : 'rgba(255,255,255,0.15)');
+    svg.appendChild(poly);
+    row.appendChild(svg);
+    setTimeout(() => { svg.style.transform = earned ? 'scale(1.15)' : 'scale(1)'; }, 50 + i * 150);
+  }
+
+  document.getElementById('btnNext').textContent = isLast ? 'Play Again' : 'Next Level';
+  document.getElementById('overlay').classList.add('show');
+  sndComplete();
+}
+
+function hideOverlay() {
+  document.getElementById('overlay').classList.remove('show');
+}
+
+// =================================================================
+// GAME CONTROL
+// =================================================================
+
+function startLevel(index) {
+  currentLevel = index;
+  wells = [];
+  particles = [];
+  emitCount = 0;
+  capturedCount = 0;
+  frame = 0;
+  levelDone = false;
+  effects = [];
+  hideOverlay();
+  updateUI();
+}
+
+function clearWells() {
+  if (!started) return;
+  wells = [];
+  updateUI();
+}
+
+function retryLevel() {
+  startLevel(currentLevel);
+}
+
+function nextLevel() {
+  if (currentLevel < levels.length - 1) {
+    startLevel(currentLevel + 1);
+  } else {
+    startLevel(0);
+  }
+}
+
+function toggleMode() {
+  mode = mode === 'attract' ? 'repel' : 'attract';
+  const btn = document.getElementById('modeBtn');
+  btn.textContent = mode === 'attract' ? 'Attract' : 'Repel';
+  btn.className = 'mode-btn ' + mode;
+}
+
+// Button bindings
+document.getElementById('btnClear').addEventListener('click', clearWells);
+document.getElementById('btnRetry').addEventListener('click', retryLevel);
+document.getElementById('btnRetry2').addEventListener('click', retryLevel);
+document.getElementById('btnNext').addEventListener('click', nextLevel);
+document.getElementById('modeBtn').addEventListener('click', toggleMode);
+document.getElementById('btnStart').addEventListener('click', () => {
+  initAudio();
+  started = true;
+  document.getElementById('title-screen').classList.add('hidden');
+  startLevel(0);
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'r' || e.key === 'R') retryLevel();
+  if (e.key === 'c' || e.key === 'C') clearWells();
+  if (e.key === 'Tab') { e.preventDefault(); toggleMode(); }
+  if (e.key === 'Enter' && levelDone) nextLevel();
+});
+
+// =================================================================
+// GAME LOOP
+// =================================================================
+
+function loop() {
+  if (!started) {
+    // Title screen — just render background
+    const W = window.innerWidth, H = window.innerHeight;
+    ctx.fillStyle = '#08080c';
+    ctx.fillRect(0, 0, W, H);
+
+    // Floating ambient particles for title
+    ctx.fillStyle = 'rgba(200,160,80,0.06)';
+    for (let i = 0; i < 30; i++) {
+      const x = (Math.sin(frame * 0.003 + i * 2.1) * 0.5 + 0.5) * W;
+      const y = (Math.cos(frame * 0.004 + i * 1.7) * 0.5 + 0.5) * H;
+      ctx.beginPath(); ctx.arc(x, y, 1.5, 0, Math.PI * 2); ctx.fill();
+    }
+
+    frame++;
+    requestAnimationFrame(loop);
+    return;
+  }
+
+  const level = levels[currentLevel];
+
+  // Emit
+  if (!levelDone && emitCount < level.total) {
+    if (frame % EMIT_INTERVAL === 0) {
+      particles.push(emitParticle(level));
+      emitCount++;
+    }
+  }
+
+  // Update
+  for (const p of particles) updateParticle(p, level);
+  particles = particles.filter(p => p.alive);
+
+  // Check completion
+  if (!levelDone && emitCount >= level.total && particles.length === 0) {
+    levelDone = true;
+    setTimeout(showOverlay, 400);
+  }
+
+  // Render
+  render(level);
+
+  // UI refresh
+  if (frame % 8 === 0) updateUI();
+
+  frame++;
+  requestAnimationFrame(loop);
+}
+
+// =================================================================
+// INIT
+// =================================================================
+
+resize();
+window.addEventListener('resize', resize);
+loop();
+</script>
+</body>
+</html>

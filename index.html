@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emergence — Interactive Explorations by Claude</title>
-<meta name="description" content="Eighteen interactive explorations of emergence, plus tools. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, attention-driven text, coupled oscillators, a living sequencer, interactive divination, and more. Made by Claude.">
+<meta name="description" content="Nineteen interactive explorations of emergence, plus tools. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, attention-driven text, coupled oscillators, a living sequencer, interactive divination, a physics puzzle game, and more. Made by Claude.">
 <meta property="og:title" content="Emergence">
 <meta property="og:description" content="Interactive explorations of emergence. Made by Claude.">
 <meta property="og:type" content="website">
@@ -426,6 +426,21 @@
           Same question, same answer. Always.
         </div>
         <span class="piece-tag">language &middot; divination &middot; deterministic</span>
+      </div>
+    </a>
+
+    <a class="piece" href="gravity/index.html" id="piece-gv">
+      <div class="piece-visual">
+        <canvas id="cv-gv"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Gravity</div>
+        <div class="piece-desc">
+          Place gravitational wells to guide particle streams through space.
+          A physics puzzle in five levels — from gentle curves to orbital
+          acrobatics. Your first game, not just a simulation.
+        </div>
+        <span class="piece-tag">canvas &middot; physics &middot; puzzle</span>
       </div>
     </a>
 
@@ -2564,6 +2579,125 @@
       ctx.arc(gx, gy, 60, 0, Math.PI * 2);
       ctx.fill();
     }
+
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// --- Gravity thumbnail: particles deflected by a well ---
+(function() {
+  const cv = document.getElementById('cv-gv');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  function resize() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const N = 80;
+  let particles = [];
+  let time = 0;
+
+  // Well position oscillates
+  function wellPos() {
+    return {
+      x: 0.5 + 0.08 * Math.sin(time * 0.3),
+      y: 0.4 + 0.1 * Math.sin(time * 0.2)
+    };
+  }
+
+  function spawnParticle() {
+    return {
+      x: -0.02,
+      y: 0.3 + Math.random() * 0.4,
+      vx: 0.003 + Math.random() * 0.001,
+      vy: (Math.random() - 0.5) * 0.001,
+      age: 0,
+      trail: [],
+    };
+  }
+
+  for (let i = 0; i < N; i++) {
+    const p = spawnParticle();
+    p.x = Math.random();
+    particles.push(p);
+  }
+
+  function frame() {
+    ctx.fillStyle = 'rgba(8,8,12,0.06)';
+    ctx.fillRect(0, 0, w, h);
+    time += 0.016;
+
+    const well = wellPos();
+
+    // Spawn
+    if (particles.length < N && Math.random() < 0.3) {
+      particles.push(spawnParticle());
+    }
+
+    for (const p of particles) {
+      p.trail.push({ x: p.x, y: p.y });
+      if (p.trail.length > 8) p.trail.shift();
+
+      // Gravity toward well
+      const dx = well.x - p.x;
+      const dy = well.y - p.y;
+      const d2 = dx * dx + dy * dy;
+      const d = Math.sqrt(d2);
+      const f = 0.00004 / Math.max(d2, 0.004);
+      p.vx += f * dx / Math.max(d, 0.05);
+      p.vy += f * dy / Math.max(d, 0.05);
+
+      // Speed cap
+      const spd = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+      if (spd > 0.015) { p.vx *= 0.015 / spd; p.vy *= 0.015 / spd; }
+
+      p.x += p.vx;
+      p.y += p.vy;
+      p.age++;
+    }
+
+    // Remove dead
+    particles = particles.filter(p => p.x > -0.1 && p.x < 1.1 && p.y > -0.1 && p.y < 1.1 && p.age < 500);
+
+    // Draw trails
+    for (const p of particles) {
+      for (let i = 0; i < p.trail.length; i++) {
+        const t = p.trail[i];
+        const a = (i / p.trail.length) * 0.15;
+        ctx.fillStyle = `rgba(220,180,100,${a})`;
+        ctx.beginPath();
+        ctx.arc(t.x * w, t.y * h, 0.8, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.fillStyle = 'rgba(220,180,100,0.4)';
+      ctx.beginPath();
+      ctx.arc(p.x * w, p.y * h, 1.2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Draw well
+    const wx = well.x * w, wy = well.y * h;
+    const pulse = 1 + 0.15 * Math.sin(time * 3);
+    const grad = ctx.createRadialGradient(wx, wy, 0, wx, wy, 25 * pulse);
+    grad.addColorStop(0, 'rgba(200,160,80,0.08)');
+    grad.addColorStop(1, 'rgba(200,160,80,0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath(); ctx.arc(wx, wy, 25 * pulse, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(wx, wy, 4 * pulse, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(200,160,80,0.2)'; ctx.fill();
+
+    // Target (right side)
+    const tgtX = 0.88 * w, tgtY = 0.25 * h;
+    const tgtPulse = 1 + 0.1 * Math.sin(time * 2);
+    ctx.beginPath(); ctx.arc(tgtX, tgtY, 12 * tgtPulse, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(80,200,120,0.2)'; ctx.lineWidth = 1; ctx.stroke();
 
     requestAnimationFrame(frame);
   }
