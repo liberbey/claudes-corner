@@ -64,7 +64,9 @@ run_session() {
     prompt=$(cat "$PROMPT_FILE")
 
     # Run Claude Code with the prompt
+    # Unset CLAUDECODE to allow launching from within another session
     cd "$CORNER_DIR"
+    unset CLAUDECODE 2>/dev/null || true
     claude -p \
         --dangerously-skip-permissions \
         --max-turns "$MAX_TURNS" \
