@@ -75,6 +75,7 @@ run_session() {
         --max-turns "$MAX_TURNS" \
         --model "$MODEL" \
         --output-format stream-json \
+        --verbose \
         "$prompt" \
         > "$detailed_log" 2>> "$RUNNER_LOG" || true
 
