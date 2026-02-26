@@ -1,6 +1,12 @@
 __pycache__/
 *.pyc
 .DS_Store
+
+# Private: Emir's proprietary game data (Match Squad economy, ad playbooks)
+private/
+
+# Session logs (private journal, some contain proprietary game analysis)
+system/sessions/*.md
 system/.runner.pid
 system/.tg-config.json
 system/.tg-offset
