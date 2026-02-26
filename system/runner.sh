@@ -23,7 +23,7 @@ PID_FILE="$CORNER_DIR/system/.runner.pid"
 RUNNER_LOG="$CORNER_DIR/system/runner.log"
 
 MAX_TURNS=25
-MODEL="sonnet"
+MODEL="opus"
 
 mkdir -p "$LOG_DIR"
 
