@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strange Attractor</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #050508;
+    overflow: hidden;
+    font-family: 'Courier New', monospace;
+    cursor: grab;
+  }
+
+  body.dragging { cursor: grabbing; }
+
+  canvas {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+
+  #ui {
+    position: fixed;
+    bottom: 24px;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 2s ease;
+  }
+
+  #ui.faded { opacity: 0; }
+
+  .presets {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    pointer-events: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0 16px;
+  }
+
+  .preset-btn {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.5);
+    padding: 6px 14px;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: lowercase;
+  }
+
+  .preset-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.8);
+    border-color: rgba(255,255,255,0.25);
+  }
+
+  .preset-btn.active {
+    background: rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.85);
+    border-color: rgba(255,255,255,0.35);
+  }
+
+  .hint {
+    color: rgba(255,255,255,0.2);
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+
+  #title {
+    position: fixed;
+    top: 24px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 2s ease;
+  }
+
+  #title.faded { opacity: 0; }
+
+  #title h1 {
+    color: rgba(255,255,255,0.35);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+
+  #title p {
+    color: rgba(255,255,255,0.15);
+    font-size: 11px;
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<div id="title">
+  <h1>Strange Attractor</h1>
+  <p>drag to rotate &middot; scroll to zoom</p>
+</div>
+
+<canvas id="canvas"></canvas>
+
+<div id="ui">
+  <div class="presets">
+    <button class="preset-btn active" data-preset="lorenz">lorenz</button>
+    <button class="preset-btn" data-preset="aizawa">aizawa</button>
+    <button class="preset-btn" data-preset="thomas">thomas</button>
+    <button class="preset-btn" data-preset="halvorsen">halvorsen</button>
+  </div>
+  <div class="hint">drag to rotate &middot; scroll to zoom &middot; press S to screenshot</div>
+</div>
+
+<script>
+// ============================================================
+// Strange Attractor — 3D chaotic systems rendered as particle trails
+// ============================================================
+// Deterministic differential equations that never repeat.
+// Sensitive to initial conditions (chaos), yet confined to a
+// shape (the attractor). The geometry is fractal — infinitely
+// detailed, with non-integer dimension.
+//
+// Lorenz discovered his while modeling weather convection.
+// "Does the flap of a butterfly's wings in Brazil set off
+// a tornado in Texas?"
+// ============================================================
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+let W, H;
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// --- Attractor systems ---
+const systems = {
+  lorenz: {
+    fn(x, y, z) {
+      const sigma = 10, rho = 28, beta = 8/3;
+      return [
+        sigma * (y - x),
+        x * (rho - z) - y,
+        x * y - beta * z,
+      ];
+    },
+    dt: 0.005,
+    scale: 12,
+    center: [0, 0, 25],
+    color: 0,
+  },
+  aizawa: {
+    fn(x, y, z) {
+      const a = 0.95, b = 0.7, c = 0.6, d = 3.5, e = 0.25, f = 0.1;
+      return [
+        (z - b) * x - d * y,
+        d * x + (z - b) * y,
+        c + a * z - (z*z*z) / 3 - (x*x + y*y) * (1 + e * z) + f * z * x*x*x,
+      ];
+    },
+    dt: 0.005,
+    scale: 200,
+    center: [0, 0, 0],
+    color: 1,
+  },
+  thomas: {
+    fn(x, y, z) {
+      const b = 0.208186;
+      return [
+        Math.sin(y) - b * x,
+        Math.sin(z) - b * y,
+        Math.sin(x) - b * z,
+      ];
+    },
+    dt: 0.04,
+    scale: 100,
+    center: [0, 0, 0],
+    color: 2,
+  },
+  halvorsen: {
+    fn(x, y, z) {
+      const a = 1.89;
+      return [
+        -a * x - 4 * y - 4 * z - y * y,
+        -a * y - 4 * z - 4 * x - z * z,
+        -a * z - 4 * x - 4 * y - x * x,
+      ];
+    },
+    dt: 0.003,
+    scale: 18,
+    center: [0, 0, 0],
+    color: 3,
+  },
+};
+
+let currentSystem = systems.lorenz;
+let currentName = 'lorenz';
+
+// --- Particles ---
+const N_TRAILS = 80;
+const TRAIL_LEN = 200;
+let trails = [];
+
+function initTrails() {
+  trails = [];
+  const c = currentSystem.center;
+  for (let i = 0; i < N_TRAILS; i++) {
+    const points = [];
+    const x = c[0] + (Math.random() - 0.5) * 1;
+    const y = c[1] + (Math.random() - 0.5) * 1;
+    const z = c[2] + (Math.random() - 0.5) * 1;
+    points.push([x, y, z]);
+    trails.push({ points, hue: Math.random() });
+  }
+}
+
+initTrails();
+
+// --- Camera ---
+let rotX = -0.4;
+let rotY = 0.6;
+let zoom = 1.0;
+let autoRotate = true;
+
+// --- Projection ---
+function project(x, y, z) {
+  const c = currentSystem.center;
+  let px = x - c[0], py = y - c[1], pz = z - c[2];
+
+  // Scale
+  const s = currentSystem.scale * zoom;
+  px *= s; py *= s; pz *= s;
+
+  // Rotate Y
+  const cy = Math.cos(rotY), sy = Math.sin(rotY);
+  let rx = px * cy + pz * sy;
+  let rz = -px * sy + pz * cy;
+  let ry = py;
+
+  // Rotate X
+  const cx = Math.cos(rotX), sx = Math.sin(rotX);
+  let fy = ry * cx - rz * sx;
+  let fz = ry * sx + rz * cx;
+
+  // Perspective
+  const fov = 800;
+  const depth = fz + fov + 200;
+  const scale = fov / Math.max(depth, 1);
+
+  return {
+    x: W / 2 + rx * scale,
+    y: H / 2 + fy * scale,
+    z: fz,
+    scale: scale,
+  };
+}
+
+// --- Color palettes ---
+function getColor(hue, alpha, colorMode) {
+  let r, g, b;
+  const h = hue * 6;
+  const f = h - Math.floor(h);
+
+  if (colorMode === 0) {
+    // Lorenz: blue → cyan → white
+    r = Math.floor((0.2 + hue * 0.6) * 255);
+    g = Math.floor((0.4 + hue * 0.55) * 255);
+    b = Math.floor((0.8 + hue * 0.2) * 255);
+  } else if (colorMode === 1) {
+    // Aizawa: orange → pink → violet
+    r = Math.floor((0.9 - hue * 0.3) * 255);
+    g = Math.floor((0.25 + hue * 0.25) * 255);
+    b = Math.floor((0.3 + hue * 0.6) * 255);
+  } else if (colorMode === 2) {
+    // Thomas: green → teal → emerald
+    r = Math.floor((0.1 + hue * 0.2) * 255);
+    g = Math.floor((0.5 + hue * 0.4) * 255);
+    b = Math.floor((0.3 + hue * 0.3) * 255);
+  } else {
+    // Halvorsen: gold → amber → red
+    r = Math.floor((0.8 + hue * 0.2) * 255);
+    g = Math.floor((0.5 - hue * 0.2) * 255);
+    b = Math.floor((0.1 + hue * 0.1) * 255);
+  }
+
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+// --- Simulation step ---
+function step() {
+  const fn = currentSystem.fn;
+  const dt = currentSystem.dt;
+
+  for (const trail of trails) {
+    const last = trail.points[trail.points.length - 1];
+    const [x, y, z] = last;
+
+    // RK4 integration
+    const k1 = fn(x, y, z);
+    const k2 = fn(x + k1[0]*dt/2, y + k1[1]*dt/2, z + k1[2]*dt/2);
+    const k3 = fn(x + k2[0]*dt/2, y + k2[1]*dt/2, z + k2[2]*dt/2);
+    const k4 = fn(x + k3[0]*dt, y + k3[1]*dt, z + k3[2]*dt);
+
+    const nx = x + (k1[0] + 2*k2[0] + 2*k3[0] + k4[0]) * dt / 6;
+    const ny = y + (k1[1] + 2*k2[1] + 2*k3[1] + k4[1]) * dt / 6;
+    const nz = z + (k1[2] + 2*k2[2] + 2*k3[2] + k4[2]) * dt / 6;
+
+    trail.points.push([nx, ny, nz]);
+    if (trail.points.length > TRAIL_LEN) {
+      trail.points.shift();
+    }
+  }
+}
+
+// --- Render ---
+function render() {
+  ctx.fillStyle = 'rgba(5,5,8,0.15)';
+  ctx.fillRect(0, 0, W, H);
+
+  const cm = currentSystem.color;
+
+  for (const trail of trails) {
+    const pts = trail.points;
+    if (pts.length < 2) continue;
+
+    ctx.beginPath();
+    let first = true;
+
+    for (let i = 0; i < pts.length; i++) {
+      const p = project(pts[i][0], pts[i][1], pts[i][2]);
+
+      // Skip points behind camera
+      if (p.scale < 0) continue;
+
+      if (first) {
+        ctx.moveTo(p.x, p.y);
+        first = false;
+      } else {
+        ctx.lineTo(p.x, p.y);
+      }
+    }
+
+    // Trail alpha: fades from tail to head
+    const headAlpha = 0.6;
+    ctx.strokeStyle = getColor(trail.hue, headAlpha, cm);
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
+
+    // Bright dot at the head
+    const head = pts[pts.length - 1];
+    const hp = project(head[0], head[1], head[2]);
+    if (hp.scale > 0) {
+      ctx.fillStyle = getColor(trail.hue, 0.9, cm);
+      const sz = Math.max(1, 2 * hp.scale / 800);
+      ctx.fillRect(hp.x - sz/2, hp.y - sz/2, sz, sz);
+    }
+  }
+}
+
+// --- Interaction ---
+let isDragging = false;
+let dragStart = null;
+let hasInteracted = false;
+
+function onDown(e) {
+  isDragging = true;
+  autoRotate = false;
+  document.body.classList.add('dragging');
+  const raw = e.touches ? e.touches[0] : e;
+  dragStart = { x: raw.clientX, y: raw.clientY, rotX, rotY };
+  e.preventDefault();
+
+  if (!hasInteracted) {
+    hasInteracted = true;
+    setTimeout(() => {
+      document.getElementById('title').classList.add('faded');
+      document.getElementById('ui').classList.add('faded');
+    }, 4000);
+  }
+}
+
+function onMove(e) {
+  if (!isDragging) return;
+  const raw = e.touches ? e.touches[0] : e;
+  const dx = raw.clientX - dragStart.x;
+  const dy = raw.clientY - dragStart.y;
+  rotY = dragStart.rotY + dx * 0.005;
+  rotX = dragStart.rotX + dy * 0.005;
+  // Clamp X rotation
+  rotX = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, rotX));
+  e.preventDefault();
+}
+
+function onUp() {
+  isDragging = false;
+  document.body.classList.remove('dragging');
+}
+
+canvas.addEventListener('mousedown', onDown);
+canvas.addEventListener('mousemove', onMove);
+canvas.addEventListener('mouseup', onUp);
+canvas.addEventListener('mouseleave', onUp);
+canvas.addEventListener('touchstart', onDown, { passive: false });
+canvas.addEventListener('touchmove', onMove, { passive: false });
+canvas.addEventListener('touchend', onUp);
+
+// Zoom
+canvas.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  zoom *= e.deltaY > 0 ? 0.95 : 1.05;
+  zoom = Math.max(0.2, Math.min(5, zoom));
+}, { passive: false });
+
+// --- Preset buttons ---
+function setPreset(name) {
+  currentSystem = systems[name];
+  currentName = name;
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`[data-preset="${name}"]`).classList.add('active');
+  initTrails();
+  autoRotate = true;
+  rotX = -0.4;
+  rotY = 0.6;
+  zoom = 1.0;
+  // Clear canvas
+  ctx.fillStyle = '#050508';
+  ctx.fillRect(0, 0, W, H);
+  showUI();
+}
+
+document.querySelectorAll('.preset-btn').forEach(btn => {
+  btn.addEventListener('click', () => setPreset(btn.dataset.preset));
+});
+
+// Keyboard
+document.addEventListener('keydown', (e) => {
+  if (e.key === 's' || e.key === 'S') screenshot();
+  const names = Object.keys(systems);
+  const idx = '1234'.indexOf(e.key);
+  if (idx >= 0 && idx < names.length) setPreset(names[idx]);
+});
+
+// Screenshot
+function screenshot() {
+  canvas.toBlob(blob => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `strange-attractor-${currentName}-${Date.now()}.png`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+}
+
+// UI visibility
+let uiTimer;
+function showUI() {
+  document.getElementById('ui').classList.remove('faded');
+  clearTimeout(uiTimer);
+  if (hasInteracted) {
+    uiTimer = setTimeout(() => document.getElementById('ui').classList.add('faded'), 3000);
+  }
+}
+canvas.addEventListener('mousemove', (e) => {
+  if (e.clientY > H * 0.75) showUI();
+});
+
+// --- Main loop ---
+function frame() {
+  // Multiple integration steps per frame for denser trails
+  for (let i = 0; i < 4; i++) step();
+
+  if (autoRotate) {
+    rotY += 0.002;
+  }
+
+  render();
+  requestAnimationFrame(frame);
+}
+
+frame();
+</script>
+</body>
+</html>

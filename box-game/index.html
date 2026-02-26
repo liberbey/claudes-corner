@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>THE HEIST — Box Game</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #080c18;
+    --surface: #0f1528;
+    --gold: #f5c842;
+    --gold-dim: #a8872e;
+    --silver: #8ec8e8;
+    --silver-dim: #4a7a94;
+    --red: #e84545;
+    --green: #4ae88a;
+    --text: #e8e4dc;
+    --text-dim: #6b6760;
+    --prize-glow: rgba(245, 200, 66, 0.4);
+    --key-glow: rgba(142, 200, 232, 0.4);
+    --empty-glow: rgba(100, 100, 100, 0.2);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+
+  /* === HEADER === */
+  .header {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px 16px 8px;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 6px;
+    color: var(--gold);
+    text-shadow: 0 0 30px rgba(245, 200, 66, 0.3);
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  /* === STATUS BAR === */
+  .status-bar {
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    gap: 8px;
+  }
+
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface);
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.05);
+    flex: 1;
+    justify-content: center;
+  }
+
+  .stat-icon {
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    min-width: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .stat-value.keys { color: var(--silver); }
+  .stat-value.prizes { color: var(--gold); }
+  .stat-value.reward { color: var(--green); }
+
+  .stat-value.bump {
+    transform: scale(1.4);
+  }
+
+  /* === PRIZE TRACKER === */
+  .prize-tracker {
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 4px 16px 12px;
+  }
+
+  .prize-pip {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--gold-dim);
+    transition: all 0.4s ease;
+  }
+
+  .prize-pip.found {
+    background: var(--gold);
+    border-color: var(--gold);
+    box-shadow: 0 0 10px var(--prize-glow);
+  }
+
+  /* === GRID === */
+  .grid-container {
+    width: 100%;
+    max-width: 420px;
+    padding: 0 16px;
+    position: relative;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    perspective: 800px;
+  }
+
+  .box-wrapper {
+    aspect-ratio: 1;
+    position: relative;
+    cursor: pointer;
+    perspective: 600px;
+  }
+
+  .box {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 12px;
+  }
+
+  .box.flipped {
+    transform: rotateY(180deg);
+  }
+
+  .box-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Front face — closed box */
+  .box-front {
+    background: linear-gradient(145deg, #1a2040, #141830);
+    border: 2px solid rgba(245, 200, 66, 0.15);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4),
+                inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+
+  .box-front:hover {
+    border-color: rgba(245, 200, 66, 0.4);
+    box-shadow: 0 4px 25px rgba(0,0,0,0.5),
+                0 0 20px rgba(245, 200, 66, 0.1),
+                inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+
+  .box-front .box-icon {
+    font-size: 36px;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+  }
+
+  .box-front:hover .box-icon {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  .box-number {
+    position: absolute;
+    bottom: 6px;
+    right: 10px;
+    font-size: 11px;
+    color: var(--text-dim);
+    opacity: 0.5;
+  }
+
+  .box-wrapper.unavailable .box-front {
+    border-color: rgba(100, 100, 100, 0.1);
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .box-wrapper.unavailable .box-front:hover {
+    border-color: rgba(100, 100, 100, 0.1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+
+  /* Back face — revealed */
+  .box-back {
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .box-back .reveal-icon {
+    font-size: 32px;
+  }
+
+  .box-back .reveal-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  /* Prize box */
+  .box-back.prize {
+    background: linear-gradient(145deg, #2a2010, #1a1508);
+    border: 2px solid var(--gold);
+    box-shadow: 0 0 30px var(--prize-glow);
+  }
+  .box-back.prize .reveal-label { color: var(--gold); }
+
+  /* Key box */
+  .box-back.key {
+    background: linear-gradient(145deg, #0a1a25, #081520);
+    border: 2px solid var(--silver);
+    box-shadow: 0 0 30px var(--key-glow);
+  }
+  .box-back.key .reveal-label { color: var(--silver); }
+
+  /* Empty box */
+  .box-back.empty {
+    background: linear-gradient(145deg, #151515, #0a0a0a);
+    border: 2px solid rgba(100, 100, 100, 0.3);
+    box-shadow: 0 0 10px var(--empty-glow);
+  }
+  .box-back.empty .reveal-label { color: var(--text-dim); }
+
+  /* === GAME INFO === */
+  .game-info {
+    width: 100%;
+    max-width: 420px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .game-message {
+    font-size: 14px;
+    color: var(--text-dim);
+    min-height: 20px;
+    transition: all 0.3s ease;
+  }
+
+  .game-message.highlight {
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  .game-message.alert {
+    color: var(--red);
+  }
+
+  /* === RESULT OVERLAY === */
+  .result-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 12, 24, 0.92);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    backdrop-filter: blur(8px);
+  }
+
+  .result-overlay.visible {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .result-card {
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 32px 40px;
+    text-align: center;
+    border: 1px solid rgba(245, 200, 66, 0.1);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    max-width: 340px;
+    width: 90%;
+    transform: translateY(20px);
+    transition: transform 0.4s ease;
+  }
+
+  .result-overlay.visible .result-card {
+    transform: translateY(0);
+  }
+
+  .result-emoji {
+    font-size: 48px;
+    margin-bottom: 12px;
+  }
+
+  .result-title {
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--gold);
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+  }
+
+  .result-subtitle {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+  }
+
+  .result-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .result-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 14px;
+  }
+
+  .result-row .label { color: var(--text-dim); }
+  .result-row .value { font-weight: 700; }
+  .result-row .value.gold { color: var(--gold); }
+  .result-row .value.silver { color: var(--silver); }
+  .result-row .value.green { color: var(--green); }
+
+  .result-multiplier {
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--gold);
+    text-shadow: 0 0 40px rgba(245, 200, 66, 0.5);
+    margin: 8px 0;
+    animation: pulse 1.5s ease infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 12px 32px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--bg);
+  }
+
+  .btn-primary:hover {
+    background: #ffd666;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(245, 200, 66, 0.3);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  /* === SESSION STATS === */
+  .session-stats {
+    width: 100%;
+    max-width: 420px;
+    padding: 8px 16px 20px;
+  }
+
+  .stats-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .mini-stat {
+    flex: 1;
+    text-align: center;
+    padding: 8px;
+    background: var(--surface);
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.03);
+  }
+
+  .mini-stat .ms-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .mini-stat .ms-label {
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* === PARTICLES === */
+  .particle-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 50;
+    overflow: hidden;
+  }
+
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: particle-fly 0.8s ease-out forwards;
+  }
+
+  @keyframes particle-fly {
+    0% {
+      opacity: 1;
+      transform: translate(0, 0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(var(--dx), var(--dy)) scale(0);
+    }
+  }
+
+  /* Float text */
+  .float-text {
+    position: absolute;
+    font-size: 18px;
+    font-weight: 900;
+    pointer-events: none;
+    z-index: 60;
+    animation: float-up 1.2s ease-out forwards;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  }
+
+  @keyframes float-up {
+    0% { opacity: 1; transform: translateY(0) scale(1); }
+    70% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-60px) scale(1.2); }
+  }
+
+  /* Screen shake */
+  .shake {
+    animation: shake 0.4s ease;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-4px) rotate(-0.5deg); }
+    40% { transform: translateX(4px) rotate(0.5deg); }
+    60% { transform: translateX(-3px) rotate(-0.3deg); }
+    80% { transform: translateX(2px) rotate(0.2deg); }
+  }
+
+  /* Intro screen */
+  .intro-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    transition: opacity 0.5s ease;
+  }
+
+  .intro-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .intro-title {
+    font-size: 42px;
+    font-weight: 900;
+    letter-spacing: 8px;
+    color: var(--gold);
+    text-shadow: 0 0 40px rgba(245, 200, 66, 0.3);
+    margin-bottom: 16px;
+  }
+
+  .intro-rules {
+    max-width: 300px;
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .intro-rule {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    font-size: 14px;
+    color: var(--text-dim);
+  }
+
+  .intro-rule .rule-icon {
+    font-size: 20px;
+    width: 28px;
+    text-align: center;
+  }
+
+  .outcome-label {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  /* Lock indicator */
+  .lock-banner {
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    padding: 6px;
+    font-size: 11px;
+    color: var(--red);
+    letter-spacing: 1px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    min-height: 24px;
+  }
+
+  .lock-banner.active {
+    opacity: 1;
+  }
+
+  /* Responsive */
+  @media (max-height: 700px) {
+    .header { padding: 12px 16px 4px; }
+    .title { font-size: 22px; }
+    .status-bar { padding: 8px 16px; }
+    .stat { padding: 6px 10px; }
+    .stat-value { font-size: 18px; }
+  }
+
+  @media (min-width: 500px) {
+    .grid { gap: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Intro Screen -->
+<div class="intro-overlay" id="intro">
+  <div class="intro-title">THE HEIST</div>
+  <div class="intro-rules">
+    <div class="intro-rule">
+      <span class="rule-icon">📦</span>
+      <span>9 boxes. Contents unknown.</span>
+    </div>
+    <div class="intro-rule">
+      <span class="rule-icon">🔑</span>
+      <span>3 keys. Each box costs one.</span>
+    </div>
+    <div class="intro-rule">
+      <span class="rule-icon">💎</span>
+      <span>3 hidden prizes. Find them all.</span>
+    </div>
+    <div class="intro-rule">
+      <span class="rule-icon">⚡</span>
+      <span>Open all 9 = double reward.</span>
+    </div>
+  </div>
+  <button class="btn btn-primary" id="start-btn">START HEIST</button>
+</div>
+
+<!-- Particle container -->
+<div class="particle-container" id="particles"></div>
+
+<!-- Main Game -->
+<div class="header">
+  <div class="title">THE HEIST</div>
+  <div class="subtitle">9 Boxes &middot; 3 Keys &middot; 3 Prizes</div>
+</div>
+
+<div class="status-bar">
+  <div class="stat">
+    <span class="stat-icon">🔑</span>
+    <span class="stat-value keys" id="keys">3</span>
+  </div>
+  <div class="stat">
+    <span class="stat-icon">💎</span>
+    <span class="stat-value prizes" id="prizes-found">0</span>
+  </div>
+  <div class="stat">
+    <span class="stat-icon">💰</span>
+    <span class="stat-value reward" id="reward">0</span>
+  </div>
+</div>
+
+<div class="prize-tracker">
+  <div class="prize-pip" id="pip-0"></div>
+  <div class="prize-pip" id="pip-1"></div>
+  <div class="prize-pip" id="pip-2"></div>
+</div>
+
+<div class="lock-banner" id="lock-banner">EMPTY BOXES LOCKED — FIND A PRIZE</div>
+
+<div class="grid-container" id="grid-container">
+  <div class="grid" id="grid"></div>
+</div>
+
+<div class="game-info">
+  <div class="game-message" id="message">Tap a box to open it</div>
+</div>
+
+<div class="session-stats">
+  <div class="stats-row">
+    <div class="mini-stat">
+      <div class="ms-value" id="games-played">0</div>
+      <div class="ms-label">Games</div>
+    </div>
+    <div class="mini-stat">
+      <div class="ms-value" id="total-reward">0</div>
+      <div class="ms-label">Total</div>
+    </div>
+    <div class="mini-stat">
+      <div class="ms-value" id="best-game">0</div>
+      <div class="ms-label">Best</div>
+    </div>
+    <div class="mini-stat">
+      <div class="ms-value" id="full-clears">0</div>
+      <div class="ms-label">x2 Clears</div>
+    </div>
+  </div>
+</div>
+
+<!-- Result Overlay -->
+<div class="result-overlay" id="result-overlay">
+  <div class="result-card">
+    <div class="result-emoji" id="result-emoji"></div>
+    <div class="result-title" id="result-title"></div>
+    <div class="result-subtitle" id="result-subtitle"></div>
+    <div class="result-breakdown" id="result-breakdown"></div>
+    <div class="result-multiplier" id="result-multiplier" style="display:none">x2 FULL CLEAR!</div>
+    <button class="btn btn-primary" id="play-again-btn">PLAY AGAIN</button>
+  </div>
+</div>
+
+<script>
+// === GAME DATA ===
+const OUTCOME_WEIGHTS = {
+  "1": 8.0, "2": 10.0, "3": 24.0, "4": 10.0,
+  "5": 14.5, "6": 10.0, "7": 7.5, "14": 16.0
+};
+
+const PRIZE_VALUES = { "P1": 1, "P2": 2, "P4": 4 };
+const KEY_VALUES = { "K1": 1, "K2": 2, "K3": 3 };
+
+// Embedded path data (subset of all valid paths)
+const PATHS={"1":[["P1","B","B"],["P1","B","K1","B"],["P1","B","K1","K2","B","B"],["P1","B","K2","B","B"],["P1","B","K2","B","K1","B"],["P1","B","K2","K1","B","B"],["P1","K1","B","B"],["P1","K1","B","K2","B","B"],["P1","K1","K2","B","B","B"],["P1","K2","B","B","B"],["P1","K2","B","B","K1","B"],["P1","K2","B","K1","B","B"],["P1","K2","K1","B","B","B"],["B","P1","B"],["B","P1","K1","B"],["B","P1","K1","K2","B","B"],["B","P1","K2","B","B"],["B","P1","K2","B","K1","B"],["B","P1","K2","K1","B","B"],["B","B","P1"],["B","B","K1","P1"],["B","B","K1","K2","P1","B"],["B","B","K2","P1","B"],["B","B","K2","P1","K1","B"],["B","B","K2","K1","P1","B"],["B","K1","P1","B"],["B","K1","P1","K2","B","B"],["B","K1","B","P1"],["B","K1","B","K2","P1","B"],["B","K1","K2","P1","B","B"],["B","K1","K2","B","P1","B"],["B","K2","P1","B","B"],["B","K2","P1","B","K1","B"],["B","K2","P1","K1","B","B"],["B","K2","B","P1","B"],["B","K2","B","P1","K1","B"],["B","K2","B","K1","P1","B"],["B","K2","K1","P1","B","B"],["B","K2","K1","B","P1","B"],["K1","P1","B","B"],["K1","P1","B","K2","B","B"],["K1","P1","K2","B","B","B"],["K1","B","P1","B"],["K1","B","P1","K2","B","B"],["K1","B","B","P1"],["K1","B","B","K2","P1","B"],["K1","B","K2","P1","B","B"],["K1","B","K2","B","P1","B"],["K1","K2","P1","B","B","B"],["K1","K2","B","P1","B","B"],["K1","K2","B","B","P1","B"],["K2","P1","B","B","B"],["K2","P1","B","B","K1","B"],["K2","P1","B","K1","B","B"],["K2","P1","K1","B","B","B"],["K2","B","P1","B","B"],["K2","B","P1","B","K1","B"],["K2","B","P1","K1","B","B"],["K2","B","B","P1","B"],["K2","B","B","P1","K1","B"],["K2","B","B","K1","P1","B"],["K2","B","K1","P1","B","B"],["K2","B","K1","B","P1","B"],["K2","K1","P1","B","B","B"],["K2","K1","B","P1","B","B"],["K2","K1","B","B","P1","B"]],"2":[["P2","B","B"],["P2","B","K1","B"],["P2","B","K1","K2","B","B"],["P2","B","K2","B","B"],["P2","B","K2","B","K1","B"],["P2","B","K2","K1","B","B"],["P2","K1","B","B"],["P2","K1","B","K2","B","B"],["P2","K1","K2","B","B","B"],["P2","K2","B","B","B"],["P2","K2","B","B","K1","B"],["P2","K2","B","K1","B","B"],["P2","K2","K1","B","B","B"],["B","P2","B"],["B","P2","K1","B"],["B","P2","K1","K2","B","B"],["B","P2","K2","B","B"],["B","P2","K2","B","K1","B"],["B","P2","K2","K1","B","B"],["B","B","P2"],["B","B","K1","P2"],["B","B","K1","K2","P2","B"],["B","B","K2","P2","B"],["B","B","K2","P2","K1","B"],["B","B","K2","K1","P2","B"],["B","K1","P2","B"],["B","K1","P2","K2","B","B"],["B","K1","B","P2"],["B","K1","B","K2","P2","B"],["B","K1","K2","P2","B","B"],["B","K1","K2","B","P2","B"],["B","K2","P2","B","B"],["B","K2","P2","B","K1","B"],["B","K2","P2","K1","B","B"],["B","K2","B","P2","B"],["B","K2","B","P2","K1","B"],["B","K2","B","K1","P2","B"],["B","K2","K1","P2","B","B"],["B","K2","K1","B","P2","B"],["K1","P2","B","B"],["K1","P2","B","K2","B","B"],["K1","P2","K2","B","B","B"],["K1","B","P2","B"],["K1","B","P2","K2","B","B"],["K1","B","B","P2"],["K1","B","B","K2","P2","B"],["K1","B","K2","P2","B","B"],["K1","B","K2","B","P2","B"],["K1","K2","P2","B","B","B"],["K1","K2","B","P2","B","B"],["K1","K2","B","B","P2","B"],["K2","P2","B","B","B"],["K2","P2","B","B","K1","B"],["K2","P2","B","K1","B","B"],["K2","P2","K1","B","B","B"],["K2","B","P2","B","B"],["K2","B","P2","B","K1","B"],["K2","B","P2","K1","B","B"],["K2","B","B","P2","B"],["K2","B","B","P2","K1","B"],["K2","B","B","K1","P2","B"],["K2","B","K1","P2","B","B"],["K2","B","K1","B","P2","B"],["K2","K1","P2","B","B","B"],["K2","K1","B","P2","B","B"],["K2","K1","B","B","P2","B"]],"3":[["P2","B","K3","B","B","K1","P1"],["P1","B","K3","P2","B","K1","B"],["B","K2","P1","P2","K1","B"],["B","K1","P1","K3","B","P2","B"],["B","B","K2","K1","P1","P2"],["P2","K2","B","B","K1","P1"],["P2","B","K2","B","P1"],["K3","B","P1","B","K1","B","P2"],["P2","P1","K2","B","K1","B"],["K3","K1","P2","P1","B","B","B"],["K1","K3","P1","P2","B","B","B"],["P1","B","K3","B","K1","B","P2"],["P1","B","K3","B","B","K1","P2"],["P2","B","P1"],["B","B","K1","K3","P2","B","P1"],["B","B","K3","P2","B","P1"],["K3","P1","B","B","P2","B"],["P1","B","K3","B","P2","B"],["K3","B","B","P1","P2","B"],["B","P2","K2","B","K1","P1"],["K3","K1","B","P1","B","B","P2"],["K1","K2","B","P2","B","P1"],["B","B","K2","P1","K1","P2"],["K2","P1","K1","P2","B","B"],["B","K2","P1","K1","P2","B"],["P1","P2","K2","K1","B","B"],["P2","K3","B","K1","B","B","P1"],["K3","K1","P2","B","B","B","P1"],["B","K3","K1","P2","B","P1","B"],["K3","B","K1","P2","P1","B","B"],["P2","K3","B","B","K1","P1","B"],["B","B","K1","K3","P1","P2","B"],["B","K3","K1","P1","P2","B","B"],["K3","K1","B","P2","P1","B","B"],["P2","P1","K3","K1","B","B","B"],["K1","B","P1","K3","P2","B","B"],["P2","B","K1","K3","P1","B","B"],["K1","P1","K3","B","P2","B","B"],["B","K3","K1","B","P2","P1","B"],["B","K1","K3","P1","P2","B","B"],["P1","K1","B","K3","B","B","P2"],["K2","P2","B","K1","B","P1"],["K3","P2","K1","B","B","B","P1"],["P2","K1","B","K3","B","P1","B"],["K1","B","P1","K2","P2","B"],["P1","K3","K1","P2","B","B","B"],["K3","B","P2","B","P1","B"],["B","K2","K1","P2","P1","B"],["K1","P2","P1","B"],["B","P2","K1","K2","B","P1"],["P1","K3","B","B","P2","B"],["P1","K1","K2","B","P2","B"],["B","B","K3","P1","B","K1","P2"],["B","K2","B","K1","P1","P2"],["P1","K3","K1","B","P2","B","B"],["K3","K1","P1","B","B","P2","B"],["P2","B","K2","P1","K1","B"],["K3","B","B","P2","B","P1"],["K3","B","B","K1","P2","P1","B"],["K2","P2","P1","K1","B","B"],["K1","P2","B","P1"],["P2","K3","K1","B","B","P1","B"],["K1","P2","K2","P1","B","B"],["K1","P1","K2","P2","B","B"],["B","P2","K3","B","K1","B","P1"],["B","K1","K3","P2","P1","B","B"],["P1","K3","B","B","B","P2"],["B","P1","K2","P2","B"],["K3","P2","K1","P1","B","B","B"],["K3","K1","B","B","P1","P2","B"],["P2","K3","K1","B","B","B","P1"],["K2","P2","K1","B","B","P1"],["K1","B","P1","K2","B","P2"],["B","K1","K3","B","P1","P2","B"],["B","B","K2","P1","P2"],["B","K3","B","P1","K1","P2","B"],["P1","K2","B","B","P2"],["B","B","K3","P1","K1","P2","B"],["K3","K1","P2","B","B","P1","B"],["B","K3","P2","B","K1","P1","B"],["K1","B","K3","P1","P2","B","B"],["B","K1","K3","P2","B","P1","B"],["P1","K3","P2","K1","B","B","B"],["B","P2","K3","K1","B","P1","B"],["B","K3","P2","B","B","K1","P1"],["B","P2","K3","K1","B","B","P1"],["K3","P1","P2","B","B","K1","B"],["K1","B","K2","P1","B","P2"],["K2","P2","B","K1","P1","B"],["P2","K2","K1","B","P1","B"],["B","K1","K3","P1","B","P2","B"],["K3","K1","B","P2","B","P1","B"],["B","K1","P2","P1"],["B","K1","K2","B","P2","P1"],["K1","K3","P2","B","B","P1","B"],["K1","B","K2","B","P1","P2"],["K3","B","P2","B","K1","P1","B"],["K3","P2","B","K1","P1","B","B"],["P2","K2","B","B","P1"],["K2","K1","B","P1","B","P2"],["P2","P1","K3","B","K1","B","B"],["P1","K1","K3","P2","B","B","B"],["P2","B","K3","B","P1","K1","B"],["P2","K3","B","B","P1","K1","B"],["K3","B","K1","P1","B","P2","B"],["K3","B","K1","P1","P2","B","B"],["P1","K3","P2","B","B","K1","B"],["B","P2","K1","K3","P1","B","B"],["B","P2","K1","K2","P1","B"],["B","K3","P1","P2","B","K1","B"],["B","B","K3","P2","B","K1","P1"],["K3","B","B","P1","K1","P2","B"],["P2","K1","B","K3","B","B","P1"],["K2","B","K1","B","P2","P1"],["B","K2","P1","B","K1","P2"],["K1","K3","B","P1","P2","B","B"],["K2","B","P2","B","P1"],["P1","P2","K2","B","K1","B"],["K3","B","B","K1","P2","B","P1"],["K1","P1","K3","B","B","B","P2"],["P1","K2","B","B","K1","P2"],["B","K3","K1","P2","B","B","P1"],["K2","P1","B","P2","B"],["K3","P2","B","P1","K1","B","B"],["K1","P2","K3","B","B","P1","B"],["P2","K2","P1","B","B"],["K1","B","P2","K2","P1","B"],["B","K3","B","P1","P2","B"],["B","P1","K1","K3","B","B","P2"],["K3","P2","B","B","K1","P1","B"],["P2","K3","P1","B","K1","B","B"],["B","B","K1","K3","P2","P1","B"],["K3","B","P2","K1","B","P1","B"],["B","B","K3","P1","B","P2"],["P1","P2","K1","B"],["K2","K1","P1","P2","B","B"],["K1","K3","B","B","P2","P1","B"],["K1","P1","K3","B","B","P2","B"],["P2","K1","K3","B","B","P1","B"],["B","K1","P2","K3","B","P1","B"],["K1","B","P1","K3","B","P2","B"],["P2","P1","K3","B","B","B"],["B","K1","B","K2","P2","P1"],["K2","P2","B","B","P1"],["P1","K2","P2","K1","B","B"],["K1","K3","B","P2","B","B","P1"],["B","K3","P2","B","P1","K1","B"],["P2","K3","B","P1","B","B"],["K1","K2","B","B","P1","P2"],["B","K3","P2","K1","B","B","P1"]],"4":[["P4","B","B"],["P4","B","K1","B"],["P4","B","K1","K2","B","B"],["P4","B","K2","B","B"],["P4","B","K2","B","K1","B"],["P4","B","K2","K1","B","B"],["P4","K1","B","B"],["P4","K1","B","K2","B","B"],["P4","K1","K2","B","B","B"],["P4","K2","B","B","B"],["P4","K2","B","B","K1","B"],["P4","K2","B","K1","B","B"],["P4","K2","K1","B","B","B"],["B","P4","B"],["B","P4","K1","B"],["B","P4","K1","K2","B","B"],["B","P4","K2","B","B"],["B","P4","K2","B","K1","B"],["B","P4","K2","K1","B","B"],["B","B","P4"],["B","B","K1","P4"],["B","B","K1","K2","P4","B"],["B","B","K2","P4","B"],["B","B","K2","P4","K1","B"],["B","B","K2","K1","P4","B"],["B","K1","P4","B"],["B","K1","P4","K2","B","B"],["B","K1","B","P4"],["B","K1","B","K2","P4","B"],["B","K1","K2","P4","B","B"],["B","K1","K2","B","P4","B"],["B","K2","P4","B","B"],["B","K2","P4","B","K1","B"],["B","K2","P4","K1","B","B"],["B","K2","B","P4","B"],["B","K2","B","P4","K1","B"],["B","K2","B","K1","P4","B"],["B","K2","K1","P4","B","B"],["B","K2","K1","B","P4","B"],["K1","P4","B","B"],["K1","P4","B","K2","B","B"],["K1","P4","K2","B","B","B"],["K1","B","P4","B"],["K1","B","P4","K2","B","B"],["K1","B","B","P4"],["K1","B","B","K2","P4","B"],["K1","B","K2","P4","B","B"],["K1","B","K2","B","P4","B"],["K1","K2","P4","B","B","B"],["K1","K2","B","P4","B","B"],["K1","K2","B","B","P4","B"],["K2","P4","B","B","B"],["K2","P4","B","B","K1","B"],["K2","P4","B","K1","B","B"],["K2","P4","K1","B","B","B"],["K2","B","P4","B","B"],["K2","B","P4","B","K1","B"],["K2","B","P4","K1","B","B"],["K2","B","B","P4","B"],["K2","B","B","P4","K1","B"],["K2","B","B","K1","P4","B"],["K2","B","K1","P4","B","B"],["K2","B","K1","B","P4","B"],["K2","K1","P4","B","B","B"],["K2","K1","B","P4","B","B"],["K2","K1","B","B","P4","B"]],"5":[["K3","P1","B","B","B","P4"],["B","P4","K2","B","K1","P1"],["P4","K3","B","B","P1","K1","B"],["K1","P4","K3","P1","B","B","B"],["P4","K3","K1","B","P1","B","B"],["K3","B","P1","P4","K1","B","B"],["K3","P4","B","K1","P1","B","B"],["P1","P4","B"],["B","K3","B","P1","B","K1","P4"],["K2","K1","P1","B","B","P4"],["P1","B","K2","P4","K1","B"],["P4","B","K3","B","B","K1","P1"],["K1","P4","P1","K2","B","B"],["B","K3","P1","K1","B","P4","B"],["B","B","K3","K1","P4","B","P1"],["P1","K2","B","K1","P4","B"],["B","K1","P1","P4"],["K3","B","B","P4","P1","B"],["P1","K3","K1","P4","B","B","B"],["P4","P1","K1","K3","B","B","B"],["K2","B","K1","B","P4","P1"],["P1","K3","B","P4","K1","B","B"],["K3","P4","B","K1","B","B","P1"],["P4","K1","B","K3","B","B","P1"],["P4","K1","K2","B","B","P1"],["K2","B","B","P1","P4"],["K3","B","P4","P1","B","B"],["B","P1","K1","P4"],["B","K1","K3","P1","B","P4","B"],["K3","P4","B","B","B","K1","P1"],["K1","K3","P1","B","P4","B","B"],["B","P4","K3","K1","B","P1","B"],["K3","K1","B","P4","B","P1","B"],["B","P4","K2","K1","B","P1"],["B","K3","P4","B","P1","B"],["K1","B","K2","B","P1","P4"],["K3","K1","B","B","P1","P4","B"],["K1","K3","B","B","P4","P1","B"],["K3","P1","K1","B","B","B","P4"],["K2","P4","P1","B","B"],["P4","K1","B","P1"],["B","K1","P4","K2","P1","B"],["B","B","K3","P1","P4","B"],["P1","K3","P4","B","B","K1","B"],["B","K3","K1","P1","B","B","P4"],["P1","B","K2","B","K1","P4"],["K3","B","P4","B","B","P1"],["B","B","K3","P1","K1","B","P4"],["B","B","K2","P1","K1","P4"],["P1","P4","K3","B","B","B"],["P1","K3","B","B","P4","K1","B"],["P1","K2","B","K1","B","P4"],["B","B","K3","P1","K1","P4","B"],["P1","K3","B","P4","B","K1","B"],["P1","B","K3","B","K1","B","P4"],["B","K3","B","P4","K1","P1","B"],["K3","B","P4","K1","P1","B","B"],["K3","P1","K1","P4","B","B","B"],["B","B","K3","K1","P1","B","P4"],["B","K2","P1","K1","B","P4"],["K3","B","K1","B","P1","B","P4"],["B","B","K1","K2","P4","P1"],["K3","B","B","P4","K1","B","P1"],["P4","K1","K3","B","B","B","P1"],["K2","B","P4","K1","P1","B"],["B","K1","P1","K2","B","P4"],["K3","B","P1","B","P4","B"],["K1","B","K3","B","P1","P4","B"],["B","P4","K1","P1"],["P4","B","K1","P1"],["P4","B","K1","K3","P1","B","B"],["K1","K3","B","P1","B","P4","B"],["K1","P1","B","K3","B","B","P4"],["K3","B","B","K1","P1","B","P4"],["K1","K2","P1","P4","B","B"],["K2","B","P1","K1","P4","B"],["P1","K2","B","P4","B"],["P4","B","K1","K3","B","P1","B"],["P1","K2","K1","B","P4","B"],["K1","B","K3","P1","B","B","P4"],["B","K3","K1","P4","P1","B","B"],["P4","B","K3","B","P1","B"],["B","K1","P4","K2","B","P1"],["B","P4","K1","K2","B","P1"],["K3","P4","K1","B","B","B","P1"],["K2","P1","K1","P4","B","B"],["P4","K2","B","K1","P1","B"],["K1","K3","P1","P4","B","B","B"],["B","P1","K3","B","B","K1","P4"],["K3","B","P1","B","K1","B","P4"],["K2","P4","K1","B","B","P1"],["B","K1","P4","K3","P1","B","B"],["P1","K3","B","K1","P4","B","B"],["K2","P1","B","P4","B"],["K3","B","B","K1","P4","P1","B"],["P1","K1","K3","B","B","B","P4"],["P1","B","K1","K3","P4","B","B"],["P4","B","P1"],["B","B","K3","K1","P1","P4","B"],["B","P1","K1","K2","P4","B"],["K3","B","P1","P4","B","B"],["K3","B","P1","B","K1","P4","B"],["K2","B","K1","P1","P4","B"],["B","B","K1","K2","P1","P4"],["K1","B","K3","P1","P4","B","B"],["K3","B","P4","B","P1","K1","B"],["B","P1","P4"],["K3","P4","P1","K1","B","B","B"],["P1","P4","K1","B"],["K2","K1","B","P1","P4","B"],["B","P4","K1","K3","B","B","P1"],["K3","B","P1","B","P4","K1","B"],["K2","B","P1","P4","B"],["K1","B","B","K3","P1","B","P4"],["K2","K1","B","B","P1","P4"],["B","B","K3","P1","B","P4"],["P4","K2","K1","B","P1","B"],["K3","B","B","K1","P1","P4","B"],["K1","P1","P4","K3","B","B","B"],["K2","B","B","K1","P1","P4"],["K1","P4","B","K2","P1","B"],["K2","K1","P4","B","B","P1"],["B","K2","P1","K1","P4","B"],["K3","B","K1","P1","B","P4","B"],["K1","P1","K3","B","P4","B","B"],["B","K1","P1","K3","P4","B","B"],["P1","K3","B","K1","B","B","P4"],["P4","B","K1","K2","P1","B"],["P4","K3","P1","K1","B","B","B"],["K3","P4","B","P1","K1","B","B"],["P1","B","K3","B","B","P4"],["B","K2","B","K1","P1","P4"],["K1","P4","B","K3","P1","B","B"],["B","K1","K3","B","P1","B","P4"],["P1","B","K3","B","K1","P4","B"],["K3","B","B","P4","P1","K1","B"],["P4","K3","B","B","K1","B","P1"],["K2","B","B","P1","K1","P4"],["P1","B","K3","P4","B","K1","B"],["B","K2","K1","P1","B","P4"],["B","B","K3","K1","P4","P1","B"],["B","K1","P4","K3","B","B","P1"],["K2","P4","B","K1","B","P1"],["K1","K3","P4","P1","B","B","B"],["K3","B","B","K1","P4","B","P1"],["K3","B","K1","B","P4","B","P1"],["K2","B","P4","P1","B"],["B","K1","B","K3","P1","P4","B"],["P1","K1","B","K2","B","P4"],["K1","K3","P1","B","B","B","P4"]],"6":[["B","P2","K3","K1","P4","B","B"],["P2","K3","B","P4","K1","B","B"],["K3","K1","B","P2","B","P4","B"],["P2","K3","B","P4","B","K1","B"],["B","B","K3","P4","K1","P2","B"],["K1","B","K3","P4","P2","B","B"],["P4","K1","P2","K3","B","B","B"],["K3","B","B","P4","B","K1","P2"],["B","K1","P4","P2"],["K3","B","K1","P2","B","B","P4"],["P2","K1","B","K2","P4","B"],["P2","K3","K1","B","B","B","P4"],["K1","K2","B","P4","B","P2"],["K3","B","K1","B","P2","B","P4"],["K3","B","B","P2","K1","P4","B"],["K3","P4","B","P2","B","K1","B"],["B","K3","P4","B","K1","P2","B"],["B","K1","K2","P4","B","P2"],["B","P4","K3","B","P2","B"],["B","K3","P4","B","B","P2"],["B","B","K3","K1","P4","P2","B"],["B","K1","K3","P2","B","P4","B"],["K1","B","K2","P2","B","P4"],["P4","K1","K3","B","B","P2","B"],["B","K3","P2","B","P4","B"],["K2","P4","B","B","K1","P2"],["K3","K1","P2","B","P4","B","B"],["P2","K3","B","B","B","K1","P4"],["P2","P4","K3","B","K1","B","B"],["K2","P4","B","K1","P2","B"],["K3","B","B","P2","B","P4"],["P4","B","K2","P2","B"],["P2","K3","B","B","K1","P4","B"],["K3","B","P2","P4","B","B"],["B","B","K1","K2","P2","P4"],["K3","P2","B","B","P4","K1","B"],["K3","B","K1","B","P2","P4","B"],["P4","K1","K3","B","B","B","P2"],["K1","P2","B","P4"],["K3","K1","B","B","P4","P2","B"],["B","K1","P2","K3","B","P4","B"],["K1","P4","B","K3","B","B","P2"],["B","K2","P4","K1","B","P2"],["P4","K3","B","K1","P2","B","B"],["K1","K3","B","B","P4","P2","B"],["K3","B","P2","B","B","K1","P4"],["B","K3","P2","B","B","P4"],["K3","P4","B","B","K1","P2","B"],["P2","P4","K3","B","B","K1","B"],["K3","B","P4","B","B","P2"],["B","K3","P2","P4","K1","B","B"],["P4","B","K2","K1","P2","B"],["P4","K2","P2","B","K1","B"],["B","K1","K3","P2","P4","B","B"],["P4","B","K3","K1","B","P2","B"],["P4","B","K3","P2","B","K1","B"],["P4","K3","B","B","K1","P2","B"],["B","K1","K3","B","P4","P2","B"],["B","K2","P4","B","P2"],["B","P4","K3","K1","P2","B","B"],["B","K3","K1","B","P2","B","P4"],["B","P4","K3","P2","K1","B","B"],["K3","B","P4","P2","K1","B","B"],["K3","P2","B","B","P4","B"],["K2","K1","P2","B","B","P4"],["B","K1","P4","K3","B","B","P2"],["P2","K2","P4","B","B"],["P4","P2","K3","K1","B","B","B"],["K1","K3","P2","B","P4","B","B"],["B","K2","P2","B","K1","P4"],["P2","K1","K2","P4","B","B"],["P2","P4","K1","K3","B","B","B"],["B","K3","B","K1","P2","B","P4"],["P4","K1","K3","B","P2","B","B"],["B","K1","K2","B","P2","P4"],["P4","K3","K1","B","P2","B","B"],["K2","P2","P4","K1","B","B"],["K1","K3","P4","B","P2","B","B"],["K3","B","B","K1","P4","B","P2"],["P4","B","K3","B","B","K1","P2"],["P2","K3","B","K1","P4","B","B"],["P4","K3","B","P2","B","B"],["P2","K1","P4","B"],["K3","B","B","K1","P2","B","P4"],["P4","K3","P2","K1","B","B","B"],["K1","K3","B","P2","P4","B","B"],["P4","K1","K2","B","P2","B"],["P2","K1","B","K3","P4","B","B"],["B","K3","P2","K1","B","B","P4"],["K1","P4","B","P2"],["K3","K1","P4","B","B","B","P2"],["K1","P2","K3","P4","B","B","B"],["K3","B","P2","B","K1","B","P4"],["B","K1","P4","K3","P2","B","B"],["P4","B","K2","B","K1","P2"],["K1","P2","B","K3","B","B","P4"],["K1","B","K3","B","P2","P4","B"],["P4","K3","B","B","B","K1","P2"],["B","B","K3","K1","P2","P4","B"],["P4","K3","K1","B","B","P2","B"],["B","P2","K3","P4","B","B"],["K1","K2","P2","B","B","P4"],["P2","B","K3","P4","B","K1","B"],["B","P2","K3","P4","K1","B","B"],["B","K3","B","K1","P2","P4","B"],["K1","K2","P2","B","P4","B"],["B","K1","P4","K2","B","P2"],["P4","K2","P2","B","B"],["P2","K3","K1","B","P4","B","B"],["K1","B","B","K3","P4","B","P2"],["K1","P2","B","K2","B","P4"],["P2","K2","B","P4","B"],["B","P4","K1","K2","P2","B"],["K1","K3","B","B","P2","P4","B"],["P2","B","K2","P4","K1","B"],["K1","K3","P4","B","B","B","P2"],["K3","K1","B","P4","B","B","P2"],["P4","B","K3","B","B","P2"],["K3","B","B","K1","P2","P4","B"],["K1","B","K3","B","P4","P2","B"],["K2","P4","B","K1","B","P2"],["B","B","K3","P2","K1","B","P4"],["B","P2","K2","K1","P4","B"],["P4","K3","B","B","P2","K1","B"],["K1","K2","P2","P4","B","B"],["K1","B","K2","P4","B","P2"],["K2","K1","B","P2","P4","B"],["P4","B","K3","B","K1","B","P2"],["K3","P4","B","B","P2","K1","B"],["P2","B","K1","P4"],["B","K3","B","P4","B","K1","P2"],["P4","B","K1","K2","B","P2"],["B","P4","K2","K1","P2","B"],["B","P2","P4"],["P4","K2","B","B","K1","P2"],["K1","K3","B","P2","B","B","P4"],["P2","B","K3","K1","B","B","P4"],["K1","B","P4","K3","P2","B","B"],["K2","B","P4","B","K1","P2"],["K2","B","K1","P4","B","P2"],["B","K3","B","P2","P4","B"],["B","K1","B","K3","P2","P4","B"],["K2","B","P4","K1","B","P2"],["B","K3","K1","P4","P2","B","B"],["K1","K2","B","B","P4","P2"],["B","K1","K3","P4","B","P2","B"],["B","P2","K1","P4"],["P2","B","K1","K2","B","P4"],["P2","K2","B","K1","P4","B"],["K1","K3","B","B","P4","B","P2"]],"7":[["B","K3","P4","P1","K2","P2","B","B"],["B","P2","K2","P4","K1","P1"],["B","K3","P4","K1","P2","P1","B"],["P1","K3","P2","P4","K1","B","B"],["P2","K3","K2","B","P1","P4","B","B"],["K3","P4","B","K2","P2","P1","B","B"],["K2","P4","K1","P1","B","P2"],["K1","K3","P4","P1","B","P2","B"],["K3","P4","K1","B","P1","P2","B"],["P4","P2","K1","K2","P1","B"],["K2","K3","B","P4","P2","B","B","P1"],["B","P4","K2","P1","K3","B","P2","B"],["B","K3","P2","P4","B","K1","P1"],["P1","K3","B","P2","B","K2","P4","B"],["K3","P4","K1","P2","B","P1","B"],["P1","P2","K2","B","K3","B","P4","B"],["B","P4","K3","B","P2","K2","P1","B"],["K2","B","K1","P1","P4","P2"],["K3","P4","B","B","P1","K1","P2"],["P2","B","K2","K3","B","P1","B","P4"],["K2","P2","P4","P1","K3","B","B","B"],["K1","K3","P4","P2","P1","B","B"],["P4","B","K2","K3","P2","B","P1","B"],["K1","B","P1","K2","P2","P4"],["K1","K2","P4","P1","B","P2"],["K3","P2","P4","P1","B","K1","B"],["K2","P1","K3","P4","P2","B","B","B"],["K3","P1","K1","B","P4","P2","B"],["K1","P4","P1","P2"],["P4","B","K3","P2","P1","K2","B","B"],["B","P4","K2","K1","P2","P1"],["K3","P2","K2","P4","P1","B","B","B"],["K2","K3","P2","B","B","B","P4","P1"],["B","P1","K3","B","K2","P2","B","P4"],["K1","B","P1","K3","P4","B","P2"],["K3","P2","P1","B","P4","K1","B"],["P1","P2","K1","K2","B","P4"],["K1","B","B","K3","P4","P2","P1"],["K1","P1","P2","K3","B","P4","B"],["B","B","K3","P2","K2","B","P4","P1"],["K3","P4","B","P2","P1","K1","B"],["K2","P1","B","P4","K3","P2","B","B"],["K3","B","B","P2","K1","P4","P1"],["K3","B","P1","P4","K1","P2","B"],["K3","B","P1","P4","K2","B","P2","B"],["B","B","K3","K2","P1","B","P2","P4"],["K3","B","K1","B","P1","P2","P4"],["B","P1","K3","P2","P4","K2","B","B"],["P2","K2","P4","B","K1","P1"],["B","K3","K2","P4","B","P2","P1","B"],["K2","P2","B","K3","B","B","P4","P1"],["P2","K3","P1","B","P4","B"],["B","K2","B","P2","K3","B","P1","P4"],["K1","K2","B","P4","P1","P2"],["B","K2","P1","K1","P2","P4"],["B","P4","K3","K1","B","P2","P1"],["P4","K2","K3","B","B","P2","B","P1"],["P1","K1","B","K2","P2","P4"],["P1","K3","B","P4","K1","B","P2"],["B","K2","K3","B","P4","P1","B","P2"],["K3","B","K2","P1","B","B","P2","P4"],["P2","B","K3","P4","B","K2","B","P1"],["K3","B","P4","P1","K2","B","P2","B"],["K3","P2","B","B","P1","K2","B","P4"],["B","P4","K3","P1","K1","B","P2"],["K2","K3","B","P2","B","P1","B","P4"],["K3","K2","P4","B","P2","B","B","P1"],["K3","P1","B","K1","P4","B","P2"],["B","K2","K3","B","P2","P1","P4","B"],["P4","K2","K3","B","B","B","P1","P2"],["P1","P4","P2"],["P2","K3","K1","P4","B","B","P1"],["K3","P4","P1","K2","B","B","P2","B"],["B","K1","B","K3","P4","P1","P2"],["B","P1","K3","K2","P4","B","P2","B"],["K3","B","B","P2","P4","K2","B","P1"],["P1","K3","B","K2","P4","B","B","P2"],["B","K3","P1","B","P4","K2","B","P2"],["P4","B","K1","K3","P2","P1","B"],["K3","B","P4","P2","K1","P1","B"],["P4","K1","P1","K3","B","P2","B"],["K3","B","B","P2","B","K2","P1","P4"],["K1","K3","B","B","P1","P4","P2"],["K3","B","P1","B","P2","K1","P4"],["K3","P4","P2","B","B","K2","B","P1"],["K3","B","P1","K2","P4","B","P2","B"],["P4","K3","B","K1","P2","B","P1"],["K3","B","K2","P1","B","P2","P4","B"],["K3","B","P2","B","P1","K2","P4","B"],["B","K3","P2","K2","P4","B","B","P1"],["B","K3","P1","P4","B","P2"],["B","K3","K1","P1","P4","B","P2"],["K3","K1","P4","B","P2","B","P1"],["B","K2","K3","P1","P4","P2","B","B"],["B","K3","B","K1","P4","P2","P1"],["K3","B","P1","P2","B","P4"],["P2","B","K3","K2","B","P4","P1","B"],["B","K3","K2","B","P4","P1","P2","B"],["B","K2","B","P2","K3","P1","P4","B"],["B","K3","B","P2","K2","B","P4","P1"],["K2","P2","K1","B","P4","P1"],["K2","P1","P4","P2","K1","B"],["P2","K1","K2","P4","P1","B"],["P4","K2","P1","B","K3","B","B","P2"],["P4","K3","P2","P1","B","K1","B"],["B","K2","P4","B","K3","P1","P2","B"],["K2","K3","B","P1","B","B","P4","P2"],["P4","K3","P2","K1","P1","B","B"],["B","B","K3","K2","P2","P1","P4","B"],["P2","P4","K3","B","B","K2","P1","B"],["K3","P2","B","B","P4","K2","P1","B"],["K3","P2","P1","K1","B","B","P4"],["K2","P2","P4","K1","P1","B"],["K3","B","B","P4","P1","P2"],["K3","P2","B","B","K2","P4","P1","B"],["P2","P4","K2","K1","P1","B"],["B","B","K3","P1","B","K2","P2","P4"],["K3","P2","K2","P1","B","P4","B","B"],["K3","P1","P2","B","B","K2","P4","B"],["P1","B","K3","B","B","K2","P2","P4"],["K2","K3","P4","B","P1","B","B","P2"],["K3","B","K2","P4","P1","B","P2","B"],["P1","P4","K1","K2","B","P2"],["K2","B","P1","K3","B","P2","B","P4"],["K1","P4","K2","B","P1","P2"],["K3","P1","P2","B","K2","P4","B","B"],["K3","P2","K1","P4","B","P1","B"],["B","K1","K3","P2","P1","P4","B"],["K3","K2","P1","P2","B","B","B","P4"],["B","K1","K2","P2","P4","P1"],["B","K3","B","P4","B","K2","P2","P1"],["K3","P4","K1","P1","B","B","P2"],["K3","K1","B","P2","P1","P4","B"],["P1","K2","P2","K3","B","P4","B","B"],["K3","P1","P2","B","P4","B"],["K2","P2","K3","P1","B","P4","B","B"],["K3","P1","K2","B","P4","B","P2","B"],["B","P1","K1","K3","P2","P4","B"],["K3","B","B","P4","K2","P1","P2","B"],["P4","B","K3","P2","B","K2","P1","B"],["P1","K1","K3","B","P2","P4","B"],["K3","P1","P4","K2","B","B","B","P2"],["P1","K1","K3","B","P4","P2","B"],["P2","K2","P1","K3","B","P4","B","B"],["K3","P4","B","P1","B","P2"],["P4","K1","K2","P2","B","P1"],["K3","B","B","P1","P2","K2","P4","B"],["B","P2","K3","P1","P4","K2","B","B"],["B","K3","P4","P1","P2","K1","B"],["K2","P1","K3","B","P4","B","B","P2"]],"14":[["B","K1","K2","P1","P4","K3","B","B","P2"],["K2","K3","B","P4","B","P2","K1","B","P1"],["K1","B","K2","K3","B","P1","P2","P4","B"],["K1","K2","P2","K3","B","B","P1","B","P4"],["K2","P2","B","P4","K1","K3","B","P1","B"],["B","K3","K1","P1","K2","P4","P2","B","B"],["K2","B","K3","P2","P4","B","K1","P1","B"],["B","K2","K3","K1","B","P1","B","P2","P4"],["P2","K2","B","K3","P4","B","P1","K1","B"],["K3","P1","B","K1","K2","B","P4","B","P2"],["P1","K1","P4","K3","B","K2","B","B","P2"],["K3","B","K2","P1","K1","B","B","P4","P2"],["P2","P1","K2","B","K1","K3","B","B","P4"],["K1","K3","P1","K2","P4","B","B","B","P2"],["B","K2","P1","B","K3","B","P4","K1","P2"],["P2","B","K3","K2","P4","K1","B","P1","B"],["P1","K3","P4","K2","K1","B","B","B","P2"],["P1","K2","B","K3","B","P4","K1","P2","B"],["B","K2","K3","P2","K1","B","P4","P1","B"],["B","B","K3","P4","K2","K1","B","P1","P2"],["P1","K1","B","K3","P2","K2","P4","B","B"],["P4","K3","K2","B","B","P1","K1","B","P2"],["B","K2","B","K3","P4","P2","P1","K1","B"],["P4","K1","K3","P2","B","B","K2","B","P1"],["K3","P1","K1","B","K2","B","P2","B","P4"],["P4","B","K2","K3","P2","K1","B","P1","B"],["K3","K2","P1","P2","K1","P4","B","B","B"],["B","K1","K3","P2","B","P4","K2","P1","B"],["K3","P1","P4","B","B","K2","K1","B","P2"],["B","K3","P1","K1","B","K2","P4","P2","B"],["K2","P1","B","B","K3","P4","K1","B","P2"],["B","P2","K2","B","K3","B","P1","K1","P4"],["P4","B","K2","K3","B","P1","K1","B","P2"],["B","P1","K3","K2","P4","B","K1","B","P2"],["K1","P4","K2","B","K3","B","P2","P1","B"],["P4","P2","K3","P1","B","K2","K1","B","B"],["K3","K2","B","B","P4","K1","P2","P1","B"],["P1","K2","P2","P4","K3","B","B","K1","B"],["K1","P4","K3","P1","B","K2","B","P2","B"],["K3","K2","B","P4","P1","B","B","K1","P2"],["K2","P1","K3","B","K1","P2","P4","B","B"],["K2","P4","K3","B","P2","K1","P1","B","B"],["B","B","K3","P4","B","K1","K2","P1","P2"],["P2","K1","K3","B","K2","P1","B","B","P4"],["B","K2","K1","K3","P1","P2","B","P4","B"],["P2","K3","K2","B","K1","B","B","P4","P1"],["K1","P2","B","K3","P1","B","K2","B","P4"],["P4","K1","P1","K2","K3","B","B","P2","B"],["K3","K2","P1","B","K1","B","P4","P2","B"],["P1","K3","B","P4","P2","K2","B","K1","B"],["K1","K2","K3","B","P4","B","P1","B","P2"],["K3","B","K1","P2","P4","B","K2","B","P1"],["K2","K1","P1","P4","K3","B","B","B","P2"],["K2","P1","B","K3","B","P2","K1","P4","B"],["P2","B","K3","K2","B","B","P4","K1","P1"],["K3","P4","K2","B","K1","B","P2","B","P1"],["K1","K2","B","P4","B","K3","P2","B","P1"],["P1","B","K2","K3","K1","B","P2","P4","B"],["K2","B","K3","P1","P4","B","B","K1","P2"],["K3","P2","K2","B","P1","K1","B","B","P4"],["P4","P1","K3","K1","B","K2","B","P2","B"],["K2","K1","B","P1","P4","K3","P2","B","B"],["K1","K3","K2","P1","B","P4","B","P2","B"],["K2","K3","K1","P1","B","B","P4","P2","B"],["P4","K3","K2","B","K1","P2","B","B","P1"],["K2","K1","B","P4","K3","B","P2","P1","B"],["B","P4","K1","K2","B","K3","B","P2","P1"],["K3","B","P4","K2","P1","B","P2","K1","B"],["B","K3","B","P1","K2","P2","P4","K1","B"],["K3","B","K2","P1","P2","K1","P4","B","B"],["K3","P2","B","B","K2","P1","K1","B","P4"],["K3","P1","P4","B","P2","K2","K1","B","B"],["K2","K1","B","P4","K3","B","B","P1","P2"],["B","K3","P4","K2","B","P2","P1","K1","B"],["K1","B","B","K3","K2","P4","P1","B","P2"],["B","K2","K3","P1","B","K1","B","P2","P4"],["P2","K2","K3","B","B","B","P4","K1","P1"],["B","K3","K1","P2","B","P1","K2","B","P4"],["K2","K3","P4","K1","B","P2","B","B","P1"],["B","K2","K1","K3","P4","B","B","P1","P2"],["K3","P1","P4","P2","K2","B","B","K1","B"],["K3","K2","P4","P1","B","P2","K1","B","B"],["K2","P2","B","P1","K3","B","K1","B","P4"],["K1","K2","P2","B","P4","K3","P1","B","B"],["P1","K2","B","P4","K3","B","K1","B","P2"],["K3","P4","P2","B","B","K2","K1","P1","B"],["K1","B","K2","B","P4","K3","P1","P2","B"],["B","P4","K3","P1","K2","B","B","K1","P2"],["K3","P2","K1","B","P4","K2","B","P1","B"],["B","K1","K2","P1","K3","B","P4","P2","B"],["K1","K3","P4","K2","P2","B","B","P1","B"],["B","K3","P2","P1","B","K2","P4","K1","B"],["K1","K2","B","P2","P4","K3","B","P1","B"],["B","K3","K1","P4","P1","B","K2","P2","B"],["B","K3","B","K2","P2","K1","B","P1","P4"],["K3","K1","B","P4","P1","B","K2","B","P2"],["P1","B","K2","B","K3","P2","K1","P4","B"],["K3","B","P2","K2","P4","B","K1","B","P1"],["B","B","K2","P4","K1","K3","P2","P1","B"],["P2","K2","K3","P4","B","K1","P1","B","B"],["B","K2","K1","P4","K3","P1","P2","B","B"],["K2","B","P4","B","K1","K3","P2","B","P1"],["K3","P2","K1","K2","P4","B","B","B","P1"],["K3","K1","B","P2","B","K2","P1","P4","B"],["B","K2","K1","P2","P1","K3","B","B","P4"],["K3","P1","K2","B","B","B","P2","K1","P4"],["K3","P2","K2","B","B","B","K1","P4","P1"],["K2","K3","P4","P1","B","B","K1","P2","B"],["P1","B","K3","K2","P4","B","K1","P2","B"],["P2","K3","B","B","P1","K1","K2","B","P4"],["K1","P1","B","K3","P2","B","K2","P4","B"],["B","K1","K3","K2","P1","B","P2","B","P4"],["K2","B","P2","K3","P4","P1","B","K1","B"],["B","K2","K1","K3","P2","P4","B","P1","B"],["K1","P2","K3","B","K2","B","P4","B","P1"],["K3","K2","K1","P1","B","B","B","P2","P4"],["K2","P1","B","B","K3","K1","P2","P4","B"],["K3","P1","K1","B","B","K2","P4","B","P2"],["K3","K1","P4","K2","B","B","B","P1","P2"],["K3","B","B","K2","K1","P1","P4","B","P2"],["K1","K2","B","K3","P4","B","P2","P1","B"],["K2","B","K3","B","P4","B","K1","P1","P2"],["K3","K1","P2","B","K2","B","P4","B","P1"],["K1","B","K3","B","P1","P4","K2","B","P2"],["K1","K3","P2","B","K2","P1","P4","B","B"],["K2","K3","B","P2","K1","B","P1","P4","B"],["B","K3","B","P2","P4","K2","B","K1","P1"],["K1","P2","K3","K2","B","P4","P1","B","B"],["B","K2","K3","K1","P1","B","B","P4","P2"],["B","K2","P4","P1","K3","B","B","K1","P2"],["P4","B","K3","K2","K1","P2","B","B","P1"],["B","B","K2","K1","K3","P2","B","P1","P4"],["K1","B","P1","K3","B","K2","P2","B","P4"],["P4","B","K3","K2","P1","B","K1","B","P2"],["K3","B","K1","B","K2","P1","P4","B","P2"],["B","P4","K3","K1","K2","B","P1","P2","B"],["B","B","K2","P4","K3","K1","P1","P2","B"],["B","K1","K2","K3","B","P4","B","P1","P2"],["K3","P2","B","K1","P4","B","K2","B","P1"],["B","K3","B","K2","P4","P2","K1","P1","B"],["K3","B","B","P2","P1","K1","K2","B","P4"],["B","K3","K1","K2","P2","B","P4","B","P1"],["P2","K3","K2","B","P1","B","P4","K1","B"],["B","B","K2","K3","P4","P2","K1","P1","B"],["K1","P1","K2","B","K3","P4","P2","B","B"],["B","K2","P2","B","K1","K3","P4","P1","B"],["K1","K3","B","K2","P2","B","B","P4","P1"],["B","P4","K2","K1","B","K3","B","P2","P1"],["K1","P2","B","K3","K2","P1","P4","B","B"],["P1","B","K3","P4","K2","B","K1","P2","B"]]};
+
+// === GAME STATE ===
+let state = {
+  keys: 3,
+  prize: 0,
+  prizesFound: 0,
+  emptiesOpened: 0,
+  boxesOpened: 0,
+  path: [],
+  step: 0,
+  outcome: null,
+  gameOver: false,
+  openedBoxes: new Set(),
+};
+
+// Session stats
+let session = {
+  gamesPlayed: 0,
+  totalReward: 0,
+  bestGame: 0,
+  fullClears: 0,
+};
+
+// === CORE GAME LOGIC ===
+
+function pickOutcome() {
+  const outcomes = Object.keys(OUTCOME_WEIGHTS);
+  const weights = outcomes.map(o => OUTCOME_WEIGHTS[o]);
+  const total = weights.reduce((a, b) => a + b, 0);
+  let r = Math.random() * total;
+  for (let i = 0; i < outcomes.length; i++) {
+    r -= weights[i];
+    if (r <= 0) return outcomes[i];
+  }
+  return outcomes[outcomes.length - 1];
+}
+
+function pickPath(outcome) {
+  const paths = PATHS[outcome];
+  return paths[Math.floor(Math.random() * paths.length)];
+}
+
+function getBoxType(label) {
+  if (label.startsWith('P')) return 'prize';
+  if (label.startsWith('K')) return 'key';
+  return 'empty';
+}
+
+function getBoxValue(label) {
+  if (PRIZE_VALUES[label]) return PRIZE_VALUES[label];
+  if (KEY_VALUES[label]) return KEY_VALUES[label];
+  return 0;
+}
+
+function getRevealIcon(label) {
+  const type = getBoxType(label);
+  if (type === 'prize') return '💎';
+  if (type === 'key') return '🔑';
+  return '💨';
+}
+
+function getRevealLabel(label) {
+  const type = getBoxType(label);
+  if (type === 'prize') return `PRIZE +${PRIZE_VALUES[label]}`;
+  if (type === 'key') return `KEY +${KEY_VALUES[label]}`;
+  return 'EMPTY';
+}
+
+function getOutcomeDescription(outcome) {
+  const descs = {
+    "1": "Found 1 prize",
+    "2": "Found 1 prize",
+    "3": "Found 2 prizes",
+    "4": "Found 1 prize",
+    "5": "Found 2 prizes",
+    "6": "Found 2 prizes",
+    "7": "Found all 3 prizes!",
+    "14": "PERFECT — All prizes, all boxes!",
+  };
+  return descs[outcome] || "";
+}
+
+function getResultEmoji(outcome) {
+  const o = parseInt(outcome);
+  if (o === 14) return '👑';
+  if (o === 7) return '🏆';
+  if (o >= 5) return '💎';
+  if (o >= 3) return '✨';
+  return '📦';
+}
+
+function getResultTitle(outcome) {
+  const o = parseInt(outcome);
+  if (o === 14) return 'FULL CLEAR!';
+  if (o === 7) return 'ALL PRIZES!';
+  if (o >= 5) return 'NICE HAUL';
+  if (o >= 3) return 'NOT BAD';
+  return 'TOUGH LUCK';
+}
+
+// === UI ===
+
+function createGrid() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < 9; i++) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'box-wrapper';
+    wrapper.dataset.index = i;
+    wrapper.innerHTML = `
+      <div class="box" id="box-${i}">
+        <div class="box-face box-front">
+          <span class="box-icon">📦</span>
+          <span class="box-number">${i + 1}</span>
+        </div>
+        <div class="box-face box-back" id="box-back-${i}">
+          <span class="reveal-icon"></span>
+          <span class="reveal-label"></span>
+        </div>
+      </div>
+    `;
+    wrapper.addEventListener('pointerup', (e) => {
+      e.preventDefault();
+      openBox(i);
+    });
+    grid.appendChild(wrapper);
+  }
+}
+
+function updateUI() {
+  const keysEl = document.getElementById('keys');
+  const prizesEl = document.getElementById('prizes-found');
+  const rewardEl = document.getElementById('reward');
+
+  keysEl.textContent = state.keys;
+  prizesEl.textContent = state.prizesFound;
+  rewardEl.textContent = state.prize;
+
+  // Prize pips
+  for (let i = 0; i < 3; i++) {
+    const pip = document.getElementById(`pip-${i}`);
+    pip.classList.toggle('found', i < state.prizesFound);
+  }
+
+  // Lock banner
+  const lockBanner = document.getElementById('lock-banner');
+  const isLocked = state.emptiesOpened >= 2 && state.prizesFound === 0;
+  lockBanner.classList.toggle('active', isLocked);
+
+  // Session stats
+  document.getElementById('games-played').textContent = session.gamesPlayed;
+  document.getElementById('total-reward').textContent = session.totalReward;
+  document.getElementById('best-game').textContent = session.bestGame;
+  document.getElementById('full-clears').textContent = session.fullClears;
+}
+
+function bumpStat(id) {
+  const el = document.getElementById(id);
+  el.classList.add('bump');
+  setTimeout(() => el.classList.remove('bump'), 300);
+}
+
+function setMessage(text, type = '') {
+  const el = document.getElementById('message');
+  el.textContent = text;
+  el.className = 'game-message' + (type ? ` ${type}` : '');
+}
+
+function spawnParticles(x, y, color, count = 12) {
+  const container = document.getElementById('particles');
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
+    const dist = 40 + Math.random() * 60;
+    const dx = Math.cos(angle) * dist;
+    const dy = Math.sin(angle) * dist;
+    const size = 4 + Math.random() * 6;
+    p.style.cssText = `
+      left: ${x}px; top: ${y}px;
+      width: ${size}px; height: ${size}px;
+      background: ${color};
+      --dx: ${dx}px; --dy: ${dy}px;
+    `;
+    container.appendChild(p);
+    setTimeout(() => p.remove(), 800);
+  }
+}
+
+function spawnFloatText(x, y, text, color) {
+  const el = document.createElement('div');
+  el.className = 'float-text';
+  el.textContent = text;
+  el.style.cssText = `left: ${x}px; top: ${y}px; color: ${color};`;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1200);
+}
+
+function shake() {
+  const container = document.getElementById('grid-container');
+  container.classList.add('shake');
+  setTimeout(() => container.classList.remove('shake'), 400);
+}
+
+// === GAME ACTIONS ===
+
+let lastOpenTime = 0;
+
+function openBox(index) {
+  if (state.gameOver) return;
+  if (state.openedBoxes.has(index)) return;
+
+  // Debounce rapid taps
+  const now = Date.now();
+  if (now - lastOpenTime < 300) return;
+  lastOpenTime = now;
+
+  const content = state.path[state.step];
+  if (!content) return;
+
+  // Haptic feedback
+  if (navigator.vibrate) navigator.vibrate(15);
+
+  state.step++;
+  state.openedBoxes.add(index);
+  state.keys -= 1;
+  state.boxesOpened++;
+
+  const type = getBoxType(content);
+  const value = getBoxValue(content);
+
+  if (type === 'key') {
+    state.keys += value;
+  } else if (type === 'prize') {
+    state.prize += value;
+    state.prizesFound++;
+  } else {
+    state.emptiesOpened++;
+  }
+
+  // Update back face
+  const backEl = document.getElementById(`box-back-${index}`);
+  backEl.className = `box-face box-back ${type}`;
+  backEl.querySelector('.reveal-icon').textContent = getRevealIcon(content);
+  backEl.querySelector('.reveal-label').textContent = getRevealLabel(content);
+
+  // Flip
+  const boxEl = document.getElementById(`box-${index}`);
+  boxEl.classList.add('flipped');
+
+  // Effects
+  const rect = boxEl.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+
+  if (type === 'prize') {
+    spawnParticles(cx, cy, '#f5c842', 16);
+    spawnFloatText(cx - 30, cy - 40, `+${value} 💎`, '#f5c842');
+    bumpStat('prizes-found');
+    bumpStat('reward');
+    shake();
+    if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
+    const msgs = [`Prize! +${value} reward`, `Found one! +${value}`, `+${value} reward!`];
+    setMessage(msgs[state.prizesFound - 1] || msgs[0], 'highlight');
+  } else if (type === 'key') {
+    spawnParticles(cx, cy, '#8ec8e8', 10);
+    spawnFloatText(cx - 30, cy - 40, `+${value} 🔑`, '#8ec8e8');
+    bumpStat('keys');
+    setMessage(`Key! +${value} — keep going`, '');
+  } else {
+    spawnParticles(cx, cy, '#555', 6);
+    const emptyMsgs = ['Empty...', 'Nothing here', 'Dust', 'Nope'];
+    setMessage(emptyMsgs[Math.floor(Math.random() * emptyMsgs.length)], 'alert');
+  }
+
+  updateUI();
+
+  // Mark unavailable boxes (visual only — the path handles the logic)
+  updateBoxAvailability();
+
+  // Check game end
+  if (state.step >= state.path.length || state.keys <= 0) {
+    state.gameOver = true;
+    setTimeout(showResult, 600);
+  }
+}
+
+function updateBoxAvailability() {
+  for (let i = 0; i < 9; i++) {
+    const wrapper = document.querySelector(`.box-wrapper[data-index="${i}"]`);
+    if (state.openedBoxes.has(i)) {
+      wrapper.classList.add('unavailable');
+    } else if (state.keys <= 0 && !state.gameOver) {
+      wrapper.classList.add('unavailable');
+    } else {
+      wrapper.classList.remove('unavailable');
+    }
+  }
+}
+
+function showResult() {
+  const finalReward = parseInt(state.outcome) === 14 ? state.prize * 2 : state.prize;
+
+  // Update session
+  session.gamesPlayed++;
+  session.totalReward += finalReward;
+  if (finalReward > session.bestGame) session.bestGame = finalReward;
+  if (parseInt(state.outcome) === 14) session.fullClears++;
+
+  const overlay = document.getElementById('result-overlay');
+  document.getElementById('result-emoji').textContent = getResultEmoji(state.outcome);
+  document.getElementById('result-title').textContent = getResultTitle(state.outcome);
+  const prob = OUTCOME_WEIGHTS[state.outcome];
+  document.getElementById('result-subtitle').textContent =
+    `${getOutcomeDescription(state.outcome)} (${prob}% chance)`;
+
+  const breakdown = document.getElementById('result-breakdown');
+  breakdown.innerHTML = '';
+
+  const rows = [
+    ['Boxes opened', `${state.boxesOpened}/9`, ''],
+    ['Prizes found', `${state.prizesFound}/3`, 'gold'],
+    ['Keys used', `${state.boxesOpened}`, 'silver'],
+    ['Base reward', `${state.prize}`, 'green'],
+  ];
+
+  if (parseInt(state.outcome) === 14) {
+    rows.push(['Full clear bonus', 'x2', 'gold']);
+    rows.push(['Final reward', `${finalReward}`, 'green']);
+  }
+
+  rows.forEach(([label, value, cls]) => {
+    const row = document.createElement('div');
+    row.className = 'result-row';
+    row.innerHTML = `<span class="label">${label}</span><span class="value ${cls}">${value}</span>`;
+    breakdown.appendChild(row);
+  });
+
+  const multiplierEl = document.getElementById('result-multiplier');
+  const isFullClear = parseInt(state.outcome) === 14;
+  multiplierEl.style.display = isFullClear ? 'block' : 'none';
+
+  overlay.classList.add('visible');
+
+  // Full clear celebration
+  if (isFullClear) {
+    if (navigator.vibrate) navigator.vibrate([50, 30, 50, 30, 100]);
+    shake();
+    // Burst of gold particles from center
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    for (let wave = 0; wave < 3; wave++) {
+      setTimeout(() => spawnParticles(cx, cy, '#f5c842', 20), wave * 150);
+    }
+  }
+
+  updateUI();
+}
+
+function newGame() {
+  state = {
+    keys: 3,
+    prize: 0,
+    prizesFound: 0,
+    emptiesOpened: 0,
+    boxesOpened: 0,
+    path: [],
+    step: 0,
+    outcome: null,
+    gameOver: false,
+    openedBoxes: new Set(),
+  };
+
+  state.outcome = pickOutcome();
+  state.path = pickPath(state.outcome);
+
+  // Close result overlay
+  document.getElementById('result-overlay').classList.remove('visible');
+
+  createGrid();
+  updateUI();
+  setMessage('Tap a box to open it');
+}
+
+// === INIT ===
+
+document.getElementById('start-btn').addEventListener('click', () => {
+  document.getElementById('intro').classList.add('hidden');
+  newGame();
+});
+
+document.getElementById('play-again-btn').addEventListener('click', () => {
+  newGame();
+});
+
+// Prevent scroll on touch
+document.addEventListener('touchmove', (e) => {
+  if (e.target.closest('.grid')) {
+    e.preventDefault();
+  }
+}, { passive: false });
+</script>
+</body>
+</html>

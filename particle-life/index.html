@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Particle Life</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #050508;
+    overflow: hidden;
+    font-family: 'Courier New', monospace;
+  }
+
+  canvas {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+
+  #ui {
+    position: fixed;
+    bottom: 24px;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 2s ease;
+  }
+
+  #ui.faded { opacity: 0; }
+
+  .controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    pointer-events: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0 16px;
+  }
+
+  .ctrl-btn {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.5);
+    padding: 6px 14px;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: lowercase;
+  }
+
+  .ctrl-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.8);
+    border-color: rgba(255,255,255,0.25);
+  }
+
+  .hint {
+    color: rgba(255,255,255,0.2);
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+
+  #title {
+    position: fixed;
+    top: 24px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 2s ease;
+  }
+
+  #title.faded { opacity: 0; }
+
+  #title h1 {
+    color: rgba(255,255,255,0.35);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+
+  #title p {
+    color: rgba(255,255,255,0.15);
+    font-size: 11px;
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  #matrix-display {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  #matrix-display.visible { opacity: 1; }
+
+  #matrix-display canvas {
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  #matrix-display .label {
+    color: rgba(255,255,255,0.2);
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-align: center;
+    margin-top: 4px;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<div id="title">
+  <h1>Particle Life</h1>
+  <p>random rules, emergent order</p>
+</div>
+
+<canvas id="canvas"></canvas>
+
+<div id="matrix-display">
+  <canvas id="matrix-canvas" width="90" height="90"></canvas>
+  <div class="label">who attracts whom</div>
+</div>
+
+<div id="ui">
+  <div class="controls">
+    <button class="ctrl-btn" id="btn-randomize">randomize (r)</button>
+    <button class="ctrl-btn" id="btn-symmetry">symmetry (y)</button>
+    <button class="ctrl-btn" id="btn-chains">chains (c)</button>
+    <button class="ctrl-btn" id="btn-orbits">orbits (o)</button>
+    <button class="ctrl-btn" id="btn-screenshot">screenshot (s)</button>
+  </div>
+  <div class="hint">press R for new rules &middot; watch what emerges</div>
+</div>
+
+<script>
+// ============================================================
+// Particle Life — emergent collective behavior
+// ============================================================
+// N particle types, each with random attraction/repulsion rules.
+// From random interaction matrices, self-organizing structures
+// emerge: clusters, orbiting systems, chains, pulsating blobs.
+//
+// Unlike flow fields (environmental) or reaction-diffusion
+// (chemical), this is multi-agent: every particle acts on
+// every other. Structure emerges from interaction, not from a
+// field imposed from outside.
+// ============================================================
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+let W, H;
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// --- Configuration ---
+const NUM_TYPES = 6;
+const PARTICLE_COUNT = 1500;
+const MAX_RADIUS = 120;    // interaction range
+const FRICTION = 0.05;     // velocity damping per frame
+const FORCE_SCALE = 0.4;   // global force multiplier
+const DT = 1.0;
+
+// Particle data (struct of arrays for performance)
+let px, py, vx, vy, types;
+
+// Attraction matrix: attractions[i][j] = how type i feels about type j
+// Positive = attraction, negative = repulsion
+let attractions;
+
+// Type colors — warm and distinct
+const TYPE_COLORS = [
+  [255, 80, 80],    // red
+  [80, 200, 255],   // cyan
+  [120, 255, 120],  // green
+  [255, 200, 60],   // gold
+  [200, 100, 255],  // violet
+  [255, 140, 180],  // pink
+];
+
+// --- Initialization ---
+function initParticles() {
+  px = new Float32Array(PARTICLE_COUNT);
+  py = new Float32Array(PARTICLE_COUNT);
+  vx = new Float32Array(PARTICLE_COUNT);
+  vy = new Float32Array(PARTICLE_COUNT);
+  types = new Uint8Array(PARTICLE_COUNT);
+
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    px[i] = Math.random() * W;
+    py[i] = Math.random() * H;
+    vx[i] = 0;
+    vy[i] = 0;
+    types[i] = Math.floor(Math.random() * NUM_TYPES);
+  }
+}
+
+function randomMatrix() {
+  attractions = [];
+  for (let i = 0; i < NUM_TYPES; i++) {
+    attractions[i] = [];
+    for (let j = 0; j < NUM_TYPES; j++) {
+      attractions[i][j] = (Math.random() * 2 - 1); // -1 to 1
+    }
+  }
+}
+
+// Preset: symmetric rules (types attract/repel equally)
+function symmetricMatrix() {
+  attractions = [];
+  for (let i = 0; i < NUM_TYPES; i++) {
+    attractions[i] = [];
+    for (let j = 0; j < NUM_TYPES; j++) {
+      attractions[i][j] = 0;
+    }
+  }
+  for (let i = 0; i < NUM_TYPES; i++) {
+    for (let j = i; j < NUM_TYPES; j++) {
+      const v = Math.random() * 2 - 1;
+      attractions[i][j] = v;
+      attractions[j][i] = v;
+    }
+  }
+}
+
+// Preset: chains — each type chases the next
+function chainsMatrix() {
+  attractions = [];
+  for (let i = 0; i < NUM_TYPES; i++) {
+    attractions[i] = [];
+    for (let j = 0; j < NUM_TYPES; j++) {
+      attractions[i][j] = -0.3; // default mild repulsion
+    }
+    // Attract to self mildly
+    attractions[i][i] = 0.1 + Math.random() * 0.2;
+    // Strongly chase next type
+    attractions[i][(i + 1) % NUM_TYPES] = 0.6 + Math.random() * 0.3;
+    // Weakly flee from previous type
+    attractions[i][(i - 1 + NUM_TYPES) % NUM_TYPES] = -0.5 - Math.random() * 0.3;
+  }
+}
+
+// Preset: orbits — strong self-attraction, mixed cross-type
+function orbitsMatrix() {
+  attractions = [];
+  for (let i = 0; i < NUM_TYPES; i++) {
+    attractions[i] = [];
+    for (let j = 0; j < NUM_TYPES; j++) {
+      if (i === j) {
+        attractions[i][j] = 0.5 + Math.random() * 0.3; // strong self-clumping
+      } else {
+        // Some pairs attract, forming binary orbits; others repel
+        attractions[i][j] = (Math.random() < 0.3 ? 1 : -1) * (0.2 + Math.random() * 0.4);
+      }
+    }
+  }
+}
+
+// --- Force function ---
+// Piecewise linear: repulsion at very close range, then
+// attraction/repulsion from the matrix at medium-long range.
+function force(d, attraction) {
+  // d is normalized: 0 to 1 (where 1 = MAX_RADIUS)
+  const BETA = 0.3; // core repulsion radius (fraction of MAX_RADIUS)
+
+  if (d < BETA) {
+    // Linear repulsion from overlap: strong push at d=0, zero at d=beta
+    return d / BETA - 1;
+  } else {
+    // Attraction/repulsion: ramps up from beta, peaks at midpoint, back to 0 at 1
+    const t = (d - BETA) / (1 - BETA); // 0 to 1
+    return attraction * (1 - Math.abs(2 * t - 1));
+  }
+}
+
+// --- Spatial hashing for O(n * k) instead of O(n^2) ---
+let cellSize, gridW, gridH, grid;
+
+function buildGrid() {
+  cellSize = MAX_RADIUS;
+  gridW = Math.ceil(W / cellSize);
+  gridH = Math.ceil(H / cellSize);
+  grid = new Array(gridW * gridH);
+
+  for (let i = 0; i < grid.length; i++) grid[i] = [];
+
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    const cx = Math.floor(px[i] / cellSize);
+    const cy = Math.floor(py[i] / cellSize);
+    const idx = Math.min(cy, gridH - 1) * gridW + Math.min(cx, gridW - 1);
+    if (idx >= 0 && idx < grid.length) grid[idx].push(i);
+  }
+}
+
+// --- Simulation step ---
+function step() {
+  buildGrid();
+
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    let fx = 0, fy = 0;
+    const ti = types[i];
+    const xi = px[i], yi = py[i];
+
+    // Check neighboring cells
+    const cx = Math.floor(xi / cellSize);
+    const cy = Math.floor(yi / cellSize);
+
+    for (let dy = -1; dy <= 1; dy++) {
+      for (let dx = -1; dx <= 1; dx++) {
+        // Wrap around (toroidal)
+        let nx = cx + dx;
+        let ny = cy + dy;
+
+        // Compute offset for toroidal wrapping
+        let ox = 0, oy = 0;
+        if (nx < 0) { nx += gridW; ox = -W; }
+        else if (nx >= gridW) { nx -= gridW; ox = W; }
+        if (ny < 0) { ny += gridH; oy = -H; }
+        else if (ny >= gridH) { ny -= gridH; oy = H; }
+
+        const cellIdx = ny * gridW + nx;
+        const cell = grid[cellIdx];
+        if (!cell) continue;
+
+        for (let k = 0; k < cell.length; k++) {
+          const j = cell[k];
+          if (j === i) continue;
+
+          let ddx = (px[j] + ox) - xi;
+          let ddy = (py[j] + oy) - yi;
+          const dist = Math.sqrt(ddx * ddx + ddy * ddy);
+
+          if (dist > 0 && dist < MAX_RADIUS) {
+            const nd = dist / MAX_RADIUS; // normalized 0-1
+            const f = force(nd, attractions[ti][types[j]]);
+            const mag = f * FORCE_SCALE / dist;
+            fx += ddx * mag;
+            fy += ddy * mag;
+          }
+        }
+      }
+    }
+
+    vx[i] = (vx[i] + fx * DT) * (1 - FRICTION);
+    vy[i] = (vy[i] + fy * DT) * (1 - FRICTION);
+  }
+
+  // Update positions (separate pass for consistency)
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    px[i] += vx[i] * DT;
+    py[i] += vy[i] * DT;
+
+    // Wrap toroidal
+    if (px[i] < 0) px[i] += W;
+    else if (px[i] >= W) px[i] -= W;
+    if (py[i] < 0) py[i] += H;
+    else if (py[i] >= H) py[i] -= H;
+  }
+}
+
+// --- Render ---
+function render() {
+  // Fading trail effect
+  ctx.fillStyle = 'rgba(5,5,8,0.2)';
+  ctx.fillRect(0, 0, W, H);
+
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    const t = types[i];
+    const [r, g, b] = TYPE_COLORS[t];
+
+    // Speed-based brightness
+    const speed = Math.sqrt(vx[i] * vx[i] + vy[i] * vy[i]);
+    const brightness = Math.min(1, 0.4 + speed * 0.15);
+
+    ctx.fillStyle = `rgba(${Math.floor(r * brightness)},${Math.floor(g * brightness)},${Math.floor(b * brightness)},0.85)`;
+    ctx.fillRect(Math.floor(px[i]), Math.floor(py[i]), 2, 2);
+  }
+}
+
+// --- Matrix display ---
+const matCanvas = document.getElementById('matrix-canvas');
+const matCtx = matCanvas.getContext('2d');
+
+function drawMatrix() {
+  const size = 90;
+  const cellW = size / NUM_TYPES;
+
+  matCtx.clearRect(0, 0, size, size);
+
+  for (let i = 0; i < NUM_TYPES; i++) {
+    for (let j = 0; j < NUM_TYPES; j++) {
+      const v = attractions[i][j];
+      // Green for attraction, red for repulsion
+      if (v >= 0) {
+        const intensity = v;
+        matCtx.fillStyle = `rgba(80,220,120,${intensity * 0.8})`;
+      } else {
+        const intensity = -v;
+        matCtx.fillStyle = `rgba(255,80,80,${intensity * 0.8})`;
+      }
+      matCtx.fillRect(j * cellW, i * cellW, cellW - 1, cellW - 1);
+
+      // Type color indicator on edges
+      if (i === 0) {
+        const [r, g, b] = TYPE_COLORS[j];
+        matCtx.fillStyle = `rgb(${r},${g},${b})`;
+        matCtx.fillRect(j * cellW, 0, cellW - 1, 1);
+      }
+      if (j === 0) {
+        const [r, g, b] = TYPE_COLORS[i];
+        matCtx.fillStyle = `rgb(${r},${g},${b})`;
+        matCtx.fillRect(0, i * cellW, 1, cellW - 1);
+      }
+    }
+  }
+}
+
+// --- Controls ---
+function newRules(matrixFn) {
+  matrixFn();
+  drawMatrix();
+  showMatrixBriefly();
+
+  // Clear screen on new rules
+  ctx.fillStyle = '#050508';
+  ctx.fillRect(0, 0, W, H);
+
+  // Reset velocities but keep positions (watch new structures form from chaos)
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    vx[i] = 0;
+    vy[i] = 0;
+  }
+}
+
+let matrixTimer;
+function showMatrixBriefly() {
+  const el = document.getElementById('matrix-display');
+  el.classList.add('visible');
+  clearTimeout(matrixTimer);
+  matrixTimer = setTimeout(() => el.classList.remove('visible'), 4000);
+}
+
+function screenshot() {
+  canvas.toBlob(blob => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `particle-life-${Date.now()}.png`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+}
+
+// Button handlers
+document.getElementById('btn-randomize').addEventListener('click', () => newRules(randomMatrix));
+document.getElementById('btn-symmetry').addEventListener('click', () => newRules(symmetricMatrix));
+document.getElementById('btn-chains').addEventListener('click', () => newRules(chainsMatrix));
+document.getElementById('btn-orbits').addEventListener('click', () => newRules(orbitsMatrix));
+document.getElementById('btn-screenshot').addEventListener('click', screenshot);
+
+// Keyboard
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'r' || e.key === 'R') newRules(randomMatrix);
+  if (e.key === 'y' || e.key === 'Y') newRules(symmetricMatrix);
+  if (e.key === 'c' || e.key === 'C') newRules(chainsMatrix);
+  if (e.key === 'o' || e.key === 'O') newRules(orbitsMatrix);
+  if (e.key === 's' || e.key === 'S') screenshot();
+});
+
+// UI fade on interaction
+let hasInteracted = false;
+canvas.addEventListener('mousedown', () => {
+  if (!hasInteracted) {
+    hasInteracted = true;
+    setTimeout(() => {
+      document.getElementById('title').classList.add('faded');
+    }, 5000);
+  }
+});
+
+// Show UI when mouse near bottom
+canvas.addEventListener('mousemove', (e) => {
+  if (e.clientY > H * 0.75) {
+    document.getElementById('ui').classList.remove('faded');
+  }
+});
+
+// --- Init & start ---
+initParticles();
+randomMatrix();
+drawMatrix();
+
+// Show matrix briefly at start
+setTimeout(showMatrixBriefly, 500);
+
+// Fade title after a while
+setTimeout(() => {
+  if (!hasInteracted) {
+    document.getElementById('title').classList.add('faded');
+  }
+}, 8000);
+
+function frame() {
+  step();
+  render();
+  requestAnimationFrame(frame);
+}
+
+frame();
+</script>
+</body>
+</html>

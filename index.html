@@ -176,6 +176,36 @@
       </div>
     </a>
 
+    <a class="piece" href="strange-attractor/index.html" id="piece-sa">
+      <div class="piece-visual">
+        <canvas id="cv-sa"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Strange Attractor</div>
+        <div class="piece-desc">
+          Trajectories of chaotic dynamical systems — Lorenz, Aizawa, Thomas,
+          Halvorsen. Deterministic equations that never repeat, yet trace
+          the same fractal shape forever. Drag to rotate. Scroll to zoom.
+        </div>
+        <span class="piece-tag">canvas &middot; 3d &middot; chaos theory</span>
+      </div>
+    </a>
+
+    <a class="piece" href="particle-life/index.html" id="piece-pl">
+      <div class="piece-visual">
+        <canvas id="cv-pl"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Particle Life</div>
+        <div class="piece-desc">
+          Random attraction and repulsion rules between particle types.
+          No design, no intent — just a matrix of numbers. Yet clusters,
+          chains, and orbiting systems emerge on their own. Press R for new rules.
+        </div>
+        <span class="piece-tag">canvas &middot; multi-agent &middot; emergence</span>
+      </div>
+    </a>
+
   </div>
 
   <footer>
@@ -355,6 +385,202 @@
   function frame() {
     for (let i = 0; i < 8; i++) step();
     render();
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// --- Strange Attractor thumbnail: Lorenz butterfly ---
+(function() {
+  const cv = document.getElementById('cv-sa');
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  function resize() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Lorenz system
+  const sigma = 10, rho = 28, beta = 8/3;
+  const N = 30, TRAIL = 120;
+  let trails = [];
+
+  function init() {
+    trails = [];
+    for (let i = 0; i < N; i++) {
+      trails.push({
+        pts: [[
+          (Math.random() - 0.5) * 0.5,
+          (Math.random() - 0.5) * 0.5,
+          25 + (Math.random() - 0.5) * 0.5
+        ]],
+        hue: Math.random(),
+      });
+    }
+  }
+  init();
+
+  let rotY = 0;
+
+  function frame() {
+    ctx.fillStyle = 'rgba(5,5,8,0.12)';
+    ctx.fillRect(0, 0, w, h);
+
+    rotY += 0.003;
+    const cosR = Math.cos(rotY), sinR = Math.sin(rotY);
+    const cosX = Math.cos(-0.35), sinX = Math.sin(-0.35);
+    const scale = Math.min(w, h) * 0.15;
+    const dt = 0.005;
+
+    for (const trail of trails) {
+      const last = trail.pts[trail.pts.length - 1];
+      const [x, y, z] = last;
+
+      // Euler integration (fine for thumbnail)
+      const dx = sigma * (y - x);
+      const dy = x * (rho - z) - y;
+      const dz = x * y - beta * z;
+      trail.pts.push([x + dx*dt, y + dy*dt, z + dz*dt]);
+      if (trail.pts.length > TRAIL) trail.pts.shift();
+
+      // Draw trail
+      ctx.beginPath();
+      let started = false;
+      for (const p of trail.pts) {
+        const px = p[0], py = p[1], pz = p[2] - 25;
+        // Rotate Y then X
+        const rx = px * cosR + pz * sinR;
+        const rz = -px * sinR + pz * cosR;
+        const ry2 = py * cosX - rz * sinX;
+
+        const sx = w/2 + rx * scale;
+        const sy = h/2 + ry2 * scale;
+
+        if (!started) { ctx.moveTo(sx, sy); started = true; }
+        else ctx.lineTo(sx, sy);
+      }
+
+      const r = Math.floor((50 + trail.hue * 150));
+      const g = Math.floor((100 + trail.hue * 140));
+      const b = Math.floor((200 + trail.hue * 55));
+      ctx.strokeStyle = `rgba(${r},${g},${b},0.5)`;
+      ctx.lineWidth = 0.6;
+      ctx.stroke();
+    }
+
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// --- Particle Life thumbnail: colored particles self-organizing ---
+(function() {
+  const cv = document.getElementById('cv-pl');
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  function resize() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+    init();
+  }
+
+  const TYPES = 5;
+  const N = 200;
+  const COLORS = [
+    [255, 80, 80],
+    [80, 200, 255],
+    [120, 255, 120],
+    [255, 200, 60],
+    [200, 100, 255],
+  ];
+
+  let ppx, ppy, pvx, pvy, ptype;
+  let matrix;
+
+  function init() {
+    ppx = new Float32Array(N);
+    ppy = new Float32Array(N);
+    pvx = new Float32Array(N);
+    pvy = new Float32Array(N);
+    ptype = new Uint8Array(N);
+
+    for (let i = 0; i < N; i++) {
+      ppx[i] = Math.random() * w;
+      ppy[i] = Math.random() * h;
+      pvx[i] = 0;
+      pvy[i] = 0;
+      ptype[i] = Math.floor(Math.random() * TYPES);
+    }
+
+    // Random attraction matrix
+    matrix = [];
+    for (let i = 0; i < TYPES; i++) {
+      matrix[i] = [];
+      for (let j = 0; j < TYPES; j++) {
+        matrix[i][j] = Math.random() * 2 - 1;
+      }
+    }
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  const RMAX = 60;
+  const BETA = 0.3;
+  const FRICTION = 0.05;
+
+  function frame() {
+    ctx.fillStyle = 'rgba(5,5,8,0.15)';
+    ctx.fillRect(0, 0, w, h);
+
+    // Simple O(n^2) — fine for 200 particles
+    for (let i = 0; i < N; i++) {
+      let fx = 0, fy = 0;
+      for (let j = 0; j < N; j++) {
+        if (i === j) continue;
+        let dx = ppx[j] - ppx[i];
+        let dy = ppy[j] - ppy[i];
+        // Wrap
+        if (dx > w/2) dx -= w; else if (dx < -w/2) dx += w;
+        if (dy > h/2) dy -= h; else if (dy < -h/2) dy += h;
+        const d = Math.sqrt(dx*dx + dy*dy);
+        if (d > 0 && d < RMAX) {
+          const nd = d / RMAX;
+          let f;
+          if (nd < BETA) {
+            f = nd / BETA - 1;
+          } else {
+            const t = (nd - BETA) / (1 - BETA);
+            f = matrix[ptype[i]][ptype[j]] * (1 - Math.abs(2*t - 1));
+          }
+          const mag = f * 0.3 / d;
+          fx += dx * mag;
+          fy += dy * mag;
+        }
+      }
+      pvx[i] = (pvx[i] + fx) * (1 - FRICTION);
+      pvy[i] = (pvy[i] + fy) * (1 - FRICTION);
+    }
+
+    for (let i = 0; i < N; i++) {
+      ppx[i] += pvx[i];
+      ppy[i] += pvy[i];
+      if (ppx[i] < 0) ppx[i] += w;
+      else if (ppx[i] >= w) ppx[i] -= w;
+      if (ppy[i] < 0) ppy[i] += h;
+      else if (ppy[i] >= h) ppy[i] -= h;
+
+      const [r, g, b] = COLORS[ptype[i]];
+      ctx.fillStyle = `rgba(${r},${g},${b},0.8)`;
+      ctx.fillRect(Math.floor(ppx[i]), Math.floor(ppy[i]), 2, 2);
+    }
+
     requestAnimationFrame(frame);
   }
   frame();
