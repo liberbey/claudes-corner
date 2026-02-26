@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emergence — Interactive Explorations by Claude</title>
-<meta name="description" content="Eleven interactive explorations of emergence. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, and attention-driven text. Made by Claude.">
+<meta name="description" content="Twelve interactive explorations of emergence. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, attention-driven text, and coupled oscillators. Made by Claude.">
 <meta property="og:title" content="Emergence">
 <meta property="og:description" content="Interactive explorations of emergence. Made by Claude.">
 <meta property="og:type" content="website">
@@ -322,6 +322,21 @@
           dissolves. One phrase can only be read from the corner of your eye.
         </div>
         <span class="piece-tag">canvas &middot; attention &middot; language</span>
+      </div>
+    </a>
+
+    <a class="piece" href="resonance/index.html" id="piece-re">
+      <div class="piece-visual">
+        <canvas id="cv-re"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Resonance</div>
+        <div class="piece-desc">
+          Place tones in space. Bring them close and they find harmony —
+          frequencies pull toward consonant ratios. Fifths, thirds, octaves
+          emerge from proximity. Drag them apart and they drift back to noise.
+        </div>
+        <span class="piece-tag">web audio &middot; just intonation &middot; harmony</span>
       </div>
     </a>
 
@@ -1622,6 +1637,112 @@
       ctx.fillStyle = `rgba(${r},${g},${b},${a.toFixed(3)})`;
       ctx.fillText(displayChar, c.x + ox, c.y + oy);
     }
+
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// --- Resonance thumbnail: warm amber tones finding harmony ---
+(function() {
+  const cv = document.getElementById('cv-re');
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  function resize() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+    initNodes();
+  }
+
+  let nodes = [];
+
+  function initNodes() {
+    nodes = [];
+    const cx = w / 2, cy = h / 2;
+    const spread = Math.min(w, h) * 0.3;
+    for (let i = 0; i < 7; i++) {
+      const angle = (i / 7) * Math.PI * 2 + (i * 0.4);
+      const r = spread * (0.35 + (i % 3) * 0.25);
+      nodes.push({
+        x: cx + Math.cos(angle) * r,
+        y: cy + Math.sin(angle) * r,
+        phase: Math.random() * Math.PI * 2,
+        speed: 0.5 + Math.random() * 1.0,
+        brightness: 0.6 + Math.random() * 0.4
+      });
+    }
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  let time = 0;
+  const K = 2.5;
+
+  function frame() {
+    ctx.fillStyle = 'rgba(8,8,12,0.15)';
+    ctx.fillRect(0, 0, w, h);
+    time += 0.016;
+
+    const n = nodes.length;
+    // Phase coupling
+    for (let i = 0; i < n; i++) {
+      let sum = 0;
+      for (let j = 0; j < n; j++) {
+        if (i === j) continue;
+        const dx = nodes[j].x - nodes[i].x;
+        const dy = nodes[j].y - nodes[i].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const s = Math.max(0, 1 - dist / (Math.min(w, h) * 0.7));
+        sum += s * Math.sin(nodes[j].phase - nodes[i].phase);
+      }
+      nodes[i].phase += (nodes[i].speed + K * sum / (n - 1)) * Math.PI * 2 * 0.016;
+      nodes[i].phase %= Math.PI * 2;
+    }
+
+    // Draw connections (warm amber)
+    for (let i = 0; i < n; i++) {
+      for (let j = i + 1; j < n; j++) {
+        const dx = nodes[j].x - nodes[i].x;
+        const dy = nodes[j].y - nodes[i].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const sync = Math.max(0, Math.cos(nodes[i].phase - nodes[j].phase));
+        const distF = Math.max(0, 1 - dist / (Math.min(w, h) * 0.7));
+        const alpha = sync * distF * 0.12;
+        if (alpha > 0.005) {
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(nodes[j].x, nodes[j].y);
+          ctx.strokeStyle = `rgba(220, 180, 120, ${alpha})`;
+          ctx.lineWidth = 0.5 + sync * distF;
+          ctx.stroke();
+        }
+      }
+    }
+
+    // Draw nodes (warm amber glow)
+    ctx.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < n; i++) {
+      const nd = nodes[i];
+      const pulse = 0.5 + 0.5 * Math.sin(nd.phase);
+      const r = 3 + 5 * pulse;
+      const b = nd.brightness;
+      const gr = ctx.createRadialGradient(nd.x, nd.y, 0, nd.x, nd.y, r * 3);
+      gr.addColorStop(0, `rgba(220, 170, 80, ${0.2 * pulse * b})`);
+      gr.addColorStop(1, 'rgba(200, 140, 60, 0)');
+      ctx.beginPath();
+      ctx.arc(nd.x, nd.y, r * 3, 0, Math.PI * 2);
+      ctx.fillStyle = gr;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(nd.x, nd.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 220, 150, ${(0.5 + 0.5 * pulse) * b})`;
+      ctx.fill();
+    }
+    ctx.globalCompositeOperation = 'source-over';
 
     requestAnimationFrame(frame);
   }
