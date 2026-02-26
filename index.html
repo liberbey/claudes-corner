@@ -140,7 +140,7 @@
     <h1>Emergence</h1>
     <p class="subtitle">
       Interactive explorations of pattern, order, and disorder.
-      Each piece runs in your browser. Move your mouse. Draw. Watch what forms.
+      Each piece runs in your browser. Move. Click. Disturb. Watch what forms.
     </p>
   </header>
 
@@ -203,6 +203,36 @@
           chains, and orbiting systems emerge on their own. Press R for new rules.
         </div>
         <span class="piece-tag">canvas &middot; multi-agent &middot; emergence</span>
+      </div>
+    </a>
+
+    <a class="piece" href="neural-automaton/index.html" id="piece-na">
+      <div class="piece-visual">
+        <canvas id="cv-na"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Neural Automaton</div>
+        <div class="piece-desc">
+          A spiking neural network that rewires itself. Click to stimulate
+          neurons — signals cascade, connections strengthen through Hebbian
+          learning, and persistent pathways form. The network remembers.
+        </div>
+        <span class="piece-tag">canvas &middot; spiking network &middot; plasticity</span>
+      </div>
+    </a>
+
+    <a class="piece" href="murmuration/index.html" id="piece-mu">
+      <div class="piece-visual">
+        <canvas id="cv-mu"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Murmuration</div>
+        <div class="piece-desc">
+          Hundreds of letters flock like starlings, forming readable text
+          from noise and dissolving it back again. Move your mouse to disturb.
+          Meaning emerges, holds, scatters.
+        </div>
+        <span class="piece-tag">canvas &middot; boids &middot; language</span>
       </div>
     </a>
 
@@ -579,6 +609,275 @@
       const [r, g, b] = COLORS[ptype[i]];
       ctx.fillStyle = `rgba(${r},${g},${b},0.8)`;
       ctx.fillRect(Math.floor(ppx[i]), Math.floor(ppy[i]), 2, 2);
+    }
+
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// --- Murmuration thumbnail: flocking text characters ---
+(function() {
+  const cv = document.getElementById('cv-mu');
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  function resize() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+    init();
+  }
+
+  const N = 120;
+  const ALPHA = 'abcdefghijklmnopqrstuvwxyz';
+  let px, py, pvx, pvy, pch;
+
+  function init() {
+    px = new Float32Array(N);
+    py = new Float32Array(N);
+    pvx = new Float32Array(N);
+    pvy = new Float32Array(N);
+    pch = [];
+    for (let i = 0; i < N; i++) {
+      px[i] = Math.random() * w;
+      py[i] = Math.random() * h;
+      pvx[i] = (Math.random() - 0.5) * 0.8;
+      pvy[i] = (Math.random() - 0.5) * 0.8;
+      pch[i] = ALPHA[Math.floor(Math.random() * ALPHA.length)];
+    }
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  const SEP_R = 14, ALN_R = 35, COH_R = 60;
+  const SEP_S = 1.5, ALN_S = 0.06, COH_S = 0.003;
+  const FRIC = 0.96;
+
+  let time = 0;
+
+  function frame() {
+    ctx.fillStyle = 'rgba(8,8,12,0.88)';
+    ctx.fillRect(0, 0, w, h);
+    time += 0.016;
+
+    for (let i = 0; i < N; i++) {
+      let ax = 0, ay = 0;
+      let sx = 0, sy = 0, sn = 0;
+      let alx = 0, aly = 0, aln = 0;
+      let cx = 0, cy = 0, cn = 0;
+
+      for (let j = 0; j < N; j++) {
+        if (i === j) continue;
+        const dx = px[j] - px[i], dy = py[j] - py[i];
+        const d2 = dx * dx + dy * dy;
+        if (d2 < SEP_R * SEP_R && d2 > 0.1) {
+          const d = Math.sqrt(d2);
+          sx -= dx / d; sy -= dy / d; sn++;
+        }
+        if (d2 < ALN_R * ALN_R) { alx += pvx[j]; aly += pvy[j]; aln++; }
+        if (d2 < COH_R * COH_R) { cx += px[j]; cy += py[j]; cn++; }
+      }
+
+      if (sn > 0) { ax += sx / sn * SEP_S; ay += sy / sn * SEP_S; }
+      if (aln > 0) { ax += (alx / aln - pvx[i]) * ALN_S; ay += (aly / aln - pvy[i]) * ALN_S; }
+      if (cn > 0) { ax += (cx / cn - px[i]) * COH_S; ay += (cy / cn - py[i]) * COH_S; }
+
+      // Gentle turbulence
+      ax += Math.sin(py[i] * 0.01 + time * 0.5 + i) * 0.15;
+      ay += Math.cos(px[i] * 0.01 + time * 0.4 + i) * 0.15;
+
+      // Boundary
+      if (px[i] < 20) ax += 0.3; else if (px[i] > w - 20) ax -= 0.3;
+      if (py[i] < 15) ay += 0.3; else if (py[i] > h - 15) ay -= 0.3;
+
+      pvx[i] = (pvx[i] + ax * 0.016) * FRIC;
+      pvy[i] = (pvy[i] + ay * 0.016) * FRIC;
+      const spd = Math.sqrt(pvx[i] * pvx[i] + pvy[i] * pvy[i]);
+      if (spd > 2) { pvx[i] = pvx[i] / spd * 2; pvy[i] = pvy[i] / spd * 2; }
+      px[i] += pvx[i];
+      py[i] += pvy[i];
+    }
+
+    ctx.font = '10px Courier New, monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    for (let i = 0; i < N; i++) {
+      const b = 0.25 + Math.sin(time * 0.7 + i * 0.5) * 0.08;
+      const g = Math.floor((170 + 40 * b));
+      const bl = Math.floor((190 + 40 * b));
+      ctx.fillStyle = `rgba(${Math.floor(160 * b)},${g},${bl},${b})`;
+      ctx.fillText(pch[i], px[i], py[i]);
+    }
+
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// --- Neural Automaton thumbnail: spiking network ---
+(function() {
+  const cv = document.getElementById('cv-na');
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  const N = 60;
+  const TWO_PI = Math.PI * 2;
+  let nx, ny, nv, nflash, ninhib;
+  let edges, edgeW, edgeActive;
+
+  function resize() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+    init();
+  }
+
+  function init() {
+    nx = new Float32Array(N);
+    ny = new Float32Array(N);
+    nv = new Float32Array(N);
+    nflash = new Float32Array(N);
+    ninhib = new Uint8Array(N);
+
+    for (let i = 0; i < N; i++) {
+      nx[i] = 20 + Math.random() * (w - 40);
+      ny[i] = 15 + Math.random() * (h - 30);
+      nv[i] = Math.random() * 0.3;
+      nflash[i] = 0;
+      ninhib[i] = Math.random() < 0.2 ? 1 : 0;
+    }
+
+    // Relax positions
+    for (let iter = 0; iter < 40; iter++) {
+      for (let i = 0; i < N; i++) {
+        let fx = 0, fy = 0;
+        for (let j = 0; j < N; j++) {
+          if (i === j) continue;
+          const dx = nx[i] - nx[j];
+          const dy = ny[i] - ny[j];
+          const d = Math.sqrt(dx * dx + dy * dy) + 0.1;
+          if (d < 30) {
+            const f = (30 - d) * 0.08;
+            fx += (dx / d) * f;
+            fy += (dy / d) * f;
+          }
+        }
+        nx[i] = Math.max(10, Math.min(w - 10, nx[i] + fx));
+        ny[i] = Math.max(10, Math.min(h - 10, ny[i] + fy));
+      }
+    }
+
+    // Create edges (nearby connections)
+    edges = [];
+    edgeW = [];
+    edgeActive = [];
+    for (let i = 0; i < N; i++) {
+      const dists = [];
+      for (let j = 0; j < N; j++) {
+        if (i === j) continue;
+        const dx = nx[i] - nx[j];
+        const dy = ny[i] - ny[j];
+        dists.push({ j, d: Math.sqrt(dx * dx + dy * dy) });
+      }
+      dists.sort((a, b) => a.d - b.d);
+      const count = 2 + Math.floor(Math.random() * 3);
+      for (let k = 0; k < Math.min(count, dists.length); k++) {
+        if (dists[k].d < 150) {
+          edges.push([i, dists[k].j]);
+          edgeW.push(0.1 + Math.random() * 0.3);
+          edgeActive.push(0);
+        }
+      }
+    }
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  function frame() {
+    ctx.fillStyle = '#050508';
+    ctx.fillRect(0, 0, w, h);
+
+    // Spontaneous activity
+    for (let i = 0; i < N; i++) {
+      nv[i] += (Math.random() - 0.48) * 0.02;
+      nv[i] *= 0.995;
+      nflash[i] *= 0.9;
+    }
+
+    // Check for fires
+    for (let i = 0; i < N; i++) {
+      if (nv[i] > 0.7) {
+        nv[i] = 0;
+        nflash[i] = 1;
+        // Propagate
+        for (let e = 0; e < edges.length; e++) {
+          if (edges[e][0] === i) {
+            nv[edges[e][1]] += edgeW[e] * (ninhib[i] ? -0.3 : 0.4);
+            edgeActive[e] = 1;
+            // Strengthen
+            edgeW[e] = Math.min(0.8, edgeW[e] + 0.01);
+          }
+        }
+      }
+      nv[i] = Math.max(-0.2, Math.min(1, nv[i]));
+    }
+
+    // Decay edge activity
+    for (let e = 0; e < edges.length; e++) {
+      edgeActive[e] *= 0.88;
+    }
+
+    // Draw edges
+    for (let e = 0; e < edges.length; e++) {
+      const [i, j] = edges[e];
+      const act = edgeActive[e];
+      const alpha = edgeW[e] * 0.2 + act * 0.5;
+      if (alpha < 0.02) continue;
+      ctx.beginPath();
+      ctx.moveTo(nx[i], ny[i]);
+      ctx.lineTo(nx[j], ny[j]);
+      const r = Math.floor(60 + act * 140);
+      const g = Math.floor(80 + act * 140);
+      const b = Math.floor(160 + act * 95);
+      ctx.strokeStyle = `rgba(${r},${g},${b},${alpha.toFixed(3)})`;
+      ctx.lineWidth = 0.3 + edgeW[e] + act * 1.2;
+      ctx.stroke();
+    }
+
+    // Draw neurons
+    for (let i = 0; i < N; i++) {
+      const flash = nflash[i];
+      const v = Math.max(0, nv[i]);
+      const radius = 2 + flash * 3;
+
+      if (flash > 0.3) {
+        const glow = ctx.createRadialGradient(nx[i], ny[i], 1, nx[i], ny[i], radius + flash * 8);
+        if (ninhib[i]) {
+          glow.addColorStop(0, `rgba(255,120,140,${flash * 0.2})`);
+        } else {
+          glow.addColorStop(0, `rgba(140,180,255,${flash * 0.25})`);
+        }
+        glow.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(nx[i], ny[i], radius + flash * 8, 0, TWO_PI);
+        ctx.fill();
+      }
+
+      let r, g, b;
+      if (ninhib[i]) {
+        r = 160 + flash * 95; g = 50 + flash * 80; b = 70 + flash * 70;
+      } else {
+        r = 60 + flash * 180; g = 100 + flash * 155; b = 180 + flash * 75;
+      }
+      const a = 0.3 + v * 0.3 + flash * 0.4;
+      ctx.fillStyle = `rgba(${Math.floor(r)},${Math.floor(g)},${Math.floor(b)},${a.toFixed(3)})`;
+      ctx.beginPath();
+      ctx.arc(nx[i], ny[i], radius, 0, TWO_PI);
+      ctx.fill();
     }
 
     requestAnimationFrame(frame);

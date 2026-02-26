@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Neural Automaton</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #050508;
+    overflow: hidden;
+    touch-action: none;
+    font-family: 'Courier New', monospace;
+    cursor: crosshair;
+  }
+
+  canvas {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+
+  .ui {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    z-index: 10;
+    opacity: 0.3;
+    transition: opacity 0.4s;
+  }
+
+  .ui:hover { opacity: 0.8; }
+
+  .ui button {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.5);
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .ui button:hover {
+    border-color: rgba(255,255,255,0.4);
+    color: rgba(255,255,255,0.8);
+  }
+
+  .ui button.active {
+    border-color: rgba(140,180,255,0.5);
+    color: rgba(140,180,255,0.8);
+  }
+
+  .hint {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 12px;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    pointer-events: none;
+    transition: opacity 1.5s ease;
+  }
+
+  .stats {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    font-size: 10px;
+    color: rgba(255,255,255,0.12);
+    letter-spacing: 0.5px;
+    line-height: 1.8;
+    text-align: right;
+    pointer-events: none;
+  }
+
+  .back {
+    position: fixed;
+    top: 16px;
+    left: 20px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.15);
+    text-decoration: none;
+    z-index: 10;
+    transition: color 0.3s;
+  }
+
+  .back:hover {
+    color: rgba(255,255,255,0.4);
+  }
+
+  .title {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.12);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<a class="back" href="../index.html">&larr; gallery</a>
+<div class="title">Neural Automaton</div>
+
+<div class="stats" id="stats"></div>
+
+<div class="hint" id="hint">click to stimulate</div>
+
+<div class="ui">
+  <button id="btn-reset">Reset</button>
+  <button id="btn-mode" class="active">Excite</button>
+  <button id="btn-speed">1x</button>
+</div>
+
+<script>
+// ============================================================
+// Neural Automaton
+// A self-organizing spiking network with Hebbian plasticity.
+// Click to inject current. Watch pathways form.
+// ============================================================
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const statsEl = document.getElementById('stats');
+const hintEl = document.getElementById('hint');
+
+let W, H, dpr;
+
+function resize() {
+  dpr = window.devicePixelRatio || 1;
+  W = window.innerWidth;
+  H = window.innerHeight;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+resize();
+window.addEventListener('resize', resize);
+
+// ============================================================
+// Network parameters
+// ============================================================
+
+const NUM_NEURONS = 250;
+const INHIBITORY_FRAC = 0.2;
+const INITIAL_CONNECTIONS_PER_NEURON = 6;
+const MAX_WEIGHT = 1.0;
+const MIN_WEIGHT = 0.01;
+
+// LIF (Leaky Integrate-and-Fire)
+const V_REST = -70;
+const V_THRESHOLD = -55;
+const V_RESET = -75;
+const TAU_MEMBRANE = 20; // ms
+const TAU_REFRACTORY = 3; // ms
+
+// STDP
+const TAU_STDP = 20; // ms
+const A_PLUS = 0.008;   // LTP amplitude
+const A_MINUS = 0.006;  // LTD amplitude
+const WEIGHT_DECAY = 0.00002; // slow decay toward 0
+
+// Spontaneous noise
+const NOISE_CURRENT = 1.5;
+const SPONTANEOUS_RATE = 0.003; // probability per neuron per step of a random spike
+
+// Simulation
+const DT = 0.5; // ms per step
+let speedMultiplier = 1;
+let stepsPerFrame = 4;
+let simTime = 0;
+
+// ============================================================
+// Neuron state
+// ============================================================
+
+let neuronX, neuronY;         // positions [0, W] x [0, H]
+let neuronV;                  // membrane voltage
+let neuronRefractory;         // refractory timer
+let neuronLastSpike;          // time of last spike
+let neuronIsInhibitory;       // boolean
+let neuronFireCount;          // total fire count (for stats)
+let neuronFlash;              // visual flash intensity [0,1]
+let neuronInputCurrent;       // external input current
+
+// Connection state (stored as arrays for performance)
+let connPre, connPost;        // pre/post neuron indices
+let connWeight;               // synaptic weight
+let connActive;               // visual: signal traveling (0 = inactive, >0 = active timer)
+let numConnections;
+let connByPre, connByPost;    // index: connections per neuron
+
+// Interaction
+let mode = 'excite'; // 'excite' or 'inhibit'
+let mouseDown = false;
+let mouseX = -1, mouseY = -1;
+let interacted = false;
+
+// ============================================================
+// Initialization
+// ============================================================
+
+function initNetwork() {
+  simTime = 0;
+
+  // Position neurons using relaxed random placement
+  neuronX = new Float32Array(NUM_NEURONS);
+  neuronY = new Float32Array(NUM_NEURONS);
+  neuronV = new Float32Array(NUM_NEURONS);
+  neuronRefractory = new Float32Array(NUM_NEURONS);
+  neuronLastSpike = new Float32Array(NUM_NEURONS);
+  neuronIsInhibitory = new Uint8Array(NUM_NEURONS);
+  neuronFireCount = new Uint32Array(NUM_NEURONS);
+  neuronFlash = new Float32Array(NUM_NEURONS);
+  neuronInputCurrent = new Float32Array(NUM_NEURONS);
+
+  const margin = 60;
+  const areaW = W - 2 * margin;
+  const areaH = H - 2 * margin;
+
+  // Place neurons with repulsion relaxation for even spacing
+  for (let i = 0; i < NUM_NEURONS; i++) {
+    neuronX[i] = margin + Math.random() * areaW;
+    neuronY[i] = margin + Math.random() * areaH;
+    neuronV[i] = V_REST + Math.random() * 5;
+    neuronRefractory[i] = 0;
+    neuronLastSpike[i] = -1000;
+    neuronIsInhibitory[i] = Math.random() < INHIBITORY_FRAC ? 1 : 0;
+    neuronFireCount[i] = 0;
+    neuronFlash[i] = 0;
+    neuronInputCurrent[i] = 0;
+  }
+
+  // Relaxation: push neurons apart
+  for (let iter = 0; iter < 80; iter++) {
+    for (let i = 0; i < NUM_NEURONS; i++) {
+      let fx = 0, fy = 0;
+      for (let j = 0; j < NUM_NEURONS; j++) {
+        if (i === j) continue;
+        const dx = neuronX[i] - neuronX[j];
+        const dy = neuronY[i] - neuronY[j];
+        const d2 = dx * dx + dy * dy;
+        const minDist = 35;
+        if (d2 < minDist * minDist * 4) {
+          const d = Math.sqrt(d2) + 0.1;
+          const force = Math.max(0, minDist - d) * 0.1;
+          fx += (dx / d) * force;
+          fy += (dy / d) * force;
+        }
+      }
+      neuronX[i] = Math.max(margin, Math.min(W - margin, neuronX[i] + fx));
+      neuronY[i] = Math.max(margin, Math.min(H - margin, neuronY[i] + fy));
+    }
+  }
+
+  // Create random connections (distance-biased)
+  const tempPre = [];
+  const tempPost = [];
+  const tempWeight = [];
+
+  for (let i = 0; i < NUM_NEURONS; i++) {
+    // Collect distances to all other neurons
+    const dists = [];
+    for (let j = 0; j < NUM_NEURONS; j++) {
+      if (i === j) continue;
+      const dx = neuronX[i] - neuronX[j];
+      const dy = neuronY[i] - neuronY[j];
+      dists.push({ idx: j, dist: Math.sqrt(dx * dx + dy * dy) });
+    }
+    dists.sort((a, b) => a.dist - b.dist);
+
+    // Connect to nearby neurons with distance-weighted probability
+    let connected = 0;
+    const target = INITIAL_CONNECTIONS_PER_NEURON;
+    for (let k = 0; k < Math.min(30, dists.length) && connected < target; k++) {
+      const prob = Math.exp(-dists[k].dist / 200);
+      if (Math.random() < prob || k < 2) { // always connect to 2 nearest
+        tempPre.push(i);
+        tempPost.push(dists[k].idx);
+        const baseWeight = 0.15 + Math.random() * 0.2;
+        tempWeight.push(neuronIsInhibitory[i] ? -baseWeight : baseWeight);
+        connected++;
+      }
+    }
+  }
+
+  numConnections = tempPre.length;
+  connPre = new Uint16Array(tempPre);
+  connPost = new Uint16Array(tempPost);
+  connWeight = new Float32Array(tempWeight);
+  connActive = new Float32Array(numConnections); // signal animation timer
+
+  // Build index: for each neuron, which connections have it as pre / post
+  connByPre = new Array(NUM_NEURONS);
+  connByPost = new Array(NUM_NEURONS);
+  for (let i = 0; i < NUM_NEURONS; i++) {
+    connByPre[i] = [];
+    connByPost[i] = [];
+  }
+  for (let c = 0; c < numConnections; c++) {
+    connByPre[connPre[c]].push(c);
+    connByPost[connPost[c]].push(c);
+  }
+}
+
+initNetwork();
+
+// ============================================================
+// Simulation step
+// ============================================================
+
+function simulationStep() {
+  simTime += DT;
+
+  // Decay flash
+  for (let i = 0; i < NUM_NEURONS; i++) {
+    neuronFlash[i] *= 0.92;
+    if (neuronFlash[i] < 0.01) neuronFlash[i] = 0;
+  }
+
+  // Decay connection activity
+  for (let c = 0; c < numConnections; c++) {
+    connActive[c] *= 0.88;
+    if (connActive[c] < 0.01) connActive[c] = 0;
+  }
+
+  // LIF dynamics
+  for (let i = 0; i < NUM_NEURONS; i++) {
+    // Refractory
+    if (neuronRefractory[i] > 0) {
+      neuronRefractory[i] -= DT;
+      neuronV[i] = V_RESET;
+      continue;
+    }
+
+    // Leak toward rest + noise
+    const noise = (Math.random() - 0.5) * 2 * NOISE_CURRENT;
+    neuronV[i] += (-(neuronV[i] - V_REST) / TAU_MEMBRANE + noise + neuronInputCurrent[i]) * DT;
+
+    // Clamp
+    neuronV[i] = Math.max(-80, Math.min(-40, neuronV[i]));
+
+    // Clear external current
+    neuronInputCurrent[i] = 0;
+  }
+
+  // Spontaneous firing (background cortical activity)
+  for (let i = 0; i < NUM_NEURONS; i++) {
+    if (neuronRefractory[i] <= 0 && Math.random() < SPONTANEOUS_RATE) {
+      neuronV[i] = V_THRESHOLD + 1; // push above threshold
+    }
+  }
+
+  // Check for spikes
+  const spiked = [];
+  for (let i = 0; i < NUM_NEURONS; i++) {
+    if (neuronRefractory[i] > 0) continue;
+    if (neuronV[i] >= V_THRESHOLD) {
+      spiked.push(i);
+      neuronV[i] = V_RESET;
+      neuronRefractory[i] = TAU_REFRACTORY;
+      neuronLastSpike[i] = simTime;
+      neuronFireCount[i]++;
+      neuronFlash[i] = 1.0;
+    }
+  }
+
+  // Propagate spikes through connections (using index for efficiency)
+  for (const s of spiked) {
+    // Outgoing connections: neuron s fired → deliver current downstream
+    for (const c of connByPre[s]) {
+      const w = connWeight[c];
+      neuronInputCurrent[connPost[c]] += w * 8;
+      connActive[c] = 1.0;
+
+      // STDP: pre (s) just fired — check if post fired recently → LTD
+      const post = connPost[c];
+      const dt_stdp = simTime - neuronLastSpike[post];
+      if (dt_stdp > 0 && dt_stdp < TAU_STDP * 4 && w > 0) {
+        connWeight[c] -= A_MINUS * Math.exp(-dt_stdp / TAU_STDP);
+        if (connWeight[c] < MIN_WEIGHT) connWeight[c] = MIN_WEIGHT;
+      }
+    }
+
+    // Incoming connections: neuron s fired as post — check if pre fired recently → LTP
+    for (const c of connByPost[s]) {
+      const pre = connPre[c];
+      const dt_stdp = simTime - neuronLastSpike[pre];
+      if (dt_stdp > 0 && dt_stdp < TAU_STDP * 4) {
+        const w = connWeight[c];
+        if (w > 0) {
+          connWeight[c] += A_PLUS * Math.exp(-dt_stdp / TAU_STDP);
+          if (connWeight[c] > MAX_WEIGHT) connWeight[c] = MAX_WEIGHT;
+        }
+      }
+    }
+  }
+
+  // Slow weight decay (homeostasis)
+  for (let c = 0; c < numConnections; c++) {
+    const w = connWeight[c];
+    if (w > 0) {
+      connWeight[c] -= WEIGHT_DECAY * DT;
+      if (connWeight[c] < MIN_WEIGHT) connWeight[c] = MIN_WEIGHT;
+    } else if (w < 0) {
+      connWeight[c] += WEIGHT_DECAY * DT * 0.5;
+      if (connWeight[c] > -MIN_WEIGHT) connWeight[c] = -MIN_WEIGHT;
+    }
+  }
+}
+
+// ============================================================
+// Mouse / touch interaction
+// ============================================================
+
+const STIM_RADIUS = 80;
+const STIM_STRENGTH = 3.0;
+
+function stimulate(x, y) {
+  if (!interacted) {
+    interacted = true;
+    hintEl.style.opacity = '0';
+  }
+
+  for (let i = 0; i < NUM_NEURONS; i++) {
+    const dx = neuronX[i] - x;
+    const dy = neuronY[i] - y;
+    const d = Math.sqrt(dx * dx + dy * dy);
+    if (d < STIM_RADIUS) {
+      const strength = (1 - d / STIM_RADIUS) * STIM_STRENGTH;
+      if (mode === 'excite') {
+        neuronInputCurrent[i] += strength;
+      } else {
+        neuronInputCurrent[i] -= strength * 1.5;
+      }
+    }
+  }
+}
+
+canvas.addEventListener('mousedown', (e) => {
+  mouseDown = true;
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  stimulate(mouseX, mouseY);
+});
+
+canvas.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  if (mouseDown) stimulate(mouseX, mouseY);
+});
+
+canvas.addEventListener('mouseup', () => { mouseDown = false; });
+
+canvas.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  mouseDown = true;
+  const t = e.touches[0];
+  mouseX = t.clientX;
+  mouseY = t.clientY;
+  stimulate(mouseX, mouseY);
+});
+
+canvas.addEventListener('touchmove', (e) => {
+  e.preventDefault();
+  const t = e.touches[0];
+  mouseX = t.clientX;
+  mouseY = t.clientY;
+  if (mouseDown) stimulate(mouseX, mouseY);
+});
+
+canvas.addEventListener('touchend', () => { mouseDown = false; });
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'r' || e.key === 'R') {
+    initNetwork();
+  } else if (e.key === 'e' || e.key === 'E') {
+    mode = 'excite';
+    btnMode.textContent = 'Excite';
+    btnMode.classList.add('active');
+  } else if (e.key === 'i' || e.key === 'I') {
+    mode = 'inhibit';
+    btnMode.textContent = 'Inhibit';
+    btnMode.classList.remove('active');
+  }
+});
+
+// UI buttons
+const btnReset = document.getElementById('btn-reset');
+const btnMode = document.getElementById('btn-mode');
+const btnSpeed = document.getElementById('btn-speed');
+
+btnReset.addEventListener('click', () => initNetwork());
+
+btnMode.addEventListener('click', () => {
+  if (mode === 'excite') {
+    mode = 'inhibit';
+    btnMode.textContent = 'Inhibit';
+    btnMode.classList.remove('active');
+  } else {
+    mode = 'excite';
+    btnMode.textContent = 'Excite';
+    btnMode.classList.add('active');
+  }
+});
+
+const speeds = [1, 2, 4];
+let speedIdx = 0;
+btnSpeed.addEventListener('click', () => {
+  speedIdx = (speedIdx + 1) % speeds.length;
+  speedMultiplier = speeds[speedIdx];
+  stepsPerFrame = 4 * speedMultiplier;
+  btnSpeed.textContent = speedMultiplier + 'x';
+});
+
+// ============================================================
+// Rendering
+// ============================================================
+
+// Pre-compute for drawing
+const TWO_PI = Math.PI * 2;
+
+function render() {
+  // Clear with slight trail
+  ctx.fillStyle = '#050508';
+  ctx.fillRect(0, 0, W, H);
+
+  // Draw connections
+  for (let c = 0; c < numConnections; c++) {
+    const w = Math.abs(connWeight[c]);
+    if (w < 0.03 && connActive[c] < 0.05) continue; // skip invisible
+
+    const pre = connPre[c];
+    const post = connPost[c];
+    const x1 = neuronX[pre], y1 = neuronY[pre];
+    const x2 = neuronX[post], y2 = neuronY[post];
+
+    const isInhib = connWeight[c] < 0;
+    const activity = connActive[c];
+
+    // Base opacity from weight
+    let alpha = w * 0.25;
+    // Boost from recent activity
+    alpha += activity * 0.5;
+    alpha = Math.min(0.7, alpha);
+
+    if (alpha < 0.015) continue;
+
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+
+    if (isInhib) {
+      const r = Math.floor(180 + activity * 75);
+      const g = Math.floor(60 + activity * 40);
+      const b = Math.floor(80 + activity * 60);
+      ctx.strokeStyle = `rgba(${r},${g},${b},${alpha.toFixed(3)})`;
+    } else {
+      // Excitatory: blue-white for active, dim blue for resting
+      const boost = activity;
+      const r = Math.floor(60 + boost * 180 + w * 80);
+      const g = Math.floor(80 + boost * 170 + w * 100);
+      const b = Math.floor(160 + boost * 95);
+      ctx.strokeStyle = `rgba(${r},${g},${b},${alpha.toFixed(3)})`;
+    }
+
+    ctx.lineWidth = 0.4 + w * 1.5 + activity * 1.5;
+    ctx.stroke();
+  }
+
+  // Draw neurons
+  for (let i = 0; i < NUM_NEURONS; i++) {
+    const x = neuronX[i];
+    const y = neuronY[i];
+    const flash = neuronFlash[i];
+    const isInhib = neuronIsInhibitory[i];
+
+    // Voltage-based brightness
+    const vNorm = Math.max(0, Math.min(1, (neuronV[i] - V_REST) / (V_THRESHOLD - V_REST)));
+
+    // Base radius
+    const baseR = isInhib ? 2.8 : 3.2;
+    const radius = baseR + flash * 4;
+
+    // Color
+    let r, g, b, a;
+    if (isInhib) {
+      r = 160 + flash * 95;
+      g = 50 + vNorm * 30 + flash * 80;
+      b = 70 + vNorm * 20 + flash * 70;
+      a = 0.25 + vNorm * 0.3 + flash * 0.45;
+    } else {
+      r = 60 + vNorm * 60 + flash * 180;
+      g = 100 + vNorm * 60 + flash * 155;
+      b = 180 + vNorm * 40 + flash * 75;
+      a = 0.3 + vNorm * 0.3 + flash * 0.4;
+    }
+
+    // Glow for firing neurons
+    if (flash > 0.3) {
+      const glowR = radius + flash * 12;
+      const glow = ctx.createRadialGradient(x, y, radius * 0.5, x, y, glowR);
+      if (isInhib) {
+        glow.addColorStop(0, `rgba(255,120,140,${flash * 0.25})`);
+      } else {
+        glow.addColorStop(0, `rgba(160,200,255,${flash * 0.3})`);
+      }
+      glow.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(x, y, glowR, 0, TWO_PI);
+      ctx.fill();
+    }
+
+    // Core
+    ctx.fillStyle = `rgba(${Math.floor(r)},${Math.floor(g)},${Math.floor(b)},${a.toFixed(3)})`;
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, TWO_PI);
+    ctx.fill();
+  }
+
+  // Draw stimulation cursor when mouse is over canvas
+  if (mouseX >= 0 && mouseY >= 0) {
+    ctx.beginPath();
+    ctx.arc(mouseX, mouseY, STIM_RADIUS, 0, TWO_PI);
+    const cursorColor = mode === 'excite'
+      ? `rgba(100,160,255,${mouseDown ? 0.12 : 0.04})`
+      : `rgba(255,100,120,${mouseDown ? 0.12 : 0.04})`;
+    ctx.fillStyle = cursorColor;
+    ctx.fill();
+    ctx.strokeStyle = mode === 'excite'
+      ? `rgba(100,160,255,${mouseDown ? 0.2 : 0.06})`
+      : `rgba(255,100,120,${mouseDown ? 0.2 : 0.06})`;
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+  }
+}
+
+// ============================================================
+// Stats display
+// ============================================================
+
+let statsTimer = 0;
+
+function updateStats() {
+  statsTimer++;
+  if (statsTimer % 30 !== 0) return;
+
+  let totalFires = 0;
+  let maxFires = 0;
+  let activeSynapses = 0;
+  let totalWeight = 0;
+  let strongSynapses = 0;
+
+  for (let i = 0; i < NUM_NEURONS; i++) {
+    totalFires += neuronFireCount[i];
+    if (neuronFireCount[i] > maxFires) maxFires = neuronFireCount[i];
+  }
+
+  for (let c = 0; c < numConnections; c++) {
+    const w = Math.abs(connWeight[c]);
+    if (w > MIN_WEIGHT * 2) activeSynapses++;
+    if (w > 0.4) strongSynapses++;
+    totalWeight += w;
+  }
+
+  const avgWeight = numConnections > 0 ? (totalWeight / numConnections).toFixed(3) : 0;
+  const time = (simTime / 1000).toFixed(1);
+
+  statsEl.innerHTML =
+    `${NUM_NEURONS} neurons &middot; ${activeSynapses} synapses<br>` +
+    `${strongSynapses} strong pathways<br>` +
+    `avg weight ${avgWeight}<br>` +
+    `${totalFires} spikes &middot; ${time}s`;
+}
+
+// ============================================================
+// Main loop
+// ============================================================
+
+function frame() {
+  for (let s = 0; s < stepsPerFrame; s++) {
+    simulationStep();
+  }
+  render();
+  updateStats();
+  requestAnimationFrame(frame);
+}
+
+// Touch hint
+if ('ontouchstart' in window) {
+  hintEl.textContent = 'touch to stimulate';
+}
+
+frame();
+</script>
+
+</body>
+</html>

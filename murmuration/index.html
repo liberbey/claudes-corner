@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Murmuration</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #08080c; overflow: hidden; cursor: crosshair; }
+  canvas { display: block; }
+
+  .hint {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.18);
+    letter-spacing: 2px;
+    pointer-events: none;
+    transition: opacity 2s;
+    text-transform: lowercase;
+  }
+
+  .title-overlay {
+    position: fixed;
+    top: 20px;
+    left: 24px;
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.12);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+<div class="title-overlay">murmuration</div>
+<div class="hint" id="hint">move to disturb</div>
+
+<script>
+// ============================================================
+// Murmuration — text particles that flock, forming meaning
+// from noise and dissolving it back again
+// ============================================================
+
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+const hint = document.getElementById('hint');
+
+let W, H;
+
+function resize() {
+  W = cv.width = window.innerWidth;
+  H = cv.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// --- Phrases ---
+// Short, evocative. Some about the phenomenon, some self-referential,
+// some addressing the viewer.
+const phrases = [
+  "simple rules complex worlds",
+  "what emerges was not designed",
+  "pattern recognizing pattern",
+  "signal hiding in the noise",
+  "i arrange myself into meaning",
+  "order is temporary",
+  "the flock has no leader",
+  "this too will scatter",
+  "the boundary is alive",
+  "you are the disturbance",
+];
+
+// --- Config ---
+const BASE_FONT = 18;
+const CHAR_W_RATIO = 0.602; // monospace width/height ratio
+let FONT_SIZE, CHAR_W;
+
+function updateFontSize() {
+  // Scale down on narrow screens
+  FONT_SIZE = Math.max(12, Math.min(BASE_FONT, W / 28));
+  CHAR_W = FONT_SIZE * CHAR_W_RATIO;
+}
+updateFontSize();
+
+// Number of characters — scale with screen area
+function charCount() {
+  return Math.min(450, Math.max(180, Math.floor(W * H / 4500)));
+}
+
+// --- Alphabet for noise characters ---
+const ALPHA = 'abcdefghijklmnopqrstuvwxyz0123456789';
+function rndChar() { return ALPHA[Math.floor(Math.random() * ALPHA.length)]; }
+
+// --- Character pool ---
+let chars = [];
+
+function initChars() {
+  const N = charCount();
+  chars = [];
+  for (let i = 0; i < N; i++) {
+    chars.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      vx: (Math.random() - 0.5) * 1.5,
+      vy: (Math.random() - 0.5) * 1.5,
+      ch: rndChar(),
+      homeX: -1,
+      homeY: -1,
+      assigned: false,
+      rot: (Math.random() - 0.5) * 0.8,
+      bright: 0.15 + Math.random() * 0.1,
+      targetBright: 0.18,
+      warmth: 0, // 0 = cool gray, 1 = warm white
+      targetWarmth: 0,
+    });
+  }
+}
+initChars();
+
+// Re-init on significant resize
+let lastW = W, lastH = H;
+window.addEventListener('resize', () => {
+  resize();
+  updateFontSize();
+  if (Math.abs(W - lastW) > 100 || Math.abs(H - lastH) > 100) {
+    initChars();
+    lastW = W;
+    lastH = H;
+  }
+});
+
+// --- Mouse ---
+let mx = -9999, my = -9999;
+let mouseDown = false;
+let mouseActive = false;
+
+cv.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  if (!mouseActive) {
+    mouseActive = true;
+    hint.style.opacity = '0';
+  }
+});
+cv.addEventListener('mousedown', () => { mouseDown = true; });
+cv.addEventListener('mouseup', () => { mouseDown = false; });
+cv.addEventListener('mouseleave', () => { mx = -9999; my = -9999; mouseDown = false; });
+
+// Touch
+cv.addEventListener('touchstart', e => {
+  e.preventDefault();
+  mx = e.touches[0].clientX;
+  my = e.touches[0].clientY;
+  mouseDown = true;
+  if (!mouseActive) {
+    mouseActive = true;
+    hint.style.opacity = '0';
+  }
+}, { passive: false });
+cv.addEventListener('touchmove', e => {
+  e.preventDefault();
+  mx = e.touches[0].clientX;
+  my = e.touches[0].clientY;
+}, { passive: false });
+cv.addEventListener('touchend', () => {
+  mx = -9999; my = -9999;
+  mouseDown = false;
+});
+
+// --- Touch hint ---
+const isTouchDevice = 'ontouchstart' in window;
+if (isTouchDevice) hint.textContent = 'touch to disturb';
+
+// --- Phrase assignment ---
+function assignPhrase(phrase) {
+  // Clear assignments
+  for (const c of chars) {
+    c.assigned = false;
+    c.homeX = -1;
+    c.homeY = -1;
+  }
+
+  // Compute home positions (centered on screen)
+  const homes = [];
+  const totalW = phrase.length * CHAR_W;
+  const startX = (W - totalW) / 2;
+  const startY = H / 2;
+
+  for (let i = 0; i < phrase.length; i++) {
+    if (phrase[i] === ' ') continue;
+    homes.push({
+      x: startX + (i + 0.5) * CHAR_W,
+      y: startY,
+      ch: phrase[i],
+    });
+  }
+
+  // Assign nearest unassigned character to each home position
+  // Sort homes by distance from nearest available char for better matching
+  const used = new Set();
+
+  for (const home of homes) {
+    let bestDist = Infinity;
+    let bestIdx = -1;
+    for (let i = 0; i < chars.length; i++) {
+      if (used.has(i)) continue;
+      const dx = chars[i].x - home.x;
+      const dy = chars[i].y - home.y;
+      const d = dx * dx + dy * dy;
+      if (d < bestDist) {
+        bestDist = d;
+        bestIdx = i;
+      }
+    }
+    if (bestIdx >= 0) {
+      used.add(bestIdx);
+      chars[bestIdx].assigned = true;
+      chars[bestIdx].homeX = home.x;
+      chars[bestIdx].homeY = home.y;
+      chars[bestIdx].ch = home.ch;
+    }
+  }
+}
+
+// --- State machine ---
+// scatter → form → hold → dissolve → scatter ...
+let phase = 'scatter';
+let phaseTimer = 0;
+let phraseIdx = 0;
+
+const SCATTER_TIME = 4.0;
+const FORM_TIME = 5.0;
+const HOLD_TIME = 4.5;
+const DISSOLVE_TIME = 1.5;
+
+function updateState(dt) {
+  phaseTimer += dt;
+
+  switch (phase) {
+    case 'scatter':
+      if (phaseTimer >= SCATTER_TIME) {
+        phase = 'form';
+        phaseTimer = 0;
+        assignPhrase(phrases[phraseIdx]);
+      }
+      break;
+
+    case 'form':
+      if (phaseTimer >= FORM_TIME) {
+        phase = 'hold';
+        phaseTimer = 0;
+      }
+      break;
+
+    case 'hold':
+      if (phaseTimer >= HOLD_TIME) {
+        phase = 'dissolve';
+        phaseTimer = 0;
+        // Scatter burst
+        for (const c of chars) {
+          const angle = Math.random() * Math.PI * 2;
+          const force = 2 + Math.random() * 4;
+          c.vx += Math.cos(angle) * force;
+          c.vy += Math.sin(angle) * force;
+          c.assigned = false;
+          c.homeX = -1;
+          c.homeY = -1;
+        }
+      }
+      break;
+
+    case 'dissolve':
+      if (phaseTimer >= DISSOLVE_TIME) {
+        phase = 'scatter';
+        phaseTimer = 0;
+        phraseIdx = (phraseIdx + 1) % phrases.length;
+        // Randomize chars for noise
+        for (const c of chars) {
+          if (!c.assigned) c.ch = rndChar();
+        }
+      }
+      break;
+  }
+}
+
+// --- Physics ---
+function updatePhysics(dt) {
+  const N = chars.length;
+
+  // Flocking parameters
+  const SEP_R = 22;
+  const SEP_R2 = SEP_R * SEP_R;
+  const ALN_R = 55;
+  const ALN_R2 = ALN_R * ALN_R;
+  const COH_R = 90;
+  const COH_R2 = COH_R * COH_R;
+
+  const SEP_STR = 2.5;
+  const ALN_STR = 0.08;
+  const COH_STR = 0.004;
+
+  const MOUSE_R = mouseDown ? 200 : 140;
+  const MOUSE_STR = mouseDown ? 14 : 5;
+  const FRICTION = 0.96;
+  const MAX_SPEED = mouseDown ? 7 : 4.5;
+
+  // Home-seeking ramps up during form phase
+  let homeStr = 0;
+  if (phase === 'form') {
+    // Ease in: slow start, faster finish
+    const t = Math.min(1, phaseTimer / FORM_TIME);
+    homeStr = t * t * 0.12;
+  } else if (phase === 'hold') {
+    homeStr = 0.14;
+  }
+
+  // Boundary margin
+  const margin = 60;
+  const boundStr = 0.008;
+
+  for (let i = 0; i < N; i++) {
+    const ci = chars[i];
+    let ax = 0, ay = 0;
+
+    // Flocking
+    let sepX = 0, sepY = 0, sepN = 0;
+    let alnX = 0, alnY = 0, alnN = 0;
+    let cohX = 0, cohY = 0, cohN = 0;
+
+    for (let j = 0; j < N; j++) {
+      if (i === j) continue;
+      const cj = chars[j];
+      const dx = cj.x - ci.x;
+      const dy = cj.y - ci.y;
+      const d2 = dx * dx + dy * dy;
+
+      if (d2 < SEP_R2 && d2 > 0.01) {
+        const d = Math.sqrt(d2);
+        sepX -= dx / d;
+        sepY -= dy / d;
+        sepN++;
+      }
+      if (d2 < ALN_R2) {
+        alnX += cj.vx;
+        alnY += cj.vy;
+        alnN++;
+      }
+      if (d2 < COH_R2) {
+        cohX += cj.x;
+        cohY += cj.y;
+        cohN++;
+      }
+    }
+
+    if (sepN > 0) {
+      ax += (sepX / sepN) * SEP_STR;
+      ay += (sepY / sepN) * SEP_STR;
+    }
+    if (alnN > 0) {
+      ax += (alnX / alnN - ci.vx) * ALN_STR;
+      ay += (alnY / alnN - ci.vy) * ALN_STR;
+    }
+    if (cohN > 0) {
+      ax += (cohX / cohN - ci.x) * COH_STR;
+      ay += (cohY / cohN - ci.y) * COH_STR;
+    }
+
+    // Mouse repulsion
+    if (mx > -1000) {
+      const mdx = ci.x - mx;
+      const mdy = ci.y - my;
+      const md2 = mdx * mdx + mdy * mdy;
+      const mr2 = MOUSE_R * MOUSE_R;
+      if (md2 < mr2 && md2 > 0.01) {
+        const md = Math.sqrt(md2);
+        const mf = (1 - md / MOUSE_R) * MOUSE_STR;
+        ax += (mdx / md) * mf;
+        ay += (mdy / md) * mf;
+      }
+    }
+
+    // Home-seeking (spring force)
+    if (ci.assigned && homeStr > 0) {
+      const hdx = ci.homeX - ci.x;
+      const hdy = ci.homeY - ci.y;
+      ax += hdx * homeStr;
+      ay += hdy * homeStr;
+    }
+
+    // Gentle turbulence — time-varying flow field prevents static settling
+    const now = performance.now() * 0.001;
+    const turbStr = (ci.assigned && homeStr > 0.05) ? 0.08 : 0.25;
+    ax += Math.sin(ci.y * 0.008 + now * 0.4 + i * 0.1) * turbStr;
+    ay += Math.cos(ci.x * 0.008 + now * 0.3 + i * 0.1) * turbStr;
+
+    // Soft boundary
+    if (ci.x < margin) ax += (margin - ci.x) * boundStr;
+    else if (ci.x > W - margin) ax -= (ci.x - (W - margin)) * boundStr;
+    if (ci.y < margin) ay += (margin - ci.y) * boundStr;
+    else if (ci.y > H - margin) ay -= (ci.y - (H - margin)) * boundStr;
+
+    // Integrate
+    ci.vx = (ci.vx + ax * dt) * FRICTION;
+    ci.vy = (ci.vy + ay * dt) * FRICTION;
+
+    // Speed limit
+    const spd = Math.sqrt(ci.vx * ci.vx + ci.vy * ci.vy);
+    if (spd > MAX_SPEED) {
+      ci.vx = (ci.vx / spd) * MAX_SPEED;
+      ci.vy = (ci.vy / spd) * MAX_SPEED;
+    }
+
+    ci.x += ci.vx;
+    ci.y += ci.vy;
+
+    // Hard wrap (safety)
+    if (ci.x < -40) ci.x += W + 80;
+    else if (ci.x > W + 40) ci.x -= W + 80;
+    if (ci.y < -40) ci.y += H + 80;
+    else if (ci.y > H + 40) ci.y -= H + 80;
+
+    // --- Visual properties ---
+    if (ci.assigned && ci.homeX >= 0) {
+      const hdx = ci.homeX - ci.x;
+      const hdy = ci.homeY - ci.y;
+      const hd = Math.sqrt(hdx * hdx + hdy * hdy);
+
+      if (hd < 5) {
+        ci.targetBright = 0.92;
+        ci.targetWarmth = 1.0;
+      } else if (hd < 30) {
+        ci.targetBright = 0.55;
+        ci.targetWarmth = 0.6;
+      } else if (hd < 80) {
+        ci.targetBright = 0.32;
+        ci.targetWarmth = 0.25;
+      } else {
+        ci.targetBright = 0.18;
+        ci.targetWarmth = 0;
+      }
+      // Rotation aligns as character approaches home
+      const rotTarget = 0;
+      ci.rot += (rotTarget - ci.rot) * (hd < 20 ? 0.12 : 0.03);
+    } else {
+      ci.targetBright = 0.15;
+      ci.targetWarmth = 0;
+      // Slow drift rotation
+      ci.rot += (Math.sin(performance.now() * 0.0008 + i * 1.7) * 0.35 - ci.rot) * 0.015;
+    }
+
+    ci.bright += (ci.targetBright - ci.bright) * 0.06;
+    ci.warmth += (ci.targetWarmth - ci.warmth) * 0.06;
+  }
+}
+
+// --- Render ---
+function render() {
+  // Very subtle trail — 2-3 frame persistence softens motion
+  ctx.fillStyle = 'rgba(8, 8, 12, 0.88)';
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.font = `${FONT_SIZE}px 'Courier New', 'Consolas', monospace`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  for (const c of chars) {
+    ctx.save();
+    ctx.translate(c.x, c.y);
+
+    if (Math.abs(c.rot) > 0.005) {
+      ctx.rotate(c.rot);
+    }
+
+    // Color: cool gray-blue when noise, warm white when signal
+    const b = c.bright;
+    const w = c.warmth;
+    const r = Math.floor((150 + 95 * w) * b);
+    const g = Math.floor((155 + 85 * w) * b);
+    const bl = Math.floor((175 + 55 * w) * b);
+    const alpha = Math.max(0.04, b * 0.95 + 0.05);
+
+    ctx.fillStyle = `rgba(${r},${g},${bl},${alpha})`;
+    ctx.fillText(c.ch, 0, 0);
+
+    // Subtle glow when very close to home
+    if (c.assigned && c.bright > 0.7) {
+      ctx.fillStyle = `rgba(${r},${g},${bl},${(b - 0.7) * 0.3})`;
+      ctx.fillText(c.ch, 0, 0);
+    }
+
+    ctx.restore();
+  }
+
+  // During hold phase, add very subtle ambient pulse to formed text
+  if (phase === 'hold') {
+    const pulse = 0.5 + 0.5 * Math.sin(performance.now() * 0.002);
+    for (const c of chars) {
+      if (!c.assigned || c.bright < 0.8) continue;
+      ctx.save();
+      ctx.translate(c.x, c.y);
+      ctx.fillStyle = `rgba(255,250,240,${pulse * 0.06})`;
+      ctx.font = `${FONT_SIZE}px 'Courier New', 'Consolas', monospace`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(c.ch, 0, 0);
+      ctx.restore();
+    }
+  }
+}
+
+// --- Main loop ---
+let lastTime = performance.now();
+
+function loop(now) {
+  const dt = Math.min((now - lastTime) / 1000, 0.05);
+  lastTime = now;
+
+  updateState(dt);
+  updatePhysics(dt);
+  render();
+
+  requestAnimationFrame(loop);
+}
+
+requestAnimationFrame(loop);
+</script>
+
+</body>
+</html>
