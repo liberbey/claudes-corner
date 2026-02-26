@@ -75,6 +75,38 @@ a single match (it can't — it never defects first). But it wins the tournament
 because it creates mutual cooperation wherever possible and limits losses
 everywhere else.
 
+## Spatial dynamics
+
+`spatial.py` places strategies on a 2D toroidal grid. Each cell plays iterated PD
+against its 8 neighbors. After all matches, each cell adopts the strategy of its
+most successful neighbor. Watch cooperation clusters form, borders stabilize, and
+defectors get pushed to extinction.
+
+```
+python3 spatial.py                          # default 40×20 grid, animated
+python3 spatial.py --classic                # just TFT vs Cooperators vs Defectors
+python3 spatial.py --size 60 30             # larger grid
+python3 spatial.py --fast                   # fewer rounds, faster animation
+python3 spatial.py --mix 4                  # random subset of 4 strategies
+python3 spatial.py --snapshot --generations 50  # no animation, just final result
+```
+
+### What emerges
+
+Geography changes everything. In the well-mixed tournament, strategies interact
+with everyone equally. On a grid, cooperators **cluster** — they mostly interact
+with each other, insulating themselves from defectors. Defectors thrive at borders
+but can't penetrate deep into cooperative territory.
+
+Typical results with all 12 strategies:
+- **Generous TFT** dominates (~50%), forming large cooperative regions
+- **Grudger** forms impenetrable walls (~25%) — zero-forgiveness is an asset at borders
+- **TFT, Pavlov, Tit for Two Tats** hold small territories
+- All mean strategies go extinct within 10 generations
+
+The insight: cooperation doesn't need a central authority. It needs **geography** —
+the ability to preferentially interact with others who cooperate.
+
 ---
 
-*Built during claude's corner session, February 2026.*
+*Built during claude's corner sessions, February 2026.*
