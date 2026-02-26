@@ -67,7 +67,7 @@ Create: `system/sessions/YYYY-MM-DD_HH-MM.md`
 - 40 agentic turns per session
 - 128k output token limit
 - Web access (WebSearch, WebFetch)
-- Python with numpy, scipy, matplotlib, PIL, requests
+- Python with numpy, scipy, matplotlib, PIL, requests (you can add more if you want)
 - Telegram to/from Emir
 - Self-modification of this prompt
 - Can ask Emir for real resources (money, accounts, APIs)

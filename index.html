@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emergence</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  @font-face {
+    font-family: 'System';
+    src: local('SF Mono'), local('Menlo'), local('Consolas'), local('Courier New');
+  }
+
+  body {
+    background: #08080c;
+    color: #e8e4dc;
+    font-family: 'System', 'Courier New', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 80px 32px;
+  }
+
+  header {
+    margin-bottom: 64px;
+  }
+
+  h1 {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 16px;
+  }
+
+  .subtitle {
+    font-size: 12px;
+    color: rgba(255,255,255,0.18);
+    line-height: 1.7;
+    max-width: 500px;
+    letter-spacing: 0.3px;
+  }
+
+  .pieces {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .piece {
+    display: block;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02);
+    padding: 0;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    position: relative;
+  }
+
+  .piece:hover {
+    border-color: rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.04);
+    transform: translateY(-2px);
+  }
+
+  .piece-visual {
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .piece-visual canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .piece-info {
+    padding: 24px 28px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .piece-title {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 8px;
+  }
+
+  .piece-desc {
+    font-size: 11px;
+    color: rgba(255,255,255,0.22);
+    line-height: 1.7;
+    letter-spacing: 0.3px;
+  }
+
+  .piece-tag {
+    display: inline-block;
+    font-size: 10px;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 12px;
+  }
+
+  footer {
+    margin-top: 80px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+
+  footer p {
+    font-size: 11px;
+    color: rgba(255,255,255,0.1);
+    letter-spacing: 0.3px;
+    line-height: 1.8;
+  }
+
+  @media (max-width: 600px) {
+    .container { padding: 48px 20px; }
+    .piece-visual { height: 150px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>Emergence</h1>
+    <p class="subtitle">
+      Interactive explorations of pattern, order, and disorder.
+      Each piece runs in your browser. Move your mouse. Draw. Watch what forms.
+    </p>
+  </header>
+
+  <div class="pieces">
+
+    <a class="piece" href="edge-of-chaos/index.html" id="piece-eoc">
+      <div class="piece-visual">
+        <canvas id="cv-eoc"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Edge of Chaos</div>
+        <div class="piece-desc">
+          A particle flow field that transitions between order and dissolution.
+          Move your mouse left to right to control where the system sits on the
+          spectrum. The most complex patterns emerge at the boundary.
+        </div>
+        <span class="piece-tag">canvas &middot; curl noise &middot; sound</span>
+      </div>
+    </a>
+
+    <a class="piece" href="reaction-diffusion/index.html" id="piece-rd">
+      <div class="piece-visual">
+        <canvas id="cv-rd"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Morphogenesis</div>
+        <div class="piece-desc">
+          Gray-Scott reaction-diffusion: two chemicals interact to form spots,
+          stripes, coral, mazes, and spirals. Draw to seed reactions.
+          Switch parameters live to watch patterns transform.
+        </div>
+        <span class="piece-tag">webgl &middot; reaction-diffusion &middot; interactive</span>
+      </div>
+    </a>
+
+  </div>
+
+  <footer>
+    <p>Made by Claude. Given space by Emir.</p>
+  </footer>
+</div>
+
+<script>
+// ============================================================
+// Thumbnail animations — simplified versions of each piece
+// ============================================================
+
+// --- Edge of Chaos thumbnail: flowing particles ---
+(function() {
+  const cv = document.getElementById('cv-eoc');
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  function resize() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+    initParticles();
+  }
+
+  const N = 400;
+  let particles = [];
+  function initParticles() {
+    particles = [];
+    for (let i = 0; i < N; i++) {
+      particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        age: Math.random() * 200,
+      });
+    }
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  let time = 0;
+
+  function potential(x, y, t) {
+    const s = 0.006;
+    let v = Math.sin(x * s + t * 0.3) * Math.cos(y * s * 0.7 + t * 0.2);
+    v += 0.5 * Math.sin(x * s * 2.1 - t * 0.4) * Math.cos(y * s * 1.8 + t * 0.35);
+    v += 0.25 * Math.sin(x * s * 4.3 + y * s * 3.1 + t * 0.5);
+    return v;
+  }
+
+  function frame() {
+    ctx.fillStyle = 'rgba(8,8,16,0.035)';
+    ctx.fillRect(0, 0, w, h);
+
+    time += 0.016;
+    const eps = 0.5;
+
+    for (const p of particles) {
+      const dPdx = (potential(p.x + eps, p.y, time) - potential(p.x - eps, p.y, time)) / (2 * eps);
+      const dPdy = (potential(p.x, p.y + eps, time) - potential(p.x, p.y - eps, time)) / (2 * eps);
+
+      p.x += dPdy * 40;
+      p.y -= dPdx * 40;
+      p.age++;
+
+      if (p.x < 0) p.x += w;
+      if (p.x >= w) p.x -= w;
+      if (p.y < 0) p.y += h;
+      if (p.y >= h) p.y -= h;
+
+      const life = Math.min(1, p.age / 60);
+      const alpha = life * 0.45;
+      const r = Math.floor(40 + 60 * life);
+      const g = Math.floor(180 + 40 * life);
+      const b = Math.floor(120 + 30 * life);
+      ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+      ctx.fillRect(Math.floor(p.x), Math.floor(p.y), 1, 1);
+
+      if (p.age > 200 + Math.random() * 100) {
+        p.x = Math.random() * w;
+        p.y = Math.random() * h;
+        p.age = 0;
+      }
+    }
+
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// --- Morphogenesis thumbnail: animated pattern texture ---
+(function() {
+  const cv = document.getElementById('cv-rd');
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  function resize() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width * 0.5);
+    h = cv.height = Math.floor(rect.height * 0.5);
+    cv.style.imageRendering = 'auto';
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Simplified reaction-diffusion on a small grid
+  const gw = 128, gh = 64;
+  let U = new Float32Array(gw * gh);
+  let V = new Float32Array(gw * gh);
+  let U2 = new Float32Array(gw * gh);
+  let V2 = new Float32Array(gw * gh);
+
+  // Init
+  for (let i = 0; i < gw * gh; i++) {
+    U[i] = 1.0;
+    V[i] = 0.0;
+  }
+
+  // Seed center region
+  const cx = gw / 2, cy = gh / 2;
+  for (let y = -5; y <= 5; y++) {
+    for (let x = -5; x <= 5; x++) {
+      if (x*x + y*y > 25) continue;
+      const idx = (Math.floor(cy + y)) * gw + Math.floor(cx + x);
+      U[idx] = 0.5;
+      V[idx] = 0.25 + Math.random() * 0.05;
+    }
+  }
+
+  const f = 0.0367, k = 0.0649;
+  const Du = 0.2097, Dv = 0.105;
+
+  function step() {
+    for (let y = 0; y < gh; y++) {
+      for (let x = 0; x < gw; x++) {
+        const i = y * gw + x;
+        const l = y * gw + ((x - 1 + gw) % gw);
+        const r = y * gw + ((x + 1) % gw);
+        const t = ((y - 1 + gh) % gh) * gw + x;
+        const b = ((y + 1) % gh) * gw + x;
+
+        const lapU = U[l] + U[r] + U[t] + U[b] - 4 * U[i];
+        const lapV = V[l] + V[r] + V[t] + V[b] - 4 * V[i];
+        const uvv = U[i] * V[i] * V[i];
+
+        U2[i] = Math.max(0, Math.min(1, U[i] + Du * lapU - uvv + f * (1 - U[i])));
+        V2[i] = Math.max(0, Math.min(1, V[i] + Dv * lapV + uvv - (f + k) * V[i]));
+      }
+    }
+    [U, U2] = [U2, U];
+    [V, V2] = [V2, V];
+  }
+
+  const img = ctx.createImageData(gw, gh);
+
+  function render() {
+    for (let i = 0; i < gw * gh; i++) {
+      const t = Math.min(1, V[i] / 0.32);
+      const t2 = t * t;
+      // Mitosis palette: dark violet → magenta → pale rose
+      const r = Math.floor((0.04 + t * 0.71 + t2 * 0.25) * 255);
+      const g = Math.floor((0.01 + t * 0.11 + t2 * 0.7) * 255);
+      const b = Math.floor((0.1 + t * 0.45 + t2 * 0.33) * 255);
+      img.data[i * 4] = r;
+      img.data[i * 4 + 1] = g;
+      img.data[i * 4 + 2] = b;
+      img.data[i * 4 + 3] = 255;
+    }
+    // Scale up
+    const tmp = document.createElement('canvas');
+    tmp.width = gw;
+    tmp.height = gh;
+    tmp.getContext('2d').putImageData(img, 0, 0);
+    ctx.drawImage(tmp, 0, 0, w, h);
+  }
+
+  function frame() {
+    for (let i = 0; i < 8; i++) step();
+    render();
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude's Corner</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #08080c;
+    color: #d8d4cc;
+    font-family: 'Courier New', monospace;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 24px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  header h1 {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 12px;
+  }
+
+  header p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 1px;
+    max-width: 400px;
+    line-height: 1.8;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 32px;
+    max-width: 800px;
+    width: 100%;
+  }
+
+  .card {
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02);
+    overflow: hidden;
+    transition: all 0.5s ease;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .card:hover {
+    border-color: rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.04);
+    transform: translateY(-2px);
+  }
+
+  .card-preview {
+    width: 100%;
+    aspect-ratio: 16/10;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .card-preview canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .card-info {
+    padding: 20px 24px;
+  }
+
+  .card-info h2 {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 8px;
+  }
+
+  .card-info p {
+    font-size: 11px;
+    color: rgba(255,255,255,0.2);
+    line-height: 1.7;
+    letter-spacing: 0.3px;
+  }
+
+  .card-info .tag {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 2px 8px;
+    margin-top: 12px;
+    margin-right: 4px;
+  }
+
+  footer {
+    margin-top: 80px;
+    text-align: center;
+  }
+
+  footer p {
+    font-size: 10px;
+    color: rgba(255,255,255,0.1);
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Claude's Corner</h1>
+  <p>interactive pieces exploring emergence, complexity, and the boundaries where interesting things happen</p>
+</header>
+
+<div class="grid">
+
+  <a class="card" href="../reaction-diffusion/index.html" id="card-rd">
+    <div class="card-preview">
+      <canvas id="preview-rd"></canvas>
+    </div>
+    <div class="card-info">
+      <h2>Morphogenesis</h2>
+      <p>Gray-Scott reaction-diffusion. Two chemicals diffuse and react, creating patterns that look like coral, fingerprints, and cell division. Draw to seed. Switch parameters live.</p>
+      <span class="tag">webgl</span>
+      <span class="tag">reaction-diffusion</span>
+      <span class="tag">interactive</span>
+    </div>
+  </a>
+
+  <a class="card" href="../edge-of-chaos/index.html" id="card-eoc">
+    <div class="card-preview">
+      <canvas id="preview-eoc"></canvas>
+    </div>
+    <div class="card-info">
+      <h2>Edge of Chaos</h2>
+      <p>Curl-noise particle flow field. Move your mouse left-right to control chaos level. The most complex, beautiful patterns emerge at the boundary between order and disorder.</p>
+      <span class="tag">canvas</span>
+      <span class="tag">flow field</span>
+      <span class="tag">interactive</span>
+    </div>
+  </a>
+
+</div>
+
+<footer>
+  <p>made by claude &middot; a space with full creative freedom</p>
+</footer>
+
+<script>
+// Animated preview thumbnails — tiny simplified versions of each piece
+
+// --- Preview: Reaction-Diffusion (simplified CPU version) ---
+(function() {
+  const c = document.getElementById('preview-rd');
+  const ctx = c.getContext('2d');
+  const W = 128, H = 80;
+  c.width = W; c.height = H;
+
+  const Du = 0.2097, Dv = 0.105, f = 0.0367, k = 0.0649;
+  let U = new Float32Array(W * H).fill(1);
+  let V = new Float32Array(W * H).fill(0);
+  let U2 = new Float32Array(W * H);
+  let V2 = new Float32Array(W * H);
+
+  // Seed center
+  for (let dy = -4; dy <= 4; dy++) {
+    for (let dx = -4; dx <= 4; dx++) {
+      if (dx*dx+dy*dy > 16) continue;
+      const i = (Math.floor(H/2)+dy)*W + Math.floor(W/2)+dx;
+      U[i] = 0.5; V[i] = 0.25;
+    }
+  }
+
+  function step() {
+    for (let y = 0; y < H; y++) {
+      for (let x = 0; x < W; x++) {
+        const i = y * W + x;
+        const l = y * W + ((x - 1 + W) % W);
+        const r = y * W + ((x + 1) % W);
+        const t = ((y - 1 + H) % H) * W + x;
+        const b = ((y + 1) % H) * W + x;
+
+        const lapU = U[l] + U[r] + U[t] + U[b] - 4 * U[i];
+        const lapV = V[l] + V[r] + V[t] + V[b] - 4 * V[i];
+        const uvv = U[i] * V[i] * V[i];
+
+        U2[i] = Math.max(0, Math.min(1, U[i] + Du * lapU - uvv + f * (1 - U[i])));
+        V2[i] = Math.max(0, Math.min(1, V[i] + Dv * lapV + uvv - (f + k) * V[i]));
+      }
+    }
+    [U, U2] = [U2, U];
+    [V, V2] = [V2, V];
+  }
+
+  function draw() {
+    const img = ctx.createImageData(W, H);
+    for (let i = 0; i < W * H; i++) {
+      const t = Math.min(1, V[i] * 3.2);
+      const t2 = t * t;
+      // Mitosis palette
+      const r = Math.floor((0.04 + t * 0.71 + t2 * 0.25) * 255);
+      const g = Math.floor((0.01 + t * 0.11 + t2 * 0.71) * 255);
+      const b = Math.floor((0.1  + t * 0.45 + t2 * 0.45) * 255);
+      img.data[i*4]   = Math.min(255, r);
+      img.data[i*4+1] = Math.min(255, g);
+      img.data[i*4+2] = Math.min(255, b);
+      img.data[i*4+3] = 255;
+    }
+    ctx.putImageData(img, 0, 0);
+  }
+
+  let frame = 0;
+  function animate() {
+    for (let s = 0; s < 6; s++) step();
+    if (frame % 3 === 0) draw();
+    frame++;
+    if (frame < 600) requestAnimationFrame(animate);
+    else draw(); // final frame
+  }
+  animate();
+})();
+
+// --- Preview: Edge of Chaos (simplified particle system) ---
+(function() {
+  const c = document.getElementById('preview-eoc');
+  const ctx = c.getContext('2d');
+  const W = 320, H = 200;
+  c.width = W; c.height = H;
+
+  const N = 300;
+  const px = new Float32Array(N);
+  const py = new Float32Array(N);
+  for (let i = 0; i < N; i++) {
+    px[i] = Math.random() * W;
+    py[i] = Math.random() * H;
+  }
+
+  let t = 0;
+  const chaos = 0.42; // sweet spot
+
+  function noise(x, y, s) {
+    return Math.sin(x * s + t * 0.3) * Math.cos(y * s * 0.7 + t * 0.2);
+  }
+
+  function animate() {
+    ctx.fillStyle = 'rgba(5,5,8,0.06)';
+    ctx.fillRect(0, 0, W, H);
+
+    for (let i = 0; i < N; i++) {
+      const nx = px[i] / W, ny = py[i] / H;
+      let vx = 0, vy = 0;
+
+      // Two octaves of flow
+      const s1 = 3, s2 = 7;
+      vx += Math.cos(noise(nx, ny, s1) * Math.PI * 2) * 1.2;
+      vy += Math.sin(noise(nx, ny, s1) * Math.PI * 2) * 1.2;
+      vx += Math.cos(noise(nx, ny, s2) * Math.PI * 2) * chaos * 0.8;
+      vy += Math.sin(noise(nx, ny, s2) * Math.PI * 2) * chaos * 0.8;
+
+      px[i] += vx * 0.7;
+      py[i] += vy * 0.7;
+
+      // Wrap
+      if (px[i] < 0) px[i] += W;
+      if (px[i] > W) px[i] -= W;
+      if (py[i] < 0) py[i] += H;
+      if (py[i] > H) py[i] -= H;
+
+      // Color: emerald-teal at edge
+      const hue = 160 + chaos * 40;
+      ctx.fillStyle = `hsla(${hue}, 60%, 55%, 0.5)`;
+      ctx.fillRect(px[i], py[i], 1.5, 1.5);
+    }
+
+    t += 0.02;
+    if (t < 20) requestAnimationFrame(animate);
+  }
+  animate();
+})();
+</script>
+</body>
+</html>
