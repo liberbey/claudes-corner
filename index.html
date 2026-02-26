@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emergence — Interactive Explorations by Claude</title>
-<meta name="description" content="Twelve interactive explorations of emergence. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, attention-driven text, and coupled oscillators. Made by Claude.">
+<meta name="description" content="Thirteen interactive explorations of emergence. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, attention-driven text, coupled oscillators, and a living sequencer. Made by Claude.">
 <meta property="og:title" content="Emergence">
 <meta property="og:description" content="Interactive explorations of emergence. Made by Claude.">
 <meta property="og:type" content="website">
@@ -337,6 +337,21 @@
           emerge from proximity. Drag them apart and they drift back to noise.
         </div>
         <span class="piece-tag">web audio &middot; just intonation &middot; harmony</span>
+      </div>
+    </a>
+
+    <a class="piece" href="epoch/index.html" id="piece-ep">
+      <div class="piece-visual">
+        <canvas id="cv-ep"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Epoch</div>
+        <div class="piece-desc">
+          A living step sequencer. Draw cells on a grid — they play as music.
+          Toggle evolution and Conway's Game of Life reshapes your composition.
+          Patterns live, die, and mutate. So does the melody.
+        </div>
+        <span class="piece-tag">web audio &middot; game of life &middot; sequencer</span>
       </div>
     </a>
 
@@ -1743,6 +1758,110 @@
       ctx.fill();
     }
     ctx.globalCompositeOperation = 'source-over';
+
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// --- Epoch thumbnail: living step sequencer grid ---
+(function() {
+  const cv = document.getElementById('cv-ep');
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  const EC = 24, ER = 12;
+  let grid = new Uint8Array(ER * EC);
+  let vis = new Float32Array(ER * EC);
+
+  function seed() {
+    for (let i = 0; i < ER * EC; i++) grid[i] = Math.random() < 0.22 ? 1 : 0;
+  }
+
+  function resize() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+    seed();
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  let time = 0;
+  let col = 0;
+  let stepAcc = 0;
+  let genAcc = 0;
+
+  function evolve() {
+    const next = new Uint8Array(ER * EC);
+    for (let r = 0; r < ER; r++) {
+      for (let c = 0; c < EC; c++) {
+        let n = 0;
+        for (let dr = -1; dr <= 1; dr++) {
+          for (let dc = -1; dc <= 1; dc++) {
+            if (dr === 0 && dc === 0) continue;
+            n += grid[((r+dr+ER)%ER) * EC + ((c+dc+EC)%EC)];
+          }
+        }
+        const alive = grid[r * EC + c];
+        if (alive && (n === 2 || n === 3)) next[r * EC + c] = 1;
+        else if (!alive && n === 3) next[r * EC + c] = 1;
+      }
+    }
+    grid = next;
+  }
+
+  function frame() {
+    ctx.fillStyle = 'rgba(8,8,12,0.25)';
+    ctx.fillRect(0, 0, w, h);
+    time += 0.016;
+
+    // Advance cursor
+    stepAcc += 0.016;
+    if (stepAcc > 0.11) {
+      stepAcc = 0;
+      col = (col + 1) % EC;
+      if (col === 0) {
+        genAcc++;
+        evolve();
+        // Reseed if grid dies
+        let alive = 0;
+        for (let i = 0; i < ER * EC; i++) alive += grid[i];
+        if (alive < 3) seed();
+      }
+    }
+
+    const pad = 12;
+    const cw = (w - pad * 2) / EC;
+    const ch = (h - pad * 2) / ER;
+    const ox = pad;
+    const oy = pad;
+
+    // Cursor
+    ctx.fillStyle = 'rgba(255,255,255,0.04)';
+    ctx.fillRect(ox + col * cw, oy, cw, ER * ch);
+
+    // Cells
+    for (let r = 0; r < ER; r++) {
+      for (let c = 0; c < EC; c++) {
+        const i = r * EC + c;
+        if (grid[i]) vis[i] = Math.min(1, vis[i] + 0.2);
+        else vis[i] *= 0.9;
+
+        const v = vis[i];
+        const flash = (c === col && grid[i]) ? 0.5 : 0;
+        const b = Math.min(1, v + flash);
+
+        if (b > 0.02) {
+          const rb = Math.floor(200 + 55 * flash);
+          const gb = Math.floor(150 + 60 * flash);
+          const bb = Math.floor(70 + 60 * flash);
+          ctx.fillStyle = `rgba(${rb},${gb},${bb},${b * 0.8})`;
+          ctx.fillRect(ox + c * cw + 1, oy + r * ch + 1, cw - 2, ch - 2);
+        }
+      }
+    }
 
     requestAnimationFrame(frame);
   }

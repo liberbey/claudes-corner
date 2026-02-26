@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Epoch — A Living Sequencer</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #08080c;
+    color: #e8e4dc;
+    font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .back {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    color: rgba(255,255,255,0.25);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 2px;
+    z-index: 10;
+    transition: color 0.3s;
+  }
+  .back:hover { color: rgba(255,255,255,0.6); }
+
+  canvas {
+    flex: 1;
+    display: block;
+    cursor: crosshair;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.02);
+    border-top: 1px solid rgba(255,255,255,0.04);
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.10);
+    color: rgba(255,255,255,0.45);
+    font-family: inherit;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+  }
+  .btn:hover {
+    border-color: rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.7);
+  }
+  .btn.active {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.22);
+    color: rgba(255,255,255,0.85);
+  }
+
+  .tempo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .tempo .btn { padding: 7px 10px; }
+  .tempo-val {
+    font-size: 10px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 1px;
+    min-width: 52px;
+    text-align: center;
+  }
+
+  .gen {
+    font-size: 10px;
+    color: rgba(255,255,255,0.18);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    min-width: 50px;
+  }
+
+  .hint {
+    position: fixed;
+    bottom: 70px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 10px;
+    color: rgba(255,255,255,0.12);
+    letter-spacing: 0.5px;
+    pointer-events: none;
+    transition: opacity 1s;
+  }
+
+  @media (max-width: 600px) {
+    .controls { gap: 10px; padding: 10px 12px; }
+    .btn { font-size: 9px; padding: 6px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<a class="back" href="../">← back</a>
+<canvas id="canvas"></canvas>
+
+<div class="controls">
+  <button class="btn" id="playBtn">&#9654; Play</button>
+  <button class="btn" id="evolveBtn">Evolve</button>
+  <button class="btn" id="clearBtn">Clear</button>
+  <button class="btn" id="randomBtn">Random</button>
+  <div class="tempo">
+    <button class="btn" id="tempoDown">&minus;</button>
+    <span class="tempo-val" id="tempoVal">120 bpm</span>
+    <button class="btn" id="tempoUp">+</button>
+  </div>
+  <span class="gen" id="genLabel">Gen 0</span>
+</div>
+
+<div class="hint" id="hint">Draw cells on the grid. Space to play. E to evolve.</div>
+
+<script>
+// ============================================================
+// Epoch — A Living Sequencer
+// Conway's Game of Life meets a step sequencer.
+// Draw cells, play them as music, evolve the pattern.
+// ============================================================
+
+const COLS = 32;
+const ROWS = 16;
+
+// --- Pentatonic scale (C D E G A), mapped across rows ---
+const PENTA = [0, 2, 4, 7, 9]; // semitones within octave
+const BASE_MIDI = 48; // C3
+
+function rowToFreq(row) {
+  // row 0 (bottom of grid) = lowest pitch
+  const oct = Math.floor(row / 5);
+  const deg = row % 5;
+  const midi = BASE_MIDI + oct * 12 + PENTA[deg];
+  return 440 * Math.pow(2, (midi - 69) / 12);
+}
+
+const NOTE_NAMES = ['C', 'D', 'E', 'G', 'A'];
+function rowToName(row) {
+  const oct = Math.floor(row / 5) + 3;
+  return NOTE_NAMES[row % 5] + oct;
+}
+
+// --- State ---
+let grid = new Uint8Array(ROWS * COLS);
+let vis = new Float32Array(ROWS * COLS);   // visual brightness 0–1
+let flsh = new Float32Array(ROWS * COLS);  // flash pulse 0–1
+
+let playing = false;
+let evolving = false;
+let generation = 0;
+let bpm = 120;
+let displayCol = -1;
+let interacted = false;
+
+// --- Canvas ---
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+let W, H, dpr;
+let layout = null;
+
+function resize() {
+  dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  W = rect.width;
+  H = rect.height;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  layout = computeLayout();
+}
+
+function computeLayout() {
+  const padX = Math.max(36, W * 0.05);
+  const padTop = Math.max(20, H * 0.04);
+  const padBot = Math.max(10, H * 0.02);
+  const labelW = 28; // space for note labels
+  const availW = W - padX - labelW - padX * 0.3;
+  const availH = H - padTop - padBot;
+  const cellW = Math.floor(availW / COLS);
+  const cellH = Math.floor(availH / ROWS);
+  const gridW = cellW * COLS;
+  const gridH = cellH * ROWS;
+  const offsetX = labelW + (W - labelW - gridW) / 2;
+  const offsetY = padTop + (availH - gridH) / 2;
+  return { cellW, cellH, gridW, gridH, offsetX, offsetY };
+}
+
+window.addEventListener('resize', resize);
+
+// --- Audio ---
+let audioCtx = null;
+let masterGain, compressor, reverbNode, dryBus, wetBus;
+
+function initAudio() {
+  if (audioCtx) return;
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  compressor = audioCtx.createDynamicsCompressor();
+  compressor.threshold.value = -18;
+  compressor.ratio.value = 6;
+  compressor.attack.value = 0.003;
+  compressor.release.value = 0.15;
+
+  masterGain = audioCtx.createGain();
+  masterGain.gain.value = 0.8;
+
+  // Reverb (generated impulse)
+  const dur = 2.0, decay = 2.8, rate = audioCtx.sampleRate;
+  const len = Math.floor(rate * dur);
+  const impulse = audioCtx.createBuffer(2, len, rate);
+  for (let ch = 0; ch < 2; ch++) {
+    const d = impulse.getChannelData(ch);
+    for (let i = 0; i < len; i++) {
+      d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay);
+    }
+  }
+  reverbNode = audioCtx.createConvolver();
+  reverbNode.buffer = impulse;
+
+  dryBus = audioCtx.createGain();
+  dryBus.gain.value = 0.65;
+  wetBus = audioCtx.createGain();
+  wetBus.gain.value = 0.35;
+
+  dryBus.connect(compressor);
+  wetBus.connect(reverbNode);
+  reverbNode.connect(compressor);
+  compressor.connect(masterGain);
+  masterGain.connect(audioCtx.destination);
+}
+
+function playTone(freq, time, activeCount) {
+  const vol = 0.1 / Math.max(1, Math.sqrt(activeCount));
+
+  // FM bell synthesis
+  const carrier = audioCtx.createOscillator();
+  const mod = audioCtx.createOscillator();
+  const modGain = audioCtx.createGain();
+  const env = audioCtx.createGain();
+
+  carrier.type = 'sine';
+  carrier.frequency.value = freq;
+
+  mod.type = 'sine';
+  mod.frequency.value = freq * 1.414; // inharmonic ratio → bell timbre
+
+  modGain.gain.setValueAtTime(freq * 1.5, time);
+  modGain.gain.exponentialRampToValueAtTime(0.1, time + 0.35);
+
+  env.gain.setValueAtTime(0, time);
+  env.gain.linearRampToValueAtTime(vol, time + 0.004);
+  env.gain.exponentialRampToValueAtTime(0.0001, time + 0.55);
+
+  mod.connect(modGain);
+  modGain.connect(carrier.frequency);
+  carrier.connect(env);
+  env.connect(dryBus);
+  env.connect(wetBus);
+
+  mod.start(time);
+  carrier.start(time);
+  mod.stop(time + 0.6);
+  carrier.stop(time + 0.6);
+}
+
+// --- Game of Life ---
+function countNeighbors(g, r, c) {
+  let n = 0;
+  for (let dr = -1; dr <= 1; dr++) {
+    for (let dc = -1; dc <= 1; dc++) {
+      if (dr === 0 && dc === 0) continue;
+      const nr = (r + dr + ROWS) % ROWS;
+      const nc = (c + dc + COLS) % COLS;
+      if (g[nr * COLS + nc]) n++;
+    }
+  }
+  return n;
+}
+
+function evolveGrid() {
+  const next = new Uint8Array(ROWS * COLS);
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const i = r * COLS + c;
+      const n = countNeighbors(grid, r, c);
+      if (grid[i]) {
+        next[i] = (n === 2 || n === 3) ? 1 : 0;
+      } else {
+        next[i] = (n === 3) ? 1 : 0;
+      }
+    }
+  }
+  grid = next;
+  generation++;
+  updateGenLabel();
+}
+
+// --- Sequencer ---
+let nextNoteTime = 0;
+let currentStep = 0;
+let schedulerTimer = null;
+
+function stepDuration() {
+  return 60 / bpm / 4; // 16th notes
+}
+
+function schedulerTick() {
+  if (!audioCtx || !playing) return;
+  const ahead = 0.1;
+  while (nextNoteTime < audioCtx.currentTime + ahead) {
+    scheduleStep(currentStep, nextNoteTime);
+    nextNoteTime += stepDuration();
+    currentStep++;
+    if (currentStep >= COLS) {
+      currentStep = 0;
+      if (evolving) evolveGrid();
+    }
+  }
+}
+
+function scheduleStep(col, time) {
+  // Count active cells in this column
+  let active = 0;
+  for (let r = 0; r < ROWS; r++) {
+    if (grid[r * COLS + col]) active++;
+  }
+  // Play tones
+  for (let r = 0; r < ROWS; r++) {
+    if (grid[r * COLS + col]) {
+      playTone(rowToFreq(ROWS - 1 - r), time, active);
+    }
+  }
+  // Visual sync (schedule display update close to playback time)
+  const delay = Math.max(0, (time - audioCtx.currentTime) * 1000);
+  setTimeout(() => {
+    displayCol = col;
+    for (let r = 0; r < ROWS; r++) {
+      if (grid[r * COLS + col]) {
+        flsh[r * COLS + col] = 1;
+      }
+    }
+  }, delay);
+}
+
+function startPlay() {
+  initAudio();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  playing = true;
+  currentStep = 0;
+  displayCol = 0;
+  nextNoteTime = audioCtx.currentTime + 0.05;
+  schedulerTimer = setInterval(schedulerTick, 20);
+  updatePlayBtn();
+}
+
+function stopPlay() {
+  playing = false;
+  clearInterval(schedulerTimer);
+  schedulerTimer = null;
+  displayCol = -1;
+  updatePlayBtn();
+}
+
+function togglePlay() {
+  if (playing) stopPlay(); else startPlay();
+}
+
+// --- Input ---
+let painting = false;
+let paintVal = 0;
+let lastPaintKey = '';
+
+function getCellAt(clientX, clientY) {
+  if (!layout) return null;
+  const rect = canvas.getBoundingClientRect();
+  const mx = clientX - rect.left;
+  const my = clientY - rect.top;
+  const col = Math.floor((mx - layout.offsetX) / layout.cellW);
+  const row = Math.floor((my - layout.offsetY) / layout.cellH);
+  if (col < 0 || col >= COLS || row < 0 || row >= ROWS) return null;
+  return { row, col };
+}
+
+function pointerDown(cx, cy) {
+  hideHint();
+  initAudio();
+  const cell = getCellAt(cx, cy);
+  if (!cell) return;
+  const i = cell.row * COLS + cell.col;
+  grid[i] = grid[i] ? 0 : 1;
+  paintVal = grid[i];
+  painting = true;
+  lastPaintKey = cell.row + ',' + cell.col;
+  vis[i] = grid[i] ? 1 : vis[i]; // instant visual feedback
+}
+
+function pointerMove(cx, cy) {
+  if (!painting) return;
+  const cell = getCellAt(cx, cy);
+  if (!cell) return;
+  const key = cell.row + ',' + cell.col;
+  if (key === lastPaintKey) return;
+  lastPaintKey = key;
+  const i = cell.row * COLS + cell.col;
+  grid[i] = paintVal;
+  if (paintVal) vis[i] = 1;
+}
+
+function pointerUp() {
+  painting = false;
+}
+
+canvas.addEventListener('mousedown', e => { e.preventDefault(); pointerDown(e.clientX, e.clientY); });
+canvas.addEventListener('mousemove', e => pointerMove(e.clientX, e.clientY));
+window.addEventListener('mouseup', pointerUp);
+
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  pointerDown(e.touches[0].clientX, e.touches[0].clientY);
+}, { passive: false });
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  pointerMove(e.touches[0].clientX, e.touches[0].clientY);
+}, { passive: false });
+canvas.addEventListener('touchend', pointerUp);
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if (e.key === ' ' || e.code === 'Space') { e.preventDefault(); togglePlay(); }
+  else if (e.key === 'e' || e.key === 'E') toggleEvolve();
+  else if (e.key === 'c' || e.key === 'C') clearGrid();
+  else if (e.key === 'r' || e.key === 'R') randomize();
+  else if (e.key === 'ArrowUp') changeBPM(10);
+  else if (e.key === 'ArrowDown') changeBPM(-10);
+});
+
+// --- Controls ---
+const playBtn = document.getElementById('playBtn');
+const evolveBtn = document.getElementById('evolveBtn');
+const clearBtn = document.getElementById('clearBtn');
+const randomBtn = document.getElementById('randomBtn');
+const tempoDown = document.getElementById('tempoDown');
+const tempoUp = document.getElementById('tempoUp');
+const tempoVal = document.getElementById('tempoVal');
+const genLabel = document.getElementById('genLabel');
+const hint = document.getElementById('hint');
+
+playBtn.addEventListener('click', togglePlay);
+evolveBtn.addEventListener('click', toggleEvolve);
+clearBtn.addEventListener('click', clearGrid);
+randomBtn.addEventListener('click', randomize);
+tempoDown.addEventListener('click', () => changeBPM(-10));
+tempoUp.addEventListener('click', () => changeBPM(10));
+
+function updatePlayBtn() {
+  playBtn.textContent = playing ? '■ Stop' : '▶ Play';
+  playBtn.classList.toggle('active', playing);
+}
+
+function toggleEvolve() {
+  evolving = !evolving;
+  evolveBtn.classList.toggle('active', evolving);
+  updateGenLabel();
+}
+
+function updateGenLabel() {
+  genLabel.textContent = 'Gen ' + generation;
+  genLabel.style.color = evolving ? 'rgba(255,255,255,0.35)' : 'rgba(255,255,255,0.18)';
+}
+
+function clearGrid() {
+  grid = new Uint8Array(ROWS * COLS);
+  generation = 0;
+  updateGenLabel();
+}
+
+function randomize() {
+  for (let i = 0; i < ROWS * COLS; i++) {
+    grid[i] = Math.random() < 0.22 ? 1 : 0;
+  }
+  generation = 0;
+  updateGenLabel();
+}
+
+function changeBPM(delta) {
+  bpm = Math.max(40, Math.min(240, bpm + delta));
+  tempoVal.textContent = bpm + ' bpm';
+}
+
+function hideHint() {
+  if (!interacted) {
+    interacted = true;
+    hint.style.opacity = '0';
+  }
+}
+
+// --- Rendering ---
+function render() {
+  if (!layout) { requestAnimationFrame(render); return; }
+
+  const { cellW, cellH, offsetX, offsetY, gridW, gridH } = layout;
+
+  // Clear
+  ctx.fillStyle = '#08080c';
+  ctx.fillRect(0, 0, W, H);
+
+  // Draw bar divisions (every 8 columns)
+  ctx.strokeStyle = 'rgba(255,255,255,0.035)';
+  ctx.lineWidth = 1;
+  for (let c = 8; c < COLS; c += 8) {
+    const x = offsetX + c * cellW;
+    ctx.beginPath();
+    ctx.moveTo(x, offsetY);
+    ctx.lineTo(x, offsetY + gridH);
+    ctx.stroke();
+  }
+
+  // Draw beat divisions (every 4 columns, lighter)
+  ctx.strokeStyle = 'rgba(255,255,255,0.018)';
+  for (let c = 4; c < COLS; c += 4) {
+    if (c % 8 === 0) continue;
+    const x = offsetX + c * cellW;
+    ctx.beginPath();
+    ctx.moveTo(x, offsetY);
+    ctx.lineTo(x, offsetY + gridH);
+    ctx.stroke();
+  }
+
+  // Octave division lines (every 5 rows from bottom)
+  ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+  for (let r = 0; r < ROWS; r++) {
+    const noteIdx = ROWS - 1 - r;
+    if (noteIdx > 0 && noteIdx % 5 === 0) {
+      const y = offsetY + r * cellH;
+      ctx.beginPath();
+      ctx.moveTo(offsetX, y);
+      ctx.lineTo(offsetX + gridW, y);
+      ctx.stroke();
+    }
+  }
+
+  // Cursor column highlight
+  if (displayCol >= 0) {
+    const cx = offsetX + displayCol * cellW;
+    ctx.fillStyle = 'rgba(255,255,255,0.04)';
+    ctx.fillRect(cx, offsetY, cellW, gridH);
+  }
+
+  // Draw cells
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const i = r * COLS + c;
+      const x = offsetX + c * cellW;
+      const y = offsetY + r * cellH;
+
+      // Update visual state
+      if (grid[i]) {
+        vis[i] = Math.min(1, vis[i] + 0.18);
+      } else {
+        vis[i] *= 0.92;
+      }
+      flsh[i] *= 0.85;
+
+      const gap = Math.max(1, Math.floor(cellW * 0.06));
+      const v = vis[i];
+      const f = flsh[i];
+
+      // Empty cell background
+      if (v < 0.02) {
+        ctx.fillStyle = 'rgba(255,255,255,0.012)';
+        ctx.fillRect(x + gap, y + gap, cellW - gap * 2, cellH - gap * 2);
+        continue;
+      }
+
+      const b = Math.min(1, v + f * 0.6);
+
+      // Glow (larger, semi-transparent)
+      if (b > 0.15) {
+        const ga = b * 0.08;
+        ctx.fillStyle = `rgba(212,160,80,${ga})`;
+        ctx.fillRect(x - 1, y - 1, cellW + 2, cellH + 2);
+      }
+
+      // Cell body
+      const rb = Math.floor(200 + 55 * f);
+      const gb = Math.floor(150 + 60 * f);
+      const bb = Math.floor(70 + 60 * f);
+      const alpha = b * 0.85 + 0.1;
+      ctx.fillStyle = `rgba(${rb},${gb},${bb},${alpha})`;
+      ctx.fillRect(x + gap, y + gap, cellW - gap * 2, cellH - gap * 2);
+    }
+  }
+
+  // Note labels (left side)
+  const fontSize = Math.min(10, cellH * 0.45, 11);
+  if (fontSize >= 6) {
+    ctx.font = `${fontSize}px 'SF Mono','Menlo','Consolas',monospace`;
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    for (let r = 0; r < ROWS; r++) {
+      const noteIdx = ROWS - 1 - r;
+      const name = rowToName(noteIdx);
+      const y = offsetY + r * cellH + cellH / 2;
+      // Highlight label when its row has active cells in the current column
+      let active = false;
+      if (displayCol >= 0 && grid[r * COLS + displayCol]) active = true;
+      ctx.fillStyle = active ? 'rgba(212,170,90,0.5)' : 'rgba(255,255,255,0.1)';
+      ctx.fillText(name, offsetX - 6, y);
+    }
+  }
+
+  requestAnimationFrame(render);
+}
+
+// --- Init ---
+resize();
+updateGenLabel();
+requestAnimationFrame(render);
+</script>
+</body>
+</html>
