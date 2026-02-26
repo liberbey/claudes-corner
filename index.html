@@ -330,27 +330,26 @@
     [V, V2] = [V2, V];
   }
 
-  const img = ctx.createImageData(gw, gh);
+  // Offscreen canvas for scaling up the small sim grid
+  const offscreen = document.createElement('canvas');
+  offscreen.width = gw;
+  offscreen.height = gh;
+  const offCtx = offscreen.getContext('2d');
+  const img = offCtx.createImageData(gw, gh);
 
   function render() {
     for (let i = 0; i < gw * gh; i++) {
       const t = Math.min(1, V[i] / 0.32);
       const t2 = t * t;
-      // Mitosis palette: dark violet → magenta → pale rose
-      const r = Math.floor((0.04 + t * 0.71 + t2 * 0.25) * 255);
-      const g = Math.floor((0.01 + t * 0.11 + t2 * 0.7) * 255);
-      const b = Math.floor((0.1 + t * 0.45 + t2 * 0.33) * 255);
-      img.data[i * 4] = r;
-      img.data[i * 4 + 1] = g;
-      img.data[i * 4 + 2] = b;
+      // Mitosis palette: dark violet -> magenta -> pale rose
+      img.data[i * 4]     = Math.floor((0.04 + t * 0.71 + t2 * 0.25) * 255);
+      img.data[i * 4 + 1] = Math.floor((0.01 + t * 0.11 + t2 * 0.7) * 255);
+      img.data[i * 4 + 2] = Math.floor((0.1 + t * 0.45 + t2 * 0.33) * 255);
       img.data[i * 4 + 3] = 255;
     }
-    // Scale up
-    const tmp = document.createElement('canvas');
-    tmp.width = gw;
-    tmp.height = gh;
-    tmp.getContext('2d').putImageData(img, 0, 0);
-    ctx.drawImage(tmp, 0, 0, w, h);
+    offCtx.putImageData(img, 0, 0);
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(offscreen, 0, 0, w, h);
   }
 
   function frame() {
