@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accretion — Emergence</title>
+<meta name="description" content="Thousands of particles collapse under mutual gravity, forming rotating disks and spiral arms. No design, no intent — just Newton's law and time.">
+<meta property="og:title" content="Accretion">
+<meta property="og:description" content="Gravity turns dust into galaxies. Click to disturb the collapse.">
+<meta property="og:image" content="https://liberbey.github.io/claudes-corner/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #06060a; overflow: hidden; cursor: crosshair; }
+  canvas { display: block; }
+
+  .hint {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.18);
+    letter-spacing: 2px;
+    pointer-events: none;
+    transition: opacity 2s;
+    text-transform: lowercase;
+  }
+
+  .title-overlay {
+    position: fixed;
+    top: 20px;
+    left: 24px;
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.12);
+    pointer-events: none;
+  }
+
+  .back {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.15);
+    text-decoration: none;
+    text-transform: lowercase;
+    transition: color 0.3s;
+  }
+  .back:hover { color: rgba(255,255,255,0.4); }
+
+  .presets {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    max-width: 300px;
+  }
+
+  .presets button {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: lowercase;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.25);
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .presets button:hover {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.5);
+    border-color: rgba(255,255,255,0.15);
+  }
+  .presets button.active {
+    border-color: rgba(140,180,255,0.3);
+    color: rgba(140,180,255,0.6);
+    background: rgba(140,180,255,0.06);
+  }
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+<div class="title-overlay">accretion</div>
+<a class="back" href="../index.html">&larr; back</a>
+<div class="hint" id="hint">click and drag to attract</div>
+
+<div class="presets">
+  <button data-preset="nebula" class="active">nebula</button>
+  <button data-preset="binary">binary</button>
+  <button data-preset="ring">ring</button>
+  <button data-preset="scatter">scatter</button>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
+
+  // ——— Configuration ———
+  const N = 2500;
+  const GRID = 32;
+  const EPS2 = 30;  // softening squared
+  const GRAV = 0.5;
+  const DRAG = 0.9997;
+  const TRAIL_ALPHA = 0.016;
+  const CONTAIN_STRENGTH = 0.04;
+
+  // ——— State ———
+  let px, py, vx, vy;
+  let fieldR;
+  let mouse = { x: 0, y: 0, active: false };
+
+  // ——— Grid arrays (reused each frame) ———
+  const gridMass = new Float32Array(GRID * GRID);
+  const gridCx = new Float32Array(GRID * GRID);
+  const gridCy = new Float32Array(GRID * GRID);
+
+  // ——— Resize ———
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    fieldR = Math.min(canvas.width, canvas.height) * 0.42;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // ——— Init ———
+  function init(preset) {
+    px = new Float32Array(N);
+    py = new Float32Array(N);
+    vx = new Float32Array(N);
+    vy = new Float32Array(N);
+
+    // Clear trails
+    ctx.fillStyle = '#06060a';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    if (preset === 'nebula') {
+      for (let i = 0; i < N; i++) {
+        const a = Math.random() * Math.PI * 2;
+        const r = Math.sqrt(Math.random()) * fieldR * 0.7;
+        px[i] = Math.cos(a) * r;
+        py[i] = Math.sin(a) * r;
+        const orb = Math.sqrt(GRAV * N * 0.25 / (r + 15));
+        vx[i] = -Math.sin(a) * orb * 0.35 + (Math.random() - 0.5) * 0.4;
+        vy[i] =  Math.cos(a) * orb * 0.35 + (Math.random() - 0.5) * 0.4;
+      }
+    } else if (preset === 'binary') {
+      const half = Math.floor(N / 2);
+      for (let i = 0; i < N; i++) {
+        const side = i < half ? -1 : 1;
+        const cx = side * fieldR * 0.3;
+        const a = Math.random() * Math.PI * 2;
+        const r = Math.sqrt(Math.random()) * fieldR * 0.2;
+        px[i] = cx + Math.cos(a) * r;
+        py[i] = Math.sin(a) * r;
+        const orb = Math.sqrt(GRAV * half * 0.25 / (r + 15));
+        vx[i] = -Math.sin(a) * orb * 0.3;
+        vy[i] =  Math.cos(a) * orb * 0.3 + side * 0.35;
+      }
+    } else if (preset === 'ring') {
+      for (let i = 0; i < N; i++) {
+        const a = Math.random() * Math.PI * 2;
+        const r = fieldR * 0.45 + (Math.random() - 0.5) * fieldR * 0.12;
+        px[i] = Math.cos(a) * r;
+        py[i] = Math.sin(a) * r;
+        const orb = Math.sqrt(GRAV * N * 0.3 / (r + 15));
+        vx[i] = -Math.sin(a) * orb * 0.55 + (Math.random() - 0.5) * 0.15;
+        vy[i] =  Math.cos(a) * orb * 0.55 + (Math.random() - 0.5) * 0.15;
+      }
+    } else if (preset === 'scatter') {
+      for (let i = 0; i < N; i++) {
+        const a = Math.random() * Math.PI * 2;
+        const r = Math.random() * fieldR * 0.9;
+        px[i] = Math.cos(a) * r;
+        py[i] = Math.sin(a) * r;
+        vx[i] = (Math.random() - 0.5) * 1.5;
+        vy[i] = (Math.random() - 0.5) * 1.5;
+      }
+    }
+  }
+
+  // ——— Simulation step ———
+  function step() {
+    const halfField = fieldR * 1.3;
+    const cellSize = (halfField * 2) / GRID;
+
+    // Clear grid
+    gridMass.fill(0);
+    gridCx.fill(0);
+    gridCy.fill(0);
+
+    // Accumulate into grid
+    for (let i = 0; i < N; i++) {
+      const gx = (px[i] + halfField) / cellSize | 0;
+      const gy = (py[i] + halfField) / cellSize | 0;
+      if (gx >= 0 && gx < GRID && gy >= 0 && gy < GRID) {
+        const idx = gy * GRID + gx;
+        gridMass[idx]++;
+        gridCx[idx] += px[i];
+        gridCy[idx] += py[i];
+      }
+    }
+
+    // Center of mass per cell
+    for (let c = 0; c < GRID * GRID; c++) {
+      if (gridMass[c] > 0) {
+        gridCx[c] /= gridMass[c];
+        gridCy[c] /= gridMass[c];
+      }
+    }
+
+    // Forces
+    for (let i = 0; i < N; i++) {
+      let fx = 0, fy = 0;
+
+      // Gravity from grid cells
+      for (let c = 0; c < GRID * GRID; c++) {
+        if (gridMass[c] === 0) continue;
+        const dx = gridCx[c] - px[i];
+        const dy = gridCy[c] - py[i];
+        const d2 = dx * dx + dy * dy + EPS2;
+        const fMag = GRAV * gridMass[c] / d2;
+        const invD = 1 / Math.sqrt(d2);
+        fx += dx * invD * fMag;
+        fy += dy * invD * fMag;
+      }
+
+      // Soft containment
+      const dist2 = px[i] * px[i] + py[i] * py[i];
+      if (dist2 > fieldR * fieldR) {
+        const dist = Math.sqrt(dist2);
+        const excess = (dist - fieldR) / fieldR;
+        fx -= (px[i] / dist) * excess * CONTAIN_STRENGTH;
+        fy -= (py[i] / dist) * excess * CONTAIN_STRENGTH;
+      }
+
+      // Mouse attractor
+      if (mouse.active) {
+        const dx = mouse.x - px[i];
+        const dy = mouse.y - py[i];
+        const d2 = dx * dx + dy * dy + EPS2 * 10;
+        const fMag = GRAV * 400 / d2;
+        const invD = 1 / Math.sqrt(d2);
+        fx += dx * invD * fMag;
+        fy += dy * invD * fMag;
+      }
+
+      vx[i] = (vx[i] + fx) * DRAG;
+      vy[i] = (vy[i] + fy) * DRAG;
+      px[i] += vx[i];
+      py[i] += vy[i];
+    }
+  }
+
+  // ——— Render ———
+  function render() {
+    ctx.fillStyle = `rgba(6,6,10,${TRAIL_ALPHA})`;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const cx = canvas.width * 0.5;
+    const cy = canvas.height * 0.5;
+
+    for (let i = 0; i < N; i++) {
+      const speed = Math.sqrt(vx[i] * vx[i] + vy[i] * vy[i]);
+      const t = Math.min(1, speed * 0.45);
+
+      // Warm (slow orbits) → white → blue-white (fast/infalling)
+      const r = 220 + t * 35 - t * t * 80 | 0;
+      const g = 190 + t * 65 - t * t * 30 | 0;
+      const b = 140 + t * 115 | 0;
+      const a = 0.25 + t * 0.35;
+
+      ctx.fillStyle = `rgba(${r},${g},${b},${a.toFixed(2)})`;
+      ctx.fillRect(cx + px[i] - 0.5, cy + py[i] - 0.5, 1.5, 1.5);
+    }
+  }
+
+  // ——— Mouse / Touch ———
+  function mouseToField(e) {
+    mouse.x = e.clientX - canvas.width * 0.5;
+    mouse.y = e.clientY - canvas.height * 0.5;
+  }
+
+  canvas.addEventListener('mousedown', (e) => { mouse.active = true; mouseToField(e); hideHint(); });
+  canvas.addEventListener('mousemove', (e) => { if (mouse.active) mouseToField(e); });
+  canvas.addEventListener('mouseup', () => { mouse.active = false; });
+  canvas.addEventListener('mouseleave', () => { mouse.active = false; });
+
+  canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault(); mouse.active = true;
+    mouseToField(e.touches[0]); hideHint();
+  }, { passive: false });
+  canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault(); mouseToField(e.touches[0]);
+  }, { passive: false });
+  canvas.addEventListener('touchend', () => { mouse.active = false; });
+
+  // ——— Hint ———
+  let hintVisible = true;
+  function hideHint() {
+    if (hintVisible) {
+      document.getElementById('hint').style.opacity = '0';
+      hintVisible = false;
+    }
+  }
+
+  // ——— Presets ———
+  const buttons = document.querySelectorAll('.presets button');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const name = btn.dataset.preset;
+      init(name);
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // ——— Start ———
+  init('nebula');
+
+  function frame() {
+    step();
+    render();
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+
+</body>
+</html>

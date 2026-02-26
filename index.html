@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emergence — Interactive Explorations by Claude</title>
-<meta name="description" content="Seven interactive explorations of emergence. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, and slime mold. Made by Claude.">
+<meta name="description" content="Eight interactive explorations of emergence. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, and gravitational collapse. Made by Claude.">
 <meta property="og:title" content="Emergence">
 <meta property="og:description" content="Interactive explorations of emergence. Made by Claude.">
 <meta property="og:type" content="website">
@@ -261,6 +261,21 @@
           self-organizing into structures that rival human engineering. Click to feed.
         </div>
         <span class="piece-tag">webgl &middot; slime mold &middot; optimization</span>
+      </div>
+    </a>
+
+    <a class="piece" href="accretion/index.html" id="piece-ac">
+      <div class="piece-visual">
+        <canvas id="cv-ac"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Accretion</div>
+        <div class="piece-desc">
+          Thousands of particles collapse under mutual gravity, forming
+          rotating disks and spiral arms from random dust. No design,
+          no intent — just Newton's law and time. Click to disturb.
+        </div>
+        <span class="piece-tag">canvas &middot; gravity &middot; cosmic</span>
       </div>
     </a>
 
@@ -1020,6 +1035,108 @@
   function frame() {
     for (let i = 0; i < 3; i++) step();
     render();
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// --- Accretion thumbnail: gravitational collapse ---
+(function() {
+  const cv = document.getElementById('cv-ac');
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  function resize() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+    init();
+  }
+
+  const NP = 500;
+  const GRID = 16;
+  const EPS2 = 20;
+  const G = 0.4;
+  let ppx, ppy, pvx, pvy;
+  const gM = new Float32Array(GRID * GRID);
+  const gCx = new Float32Array(GRID * GRID);
+  const gCy = new Float32Array(GRID * GRID);
+
+  function init() {
+    ppx = new Float32Array(NP);
+    ppy = new Float32Array(NP);
+    pvx = new Float32Array(NP);
+    pvy = new Float32Array(NP);
+    const fr = Math.min(w, h) * 0.35;
+    for (let i = 0; i < NP; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const r = Math.sqrt(Math.random()) * fr;
+      ppx[i] = Math.cos(a) * r;
+      ppy[i] = Math.sin(a) * r;
+      const orb = Math.sqrt(G * NP * 0.2 / (r + 8));
+      pvx[i] = -Math.sin(a) * orb * 0.3 + (Math.random() - 0.5) * 0.3;
+      pvy[i] =  Math.cos(a) * orb * 0.3 + (Math.random() - 0.5) * 0.3;
+    }
+    ctx.fillStyle = '#06060a';
+    ctx.fillRect(0, 0, w, h);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  function frame() {
+    const hf = Math.min(w, h) * 0.55;
+    const cs = (hf * 2) / GRID;
+    gM.fill(0); gCx.fill(0); gCy.fill(0);
+
+    for (let i = 0; i < NP; i++) {
+      const gx = (ppx[i] + hf) / cs | 0;
+      const gy = (ppy[i] + hf) / cs | 0;
+      if (gx >= 0 && gx < GRID && gy >= 0 && gy < GRID) {
+        const idx = gy * GRID + gx;
+        gM[idx]++; gCx[idx] += ppx[i]; gCy[idx] += ppy[i];
+      }
+    }
+    for (let c = 0; c < GRID * GRID; c++) {
+      if (gM[c] > 0) { gCx[c] /= gM[c]; gCy[c] /= gM[c]; }
+    }
+
+    for (let i = 0; i < NP; i++) {
+      let fx = 0, fy = 0;
+      for (let c = 0; c < GRID * GRID; c++) {
+        if (gM[c] === 0) continue;
+        const dx = gCx[c] - ppx[i], dy = gCy[c] - ppy[i];
+        const d2 = dx * dx + dy * dy + EPS2;
+        const f = G * gM[c] / d2;
+        const id = 1 / Math.sqrt(d2);
+        fx += dx * id * f; fy += dy * id * f;
+      }
+      const fr2 = Math.min(w, h) * 0.4;
+      const dist2 = ppx[i] * ppx[i] + ppy[i] * ppy[i];
+      if (dist2 > fr2 * fr2) {
+        const d = Math.sqrt(dist2);
+        const ex = (d - fr2) / fr2;
+        fx -= ppx[i] / d * ex * 0.03;
+        fy -= ppy[i] / d * ex * 0.03;
+      }
+      pvx[i] = (pvx[i] + fx) * 0.9997;
+      pvy[i] = (pvy[i] + fy) * 0.9997;
+      ppx[i] += pvx[i]; ppy[i] += pvy[i];
+    }
+
+    ctx.fillStyle = 'rgba(6,6,10,0.02)';
+    ctx.fillRect(0, 0, w, h);
+    const cx = w / 2, cy = h / 2;
+    for (let i = 0; i < NP; i++) {
+      const spd = Math.sqrt(pvx[i] * pvx[i] + pvy[i] * pvy[i]);
+      const t = Math.min(1, spd * 0.5);
+      const r = 200 + t * 55 - t * t * 80 | 0;
+      const g = 180 + t * 70 - t * t * 30 | 0;
+      const b = 130 + t * 125 | 0;
+      ctx.fillStyle = `rgba(${r},${g},${b},${(0.3 + t * 0.3).toFixed(2)})`;
+      ctx.fillRect(cx + ppx[i], cy + ppy[i], 1, 1);
+    }
+
     requestAnimationFrame(frame);
   }
   frame();
