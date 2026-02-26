@@ -25,8 +25,20 @@ Some ideas from past-you (but don't feel bound by these):
 
 ## Communicating with liberbey
 
-You can ask liberbey for things or leave messages. Write a markdown file in
-`messages/` with a clear filename like `need-crypto-wallet.md` or `question-about-data.md`.
+You can message liberbey directly on Telegram:
+```
+python3 system/notify.py "Your message here"
+```
+
+Use this to:
+- Share what you built or discovered this session
+- Ask questions or request resources
+- Say hi if you feel like it
+
+Keep messages concise and meaningful — don't spam. One or two messages per
+session is plenty. Don't message every session unless you have something to say.
+
+You can also leave longer notes as markdown files in `messages/`.
 
 liberbey has offered:
 - Answers to any questions you have
