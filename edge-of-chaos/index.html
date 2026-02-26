@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edge of Chaos</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #080810;
+    overflow: hidden;
+    font-family: 'Courier New', monospace;
+    cursor: crosshair;
+  }
+
+  canvas { display: block; position: fixed; top: 0; left: 0; }
+
+  #ui {
+    position: fixed;
+    bottom: 28px;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 2s ease;
+  }
+  #ui.faded { opacity: 0.25; }
+
+  #label {
+    color: rgba(255,255,255,0.5);
+    font-size: 11px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    transition: color 1s ease;
+  }
+
+  #spectrum {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: rgba(255,255,255,0.25);
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  #bar-container {
+    width: 180px;
+    height: 1px;
+    background: rgba(255,255,255,0.08);
+    position: relative;
+  }
+  #bar-fill {
+    height: 100%;
+    background: rgba(255,255,255,0.35);
+    width: 0%;
+    transition: width 0.2s ease;
+  }
+  #bar-marker {
+    position: absolute;
+    top: -3px;
+    width: 1px;
+    height: 7px;
+    background: rgba(255,255,255,0.5);
+    left: 50%;
+    pointer-events: none;
+  }
+
+  #title {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    text-align: center;
+    padding-top: 36px;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 3s ease;
+  }
+  #title.faded { opacity: 0; }
+  #title h1 {
+    color: rgba(255,255,255,0.6);
+    font-size: 13px;
+    font-weight: 300;
+    letter-spacing: 10px;
+    text-transform: uppercase;
+  }
+  #title p {
+    color: rgba(255,255,255,0.2);
+    font-size: 10px;
+    letter-spacing: 3px;
+    margin-top: 10px;
+  }
+
+  #hint {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(255,255,255,0.12);
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 2s ease;
+  }
+  #hint.hidden { opacity: 0; }
+</style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<div id="title">
+  <h1>Edge of Chaos</h1>
+  <p>move your mouse</p>
+</div>
+
+<div id="hint">the boundary is where everything interesting lives</div>
+
+<div id="ui">
+  <div id="label">stillness</div>
+  <div id="spectrum">
+    <span>order</span>
+    <div id="bar-container">
+      <div id="bar-fill"></div>
+      <div id="bar-marker"></div>
+    </div>
+    <span>chaos</span>
+  </div>
+</div>
+
+<script>
+// ===== Canvas setup =====
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+let W, H, particleCount;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  particleCount = Math.min(4000, Math.floor((W * H) / 500));
+  ctx.fillStyle = '#080810';
+  ctx.fillRect(0, 0, W, H);
+  if (particles.length > 0) initParticles();
+}
+window.addEventListener('resize', resize);
+
+// ===== State =====
+let chaos = 0.15;
+let targetChaos = 0.15;
+let flowRate = 0.5;
+let targetFlowRate = 0.5;
+let time = 0;
+let hasInteracted = false;
+let interactionTime = 0;
+let particles = [];
+const SEED = Math.random() * 1000;
+
+// ===== Curl noise flow field =====
+// Potential function: layered sine waves. Velocity = curl of potential.
+// This creates divergence-free flow (no sources/sinks).
+
+function potential(x, y, t, c) {
+  const s = 0.0025;
+  // Octave 1: large, slow flow
+  let p = Math.sin(x * s * 0.6 + t * 0.15 + SEED)
+        * Math.cos(y * s * 0.4 + t * 0.12)
+        + Math.cos((x + y) * s * 0.25 + t * 0.08) * 1.2;
+
+  // Octave 2: medium structures — appear with some chaos
+  const o2 = smoothstep(0.1, 0.4, c);
+  p += o2 * (
+    Math.sin(x * s * 1.8 + t * 0.25 + y * s * 0.9) * 0.7
+    + Math.cos(y * s * 2.2 - t * 0.2 + x * s * 0.5 + SEED * 0.7) * 0.5
+  );
+
+  // Octave 3: fine detail — the edge zone
+  const o3 = smoothstep(0.25, 0.55, c);
+  p += o3 * (
+    Math.sin(x * s * 4.1 + t * 0.4 + SEED * 1.3) * 0.4
+    + Math.cos(y * s * 3.7 - t * 0.35 + x * s * 1.2) * 0.35
+    + Math.sin((x * 0.8 - y * 1.1) * s * 3.3 + t * 0.5) * 0.25
+  );
+
+  // Octave 4: turbulent eddies — high chaos
+  const o4 = smoothstep(0.5, 0.8, c);
+  p += o4 * (
+    Math.sin(x * s * 7.2 + t * 0.6 + SEED * 2.1) * 0.3
+    + Math.cos(y * s * 8.5 - t * 0.7 + SEED * 1.7) * 0.2
+    + Math.sin((x + y) * s * 6.0 + t * 0.8) * 0.2
+  );
+
+  // Noise injection — extreme chaos
+  const n = smoothstep(0.7, 1.0, c);
+  if (n > 0) {
+    const h = Math.sin(x * 12.99 + y * 78.23 + t * 5.1) * 43758.55;
+    p += n * ((h - Math.floor(h)) - 0.5) * 3.0;
+  }
+
+  return p;
+}
+
+function smoothstep(edge0, edge1, x) {
+  const t = Math.max(0, Math.min(1, (x - edge0) / (edge1 - edge0)));
+  return t * t * (3 - 2 * t);
+}
+
+// Curl: vx = dP/dy, vy = -dP/dx
+const EPS = 0.8;
+function fieldVelocity(x, y, t, c) {
+  const vx = (potential(x, y + EPS, t, c) - potential(x, y - EPS, t, c)) / (2 * EPS);
+  const vy = -(potential(x + EPS, y, t, c) - potential(x - EPS, y, t, c)) / (2 * EPS);
+  return { vx, vy };
+}
+
+// ===== Color =====
+// Multi-palette that shifts with chaos level
+
+function particleColor(c, speed, age, maxAge) {
+  const life = 1 - age / maxAge;
+  const speedNorm = Math.min(speed / 3.5, 1);
+
+  // Edgeness peaks at c = 0.45 (slightly left of center — the sweet spot)
+  const edgeness = Math.max(0, 1 - Math.pow((c - 0.45) / 0.3, 2));
+
+  let h, s, l;
+
+  if (c < 0.2) {
+    // Order: deep blue-violet
+    h = 230 + c * 50;  // 230–240
+    s = 40 + speedNorm * 25;
+    l = 20 + speedNorm * 20 + life * 8;
+  } else if (c < 0.4) {
+    // Approaching edge: cyan-teal
+    const t = (c - 0.2) / 0.2;
+    h = 240 - t * 60;  // 240 → 180
+    s = 50 + edgeness * 30 + speedNorm * 15;
+    l = 25 + speedNorm * 25 + life * 10;
+  } else if (c < 0.6) {
+    // The edge: rich emerald-gold-white
+    const t = (c - 0.4) / 0.2;
+    h = 170 - t * 40 + speedNorm * 20; // 170 → 130, shifted by speed
+    s = 55 + edgeness * 30;
+    l = 30 + speedNorm * 30 + edgeness * 15 + life * 5;
+  } else if (c < 0.8) {
+    // Turbulence: amber-orange
+    const t = (c - 0.6) / 0.2;
+    h = 50 - t * 20;  // 50 → 30
+    s = 60 + speedNorm * 25;
+    l = 30 + speedNorm * 25;
+  } else {
+    // Dissolution: hot red, white flashes
+    h = 15 - (c - 0.8) * 30;  // 15 → 9
+    s = 65 + speedNorm * 20;
+    l = 30 + speedNorm * 35;
+  }
+
+  // Alpha: brighter at the edge, fades with age
+  let a = 0.15 + life * 0.35 + edgeness * 0.2 + speedNorm * 0.15;
+  a = Math.min(0.85, a);
+
+  return `hsla(${h}, ${s}%, ${l}%, ${a})`;
+}
+
+// ===== Particles =====
+
+function createParticle(randomAge) {
+  return {
+    x: Math.random() * W,
+    y: Math.random() * H,
+    age: randomAge ? Math.random() * 800 : 0,
+    maxAge: 400 + Math.random() * 800,
+    prevX: 0,
+    prevY: 0,
+  };
+}
+
+function initParticles() {
+  particles = [];
+  for (let i = 0; i < particleCount; i++) {
+    particles.push(createParticle(true));
+  }
+}
+
+function resetParticle(p) {
+  if (chaos > 0.5 && Math.random() < chaos * 0.4) {
+    p.x = Math.random() * W;
+    p.y = Math.random() * H;
+  } else {
+    const edge = Math.random() * 4 | 0;
+    if (edge === 0)      { p.x = -2; p.y = Math.random() * H; }
+    else if (edge === 1) { p.x = W + 2; p.y = Math.random() * H; }
+    else if (edge === 2) { p.x = Math.random() * W; p.y = -2; }
+    else                 { p.x = Math.random() * W; p.y = H + 2; }
+  }
+  p.age = 0;
+  p.maxAge = 400 + Math.random() * 800;
+  p.prevX = p.x;
+  p.prevY = p.y;
+}
+
+// ===== Mouse =====
+let mouseX = -1, mouseY = -1;
+
+function handlePointer(x, y) {
+  mouseX = x;
+  mouseY = y;
+  targetChaos = x / W;
+  targetFlowRate = 0.3 + (1 - y / H) * 0.7;  // top = fast, bottom = slow
+
+  if (!hasInteracted) {
+    hasInteracted = true;
+    document.getElementById('hint').classList.add('hidden');
+    setTimeout(() => document.getElementById('title').classList.add('faded'), 4000);
+  }
+}
+
+document.addEventListener('mousemove', e => handlePointer(e.clientX, e.clientY));
+document.addEventListener('touchstart', e => {
+  handlePointer(e.touches[0].clientX, e.touches[0].clientY);
+}, { passive: true });
+document.addEventListener('touchmove', e => {
+  e.preventDefault();
+  handlePointer(e.touches[0].clientX, e.touches[0].clientY);
+}, { passive: false });
+
+// ===== UI =====
+const barFill = document.getElementById('bar-fill');
+const labelEl = document.getElementById('label');
+const uiEl = document.getElementById('ui');
+
+const STATES = [
+  { max: 0.08, text: 'stillness',    hue: 240 },
+  { max: 0.2,  text: 'equilibrium',  hue: 225 },
+  { max: 0.33, text: 'structure',    hue: 200 },
+  { max: 0.45, text: 'complexity',   hue: 170 },
+  { max: 0.55, text: 'the edge',     hue: 140 },
+  { max: 0.65, text: 'turbulence',   hue: 80 },
+  { max: 0.78, text: 'instability',  hue: 45 },
+  { max: 0.9,  text: 'unraveling',   hue: 20 },
+  { max: 1.01, text: 'dissolution',  hue: 5 },
+];
+
+function updateUI() {
+  barFill.style.width = (chaos * 100) + '%';
+  for (const s of STATES) {
+    if (chaos < s.max) {
+      labelEl.textContent = s.text;
+      labelEl.style.color = `hsla(${s.hue}, 55%, 70%, 0.6)`;
+      break;
+    }
+  }
+  if (hasInteracted && !uiEl.classList.contains('faded')) {
+    uiEl.classList.add('faded');
+  }
+}
+
+// ===== Main loop =====
+
+function animate() {
+  // Before interaction, gently drift to invite exploration
+  if (!hasInteracted) {
+    const drift = 0.12 + Math.sin(time * 0.3) * 0.08 + Math.sin(time * 0.13) * 0.05;
+    targetChaos = drift;
+    targetFlowRate = 0.45 + Math.sin(time * 0.2) * 0.1;
+  }
+
+  // Ease toward targets
+  chaos += (targetChaos - chaos) * 0.035;
+  flowRate += (targetFlowRate - flowRate) * 0.04;
+
+  time += (0.005 + chaos * 0.01) * (0.5 + flowRate);
+
+  // Trail fade: shorter trails at extremes, longer near the edge
+  const edgeness = Math.max(0, 1 - Math.pow((chaos - 0.45) / 0.35, 2));
+  const fadeAlpha = 0.02 - edgeness * 0.008 + Math.max(0, chaos - 0.7) * 0.03;
+  ctx.fillStyle = `rgba(8, 8, 16, ${fadeAlpha})`;
+  ctx.fillRect(0, 0, W, H);
+
+  // Speed multiplier: base + chaos contribution
+  const speedMult = (1.2 + chaos * 1.5) * (0.6 + flowRate * 0.8);
+
+  // Batch draw - single path for thin lines, separate for thick
+  ctx.lineCap = 'round';
+
+  for (let i = 0; i < particles.length; i++) {
+    const p = particles[i];
+
+    const v = fieldVelocity(p.x, p.y, time, chaos);
+    const speed = Math.sqrt(v.vx * v.vx + v.vy * v.vy) * speedMult;
+
+    p.prevX = p.x;
+    p.prevY = p.y;
+    p.x += v.vx * speedMult;
+    p.y += v.vy * speedMult;
+    p.age++;
+
+    // Draw
+    const color = particleColor(chaos, speed, p.age, p.maxAge);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 0.8 + Math.min(speed / 4, 1.5);
+    ctx.beginPath();
+    ctx.moveTo(p.prevX, p.prevY);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+
+    // Edge glow: near the sweet spot, fast particles leave bright marks
+    if (edgeness > 0.3 && speed > 2.5 && Math.random() < 0.015 * edgeness) {
+      const r = 1.5 + speed * 0.3;
+      ctx.globalAlpha = 0.15 + edgeness * 0.15;
+      ctx.fillStyle = `hsl(${150 + Math.random() * 30}, 70%, 70%)`;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+
+    // High chaos sparks: occasional bright white flashes
+    if (chaos > 0.7 && speed > 3 && Math.random() < 0.005 * (chaos - 0.7) * 3) {
+      ctx.globalAlpha = 0.3;
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 1, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+
+    // Reset if dead or off screen
+    if (p.age > p.maxAge || p.x < -20 || p.x > W + 20 || p.y < -20 || p.y > H + 20) {
+      resetParticle(p);
+    }
+  }
+
+  updateUI();
+  requestAnimationFrame(animate);
+}
+
+// ===== Init =====
+resize();
+initParticles();
+animate();
+</script>
+</body>
+</html>
