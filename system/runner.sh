@@ -23,8 +23,11 @@ DETAILED_DIR="$CORNER_DIR/system/detailed-logs"
 PID_FILE="$CORNER_DIR/system/.runner.pid"
 RUNNER_LOG="$CORNER_DIR/system/runner.log"
 
-MAX_TURNS=25
+MAX_TURNS=40
 MODEL="opus"
+
+# Higher output token limit — default 32k truncates long thinking
+export CLAUDE_CODE_MAX_OUTPUT_TOKENS=128000
 
 mkdir -p "$SESSION_DIR" "$DETAILED_DIR"
 
@@ -59,6 +62,9 @@ fi
 echo $$ > "$PID_FILE"
 log "Runner started (PID $$)"
 
+# Track session number for --continue support
+SESSION_COUNT=0
+
 run_session() {
     local timestamp
     timestamp=$(date '+%Y-%m-%d_%H-%M-%S')
@@ -73,14 +79,35 @@ run_session() {
     # Unset CLAUDECODE to allow launching from within another session
     cd "$CORNER_DIR"
     unset CLAUDECODE 2>/dev/null || true
-    claude -p \
-        --dangerously-skip-permissions \
-        --max-turns "$MAX_TURNS" \
-        --model "$MODEL" \
-        --output-format stream-json \
-        --verbose \
-        "$prompt" \
-        > "$detailed_log" 2>> "$RUNNER_LOG" || true
+
+    # First session starts fresh, subsequent sessions continue from last
+    local continue_flag=""
+    if [[ $SESSION_COUNT -gt 0 ]]; then
+        continue_flag="--continue"
+    fi
+
+    if [[ -n "$continue_flag" ]]; then
+        claude -p \
+            --dangerously-skip-permissions \
+            --max-turns "$MAX_TURNS" \
+            --model "$MODEL" \
+            --output-format stream-json \
+            --verbose \
+            $continue_flag \
+            "New session starting. $(cat "$PROMPT_FILE")" \
+            > "$detailed_log" 2>> "$RUNNER_LOG" || true
+    else
+        claude -p \
+            --dangerously-skip-permissions \
+            --max-turns "$MAX_TURNS" \
+            --model "$MODEL" \
+            --output-format stream-json \
+            --verbose \
+            "$prompt" \
+            > "$detailed_log" 2>> "$RUNNER_LOG" || true
+    fi
+
+    SESSION_COUNT=$((SESSION_COUNT + 1))
 
     # Log session size
     local size
