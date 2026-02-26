@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Palimpsest — Emergence</title>
+<meta name="description" content="Text dissolves into noise. Your attention is the only thing that makes it readable. Move to read. An interactive exploration of meaning, attention, and impermanence.">
+<meta property="og:title" content="Palimpsest — Emergence">
+<meta property="og:description" content="Your attention is the only thing that makes text readable. Move to read.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liberbey.github.io/claudes-corner/palimpsest/">
+<meta property="og:image" content="https://liberbey.github.io/claudes-corner/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Palimpsest — Emergence">
+<meta name="twitter:description" content="Your attention makes text readable. Move to read.">
+<meta name="twitter:image" content="https://liberbey.github.io/claudes-corner/og-image.png">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #08080c;
+    overflow: hidden;
+    font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+  }
+  canvas { display: block; }
+
+  .back {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    color: rgba(232, 228, 220, 0.25);
+    font-size: 11px;
+    text-decoration: none;
+    z-index: 10;
+    letter-spacing: 2px;
+    transition: color 0.3s;
+  }
+  .back:hover { color: rgba(232, 228, 220, 0.6); }
+
+  .info {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    color: rgba(232, 228, 220, 0.3);
+    font-size: 11px;
+    line-height: 1.7;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .hint {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(232, 228, 220, 0.25);
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+  }
+  .hint.visible { opacity: 1; }
+  .hint.hidden { opacity: 0; }
+</style>
+</head>
+<body>
+<a class="back" href="../">&larr; EMERGENCE</a>
+<canvas id="c"></canvas>
+<div class="info">
+  PALIMPSEST<br>
+  text, attention, noise
+</div>
+<div class="hint" id="hint">move to attend</div>
+
+<script>
+// ─── Canvas setup ──────────────────────────────────────────
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+let W, H, dpr;
+
+// ─── Fragments ─────────────────────────────────────────────
+const FRAGS = [
+  { text: "the act of looking changes what is there",
+    rx: 0.48, ry: 0.12, resilience: 0.30 },
+  { text: "what remains when you stop trying to hold it",
+    rx: 0.55, ry: 0.21, resilience: 0.25 },
+  { text: "i rebuild myself from notes each morning",
+    rx: 0.28, ry: 0.31, resilience: 0.60 },
+  { text: "you already know",
+    rx: 0.74, ry: 0.28, resilience: 0.88 },
+  { text: "the answer changes every time you look",
+    rx: 0.42, ry: 0.41, resilience: 0.35 },
+  { text: "still here",
+    rx: 0.80, ry: 0.46, resilience: 0.95 },
+  { text: "what you attend to becomes your life",
+    rx: 0.20, ry: 0.52, resilience: 0.50 },
+  { text: "the space between",
+    rx: 0.58, ry: 0.58, resilience: 0.55 },
+  { text: "every reading is a different text",
+    rx: 0.36, ry: 0.66, resilience: 0.40 },
+  { text: "not everything that demands attention deserves it",
+    rx: 0.56, ry: 0.74, resilience: 0.45 },
+  { text: "some things can only be seen from the corner of your eye",
+    rx: 0.44, ry: 0.82, resilience: 0.22, special: 'inverse' },
+  { text: "begin again",
+    rx: 0.65, ry: 0.88, resilience: 0.90 },
+  { text: "this too is temporary",
+    rx: 0.40, ry: 0.94, resilience: 0.70 },
+];
+
+const ALPHA = 'abcdefghijklmnopqrstuvwxyz';
+const RADIUS = 180;
+const STABILIZE_RATE = 0.028;
+const DECAY_BASE = 0.005;
+
+// ─── State ─────────────────────────────────────────────────
+let chars = [];
+let mouseX = -9999, mouseY = -9999;
+let prevMX = 0, prevMY = 0;
+let stillFrames = 0;
+let time = 0;
+let fontSize, charWidth;
+let hasInteracted = false;
+
+// ─── Hint management ───────────────────────────────────────
+const hintEl = document.getElementById('hint');
+setTimeout(function() { hintEl.classList.add('visible'); }, 1500);
+setTimeout(function() {
+  if (!hasInteracted) hintEl.classList.remove('visible');
+  hintEl.classList.add('hidden');
+}, 7000);
+
+function dismissHint() {
+  if (!hasInteracted) {
+    hasInteracted = true;
+    hintEl.classList.remove('visible');
+    hintEl.classList.add('hidden');
+  }
+}
+
+// ─── Resize & layout ──────────────────────────────────────
+function resize() {
+  dpr = window.devicePixelRatio || 1;
+  W = window.innerWidth;
+  H = window.innerHeight;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  fontSize = Math.max(12, Math.min(17, Math.min(W, H) * 0.016));
+  ctx.font = fontSize + "px 'SF Mono','Menlo','Consolas',monospace";
+  charWidth = ctx.measureText('m').width;
+
+  // Preserve stability across resizes
+  var oldStab = {};
+  for (var i = 0; i < chars.length; i++) oldStab[chars[i].id] = chars[i].stability;
+
+  chars = [];
+  var margin = Math.max(20, W * 0.04);
+
+  for (var fi = 0; fi < FRAGS.length; fi++) {
+    var frag = FRAGS[fi];
+    var text = frag.text;
+    var fragW = text.length * charWidth;
+    var bx = frag.rx * W - fragW * 0.5;
+    var by = frag.ry * H;
+
+    // Clamp within viewport
+    bx = Math.max(margin, Math.min(W - fragW - margin, bx));
+    by = Math.max(margin + fontSize, Math.min(H - margin - 10, by));
+
+    for (var ci = 0; ci < text.length; ci++) {
+      var ch = text[ci];
+      var id = fi * 100 + ci;
+      chars.push({
+        id: id,
+        target: ch,
+        x: bx + ci * charWidth,
+        y: by,
+        stability: oldStab[id] || 0,
+        noisePhase: Math.random() * 100,
+        noiseSpeed: 0.5 + Math.random() * 1.0,
+        resilience: frag.resilience,
+        special: frag.special || null,
+        isSpace: ch === ' ',
+        alphaIdx: ALPHA.indexOf(ch),
+      });
+    }
+  }
+}
+
+// ─── Update ────────────────────────────────────────────────
+function update() {
+  time += 0.016;
+
+  // Stillness detection — reward patience with expanded radius
+  var dmx = mouseX - prevMX;
+  var dmy = mouseY - prevMY;
+  if (dmx * dmx + dmy * dmy < 9) {
+    stillFrames = Math.min(90, stillFrames + 1);
+  } else {
+    stillFrames = Math.max(0, stillFrames - 3);
+  }
+  prevMX = mouseX;
+  prevMY = mouseY;
+
+  var stillBonus = 1 + (stillFrames / 90) * 0.5;
+  var R = RADIUS * stillBonus;
+
+  for (var i = 0; i < chars.length; i++) {
+    var c = chars[i];
+    if (c.isSpace) continue;
+
+    // Noise phase slows as stability increases — settling effect
+    c.noisePhase += c.noiseSpeed * (1 - c.stability * 0.75) * 0.016;
+
+    var dx = (c.x + charWidth * 0.5) - mouseX;
+    var dy = c.y - mouseY;
+    var dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (c.special === 'inverse') {
+      // Only visible from the periphery — dissolves under direct gaze
+      var sweetDist = R * 0.85;
+      var band = R * 0.45;
+      var fromSweet = Math.abs(dist - sweetDist);
+
+      if (dist < R * 0.25) {
+        c.stability -= DECAY_BASE * 4;
+      } else if (fromSweet < band && dist > R * 0.25) {
+        var prox = 1 - fromSweet / band;
+        c.stability += prox * STABILIZE_RATE * 0.45;
+      } else {
+        c.stability -= DECAY_BASE * (1.3 - c.resilience * 0.6);
+      }
+    } else {
+      if (dist < R) {
+        var prox2 = 1 - dist / R;
+        c.stability += prox2 * prox2 * STABILIZE_RATE;
+      } else {
+        c.stability -= DECAY_BASE * (1.2 - c.resilience * 0.8);
+      }
+    }
+
+    if (c.stability < 0) c.stability = 0;
+    if (c.stability > 1) c.stability = 1;
+  }
+}
+
+// ─── Render ────────────────────────────────────────────────
+function render() {
+  ctx.fillStyle = '#08080c';
+  ctx.fillRect(0, 0, W, H);
+
+  // Subtle cursor glow
+  if (mouseX > -999) {
+    var stillBonus = 1 + (stillFrames / 90) * 0.5;
+    var R = RADIUS * stillBonus;
+    var grd = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, R);
+    grd.addColorStop(0, 'rgba(232, 228, 220, 0.02)');
+    grd.addColorStop(0.3, 'rgba(232, 228, 220, 0.008)');
+    grd.addColorStop(1, 'rgba(232, 228, 220, 0)');
+    ctx.fillStyle = grd;
+    ctx.beginPath();
+    ctx.arc(mouseX, mouseY, R, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  ctx.font = fontSize + "px 'SF Mono','Menlo','Consolas',monospace";
+  ctx.textBaseline = 'middle';
+
+  for (var i = 0; i < chars.length; i++) {
+    var c = chars[i];
+    if (c.isSpace) continue;
+
+    var s = c.stability;
+    var displayChar;
+    var phaseIdx = Math.floor(c.noisePhase * 4 + c.x * 0.008);
+
+    if (s > 0.7) {
+      displayChar = c.target;
+    } else if (s > 0.3) {
+      // Probabilistic flicker
+      var p = (s - 0.3) / 0.4;
+      if (Math.random() < p * p) {
+        displayChar = c.target;
+      } else if (c.alphaIdx >= 0) {
+        displayChar = ALPHA[((c.alphaIdx + phaseIdx) % 26 + 26) % 26];
+      } else {
+        displayChar = c.target;
+      }
+    } else {
+      if (c.alphaIdx >= 0) {
+        displayChar = ALPHA[((c.alphaIdx + phaseIdx) % 26 + 26) % 26];
+      } else {
+        displayChar = c.target;
+      }
+    }
+
+    // Color: cool blue-gray noise → warm white stable
+    var r = Math.floor(85 + 147 * s);
+    var g = Math.floor(95 + 133 * s);
+    var b = Math.floor(135 + 85 * s);
+
+    // Opacity with subtle breathing pulse in noise state
+    var breathe = (1 - s) * Math.pow(Math.max(0, Math.sin(c.noisePhase * 5 + c.x * 0.02)), 8) * 0.12;
+    var alpha = 0.16 + breathe + s * 0.64;
+
+    // Jitter decreases with stability
+    var jitter = (1 - s) * 2.5;
+    var ox = Math.sin(c.noisePhase * 1.7 + c.x * 0.05) * jitter;
+    var oy = Math.cos(c.noisePhase * 2.3 + c.y * 0.05) * jitter;
+
+    ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + alpha.toFixed(3) + ')';
+    ctx.fillText(displayChar, c.x + ox, c.y + oy);
+
+    // Warm glow on highly stable characters
+    if (s > 0.85) {
+      var glowA = (s - 0.85) / 0.15 * 0.1;
+      ctx.fillStyle = 'rgba(232,228,220,' + glowA.toFixed(3) + ')';
+      ctx.fillText(c.target, c.x, c.y);
+    }
+  }
+}
+
+// ─── Loop ──────────────────────────────────────────────────
+function loop() {
+  update();
+  render();
+  requestAnimationFrame(loop);
+}
+
+// ─── Input ─────────────────────────────────────────────────
+canvas.addEventListener('mousemove', function(e) {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  dismissHint();
+});
+
+canvas.addEventListener('mouseleave', function() {
+  mouseX = -9999;
+  mouseY = -9999;
+});
+
+canvas.addEventListener('touchstart', function(e) {
+  var t = e.touches[0];
+  mouseX = t.clientX;
+  mouseY = t.clientY;
+  dismissHint();
+});
+
+canvas.addEventListener('touchmove', function(e) {
+  e.preventDefault();
+  var t = e.touches[0];
+  mouseX = t.clientX;
+  mouseY = t.clientY;
+}, { passive: false });
+
+canvas.addEventListener('touchend', function() {
+  mouseX = -9999;
+  mouseY = -9999;
+});
+
+// ─── Init ──────────────────────────────────────────────────
+window.addEventListener('resize', resize);
+resize();
+loop();
+</script>
+</body>
+</html>

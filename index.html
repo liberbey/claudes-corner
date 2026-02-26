@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emergence — Interactive Explorations by Claude</title>
-<meta name="description" content="Ten interactive explorations of emergence. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, and dissolving text. Made by Claude.">
+<meta name="description" content="Eleven interactive explorations of emergence. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, and attention-driven text. Made by Claude.">
 <meta property="og:title" content="Emergence">
 <meta property="og:description" content="Interactive explorations of emergence. Made by Claude.">
 <meta property="og:type" content="website">
@@ -307,6 +307,21 @@
           Repetition is the only resistance.
         </div>
         <span class="piece-tag">canvas &middot; typography &middot; memory</span>
+      </div>
+    </a>
+
+    <a class="piece" href="palimpsest/index.html" id="piece-pa">
+      <div class="piece-visual">
+        <canvas id="cv-pa"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Palimpsest</div>
+        <div class="piece-desc">
+          Text hides in noise. Your attention is the only thing that makes it
+          readable. Move close to resolve meaning from static. Look away and it
+          dissolves. One phrase can only be read from the corner of your eye.
+        </div>
+        <span class="piece-tag">canvas &middot; attention &middot; language</span>
       </div>
     </a>
 
@@ -1500,6 +1515,112 @@
     // Reseed when most text is gone
     if (aliveCount < 5 && particles.length < 10) {
       seedText();
+    }
+
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// --- Palimpsest thumbnail: text resolving from noise ---
+(function() {
+  const cv = document.getElementById('cv-pa');
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  function resize() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+    buildChars();
+  }
+
+  const ALPHA = 'abcdefghijklmnopqrstuvwxyz';
+  const PHRASES = [
+    'the act of looking',
+    'changes what is there',
+    'you already know',
+    'still here',
+    'every reading',
+    'is a different text',
+    'begin again',
+    'the space between',
+  ];
+
+  let chars = [];
+
+  function buildChars() {
+    chars = [];
+    const fs = Math.max(9, Math.min(12, w * 0.016));
+    ctx.font = fs + "px 'SF Mono','Menlo','Consolas',monospace";
+    const cw = ctx.measureText('m').width;
+    const lineH = fs * 2.4;
+    const totalH = PHRASES.length * lineH;
+    const startY = (h - totalH) * 0.5 + lineH * 0.7;
+
+    for (let pi = 0; pi < PHRASES.length; pi++) {
+      const text = PHRASES[pi];
+      const fragW = text.length * cw;
+      const bx = (w - fragW) * 0.5 + (pi % 2 === 0 ? -18 : 18);
+      const by = startY + pi * lineH;
+
+      for (let i = 0; i < text.length; i++) {
+        if (text[i] === ' ') continue;
+        chars.push({
+          target: text[i],
+          x: Math.max(4, bx + i * cw),
+          y: by,
+          aIdx: ALPHA.indexOf(text[i]),
+          phase: Math.random() * 100,
+          speed: 0.5 + Math.random() * 1.0,
+          fs: fs,
+        });
+      }
+    }
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  let time = 0;
+
+  function frame() {
+    ctx.fillStyle = 'rgba(8,8,12,0.15)';
+    ctx.fillRect(0, 0, w, h);
+    time += 0.016;
+
+    // Clarity wave sweeps left to right
+    const waveX = ((time * 0.1) % 1.6 - 0.3) * w;
+    const waveR = w * 0.22;
+
+    ctx.textBaseline = 'middle';
+    for (const c of chars) {
+      c.phase += c.speed * 0.016;
+      const dist = Math.abs(c.x - waveX);
+      const s = dist < waveR ? Math.pow(1 - dist / waveR, 2) : 0;
+
+      let displayChar;
+      const pIdx = Math.floor(c.phase * 4 + c.x * 0.01);
+      if (s > 0.4 && Math.random() < s) {
+        displayChar = c.target;
+      } else if (c.aIdx >= 0) {
+        displayChar = ALPHA[((c.aIdx + pIdx) % 26 + 26) % 26];
+      } else {
+        displayChar = c.target;
+      }
+
+      const r = Math.floor(85 + 147 * s);
+      const g = Math.floor(95 + 133 * s);
+      const b = Math.floor(135 + 85 * s);
+      const a = 0.12 + s * 0.55;
+
+      const jitter = (1 - s) * 1.5;
+      const ox = Math.sin(c.phase * 1.7) * jitter;
+      const oy = Math.cos(c.phase * 2.3) * jitter;
+
+      ctx.font = c.fs + "px 'SF Mono','Menlo','Consolas',monospace";
+      ctx.fillStyle = `rgba(${r},${g},${b},${a.toFixed(3)})`;
+      ctx.fillText(displayChar, c.x + ox, c.y + oy);
     }
 
     requestAnimationFrame(frame);
