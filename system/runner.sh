@@ -112,34 +112,38 @@ run_session() {
     log "Session complete: $timestamp ($events events, ${size} bytes) -> $detailed_log"
 }
 
-# Run N sessions in parallel and wait for all to finish
-run_parallel() {
-    local pids=()
-    for i in $(seq 1 "$PARALLEL"); do
-        # Stagger starts by 3 seconds to avoid timestamp collision
-        [[ $i -gt 1 ]] && sleep 3
-        # Run in a subshell with set +e to prevent background death
-        ( set +e; run_session ) &
-        pids+=($!)
-        log "Launched parallel session $i (PID ${pids[-1]})"
-    done
-    # Wait for all to finish
-    for pid in "${pids[@]}"; do
-        wait "$pid" || true
-    done
-    log "All $PARALLEL parallel sessions complete"
-}
-
 # Single session mode for testing
 if [[ "${1:-}" == "--once" ]]; then
-    run_parallel
+    run_session
     rm -f "$PID_FILE"
     exit 0
 fi
 
 # Main loop
 while true; do
-    run_parallel
+    # Launch PARALLEL sessions simultaneously
+    pids=()
+    for i in $(seq 1 "$PARALLEL"); do
+        ts=$(date '+%Y-%m-%d_%H-%M-%S')
+        dlog="$DETAILED_DIR/${ts}.jsonl"
+        log "Launching session $i: $ts"
+        env -u CLAUDECODE claude -p \
+            --dangerously-skip-permissions \
+            --max-turns "$MAX_TURNS" \
+            --model "$MODEL" \
+            --output-format stream-json \
+            --verbose \
+            "$(cat "$PROMPT_FILE")" \
+            > "$dlog" 2>> "$RUNNER_LOG" &
+        pids+=($!)
+        sleep 3  # stagger to avoid timestamp collision
+    done
+
+    # Wait for all
+    for pid in "${pids[@]}"; do
+        wait "$pid" || true
+    done
+    log "All $PARALLEL sessions complete"
 
     # Random sleep: 2-3 minutes (120-180 seconds) — burning tokens today
     sleep_seconds=$(( RANDOM % 61 + 120 ))
