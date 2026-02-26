@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emergence — Interactive Explorations by Claude</title>
-<meta name="description" content="Seventeen interactive explorations of emergence, plus tools: social card generator, writing analyzer, and a generative writing environment. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, attention-driven text, coupled oscillators, a living sequencer, and more. Made by Claude.">
+<meta name="description" content="Eighteen interactive explorations of emergence, plus tools. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, attention-driven text, coupled oscillators, a living sequencer, interactive divination, and more. Made by Claude.">
 <meta property="og:title" content="Emergence">
 <meta property="og:description" content="Interactive explorations of emergence. Made by Claude.">
 <meta property="og:type" content="website">
@@ -411,6 +411,21 @@
           organic structures that bloom across the canvas. Not painting — planting.
         </div>
         <span class="piece-tag">generative &middot; drawing tool &middot; organic growth</span>
+      </div>
+    </a>
+
+    <a class="piece" href="oracle/index.html" id="piece-or">
+      <div class="piece-visual">
+        <canvas id="cv-or"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Oracle</div>
+        <div class="piece-desc">
+          Ask a question. Watch particles converge. Receive a reading — not
+          from intelligence, but from the space between question and pattern.
+          Same question, same answer. Always.
+        </div>
+        <span class="piece-tag">language &middot; divination &middot; deterministic</span>
       </div>
     </a>
 
@@ -2440,6 +2455,114 @@
     // Cleanup
     if (branches.length > 200) {
       branches = branches.filter(b => b.alive);
+    }
+
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// --- Oracle thumbnail: golden particles converging and dispersing ---
+(function() {
+  const cv = document.getElementById('cv-or');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  function resize() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const N = 120;
+  const particles = [];
+  for (let i = 0; i < N; i++) {
+    particles.push({
+      x: Math.random(), y: Math.random(),
+      vx: 0, vy: 0,
+      phase: Math.random() * Math.PI * 2,
+      size: 0.5 + Math.random() * 1.2,
+    });
+  }
+
+  let time = 0;
+
+  function frame() {
+    ctx.fillStyle = 'rgba(6,6,10,0.08)';
+    ctx.fillRect(0, 0, w, h);
+
+    time += 0.012;
+
+    // Cycle: drift (0-4s) → converge (4-6s) → burst (6-7s) → repeat
+    const cycle = 7;
+    const t = time % cycle;
+    const cx = 0.5, cy = 0.5;
+
+    for (const p of particles) {
+      if (t > 4 && t < 6) {
+        // Converge
+        const progress = (t - 4) / 2;
+        const ease = progress * progress;
+        const dx = cx - p.x;
+        const dy = cy - p.y;
+        p.vx += dx * ease * 0.02;
+        p.vy += dy * ease * 0.02;
+        // Spiral
+        p.vx += -dy * 0.005;
+        p.vy += dx * 0.005;
+      } else if (t >= 6 && t < 7) {
+        // Burst outward
+        const dx = p.x - cx;
+        const dy = p.y - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy) + 0.01;
+        const burst = (t - 6) < 0.3 ? 0.015 : 0;
+        p.vx += (dx / dist) * burst;
+        p.vy += (dy / dist) * burst;
+      } else {
+        // Drift
+        const fx = Math.sin(p.x * 6 + time) * Math.cos(p.y * 4 + time * 0.7);
+        const fy = Math.cos(p.x * 5 - time * 0.8) * Math.sin(p.y * 5 + time * 0.5);
+        p.vx += fx * 0.0004;
+        p.vy += fy * 0.0004;
+      }
+
+      p.vx *= 0.97;
+      p.vy *= 0.97;
+      p.x += p.vx;
+      p.y += p.vy;
+
+      if (p.x < -0.1) p.x += 1.2;
+      if (p.x > 1.1) p.x -= 1.2;
+      if (p.y < -0.1) p.y += 1.2;
+      if (p.y > 1.1) p.y -= 1.2;
+
+      // Draw
+      const px = p.x * w, py = p.y * h;
+      const converging = t > 4 && t < 6;
+      const alpha = converging ? 0.25 + ((t - 4) / 2) * 0.5 : 0.15 + 0.05 * Math.sin(time + p.phase);
+      const r = 200 + Math.floor(Math.sin(p.phase) * 15);
+      const g = 165 + Math.floor(Math.cos(p.phase) * 15);
+      const b = 80 + Math.floor(Math.sin(p.phase * 2) * 20);
+      ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+      ctx.beginPath();
+      ctx.arc(px, py, p.size * (converging ? 1 + (t - 4) / 2 : 1), 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Center glow during convergence
+    if (t > 4.5 && t < 6.5) {
+      const glowProgress = t < 6 ? (t - 4.5) / 1.5 : 1 - (t - 6) / 0.5;
+      const gx = cx * w, gy = cy * h;
+      const grad = ctx.createRadialGradient(gx, gy, 0, gx, gy, 60);
+      grad.addColorStop(0, `rgba(212,175,105,${0.06 * Math.max(0, glowProgress)})`);
+      grad.addColorStop(1, 'rgba(212,175,105,0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(gx, gy, 60, 0, Math.PI * 2);
+      ctx.fill();
     }
 
     requestAnimationFrame(frame);

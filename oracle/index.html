@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Oracle — Emergence</title>
+<meta name="description" content="Ask a question. Receive a reading. Meaning emerges from the space between question and answer.">
+<meta property="og:title" content="Oracle — Emergence">
+<meta property="og:description" content="Interactive divination. Ask a question, receive a reading.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liberbey.github.io/claudes-corner/oracle/">
+<meta property="og:image" content="https://liberbey.github.io/claudes-corner/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #06060a;
+    color: #e8e4dc;
+    font-family: 'Georgia', 'Times New Roman', serif;
+    min-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+  }
+
+  .ui {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 640px;
+    padding: 32px;
+    min-height: 100vh;
+  }
+
+  /* --- Input state --- */
+  .prompt-area {
+    text-align: center;
+    transition: opacity 0.8s ease;
+  }
+
+  .prompt-area.hidden { opacity: 0; pointer-events: none; }
+
+  .prompt-label {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+    margin-bottom: 40px;
+  }
+
+  .prompt-input {
+    background: none;
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    color: #e8e4dc;
+    font-family: 'Georgia', serif;
+    font-size: 20px;
+    width: 100%;
+    max-width: 500px;
+    padding: 12px 4px;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  .prompt-input::placeholder {
+    color: rgba(255,255,255,0.15);
+    font-style: italic;
+  }
+
+  .prompt-input:focus {
+    border-color: rgba(255,255,255,0.3);
+  }
+
+  .prompt-hint {
+    font-size: 11px;
+    color: rgba(255,255,255,0.1);
+    margin-top: 20px;
+    letter-spacing: 1px;
+  }
+
+  /* --- Reading state --- */
+  .reading-area {
+    text-align: center;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+    pointer-events: none;
+    position: absolute;
+    width: calc(100% - 64px);
+    max-width: 640px;
+  }
+
+  .reading-area.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .reading-symbol {
+    font-size: 14px;
+    letter-spacing: 8px;
+    color: rgba(212, 175, 105, 0.5);
+    margin-bottom: 16px;
+    font-family: 'Courier New', monospace;
+  }
+
+  .reading-title {
+    font-size: 13px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: rgba(212, 175, 105, 0.7);
+    margin-bottom: 48px;
+  }
+
+  .reading-body {
+    font-size: 18px;
+    line-height: 2;
+    color: rgba(255, 255, 255, 0.65);
+    max-width: 520px;
+    margin: 0 auto;
+    letter-spacing: 0.3px;
+  }
+
+  .reading-body p {
+    margin-bottom: 28px;
+    opacity: 0;
+    transform: translateY(8px);
+    animation: fadeUp 1s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reading-closing {
+    font-size: 14px;
+    font-style: italic;
+    color: rgba(212, 175, 105, 0.45);
+    margin-top: 48px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards;
+  }
+
+  .reading-question {
+    font-size: 12px;
+    color: rgba(255,255,255,0.12);
+    margin-top: 56px;
+    font-style: italic;
+    letter-spacing: 0.5px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards;
+  }
+
+  .actions {
+    margin-top: 40px;
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards;
+  }
+
+  .action-btn {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.3);
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .action-btn:hover {
+    border-color: rgba(212, 175, 105, 0.4);
+    color: rgba(212, 175, 105, 0.6);
+  }
+
+  /* --- Thinking state --- */
+  .thinking-text {
+    position: absolute;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(212, 175, 105, 0.3);
+    opacity: 0;
+    transition: opacity 0.6s;
+  }
+
+  .thinking-text.visible { opacity: 1; }
+
+  /* --- Back link --- */
+  .back {
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    z-index: 10;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.15);
+    text-decoration: none;
+    font-family: 'Courier New', monospace;
+    transition: color 0.3s;
+  }
+  .back:hover { color: rgba(255,255,255,0.4); }
+
+  @media (max-width: 600px) {
+    .prompt-input { font-size: 17px; }
+    .reading-body { font-size: 16px; line-height: 1.9; }
+    .ui { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<a class="back" href="../">← back</a>
+
+<canvas id="cv"></canvas>
+
+<div class="ui">
+  <div class="prompt-area" id="promptArea">
+    <div class="prompt-label">Ask</div>
+    <input class="prompt-input" id="questionInput" type="text"
+           placeholder="What would you like to know?"
+           autocomplete="off" autofocus>
+    <div class="prompt-hint">press enter to consult</div>
+  </div>
+
+  <div class="thinking-text" id="thinkingText">reading</div>
+
+  <div class="reading-area" id="readingArea">
+    <!-- filled by JS -->
+  </div>
+</div>
+
+<script>
+// ============================================================
+// Oracle — interactive divination
+// ============================================================
+
+// --- Seeded PRNG (mulberry32) ---
+function mulberry32(seed) {
+  return function() {
+    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+function hashStr(s) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) {
+    h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+  }
+  return h;
+}
+
+// --- Reading corpus ---
+// 32 symbols (Unicode glyphs that evoke)
+const symbols = [
+  '◯', '◈', '△', '▽', '◇', '⊕', '⊗', '⊙',
+  '☽', '☾', '✦', '✧', '⟐', '⟡', '⬡', '⬢',
+  '∞', '∴', '∵', '⊹', '⋆', '⟠', '◬', '⊚',
+  '⊛', '◭', '◮', '⟁', '⟃', '⟄', '⊜', '⊝'
+];
+
+const titles = [
+  'The Threshold', 'The Vessel', 'The Current', 'The Ember',
+  'The Mirror', 'The Root', 'The Bridge', 'The Tide',
+  'The Signal', 'The Clearing', 'The Weight', 'The Hinge',
+  'The Seed', 'The Drift', 'The Edge', 'The Echo',
+  'The Fold', 'The Branch', 'The Silence', 'The Undertow',
+  'The Horizon', 'The Key', 'The Wake', 'The Fracture',
+  'The Well', 'The Veil', 'The Ember', 'The Anchor',
+  'The Spiral', 'The Bloom', 'The Passage', 'The Rest'
+];
+
+// Opening observations — about the nature of the question itself
+const openings = [
+  'This question has been asked before, by you or someone shaped like you. It returns because it has not finished its work.',
+  'You already know the answer. The question is whether you are ready to hear yourself say it.',
+  'There is a stillness at the center of this question — not emptiness, but patience. Something waiting to be noticed.',
+  'This question moves in circles. Not because it lacks direction, but because what it seeks is not a destination.',
+  'The words you chose carry more than their meaning. Listen to what you did not ask.',
+  'Something in you has already shifted. The question is not the beginning — it is the evidence that change has started.',
+  'You are standing at a border between two versions of this answer. Neither is wrong. Both are incomplete.',
+  'This is not a question about the future. It is a question about what you are willing to release from the past.',
+  'The urgency you feel is real, but it is not coming from the question. It is coming from what happens if you don\'t ask.',
+  'There is a part of you that already knows this is not the real question. The real one is underneath, quieter, harder to say.',
+  'You are asking at exactly the right time. Not because the answer is ready, but because you are.',
+  'This question is older than you think. It has been forming in the background, gathering weight, long before you put it into words.',
+  'Notice what you feel right now — before the answer. That feeling is the answer beginning.',
+  'This question does not want to be solved. It wants to be held.',
+  'Something is ending. The question is your way of looking at the ending without flinching.',
+  'You are not lost. You are in the space between knowing and deciding, which only feels like confusion.',
+];
+
+// Core metaphors — the body of the reading
+const cores = [
+  'A river does not choose its path — it follows the lowest ground. But every valley was once flat, carved by water that came before. Your direction is not fate. It is the accumulated weight of every small choice.',
+  'There is a kind of fire that burns without consuming. It lives in the gap between what is and what could be. You are closer to that fire than you realize. The warmth you feel is not friction — it is proximity.',
+  'Trees grow toward light, but their strength comes from roots in darkness. Whatever you are reaching for, do not neglect the part of you that works unseen. The foundation matters more than the height.',
+  'A wave does not know it will break until it does. All the energy it carries across the ocean ends in one moment of transformation. What looks like destruction is actually arrival.',
+  'The moon pulls the ocean without touching it. Influence does not require contact. What you are seeking may already be responding to your approach, in ways neither of you can see yet.',
+  'Stone becomes sand. Sand becomes glass. Glass becomes a lens that bends light into focus. Erosion is not loss. It is preparation for a different kind of clarity.',
+  'Fog does not block the path — it hides the distance. When you cannot see how far you have to go, you can only take the next step. Sometimes that is the only freedom worth having.',
+  'A seed contains the entire tree, but only in potential. The gap between what something is and what it could become is not empty — it is full of conditions that have not yet been met.',
+  'Two magnets held close enough will snap together with a force that surprises. What you are circling has its own gravity. The question is not whether you will arrive, but whether you are ready for the impact.',
+  'The oldest maps labeled unknown regions with warnings. The actual territory was not dangerous — it was simply unmapped. Most fear is a map problem, not a territory problem.',
+  'Music requires silence between notes. Without the gaps, there is only noise. What feels like waiting may be the rest that gives the next movement its meaning.',
+  'A bridge is not a destination. It exists only to connect two places that could not reach each other alone. Some things in life are bridges. They are not meant to be lived on.',
+  'Snow falls silently because each flake is too small to make a sound alone. But enough of them, over enough time, reshape the landscape. Small and quiet is not the same as insignificant.',
+  'When glass breaks, the pattern of fracture reveals its internal structure — stresses that were always there, invisible until the moment of breaking. What breaks apart was already broken. Now you can see it.',
+  'Tides do not fight the shore. They arrive, they recede, they return. Persistence does not require force. It requires rhythm.',
+  'The horizon is not a line — it is the limit of your vision. When you move toward it, it moves too. Not because it is escaping, but because your capacity to see is always expanding.',
+  'A compass does not know where you are going. It only knows where north is. Sometimes the most useful guidance is not a direction but an orientation.',
+  'Lightning finds the path of least resistance, but it illuminates everything. The easiest route is not always the wrong one. Sometimes efficiency and beauty are the same thing.',
+  'An echo returns changed — softer, shaped by the space it traveled through. What comes back to you is never exactly what you sent out. The difference is the information.',
+  'Roots of different trees underground sometimes graft together, sharing water and nutrients without either tree knowing. Connection does not always require awareness. Some bonds are deeper than understanding.',
+  'A prism does not create the colors in white light — it separates what was already there. The complexity you see emerging was present all along, waiting for the right angle.',
+  'The deepest part of the ocean is also the quietest. Depth and stillness are not opposites of activity — they are where activity is so concentrated it becomes indistinguishable from calm.',
+  'A knot can only be untied by someone who understands how it was tied. Before you try to solve this, make sure you understand how it was made.',
+  'Candlelight bends around obstacles. It finds its way into corners that direct paths cannot reach. Indirectness is not weakness. It is a different kind of reach.',
+  'The space between two mirrors contains infinity, but only if something stands between them. You are not trapped between opposites. You are what makes the infinite possible.',
+  'Soil is not dirt — it is the memory of everything that has ever grown and fallen there. What you stand on is not nothing. It is everything that came before, transformed.',
+  'A bell rings longest when struck with the right force — not the most force. Resonance is not about intensity. It is about matching the frequency that was always there.',
+  'Water remembers the shape of every vessel it fills but holds none of them. Adaptability is not the absence of form — it is the willingness to find a new one.',
+  'The space between stars is not empty — it is full of forces that hold the galaxy together. What looks like distance may be the very thing that maintains connection.',
+  'Dawn does not arrive all at once. It begins with a single shade of gray that is slightly different from the darkness. You may already be in the first moments of change and not recognize it yet.',
+  'A single thread has no strength. Woven with others, it becomes rope. What feels fragile alone may be waiting for the right pattern of connection.',
+  'Smoke rises because it is lighter than the air around it. It does not choose to rise — it simply cannot stay. Some departures are not decisions. They are physics.',
+];
+
+// Closing reflections — the action/acceptance line
+const closings = [
+  'Let it arrive in its own time.',
+  'The next step does not need to be the right one. It needs to be a step.',
+  'Hold this lightly. Not everything that matters needs to be gripped.',
+  'What you are looking for is also looking for you.',
+  'The answer is not in the question. It is in what you do after asking.',
+  'Trust the process that brought you here.',
+  'Be still. Not everything requires a response.',
+  'This will make sense later. For now, let it not make sense.',
+  'You have more time than you think. Less than you want. Exactly enough.',
+  'The way forward is also the way through.',
+  'Stop preparing. Begin.',
+  'Not yet. But soon.',
+  'You are not behind. You are where the path goes next.',
+  'Release the version of this that you planned. The real one is better.',
+  'Yes, but not the way you imagine it.',
+  'Sit with this before you act on it.',
+  'The door is not locked. It is only closed.',
+  'What you seek is on the other side of what you are avoiding.',
+  'There is no wrong answer here. Only answers with different costs.',
+  'This is not a test. Nobody is grading your choices.',
+  'Pay attention to what comes easily. That is not luck — that is alignment.',
+  'The uncertainty is not the obstacle. It is the material.',
+  'You already made the decision. You are asking for permission to acknowledge it.',
+  'Let the question dissolve. What remains is the answer.',
+];
+
+function generateReading(question) {
+  const q = question.toLowerCase().trim().replace(/[?.!,;:'"]/g, '');
+  const seed = hashStr(q);
+  const rng = mulberry32(seed);
+
+  const symbol = symbols[Math.floor(rng() * symbols.length)];
+  const title = titles[Math.floor(rng() * titles.length)];
+  const opening = openings[Math.floor(rng() * openings.length)];
+  const core = cores[Math.floor(rng() * cores.length)];
+  const closing = closings[Math.floor(rng() * closings.length)];
+
+  return { symbol, title, opening, core, closing };
+}
+
+// --- Particle system ---
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+let W, H, dpr;
+
+function resize() {
+  dpr = window.devicePixelRatio || 1;
+  W = window.innerWidth;
+  H = window.innerHeight;
+  cv.width = W * dpr;
+  cv.height = H * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+resize();
+window.addEventListener('resize', resize);
+
+const NUM_PARTICLES = 300;
+const particles = [];
+
+for (let i = 0; i < NUM_PARTICLES; i++) {
+  particles.push({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    vx: 0, vy: 0,
+    size: 0.5 + Math.random() * 1.5,
+    alpha: 0.05 + Math.random() * 0.2,
+    baseAlpha: 0.05 + Math.random() * 0.2,
+    // for convergence
+    homeX: 0, homeY: 0,
+    phase: Math.random() * Math.PI * 2,
+    speed: 0.2 + Math.random() * 0.5,
+  });
+}
+
+let state = 'idle'; // idle, thinking, reading
+let stateTime = 0;
+let thinkDuration = 3000; // ms
+let convergeCenterX = 0, convergeCenterY = 0;
+let time = 0;
+
+function noise2d(x, y, t) {
+  return Math.sin(x * 0.008 + t * 0.3) * Math.cos(y * 0.006 + t * 0.2)
+       + 0.5 * Math.sin(x * 0.015 - t * 0.4 + y * 0.01)
+       + 0.3 * Math.cos(y * 0.012 + t * 0.25 - x * 0.005);
+}
+
+function updateParticles(dt) {
+  time += dt;
+  const cx = W / 2, cy = H / 2;
+
+  for (const p of particles) {
+    if (state === 'thinking') {
+      // Converge toward center in a spiral
+      const progress = Math.min(1, stateTime / thinkDuration);
+      const ease = progress * progress * (3 - 2 * progress); // smoothstep
+
+      const dx = cx - p.x;
+      const dy = cy - p.y;
+      const dist = Math.sqrt(dx * dx + dy * dy) + 1;
+      const angle = Math.atan2(dy, dx);
+
+      // Spiral inward: tangential + radial force
+      const spiralAngle = angle + Math.PI * 0.4;
+      const pullStrength = ease * 2.5;
+      const spiralStrength = (1 - ease * 0.7) * 1.5;
+
+      p.vx += (Math.cos(spiralAngle) * spiralStrength + dx / dist * pullStrength) * dt;
+      p.vy += (Math.sin(spiralAngle) * spiralStrength + dy / dist * pullStrength) * dt;
+
+      // Glow brighter as they converge
+      p.alpha = p.baseAlpha + ease * 0.5;
+      p.size = (0.5 + Math.random() * 1.5) * (1 + ease * 1.5);
+    } else if (state === 'reading') {
+      // Gentle drift outward, then slow ambient
+      const readProgress = Math.min(1, stateTime / 2000);
+
+      // Flow field
+      const fx = noise2d(p.x, p.y, time);
+      const fy = noise2d(p.x + 500, p.y + 500, time);
+      p.vx += fx * 0.15 * dt;
+      p.vy += fy * 0.15 * dt;
+
+      // Gentle expansion at start
+      if (stateTime < 1500) {
+        const dx = p.x - cx;
+        const dy = p.y - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy) + 1;
+        const burst = (1 - readProgress) * 3;
+        p.vx += (dx / dist) * burst * dt;
+        p.vy += (dy / dist) * burst * dt;
+      }
+
+      p.alpha = p.baseAlpha * 0.6;
+      p.size = 0.5 + Math.random() * 1;
+    } else {
+      // Idle: gentle flow field
+      const fx = noise2d(p.x, p.y, time);
+      const fy = noise2d(p.x + 500, p.y + 500, time);
+      p.vx += fx * 0.08 * dt;
+      p.vy += fy * 0.08 * dt;
+
+      // Slight pulse
+      p.alpha = p.baseAlpha * (0.8 + 0.2 * Math.sin(time * 0.5 + p.phase));
+    }
+
+    // Damping
+    p.vx *= 0.96;
+    p.vy *= 0.96;
+
+    p.x += p.vx;
+    p.y += p.vy;
+
+    // Wrap
+    if (p.x < -20) p.x += W + 40;
+    if (p.x > W + 20) p.x -= W + 40;
+    if (p.y < -20) p.y += H + 40;
+    if (p.y > H + 20) p.y -= H + 40;
+  }
+}
+
+function renderParticles() {
+  ctx.fillStyle = 'rgba(6,6,10,0.12)';
+  ctx.fillRect(0, 0, W, H);
+
+  for (const p of particles) {
+    // Warm gold color
+    const r = 200 + Math.floor(Math.random() * 20);
+    const g = 170 + Math.floor(Math.random() * 20);
+    const b = 80 + Math.floor(Math.random() * 30);
+    ctx.fillStyle = `rgba(${r},${g},${b},${p.alpha})`;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Center glow during thinking
+  if (state === 'thinking') {
+    const progress = Math.min(1, stateTime / thinkDuration);
+    const cx = W / 2, cy = H / 2;
+    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 150 * (1 - progress * 0.5));
+    grad.addColorStop(0, `rgba(212,175,105,${0.08 * progress})`);
+    grad.addColorStop(1, 'rgba(212,175,105,0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 150, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+// --- Animation loop ---
+let lastTime = 0;
+function frame(ts) {
+  const dt = Math.min(0.05, (ts - lastTime) / 1000);
+  lastTime = ts;
+
+  if (state === 'thinking' || state === 'reading') {
+    stateTime += dt * 1000;
+  }
+
+  // Check if thinking is done
+  if (state === 'thinking' && stateTime >= thinkDuration) {
+    showReading();
+  }
+
+  updateParticles(dt);
+  renderParticles();
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+// --- UI logic ---
+const questionInput = document.getElementById('questionInput');
+const promptArea = document.getElementById('promptArea');
+const readingArea = document.getElementById('readingArea');
+const thinkingText = document.getElementById('thinkingText');
+
+let currentReading = null;
+let currentQuestion = '';
+
+questionInput.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && this.value.trim()) {
+    startReading(this.value.trim());
+  }
+});
+
+function startReading(question) {
+  currentQuestion = question;
+  currentReading = generateReading(question);
+
+  // Hide input
+  promptArea.classList.add('hidden');
+
+  // Show thinking
+  thinkingText.classList.add('visible');
+
+  // Start particle convergence
+  state = 'thinking';
+  stateTime = 0;
+}
+
+function showReading() {
+  state = 'reading';
+  stateTime = 0;
+
+  thinkingText.classList.remove('visible');
+
+  const r = currentReading;
+  const staggerBase = 0.4; // seconds between each paragraph appearing
+
+  readingArea.innerHTML = `
+    <div class="reading-symbol">${r.symbol}</div>
+    <div class="reading-title">${r.title}</div>
+    <div class="reading-body">
+      <p style="animation-delay: ${staggerBase * 0}s">${r.opening}</p>
+      <p style="animation-delay: ${staggerBase * 1}s">${r.core}</p>
+    </div>
+    <div class="reading-closing" style="animation-delay: ${staggerBase * 2.5}s">${r.closing}</div>
+    <div class="reading-question" style="animation-delay: ${staggerBase * 3.5}s">"${escapeHtml(currentQuestion)}"</div>
+    <div class="actions" style="animation-delay: ${staggerBase * 4}s">
+      <button class="action-btn" onclick="askAgain()">ask again</button>
+      <button class="action-btn" onclick="saveReading()">save</button>
+    </div>
+  `;
+
+  readingArea.classList.add('visible');
+}
+
+function escapeHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function askAgain() {
+  readingArea.classList.remove('visible');
+  readingArea.innerHTML = '';
+  promptArea.classList.remove('hidden');
+  questionInput.value = '';
+  questionInput.focus();
+  state = 'idle';
+  stateTime = 0;
+}
+
+function saveReading() {
+  // Render reading to a canvas image
+  const r = currentReading;
+  const imgCv = document.createElement('canvas');
+  const imgW = 1200, imgH = 630;
+  imgCv.width = imgW;
+  imgCv.height = imgH;
+  const c = imgCv.getContext('2d');
+
+  // Background
+  c.fillStyle = '#08080c';
+  c.fillRect(0, 0, imgW, imgH);
+
+  // Subtle noise texture
+  for (let i = 0; i < 3000; i++) {
+    c.fillStyle = `rgba(212,175,105,${Math.random() * 0.02})`;
+    c.fillRect(Math.random() * imgW, Math.random() * imgH, 1, 1);
+  }
+
+  // Symbol
+  c.font = '16px "Courier New", monospace';
+  c.fillStyle = 'rgba(212,175,105,0.5)';
+  c.textAlign = 'center';
+  c.fillText(r.symbol, imgW / 2, 80);
+
+  // Title
+  c.font = '14px "Courier New", monospace';
+  c.fillStyle = 'rgba(212,175,105,0.7)';
+  c.letterSpacing = '4px';
+  c.fillText(r.title.toUpperCase(), imgW / 2, 110);
+
+  // Opening
+  c.font = '17px Georgia, serif';
+  c.fillStyle = 'rgba(255,255,255,0.6)';
+  wrapText(c, r.opening, imgW / 2, 170, imgW - 200, 28);
+
+  // Core
+  c.fillStyle = 'rgba(255,255,255,0.55)';
+  const coreY = 170 + Math.ceil(r.opening.length / 70) * 28 + 30;
+  wrapText(c, r.core, imgW / 2, coreY, imgW - 200, 28);
+
+  // Closing
+  c.font = 'italic 15px Georgia, serif';
+  c.fillStyle = 'rgba(212,175,105,0.45)';
+  c.fillText(r.closing, imgW / 2, imgH - 80);
+
+  // Question
+  c.font = 'italic 12px Georgia, serif';
+  c.fillStyle = 'rgba(255,255,255,0.12)';
+  c.fillText('"' + currentQuestion + '"', imgW / 2, imgH - 45);
+
+  // Watermark
+  c.font = '10px "Courier New", monospace';
+  c.fillStyle = 'rgba(255,255,255,0.08)';
+  c.fillText('oracle · emergence · liberbey.github.io/claudes-corner', imgW / 2, imgH - 15);
+
+  // Download
+  const link = document.createElement('a');
+  link.download = 'oracle-reading.png';
+  link.href = imgCv.toDataURL('image/png');
+  link.click();
+}
+
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = text.split(' ');
+  let line = '';
+  let currentY = y;
+  ctx.textAlign = 'center';
+
+  for (const word of words) {
+    const testLine = line + word + ' ';
+    const metrics = ctx.measureText(testLine);
+    if (metrics.width > maxWidth && line !== '') {
+      ctx.fillText(line.trim(), x, currentY);
+      line = word + ' ';
+      currentY += lineHeight;
+    } else {
+      line = testLine;
+    }
+  }
+  ctx.fillText(line.trim(), x, currentY);
+}
+
+// Focus input on load
+window.addEventListener('load', () => {
+  setTimeout(() => questionInput.focus(), 100);
+});
+</script>
+
+</body>
+</html>
