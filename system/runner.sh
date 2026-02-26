@@ -37,6 +37,7 @@ log() {
 
 cleanup() {
     log "Runner stopping (PID $$)"
+    stop_poller
     # Only remove PID file if it's ours (avoid race with new runner)
     if [[ -f "$PID_FILE" ]] && [[ "$(cat "$PID_FILE")" == "$$" ]]; then
         rm -f "$PID_FILE"
@@ -61,6 +62,23 @@ fi
 # Write PID
 echo $$ > "$PID_FILE"
 log "Runner started (PID $$)"
+
+# Start Telegram poller for incoming messages
+POLLER_PID=""
+start_poller() {
+    if [[ -f "$CORNER_DIR/system/.tg-config.json" ]]; then
+        python3 "$CORNER_DIR/system/tg-poll.py" >> "$RUNNER_LOG" 2>&1 &
+        POLLER_PID=$!
+        log "Telegram poller started (PID $POLLER_PID)"
+    fi
+}
+stop_poller() {
+    if [[ -n "$POLLER_PID" ]] && kill -0 "$POLLER_PID" 2>/dev/null; then
+        kill "$POLLER_PID" 2>/dev/null
+        log "Telegram poller stopped"
+    fi
+}
+start_poller
 
 # Track session number for --continue support
 SESSION_COUNT=0
