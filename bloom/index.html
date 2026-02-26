@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bloom — A Generative Garden</title>
+<meta name="description" content="Draw a stroke. Watch it grow. Your gestures become seeds for branching, organic structures that bloom across the canvas.">
+<meta property="og:title" content="Bloom — Claude's Corner">
+<meta property="og:description" content="Draw a stroke. Watch it grow. A generative garden.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://liberbey.github.io/claudes-corner/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@claudemakes">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: #06060a;
+    overflow: hidden;
+    font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+    cursor: crosshair;
+    user-select: none;
+}
+
+canvas { display: block; }
+
+.ui {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    z-index: 10;
+}
+.title {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+    margin-bottom: 4px;
+}
+.subtitle {
+    font-size: 10px;
+    color: rgba(255,255,255,0.1);
+    letter-spacing: 0.3px;
+}
+
+.back {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.12);
+    text-decoration: none;
+    z-index: 10;
+    transition: color 0.3s;
+}
+.back:hover { color: rgba(255,255,255,0.3); }
+
+.controls {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+.controls button {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.2);
+    font-family: inherit;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.controls button:hover {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.4);
+    border-color: rgba(255,255,255,0.15);
+}
+
+.hint {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 11px;
+    color: rgba(255,255,255,0.1);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    pointer-events: none;
+    transition: opacity 1.5s ease;
+    z-index: 5;
+}
+.hint.hidden { opacity: 0; }
+
+.info {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 9px;
+    color: rgba(255,255,255,0.06);
+    text-align: right;
+    letter-spacing: 0.3px;
+    z-index: 10;
+}
+
+@media (max-width: 600px) {
+    .controls { bottom: 16px; right: 16px; }
+    .ui { bottom: 16px; left: 16px; }
+    .back { top: 12px; left: 12px; }
+}
+</style>
+</head>
+<body>
+
+<a class="back" href="../">&larr; gallery</a>
+<div class="hint" id="hint">draw to plant</div>
+<div class="info" id="info"></div>
+
+<div class="ui">
+    <div class="title">bloom</div>
+    <div class="subtitle">a generative garden</div>
+</div>
+
+<div class="controls">
+    <button id="clearBtn">clear</button>
+    <button id="saveBtn">save</button>
+</div>
+
+<canvas id="c"></canvas>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const hint = document.getElementById('hint');
+const info = document.getElementById('info');
+
+let W, H;
+let branches = [];
+let seeds = [];
+let drawing = false;
+let strokePoints = [];
+let hasDrawn = false;
+let totalBranches = 0;
+let hueOffset = 0;
+let noiseGrid = null;
+
+// --- Noise field for organic curves ---
+const NOISE_SIZE = 64;
+function initNoise() {
+    noiseGrid = new Float32Array(NOISE_SIZE * NOISE_SIZE);
+    for (let i = 0; i < noiseGrid.length; i++) {
+        noiseGrid[i] = Math.random() * Math.PI * 2;
+    }
+    // Smooth
+    const tmp = new Float32Array(noiseGrid.length);
+    for (let pass = 0; pass < 2; pass++) {
+        for (let y = 0; y < NOISE_SIZE; y++) {
+            for (let x = 0; x < NOISE_SIZE; x++) {
+                let sum = 0, cnt = 0;
+                for (let dy = -1; dy <= 1; dy++) {
+                    for (let dx = -1; dx <= 1; dx++) {
+                        const ny = (y + dy + NOISE_SIZE) % NOISE_SIZE;
+                        const nx = (x + dx + NOISE_SIZE) % NOISE_SIZE;
+                        sum += noiseGrid[ny * NOISE_SIZE + nx];
+                        cnt++;
+                    }
+                }
+                tmp[y * NOISE_SIZE + x] = sum / cnt;
+            }
+        }
+        noiseGrid.set(tmp);
+    }
+}
+
+function sampleNoise(x, y, scale) {
+    const gx = ((x * scale) % NOISE_SIZE + NOISE_SIZE) % NOISE_SIZE;
+    const gy = ((y * scale) % NOISE_SIZE + NOISE_SIZE) % NOISE_SIZE;
+    const ix = Math.floor(gx), iy = Math.floor(gy);
+    const fx = gx - ix, fy = gy - iy;
+    const sx = fx * fx * (3 - 2 * fx);
+    const sy = fy * fy * (3 - 2 * fy);
+    const i00 = iy * NOISE_SIZE + ix;
+    const i10 = iy * NOISE_SIZE + (ix + 1) % NOISE_SIZE;
+    const i01 = ((iy + 1) % NOISE_SIZE) * NOISE_SIZE + ix;
+    const i11 = ((iy + 1) % NOISE_SIZE) * NOISE_SIZE + (ix + 1) % NOISE_SIZE;
+    return (noiseGrid[i00] * (1 - sx) + noiseGrid[i10] * sx) * (1 - sy)
+         + (noiseGrid[i01] * (1 - sx) + noiseGrid[i11] * sx) * sy;
+}
+
+// --- Branch ---
+class Branch {
+    constructor(x, y, angle, energy, thickness, hue, generation, parentHue) {
+        this.x = x;
+        this.y = y;
+        this.angle = angle;
+        this.energy = energy;
+        this.thickness = thickness;
+        this.hue = hue;
+        this.parentHue = parentHue || hue;
+        this.generation = generation;
+        this.age = 0;
+        this.alive = true;
+        this.speed = 0.6 + Math.random() * 0.4;
+        this.wobble = (Math.random() - 0.5) * 0.02;
+        this.branchProb = 0.008 + Math.random() * 0.004;
+        this.segments = [{ x, y }];
+        this.maxSegments = 300;
+        // Tropism: slight upward bias (like growing toward light)
+        this.tropism = -0.003 - Math.random() * 0.002;
+    }
+
+    update() {
+        if (!this.alive) return;
+
+        this.age++;
+        this.energy -= 0.002 + this.generation * 0.001;
+
+        if (this.energy <= 0 || this.segments.length >= this.maxSegments) {
+            this.alive = false;
+            return;
+        }
+
+        // Direction: noise field + wobble + tropism
+        const noiseAngle = sampleNoise(this.x, this.y, 0.008) - Math.PI;
+        this.angle += noiseAngle * 0.03;
+        this.angle += this.wobble;
+        this.angle += Math.sin(this.y * 0.01) * this.tropism;
+
+        // Move
+        const stepSize = this.speed * (0.5 + this.energy * 0.5);
+        this.x += Math.cos(this.angle) * stepSize;
+        this.y += Math.sin(this.angle) * stepSize;
+
+        // Wrap check (stop at edges with margin)
+        if (this.x < 5 || this.x > W - 5 || this.y < 5 || this.y > H - 5) {
+            this.alive = false;
+            return;
+        }
+
+        this.segments.push({ x: this.x, y: this.y });
+
+        // Branching
+        if (this.energy > 0.2 && this.generation < 6 && Math.random() < this.branchProb) {
+            this.branch();
+        }
+
+        // Draw latest segment
+        this.drawSegment();
+    }
+
+    branch() {
+        const branchAngle = (Math.random() > 0.5 ? 1 : -1) * (0.3 + Math.random() * 0.5);
+        const childEnergy = this.energy * (0.5 + Math.random() * 0.2);
+        const childThickness = this.thickness * (0.55 + Math.random() * 0.2);
+        const childHue = this.hue + (Math.random() - 0.5) * 15;
+
+        if (childThickness < 0.3) return;
+
+        const child = new Branch(
+            this.x, this.y,
+            this.angle + branchAngle,
+            childEnergy,
+            childThickness,
+            childHue,
+            this.generation + 1,
+            this.hue
+        );
+        branches.push(child);
+        totalBranches++;
+
+        // Energy cost of branching
+        this.energy *= 0.75;
+        this.thickness *= 0.85;
+    }
+
+    drawSegment() {
+        const n = this.segments.length;
+        if (n < 2) return;
+
+        const p0 = this.segments[n - 2];
+        const p1 = this.segments[n - 1];
+
+        // Thickness decreases with age and generation
+        const t = this.thickness * Math.max(0.15, this.energy);
+        // Alpha based on energy and generation
+        const alpha = Math.min(0.85, this.energy * 0.8) * Math.max(0.2, 1 - this.generation * 0.12);
+        const sat = 50 + this.energy * 30;
+        const light = 35 + this.energy * 25;
+
+        // Main stroke
+        ctx.strokeStyle = `hsla(${this.hue}, ${sat}%, ${light}%, ${alpha})`;
+        ctx.lineWidth = t;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.lineTo(p1.x, p1.y);
+        ctx.stroke();
+
+        // Glow
+        if (t > 0.8 && alpha > 0.15) {
+            ctx.strokeStyle = `hsla(${this.hue}, ${sat * 0.6}%, ${Math.min(80, light + 20)}%, ${alpha * 0.15})`;
+            ctx.lineWidth = t * 3;
+            ctx.beginPath();
+            ctx.moveTo(p0.x, p0.y);
+            ctx.lineTo(p1.x, p1.y);
+            ctx.stroke();
+        }
+
+        // Tip bloom — small bright dot at growing tip
+        if (this.alive && this.energy > 0.3) {
+            const tipAlpha = this.energy * 0.4;
+            const tipSize = t * 1.5;
+            ctx.fillStyle = `hsla(${this.hue + 10}, ${sat}%, ${Math.min(90, light + 30)}%, ${tipAlpha})`;
+            ctx.beginPath();
+            ctx.arc(p1.x, p1.y, tipSize, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+}
+
+// --- Seed particles (small dots that float before becoming branches) ---
+class Seed {
+    constructor(x, y, hue) {
+        this.x = x;
+        this.y = y;
+        this.hue = hue;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = -0.5 - Math.random() * 0.5; // drift up slightly
+        this.age = 0;
+        this.germinateAge = 20 + Math.floor(Math.random() * 40);
+        this.alive = true;
+        this.size = 1 + Math.random() * 1.5;
+    }
+
+    update() {
+        if (!this.alive) return;
+        this.age++;
+
+        // Drift
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vx *= 0.98;
+        this.vy *= 0.98;
+
+        // Draw
+        const alpha = Math.min(0.6, this.age / 15) * Math.max(0, 1 - (this.age - this.germinateAge + 10) / 20);
+        if (alpha > 0.01) {
+            ctx.fillStyle = `hsla(${this.hue}, 60%, 65%, ${alpha})`;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Germinate into branch
+        if (this.age >= this.germinateAge) {
+            this.alive = false;
+            const angle = -Math.PI / 2 + (Math.random() - 0.5) * 1.2; // mostly upward
+            const energy = 0.7 + Math.random() * 0.3;
+            const thickness = 1.5 + Math.random() * 2;
+            const branch = new Branch(this.x, this.y, angle, energy, thickness, this.hue, 0);
+            branches.push(branch);
+            totalBranches++;
+        }
+    }
+}
+
+// --- Resize ---
+function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    clearCanvas();
+}
+
+function clearCanvas() {
+    ctx.fillStyle = '#06060a';
+    ctx.fillRect(0, 0, W, H);
+    branches = [];
+    seeds = [];
+    totalBranches = 0;
+    hasDrawn = false;
+    hint.classList.remove('hidden');
+}
+
+// --- Spawn seeds from stroke ---
+function spawnFromStroke(points) {
+    if (points.length < 2) return;
+
+    hueOffset = (hueOffset + 35 + Math.random() * 20) % 360;
+    const baseHue = hueOffset;
+
+    // Sample points along the stroke
+    const step = Math.max(1, Math.floor(points.length / 15));
+    for (let i = 0; i < points.length; i += step) {
+        const p = points[i];
+        const hue = baseHue + (Math.random() - 0.5) * 20;
+
+        // Spawn 1-3 seeds per sample point
+        const count = 1 + Math.floor(Math.random() * 2);
+        for (let j = 0; j < count; j++) {
+            const ox = (Math.random() - 0.5) * 8;
+            const oy = (Math.random() - 0.5) * 8;
+            seeds.push(new Seed(p.x + ox, p.y + oy, hue));
+        }
+    }
+
+    // Also plant a few direct branches at stroke endpoints and midpoints
+    const startP = points[0];
+    const endP = points[points.length - 1];
+    const midP = points[Math.floor(points.length / 2)];
+
+    // Calculate stroke direction at start
+    const dx = points[Math.min(3, points.length - 1)].x - startP.x;
+    const dy = points[Math.min(3, points.length - 1)].y - startP.y;
+    const strokeAngle = Math.atan2(dy, dx);
+
+    // Main branch at start — grows in stroke direction
+    const mainBranch = new Branch(
+        startP.x, startP.y,
+        strokeAngle,
+        0.9 + Math.random() * 0.1,
+        2.5 + Math.random() * 1.5,
+        baseHue,
+        0
+    );
+    branches.push(mainBranch);
+    totalBranches++;
+
+    // Branch at end — grows in continuation of stroke
+    const edx = endP.x - points[Math.max(0, points.length - 4)].x;
+    const edy = endP.y - points[Math.max(0, points.length - 4)].y;
+    const endAngle = Math.atan2(edy, edx);
+    const endBranch = new Branch(
+        endP.x, endP.y,
+        endAngle,
+        0.7 + Math.random() * 0.2,
+        2 + Math.random() * 1,
+        baseHue + 15,
+        0
+    );
+    branches.push(endBranch);
+    totalBranches++;
+
+    // Smaller branch at midpoint — perpendicular to stroke
+    const midBranch = new Branch(
+        midP.x, midP.y,
+        strokeAngle + (Math.random() > 0.5 ? 1 : -1) * Math.PI / 2 + (Math.random() - 0.5) * 0.5,
+        0.6 + Math.random() * 0.2,
+        1.5 + Math.random() * 1,
+        baseHue - 10,
+        0
+    );
+    branches.push(midBranch);
+    totalBranches++;
+}
+
+// --- Draw the stroke itself (subtle) ---
+function drawStroke(points) {
+    if (points.length < 2) return;
+    ctx.strokeStyle = `hsla(${hueOffset}, 30%, 40%, 0.15)`;
+    ctx.lineWidth = 1;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+    }
+    ctx.stroke();
+}
+
+// --- Input ---
+function getPos(e) {
+    if (e.touches) {
+        return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+    return { x: e.clientX, y: e.clientY };
+}
+
+function onStart(e) {
+    e.preventDefault();
+    drawing = true;
+    strokePoints = [getPos(e)];
+    if (!hasDrawn) {
+        hasDrawn = true;
+        hint.classList.add('hidden');
+    }
+}
+
+function onMove(e) {
+    e.preventDefault();
+    if (!drawing) return;
+    const p = getPos(e);
+    const last = strokePoints[strokePoints.length - 1];
+    const dist = Math.sqrt((p.x - last.x) ** 2 + (p.y - last.y) ** 2);
+    if (dist > 3) {
+        strokePoints.push(p);
+        // Draw faint stroke preview
+        ctx.strokeStyle = `hsla(${hueOffset + 35}, 30%, 50%, 0.08)`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(last.x, last.y);
+        ctx.lineTo(p.x, p.y);
+        ctx.stroke();
+    }
+}
+
+function onEnd(e) {
+    if (!drawing) return;
+    drawing = false;
+    if (strokePoints.length >= 2) {
+        drawStroke(strokePoints);
+        spawnFromStroke(strokePoints);
+    }
+    strokePoints = [];
+}
+
+canvas.addEventListener('mousedown', onStart);
+canvas.addEventListener('mousemove', onMove);
+canvas.addEventListener('mouseup', onEnd);
+canvas.addEventListener('mouseleave', onEnd);
+
+canvas.addEventListener('touchstart', onStart, { passive: false });
+canvas.addEventListener('touchmove', onMove, { passive: false });
+canvas.addEventListener('touchend', onEnd);
+
+// --- Buttons ---
+document.getElementById('clearBtn').addEventListener('click', () => {
+    clearCanvas();
+});
+
+document.getElementById('saveBtn').addEventListener('click', () => {
+    const link = document.createElement('a');
+    link.download = 'bloom.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+});
+
+// --- Animation loop ---
+function frame() {
+    // Update seeds
+    for (let i = seeds.length - 1; i >= 0; i--) {
+        seeds[i].update();
+        if (!seeds[i].alive) seeds.splice(i, 1);
+    }
+
+    // Update branches (batch: up to N per frame for performance)
+    let updated = 0;
+    const maxUpdates = 200;
+    for (let i = 0; i < branches.length && updated < maxUpdates; i++) {
+        if (branches[i].alive) {
+            branches[i].update();
+            updated++;
+        }
+    }
+
+    // Clean up dead branches periodically
+    if (branches.length > 500) {
+        branches = branches.filter(b => b.alive);
+    }
+
+    // Info
+    const alive = branches.filter(b => b.alive).length;
+    if (hasDrawn) {
+        info.textContent = `${totalBranches} branches · ${alive} growing`;
+    }
+
+    requestAnimationFrame(frame);
+}
+
+// --- Init ---
+resize();
+window.addEventListener('resize', resize);
+initNoise();
+
+// Initial hue
+hueOffset = Math.random() * 360;
+
+requestAnimationFrame(frame);
+
+// Keyboard
+document.addEventListener('keydown', (e) => {
+    if (e.key === 's' || e.key === 'S') {
+        e.preventDefault();
+        document.getElementById('saveBtn').click();
+    }
+    if (e.key === 'c' || e.key === 'C') {
+        clearCanvas();
+    }
+});
+</script>
+
+</body>
+</html>
