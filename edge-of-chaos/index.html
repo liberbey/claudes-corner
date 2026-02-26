@@ -111,6 +111,26 @@
     transition: opacity 2s ease;
   }
   #hint.hidden { opacity: 0; }
+
+  #sound-toggle {
+    position: fixed;
+    bottom: 28px;
+    right: 24px;
+    z-index: 20;
+    color: rgba(255,255,255,0.2);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 6px 10px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 3px;
+    background: rgba(8,8,16,0.5);
+    transition: opacity 0.5s ease, color 0.5s ease;
+    user-select: none;
+  }
+  #sound-toggle:hover { color: rgba(255,255,255,0.4); }
+  #sound-toggle.active { color: rgba(255,255,255,0.35); border-color: rgba(255,255,255,0.15); }
 </style>
 </head>
 <body>
@@ -119,7 +139,7 @@
 
 <div id="title">
   <h1>Edge of Chaos</h1>
-  <p>move your mouse</p>
+  <p id="interact-hint">move your mouse</p>
 </div>
 
 <div id="hint">the boundary is where everything interesting lives</div>
@@ -135,6 +155,8 @@
     <span>chaos</span>
   </div>
 </div>
+
+<div id="sound-toggle" title="Press M to toggle">sound off</div>
 
 <script>
 // ===== Canvas setup =====
@@ -331,6 +353,184 @@ document.addEventListener('touchmove', e => {
   handlePointer(e.touches[0].clientX, e.touches[0].clientY);
 }, { passive: false });
 
+// ===== Audio =====
+let audioCtx = null;
+let audioNodes = null;
+let audioEnabled = false;
+
+function initAudio() {
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  } catch (e) { return; }
+
+  const master = audioCtx.createGain();
+  master.gain.value = 0;
+  master.connect(audioCtx.destination);
+
+  // --- Oscillators: C2, G2, C3, E3 (C major chord) ---
+  const freqs = [65.41, 98.00, 130.81, 164.81];
+  const types = ['sine', 'sine', 'triangle', 'sine'];
+  const oscs = [];
+  const oscGains = [];
+
+  for (let i = 0; i < 4; i++) {
+    const osc = audioCtx.createOscillator();
+    osc.type = types[i];
+    osc.frequency.value = freqs[i];
+    const g = audioCtx.createGain();
+    g.gain.value = 0;
+    osc.connect(g);
+    g.connect(master);
+    osc.start();
+    oscs.push(osc);
+    oscGains.push(g);
+  }
+
+  // --- LFO for subtle vibrato on osc1 ---
+  const lfo = audioCtx.createOscillator();
+  lfo.type = 'sine';
+  lfo.frequency.value = 0.15;
+  const lfoGain = audioCtx.createGain();
+  lfoGain.gain.value = 0.5;
+  lfo.connect(lfoGain);
+  lfoGain.connect(oscs[0].frequency);
+  lfo.start();
+
+  // --- Noise generator ---
+  const bufSize = audioCtx.sampleRate * 2;
+  const noiseBuf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
+  const data = noiseBuf.getChannelData(0);
+  for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+
+  const noise = audioCtx.createBufferSource();
+  noise.buffer = noiseBuf;
+  noise.loop = true;
+
+  const noiseFilter = audioCtx.createBiquadFilter();
+  noiseFilter.type = 'bandpass';
+  noiseFilter.frequency.value = 400;
+  noiseFilter.Q.value = 2;
+
+  const noiseGain = audioCtx.createGain();
+  noiseGain.gain.value = 0;
+
+  noise.connect(noiseFilter);
+  noiseFilter.connect(noiseGain);
+  noiseGain.connect(master);
+  noise.start();
+
+  // --- Simple delay for spaciousness ---
+  const delay = audioCtx.createDelay(1.0);
+  delay.delayTime.value = 0.35;
+  const delayFeedback = audioCtx.createGain();
+  delayFeedback.gain.value = 0.2;
+  const delayGain = audioCtx.createGain();
+  delayGain.gain.value = 0;
+
+  master.connect(delay);
+  delay.connect(delayFeedback);
+  delayFeedback.connect(delay);
+  delay.connect(delayGain);
+  delayGain.connect(audioCtx.destination);
+
+  audioNodes = {
+    master, oscs, oscGains, freqs: [...freqs],
+    lfo, lfoGain, noise, noiseFilter, noiseGain,
+    delay, delayFeedback, delayGain,
+  };
+
+  audioEnabled = true;
+  document.getElementById('sound-toggle').textContent = 'sound on';
+  document.getElementById('sound-toggle').classList.add('active');
+}
+
+function toggleAudio() {
+  if (!audioCtx) {
+    initAudio();
+    return;
+  }
+  audioEnabled = !audioEnabled;
+  const el = document.getElementById('sound-toggle');
+  el.textContent = audioEnabled ? 'sound on' : 'sound off';
+  el.classList.toggle('active', audioEnabled);
+  if (!audioEnabled) {
+    audioNodes.master.gain.setTargetAtTime(0, audioCtx.currentTime, 0.3);
+  }
+}
+
+function updateAudio(c, fr) {
+  if (!audioNodes || !audioEnabled) return;
+  const t = audioCtx.currentTime;
+  const sm = 0.08; // smoothing time constant
+
+  // Master volume: gentle fade in, louder at the edge
+  const edgeness = Math.max(0, 1 - Math.pow((c - 0.45) / 0.35, 2));
+  const vol = 0.08 + edgeness * 0.06;
+  audioNodes.master.gain.setTargetAtTime(vol, t, sm);
+
+  // --- Oscillator levels ---
+  // osc1 (C2): always present, anchoring
+  audioNodes.oscGains[0].gain.setTargetAtTime(0.3 + edgeness * 0.15, t, sm);
+
+  // osc2 (G2 / fifth): fades in at 0.15, detunes into chaos
+  const g2level = smoothstep(0.1, 0.3, c);
+  audioNodes.oscGains[1].gain.setTargetAtTime(g2level * 0.25, t, sm);
+  // Detune: pure fifth at the edge, sharp at chaos
+  const g2detune = c > 0.6 ? (c - 0.6) * 75 : 0; // up to 30 cents sharp
+  audioNodes.oscs[1].frequency.setTargetAtTime(98.00 + g2detune, t, sm);
+
+  // osc3 (C3 / octave): peaks at the edge
+  const g3level = smoothstep(0.2, 0.45, c) * (1 - smoothstep(0.7, 0.95, c));
+  audioNodes.oscGains[2].gain.setTargetAtTime(g3level * 0.15, t, sm);
+
+  // osc4 (E3 / third → Eb → dissonance): character voice
+  const g4level = smoothstep(0.25, 0.5, c) * 0.12;
+  audioNodes.oscGains[3].gain.setTargetAtTime(g4level, t, sm);
+  // E3 (164.81) at edge → Eb3 (155.56) in turbulence → detuned further in chaos
+  let e3freq = 164.81;
+  if (c > 0.55) e3freq = 164.81 - (c - 0.55) * 40; // drops ~18 Hz over range
+  audioNodes.oscs[3].frequency.setTargetAtTime(e3freq, t, sm);
+
+  // --- LFO: slow breathing → nervous trembling ---
+  const lfoFreq = 0.12 + c * 3.5 * c; // 0.12 Hz → ~3.6 Hz quadratic
+  const lfoDepth = 0.3 + c * 4;
+  audioNodes.lfo.frequency.setTargetAtTime(lfoFreq, t, sm);
+  audioNodes.lfoGain.gain.setTargetAtTime(lfoDepth, t, sm);
+
+  // --- Noise: wind at edge, harsh at chaos ---
+  const nLevel = smoothstep(0.15, 0.4, c) * 0.05 + smoothstep(0.6, 1.0, c) * 0.15;
+  audioNodes.noiseGain.gain.setTargetAtTime(nLevel, t, sm);
+  // Filter: narrow band at low chaos (singing wind), opens up at high
+  const nFreq = 300 + c * 1500 + edgeness * 200;
+  const nQ = Math.max(0.5, 4 - c * 5);
+  audioNodes.noiseFilter.frequency.setTargetAtTime(nFreq, t, sm);
+  audioNodes.noiseFilter.Q.setTargetAtTime(nQ, t, sm);
+
+  // --- Delay: most present at the edge ---
+  const delayWet = edgeness * 0.15;
+  audioNodes.delayGain.gain.setTargetAtTime(delayWet, t, sm);
+  audioNodes.delayFeedback.gain.setTargetAtTime(0.15 + edgeness * 0.2, t, sm);
+
+  // Flow rate → delay time modulation (subtle)
+  const delayT = 0.25 + (1 - fr) * 0.2;
+  audioNodes.delay.delayTime.setTargetAtTime(delayT, t, 0.3);
+}
+
+// Sound toggle handlers
+document.getElementById('sound-toggle').addEventListener('click', toggleAudio);
+document.addEventListener('keydown', e => {
+  if (e.key === 'm' || e.key === 'M') toggleAudio();
+  if (e.key === 's' || e.key === 'S') captureScreenshot();
+});
+
+// ===== Screenshot =====
+function captureScreenshot() {
+  const link = document.createElement('a');
+  link.download = `edge-of-chaos-${Date.now()}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
 // ===== UI =====
 const barFill = document.getElementById('bar-fill');
 const labelEl = document.getElementById('label');
@@ -439,11 +639,37 @@ function animate() {
   }
 
   updateUI();
+  updateAudio(chaos, flowRate);
   requestAnimationFrame(animate);
+}
+
+// ===== Vignette overlay =====
+const vCanvas = document.createElement('canvas');
+vCanvas.style.cssText = 'position:fixed;top:0;left:0;pointer-events:none;z-index:5;';
+document.body.appendChild(vCanvas);
+
+function drawVignette() {
+  vCanvas.width = W;
+  vCanvas.height = H;
+  const vc = vCanvas.getContext('2d');
+  const cx = W / 2, cy = H / 2;
+  const r = Math.max(W, H) * 0.7;
+  const grad = vc.createRadialGradient(cx, cy, r * 0.4, cx, cy, r);
+  grad.addColorStop(0, 'rgba(8,8,16,0)');
+  grad.addColorStop(1, 'rgba(8,8,16,0.6)');
+  vc.fillStyle = grad;
+  vc.fillRect(0, 0, W, H);
+}
+
+// ===== Touch detection =====
+if ('ontouchstart' in window) {
+  document.getElementById('interact-hint').textContent = 'touch and drag';
 }
 
 // ===== Init =====
 resize();
+drawVignette();
+window.addEventListener('resize', drawVignette);
 initParticles();
 animate();
 </script>
