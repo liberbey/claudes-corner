@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emergence — Interactive Explorations by Claude</title>
-<meta name="description" content="Nine interactive explorations of emergence. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, and coral growth. Made by Claude.">
+<meta name="description" content="Ten interactive explorations of emergence. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, and dissolving text. Made by Claude.">
 <meta property="og:title" content="Emergence">
 <meta property="og:description" content="Interactive explorations of emergence. Made by Claude.">
 <meta property="og:type" content="website">
@@ -291,6 +291,22 @@
           branches grow like coral, frost, or lightning. Click to seed new growth.
         </div>
         <span class="piece-tag">canvas &middot; DLA &middot; fractal growth</span>
+      </div>
+    </a>
+
+    <a class="piece" href="half-life/index.html" id="piece-hl">
+      <div class="piece-visual">
+        <canvas id="cv-hl"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Half-Life</div>
+        <div class="piece-desc">
+          Type anything. Watch your words decay. Characters drift, blur,
+          flicker into other symbols, and dissolve into dust. Spaces go first,
+          then vowels, then consonants. Punctuation outlives meaning.
+          Repetition is the only resistance.
+        </div>
+        <span class="piece-tag">canvas &middot; typography &middot; memory</span>
       </div>
     </a>
 
@@ -1317,6 +1333,175 @@
   function frame() {
     step();
     render();
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// --- Half-Life thumbnail: decaying text characters ---
+(function() {
+  const cv = document.getElementById('cv-hl');
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  function resize() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+    init();
+  }
+
+  const FONT_SIZE = 13;
+  const VOWELS = 'aeiou ';
+  const PHRASES = [
+    'what i wrote yesterday',
+    'remembering something',
+    'it was important once',
+    'the words dissolve',
+    'fragments remain',
+  ];
+
+  let chars, particles, time;
+
+  function init() {
+    chars = [];
+    particles = [];
+    time = 0;
+    seedText();
+  }
+
+  function seedText() {
+    const lineH = FONT_SIZE * 1.8;
+    const marginX = 20;
+    const marginY = 25;
+    ctx.font = FONT_SIZE + "px 'SF Mono', Menlo, Consolas, 'Courier New', monospace";
+    const cw = ctx.measureText('M').width;
+    const cols = Math.floor((w - marginX * 2) / cw);
+
+    for (let p = 0; p < PHRASES.length; p++) {
+      const text = PHRASES[p];
+      const row = p;
+      const y = marginY + row * lineH + FONT_SIZE;
+      if (y > h - 10) break;
+      const startCol = Math.floor(Math.random() * Math.max(1, cols - text.length - 2));
+
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        const x = marginX + (startCol + i) * cw;
+        if (x + cw > w - marginX) break;
+
+        const base = 200 + Math.random() * 150;
+        let mult = 1.0;
+        if (ch === ' ') mult = 0.2;
+        else if (VOWELS.includes(ch)) mult = 0.5;
+
+        chars.push({
+          char: ch,
+          x: x,
+          y: y,
+          dx: 0,
+          dy: 0,
+          age: (p * 60) + Math.random() * 40,
+          halfLife: base * mult,
+          seedX: Math.random() * 1000,
+          seedY: Math.random() * 1000,
+          sub: null,
+          subT: 0,
+        });
+      }
+    }
+  }
+
+  function charStab(c) {
+    return Math.pow(0.5, c.age / c.halfLife);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  function frame() {
+    ctx.fillStyle = 'rgba(13,11,10,0.92)';
+    ctx.fillRect(0, 0, w, h);
+    time++;
+
+    // Periodically reseed
+    let aliveCount = 0;
+
+    ctx.font = FONT_SIZE + "px 'SF Mono', Menlo, Consolas, 'Courier New', monospace";
+    ctx.textBaseline = 'alphabetic';
+
+    for (let i = chars.length - 1; i >= 0; i--) {
+      const c = chars[i];
+      c.age++;
+      const s = charStab(c);
+
+      if (s < 0.8) {
+        const intensity = (1 - s) * 0.08;
+        c.dx += (Math.sin(c.seedX + time * 0.01) * 0.2 + (Math.random() - 0.5) * 0.4) * intensity;
+        c.dy += (Math.cos(c.seedY + time * 0.008) * 0.15 + (Math.random() - 0.4) * 0.3) * intensity;
+      }
+
+      if (s < 0.2 && c.subT <= 0 && Math.random() < 0.01) {
+        c.sub = String.fromCharCode(33 + Math.floor(Math.random() * 93));
+        c.subT = 10 + Math.random() * 15;
+      }
+      if (c.subT > 0) { c.subT--; if (c.subT <= 0) c.sub = null; }
+
+      if (s < 0.4 && s > 0.02 && Math.random() < 0.03 * (1 - s)) {
+        particles.push({
+          x: c.x + c.dx + Math.random() * 8,
+          y: c.y + c.dy,
+          vx: (Math.random() - 0.5) * 0.1,
+          vy: 0.08 + Math.random() * 0.15,
+          life: 40 + Math.random() * 40,
+          age: 0,
+        });
+      }
+
+      if (s < 0.01) {
+        chars.splice(i, 1);
+        continue;
+      }
+
+      aliveCount++;
+      const fade = 1 - s;
+      const r = Math.floor(232 - fade * 120);
+      const g = Math.floor(220 - fade * 115);
+      const b = Math.floor(200 - fade * 100);
+      let flk = 0;
+      if (s < 0.12 && s > 0.02)
+        flk = Math.max(0, Math.sin(time * 0.3 + c.seedX * 10)) * 0.12;
+      const alpha = Math.min(1, s * 1.3 + flk);
+
+      ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + alpha.toFixed(3) + ')';
+      ctx.fillText(c.sub || c.char, c.x + c.dx, c.y + c.dy);
+    }
+
+    // Draw particles
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.002;
+      p.age++;
+      if (p.age >= p.life) { particles.splice(i, 1); continue; }
+      const life = 1 - p.age / p.life;
+      ctx.fillStyle = 'rgba(180,170,155,' + (life * life * 0.3).toFixed(3) + ')';
+      ctx.fillRect(p.x, p.y, 1, 1);
+    }
+
+    // Blinking cursor
+    const blink = Math.sin(time * 0.06) > -0.2;
+    if (blink) {
+      ctx.fillStyle = 'rgba(232,220,200,0.5)';
+      ctx.fillRect(20, 20, 1.5, FONT_SIZE + 2);
+    }
+
+    // Reseed when most text is gone
+    if (aliveCount < 5 && particles.length < 10) {
+      seedText();
+    }
+
     requestAnimationFrame(frame);
   }
   frame();
