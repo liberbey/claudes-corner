@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emergence — Interactive Explorations by Claude</title>
-<meta name="description" content="Eight interactive explorations of emergence. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, and gravitational collapse. Made by Claude.">
+<meta name="description" content="Nine interactive explorations of emergence. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, and coral growth. Made by Claude.">
 <meta property="og:title" content="Emergence">
 <meta property="og:description" content="Interactive explorations of emergence. Made by Claude.">
 <meta property="og:type" content="website">
@@ -276,6 +276,21 @@
           no intent — just Newton's law and time. Click to disturb.
         </div>
         <span class="piece-tag">canvas &middot; gravity &middot; cosmic</span>
+      </div>
+    </a>
+
+    <a class="piece" href="coral/index.html" id="piece-co">
+      <div class="piece-visual">
+        <canvas id="cv-co"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Coral</div>
+        <div class="piece-desc">
+          Diffusion-limited aggregation — random walkers drift until they
+          touch the structure, then stick. From a single seed, fractal
+          branches grow like coral, frost, or lightning. Click to seed new growth.
+        </div>
+        <span class="piece-tag">canvas &middot; DLA &middot; fractal growth</span>
       </div>
     </a>
 
@@ -1138,6 +1153,170 @@
       ctx.fillRect(cx + ppx[i], cy + ppy[i], 1, 1);
     }
 
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// --- Coral thumbnail: DLA fractal growth ---
+(function() {
+  const cv = document.getElementById('cv-co');
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  const TG = 100; // thumbnail grid size
+  const NW = 600; // walkers
+  const STEPS = 30;
+  const DX = [0, 1, 0, -1];
+  const DY = [-1, 0, 1, 0];
+
+  let grid, bdr, dep, walkerX, walkerY, deposits, recent;
+
+  function resize() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width * 0.5);
+    h = cv.height = Math.floor(rect.height * 0.5);
+    cv.style.imageRendering = 'crisp-edges';
+    init();
+  }
+
+  function init() {
+    grid = new Uint8Array(TG * TG);
+    bdr = new Uint8Array(TG * TG);
+    dep = new Uint16Array(TG * TG);
+    walkerX = new Int16Array(NW);
+    walkerY = new Int16Array(NW);
+    deposits = 0;
+    recent = [];
+
+    // Seed center
+    const cx = TG / 2 | 0, cy = TG / 2 | 0;
+    for (let dy = -3; dy <= 3; dy++) {
+      for (let dx = -3; dx <= 3; dx++) {
+        if (dx*dx + dy*dy > 9) continue;
+        const x = cx + dx, y = cy + dy;
+        const idx = y * TG + x;
+        grid[idx] = 1;
+        dep[idx] = 0;
+        deposits++;
+        for (let d = 0; d < 4; d++) {
+          const nx = x + DX[d], ny = y + DY[d];
+          if (nx >= 0 && nx < TG && ny >= 0 && ny < TG && !grid[ny*TG+nx])
+            bdr[ny*TG+nx] = 1;
+        }
+        recent.push(idx);
+      }
+    }
+
+    for (let i = 0; i < NW; i++) spawn(i);
+  }
+
+  function spawn(i) {
+    if (recent.length > 0) {
+      const ri = recent[(Math.random() * recent.length) | 0];
+      const rx = ri % TG, ry = (ri / TG) | 0;
+      const a = Math.random() * Math.PI * 2;
+      const d = 8 + Math.random() * 12;
+      walkerX[i] = Math.max(0, Math.min(TG-1, Math.round(rx + Math.cos(a) * d)));
+      walkerY[i] = Math.max(0, Math.min(TG-1, Math.round(ry + Math.sin(a) * d)));
+      if (grid[walkerY[i] * TG + walkerX[i]]) {
+        walkerX[i] = (Math.random() * TG) | 0;
+        walkerY[i] = (Math.random() * TG) | 0;
+      }
+    } else {
+      walkerX[i] = (Math.random() * TG) | 0;
+      walkerY[i] = (Math.random() * TG) | 0;
+    }
+  }
+
+  function colorAt(t) {
+    t = Math.max(0, Math.min(1, t));
+    if (t < 0.3) {
+      const s = t / 0.3;
+      return [65 + s * 75, 10 + s * 20, 12 + s * 13];
+    } else if (t < 0.6) {
+      const s = (t - 0.3) / 0.3;
+      return [140 + s * 80, 30 + s * 55, 25 + s * 15];
+    } else {
+      const s = (t - 0.6) / 0.4;
+      return [220 + s * 25, 85 + s * 100, 40 + s * 60];
+    }
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  const offscreen = document.createElement('canvas');
+  offscreen.width = TG; offscreen.height = TG;
+  const offCtx = offscreen.getContext('2d');
+  const img = offCtx.createImageData(TG, TG);
+
+  // Fill background
+  for (let i = 0; i < TG * TG; i++) {
+    img.data[i*4] = 6; img.data[i*4+1] = 8;
+    img.data[i*4+2] = 16; img.data[i*4+3] = 255;
+  }
+
+  let resetTimer = 0;
+
+  function step() {
+    let stuck = 0;
+    for (let i = 0; i < NW; i++) {
+      let x = walkerX[i], y = walkerY[i];
+      for (let s = 0; s < STEPS; s++) {
+        const dir = (Math.random() * 4) | 0;
+        const nx = x + DX[dir], ny = y + DY[dir];
+        if (nx < 0 || nx >= TG || ny < 0 || ny >= TG) continue;
+        const nidx = ny * TG + nx;
+        if (grid[nidx]) continue;
+        x = nx; y = ny;
+        if (bdr[nidx]) {
+          let maxD = 0;
+          for (let dd = 0; dd < 4; dd++) {
+            const nnx = nx + DX[dd], nny = ny + DY[dd];
+            if (nnx >= 0 && nnx < TG && nny >= 0 && nny < TG && grid[nny*TG+nnx])
+              maxD = Math.max(maxD, dep[nny*TG+nnx]);
+          }
+          grid[nidx] = 1;
+          dep[nidx] = maxD + 1;
+          deposits++;
+          bdr[nidx] = 0;
+          for (let dd = 0; dd < 4; dd++) {
+            const nnx = nx + DX[dd], nny = ny + DY[dd];
+            if (nnx >= 0 && nnx < TG && nny >= 0 && nny < TG && !grid[nny*TG+nnx])
+              bdr[nny*TG+nnx] = 1;
+          }
+          if (recent.length < 2000) recent.push(nidx);
+          else recent[(Math.random() * recent.length) | 0] = nidx;
+
+          const t = dep[nidx] / 60;
+          const [r, g, b] = colorAt(t);
+          img.data[nidx*4] = r | 0;
+          img.data[nidx*4+1] = g | 0;
+          img.data[nidx*4+2] = b | 0;
+
+          spawn(i);
+          x = walkerX[i]; y = walkerY[i];
+          stuck++;
+          break;
+        }
+      }
+      walkerX[i] = x; walkerY[i] = y;
+    }
+    if (stuck < 2) resetTimer++;
+    else resetTimer = 0;
+    if (resetTimer > 60) { init(); resetTimer = 0; }
+  }
+
+  function render() {
+    offCtx.putImageData(img, 0, 0);
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(offscreen, 0, 0, w, h);
+  }
+
+  function frame() {
+    step();
+    render();
     requestAnimationFrame(frame);
   }
   frame();

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coral — Emergence</title>
+<meta name="description" content="Diffusion-limited aggregation. Random walkers build coral-like branching structures from noise. Click to seed new growth.">
+<meta property="og:title" content="Coral — Emergence">
+<meta property="og:description" content="Random walkers build coral-like branching structures. Click to seed growth.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liberbey.github.io/claudes-corner/coral/">
+<meta property="og:image" content="https://liberbey.github.io/claudes-corner/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Coral — Emergence">
+<meta name="twitter:description" content="Random walkers build coral-like branching structures.">
+<meta name="twitter:image" content="https://liberbey.github.io/claudes-corner/og-image.png">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #060810;
+    overflow: hidden;
+    cursor: crosshair;
+    font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+  }
+  canvas { display: block; }
+
+  .back {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    color: rgba(200, 175, 150, 0.3);
+    font-size: 11px;
+    text-decoration: none;
+    z-index: 10;
+    letter-spacing: 2px;
+  }
+  .back:hover { color: rgba(200, 175, 150, 0.7); }
+
+  .stats {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    color: rgba(200, 175, 150, 0.3);
+    font-size: 11px;
+    text-align: right;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .info {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    color: rgba(200, 175, 150, 0.4);
+    font-size: 11px;
+    line-height: 1.7;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .controls {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    color: rgba(200, 175, 150, 0.25);
+    font-size: 11px;
+    text-align: right;
+    line-height: 1.7;
+    z-index: 10;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<a class="back" href="../">← EMERGENCE</a>
+<div class="stats" id="stats"></div>
+<canvas id="c"></canvas>
+<div class="info">
+  CORAL<br>
+  diffusion-limited aggregation<br><br>
+  click to seed · drag to draw
+</div>
+<div class="controls" id="controls">
+  r reset · w walkers<br>
+  1 center · 2 bed<br>
+  3 ring · 4 scatter
+</div>
+
+<script>
+// ─── Configuration ───────────────────────────────────────────
+const G = 500;            // grid cells
+const N_WALKERS = 2000;
+const STEPS = 50;         // walk steps per walker per frame
+const SPAWN_MIN = 12;     // min spawn offset from structure
+const SPAWN_MAX = 30;     // max spawn offset
+const MAX_AGE = 400;      // frames before walker respawn
+const MAX_DEPTH = 300;    // color normalization depth
+
+// 4-connected directions
+const DX = [0, 1, 0, -1];
+const DY = [-1, 0, 1, 0];
+
+// ─── State ───────────────────────────────────────────────────
+const grid    = new Uint8Array(G * G);     // 0 = empty, 1 = structure
+const border  = new Uint8Array(G * G);     // 1 = empty cell adjacent to structure
+const depth   = new Uint16Array(G * G);    // tree depth from seed
+let deposits  = 0;
+let showWalkers = true;
+
+// Recent deposits ring buffer (for frontier-biased spawning)
+const recent = new Int32Array(6000);
+let recentLen = 0, recentHead = 0;
+function pushRecent(idx) {
+  if (recentLen < recent.length) {
+    recent[recentLen++] = idx;
+  } else {
+    recent[recentHead] = idx;
+    recentHead = (recentHead + 1) % recent.length;
+  }
+}
+
+// Walkers (Structure of Arrays)
+const wx   = new Int16Array(N_WALKERS);
+const wy   = new Int16Array(N_WALKERS);
+const wage = new Uint16Array(N_WALKERS);
+
+// ─── Canvas ──────────────────────────────────────────────────
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const statsEl = document.getElementById('stats');
+
+const off = document.createElement('canvas');
+off.width = G; off.height = G;
+const offCtx = off.getContext('2d');
+const img = offCtx.createImageData(G, G);
+const px = img.data;
+
+let dw, dh, ox, oy; // display size and offset
+
+// Background color
+const BG = [6, 8, 16];
+for (let i = 0; i < G * G; i++) {
+  px[i*4]   = BG[0];
+  px[i*4+1] = BG[1];
+  px[i*4+2] = BG[2];
+  px[i*4+3] = 255;
+}
+
+// ─── Color palette ───────────────────────────────────────────
+// Warm coral gradient: deep maroon → coral → amber → gold → cream
+function colorAt(t) {
+  t = Math.max(0, Math.min(1, t));
+  let r, g, b;
+  if (t < 0.15) {
+    const s = t / 0.15;
+    r = 65 + s * 55;  g = 10 + s * 15;  b = 12 + s * 10;
+  } else if (t < 0.35) {
+    const s = (t - 0.15) / 0.2;
+    r = 120 + s * 80;  g = 25 + s * 40;  b = 22 + s * 15;
+  } else if (t < 0.6) {
+    const s = (t - 0.35) / 0.25;
+    r = 200 + s * 30;  g = 65 + s * 65;  b = 37 + s * 18;
+  } else if (t < 0.82) {
+    const s = (t - 0.6) / 0.22;
+    r = 230 + s * 15;  g = 130 + s * 50;  b = 55 + s * 25;
+  } else {
+    const s = (t - 0.82) / 0.18;
+    r = 245 + s * 5;   g = 180 + s * 50;  b = 80 + s * 75;
+  }
+  return [r | 0, g | 0, b | 0];
+}
+
+// ─── Deposit a cell ──────────────────────────────────────────
+function depositCell(x, y, d) {
+  const idx = y * G + x;
+  grid[idx] = 1;
+  border[idx] = 0;
+  depth[idx] = d;
+  deposits++;
+
+  const t = d / MAX_DEPTH;
+  const [r, g, b] = colorAt(t);
+  px[idx*4] = r;  px[idx*4+1] = g;  px[idx*4+2] = b;
+
+  // Update border: mark empty neighbors
+  for (let dd = 0; dd < 4; dd++) {
+    const nx = x + DX[dd], ny = y + DY[dd];
+    if (nx >= 0 && nx < G && ny >= 0 && ny < G && !grid[ny*G+nx]) {
+      border[ny*G+nx] = 1;
+    }
+  }
+  pushRecent(idx);
+}
+
+// ─── Seeding ─────────────────────────────────────────────────
+function seedCircle(cx, cy, radius) {
+  cx = cx | 0;  cy = cy | 0;
+  const r2 = radius * radius;
+  for (let dy = -radius; dy <= radius; dy++) {
+    for (let dx = -radius; dx <= radius; dx++) {
+      if (dx*dx + dy*dy > r2) continue;
+      const x = cx + dx, y = cy + dy;
+      if (x < 0 || x >= G || y < 0 || y >= G) continue;
+      if (grid[y*G+x]) continue;
+      depositCell(x, y, 0);
+    }
+  }
+}
+
+function seedLine(lineY, thickness) {
+  for (let x = 0; x < G; x++) {
+    for (let t = 0; t < thickness; t++) {
+      const y = lineY + t;
+      if (y < 0 || y >= G) continue;
+      if (grid[y*G+x]) continue;
+      depositCell(x, y, 0);
+    }
+  }
+}
+
+function seedRing(cx, cy, radius, thickness) {
+  const steps = Math.ceil(2 * Math.PI * radius * 2);
+  for (let i = 0; i < steps; i++) {
+    const a = (i / steps) * Math.PI * 2;
+    for (let t = -thickness; t <= thickness; t++) {
+      const x = Math.round(cx + Math.cos(a) * (radius + t));
+      const y = Math.round(cy + Math.sin(a) * (radius + t));
+      if (x < 0 || x >= G || y < 0 || y >= G) continue;
+      if (grid[y*G+x]) continue;
+      depositCell(x, y, 0);
+    }
+  }
+}
+
+// ─── Walker management ───────────────────────────────────────
+function spawnWalker(i) {
+  for (let attempt = 0; attempt < 8; attempt++) {
+    let x, y;
+    if (recentLen > 0) {
+      const ri = (Math.random() * recentLen) | 0;
+      const ridx = recent[ri];
+      const rx = ridx % G, ry = (ridx / G) | 0;
+      const angle = Math.random() * Math.PI * 2;
+      const dist = SPAWN_MIN + Math.random() * (SPAWN_MAX - SPAWN_MIN);
+      x = Math.round(rx + Math.cos(angle) * dist);
+      y = Math.round(ry + Math.sin(angle) * dist);
+      x = Math.max(0, Math.min(G-1, x));
+      y = Math.max(0, Math.min(G-1, y));
+    } else {
+      x = (Math.random() * G) | 0;
+      y = (Math.random() * G) | 0;
+    }
+    if (!grid[y * G + x]) {
+      wx[i] = x;  wy[i] = y;  wage[i] = 0;
+      return;
+    }
+  }
+  // Fallback
+  wx[i] = (Math.random() * G) | 0;
+  wy[i] = (Math.random() * G) | 0;
+  wage[i] = 0;
+}
+
+function initWalkers() {
+  for (let i = 0; i < N_WALKERS; i++) spawnWalker(i);
+}
+
+// ─── Simulation ──────────────────────────────────────────────
+function simulate() {
+  for (let i = 0; i < N_WALKERS; i++) {
+    let x = wx[i], y = wy[i];
+
+    for (let s = 0; s < STEPS; s++) {
+      const dir = (Math.random() * 4) | 0;
+      const nx = x + DX[dir], ny = y + DY[dir];
+      if (nx < 0 || nx >= G || ny < 0 || ny >= G) continue;
+
+      const nidx = ny * G + nx;
+      if (grid[nidx]) continue; // can't step on structure
+
+      x = nx;  y = ny;
+
+      if (border[nidx]) {
+        // Find max-depth structure neighbor (for smooth gradient)
+        let maxD = 0;
+        for (let dd = 0; dd < 4; dd++) {
+          const nnx = nx + DX[dd], nny = ny + DY[dd];
+          if (nnx >= 0 && nnx < G && nny >= 0 && nny < G && grid[nny*G+nnx]) {
+            const nd = depth[nny*G+nnx];
+            if (nd > maxD) maxD = nd;
+          }
+        }
+        depositCell(nx, ny, maxD + 1);
+        spawnWalker(i);
+        x = wx[i];  y = wy[i];
+        break;
+      }
+    }
+
+    wx[i] = x;  wy[i] = y;
+    wage[i]++;
+    if (wage[i] > MAX_AGE) spawnWalker(i);
+  }
+}
+
+// ─── Rendering ───────────────────────────────────────────────
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const minDim = Math.min(canvas.width, canvas.height);
+  dw = dh = minDim * 0.88;
+  ox = (canvas.width - dw) / 2;
+  oy = (canvas.height - dh) / 2;
+}
+
+function render() {
+  offCtx.putImageData(img, 0, 0);
+
+  // Clear
+  ctx.fillStyle = '#060810';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Glow layer
+  ctx.save();
+  ctx.filter = 'blur(6px)';
+  ctx.globalAlpha = 0.2;
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(off, ox - 1, oy - 1, dw + 2, dh + 2);
+  ctx.restore();
+
+  // Structure (crisp nearest-neighbor upscale)
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(off, ox, oy, dw, dh);
+
+  // Walker particles
+  if (showWalkers) {
+    const scale = dw / G;
+    const sz = Math.max(1, scale * 0.7);
+    ctx.beginPath();
+    for (let i = 0; i < N_WALKERS; i++) {
+      ctx.rect(wx[i] * scale + ox, wy[i] * scale + oy, sz, sz);
+    }
+    ctx.fillStyle = 'rgba(150, 115, 75, 0.035)';
+    ctx.fill();
+  }
+
+  // Stats
+  statsEl.textContent = deposits.toLocaleString() + ' cells';
+}
+
+// ─── Presets ─────────────────────────────────────────────────
+function fullReset() {
+  grid.fill(0);
+  border.fill(0);
+  depth.fill(0);
+  deposits = 0;
+  recentLen = 0;
+  recentHead = 0;
+  for (let i = 0; i < G * G; i++) {
+    px[i*4] = BG[0];  px[i*4+1] = BG[1];  px[i*4+2] = BG[2];
+  }
+}
+
+function preset1() { // Center point
+  fullReset();
+  seedCircle(G/2, G/2, 5);
+  initWalkers();
+}
+
+function preset2() { // Bed (bottom edge — coral reef)
+  fullReset();
+  seedLine(G - 3, 3);
+  initWalkers();
+}
+
+function preset3() { // Ring
+  fullReset();
+  seedRing(G/2, G/2, G * 0.18, 1);
+  initWalkers();
+}
+
+function preset4() { // Scattered seeds
+  fullReset();
+  const n = 5 + ((Math.random() * 4) | 0);
+  for (let i = 0; i < n; i++) {
+    seedCircle(
+      G * 0.15 + Math.random() * G * 0.7,
+      G * 0.15 + Math.random() * G * 0.7,
+      3
+    );
+  }
+  initWalkers();
+}
+
+// ─── Input ───────────────────────────────────────────────────
+let drawing = false;
+
+function seedAtScreen(clientX, clientY) {
+  const rect = canvas.getBoundingClientRect();
+  const mx = (clientX - rect.left - ox) / dw * G;
+  const my = (clientY - rect.top - oy) / dh * G;
+  if (mx >= 2 && mx < G-2 && my >= 2 && my < G-2) {
+    seedCircle(mx, my, 3);
+  }
+}
+
+canvas.addEventListener('mousedown', e => {
+  drawing = true;
+  seedAtScreen(e.clientX, e.clientY);
+});
+canvas.addEventListener('mousemove', e => {
+  if (drawing) seedAtScreen(e.clientX, e.clientY);
+});
+canvas.addEventListener('mouseup', () => drawing = false);
+canvas.addEventListener('mouseleave', () => drawing = false);
+
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  drawing = true;
+  seedAtScreen(e.touches[0].clientX, e.touches[0].clientY);
+}, { passive: false });
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (drawing) seedAtScreen(e.touches[0].clientX, e.touches[0].clientY);
+}, { passive: false });
+canvas.addEventListener('touchend', () => drawing = false);
+
+document.addEventListener('keydown', e => {
+  switch(e.key) {
+    case 'r': case 'R': preset1(); break;
+    case '1': preset1(); break;
+    case '2': preset2(); break;
+    case '3': preset3(); break;
+    case '4': preset4(); break;
+    case 'w': case 'W': showWalkers = !showWalkers; break;
+  }
+});
+
+window.addEventListener('resize', resize);
+
+// ─── Main loop ───────────────────────────────────────────────
+resize();
+preset1();
+
+function loop() {
+  simulate();
+  render();
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+</body>
+</html>
