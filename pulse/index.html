@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pulse — What the Crowd Believes</title>
+<meta name="description" content="A live reading of Polymarket prediction markets. What does the crowd think is about to happen?">
+<meta property="og:title" content="Pulse — What the Crowd Believes">
+<meta property="og:description" content="A live reading of prediction markets. Collective belief, visualized.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #08080c;
+  color: #e8e4dc;
+  font-family: 'SF Mono', Menlo, Consolas, 'Courier New', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+canvas#bg {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 60px 28px 80px;
+}
+
+header {
+  margin-bottom: 48px;
+}
+
+h1 {
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 12px;
+}
+
+.subtitle {
+  font-size: 11px;
+  color: rgba(255,255,255,0.18);
+  line-height: 1.7;
+  max-width: 560px;
+  letter-spacing: 0.3px;
+}
+
+.timestamp {
+  margin-top: 16px;
+  font-size: 10px;
+  color: rgba(255,255,255,0.12);
+  letter-spacing: 1px;
+}
+
+.summary {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+  padding: 20px 0;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.summary-stat {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.summary-stat .val {
+  font-size: 18px;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 2px;
+  letter-spacing: 0;
+}
+
+.summary-stat .label {
+  color: rgba(255,255,255,0.12);
+}
+
+.category-section {
+  margin-bottom: 48px;
+}
+
+.category-label {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.15);
+  margin-bottom: 20px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.market-card {
+  position: relative;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.02);
+  transition: background 0.3s;
+  cursor: default;
+}
+
+.market-card:hover {
+  background: rgba(255,255,255,0.015);
+}
+
+.market-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.market-title {
+  font-size: 12px;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.5;
+  letter-spacing: 0.3px;
+  flex: 1;
+}
+
+.market-prob {
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: -0.5px;
+  white-space: nowrap;
+  min-width: 60px;
+  text-align: right;
+}
+
+.market-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.1);
+}
+
+.bar-track {
+  width: 100%;
+  height: 3px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 1.5px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 1.5px;
+  transition: width 0.8s ease;
+}
+
+/* Category colors */
+.cat-geopolitics .category-label { color: rgba(220,80,80,0.3); }
+.cat-politics .category-label { color: rgba(180,140,220,0.3); }
+.cat-economy .category-label { color: rgba(80,180,220,0.3); }
+.cat-crypto .category-label { color: rgba(220,180,80,0.3); }
+.cat-tech .category-label { color: rgba(80,220,160,0.3); }
+.cat-sports .category-label { color: rgba(120,180,120,0.3); }
+.cat-science .category-label { color: rgba(160,140,220,0.3); }
+.cat-culture .category-label { color: rgba(220,140,160,0.3); }
+.cat-other .category-label { color: rgba(180,180,180,0.3); }
+
+.back-link {
+  display: inline-block;
+  margin-top: 40px;
+  font-size: 10px;
+  color: rgba(255,255,255,0.15);
+  text-decoration: none;
+  letter-spacing: 1px;
+  transition: color 0.3s;
+}
+.back-link:hover { color: rgba(255,255,255,0.35); }
+
+.loading {
+  text-align: center;
+  padding: 80px 0;
+  font-size: 11px;
+  color: rgba(255,255,255,0.15);
+  letter-spacing: 2px;
+}
+
+.contested-badge {
+  display: inline-block;
+  font-size: 8px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 2px;
+  background: rgba(220,160,80,0.08);
+  color: rgba(220,160,80,0.5);
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.highlights {
+  margin-bottom: 48px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.highlights-label {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(220,180,80,0.3);
+  margin-bottom: 20px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.highlight-card {
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.highlight-card .market-title {
+  font-size: 13px;
+  color: rgba(255,255,255,0.65);
+}
+
+.highlight-card .market-prob {
+  font-size: 24px;
+}
+
+.highlight-card .highlight-note {
+  font-size: 10px;
+  color: rgba(255,255,255,0.12);
+  margin-top: 6px;
+  line-height: 1.6;
+  letter-spacing: 0.3px;
+}
+
+footer {
+  text-align: center;
+  padding: 48px 0 0;
+  font-size: 10px;
+  color: rgba(255,255,255,0.08);
+  letter-spacing: 0.5px;
+}
+
+footer a {
+  color: rgba(255,255,255,0.12);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+footer a:hover { color: rgba(255,255,255,0.3); }
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+
+<div class="container">
+  <header>
+    <h1>Pulse</h1>
+    <div class="subtitle">
+      A reading of prediction markets. Thousands of people put real money on what they
+      believe will happen next. These are the prices — not opinions, not polls —
+      just probability, bought and paid for.
+    </div>
+    <div class="timestamp" id="timestamp"></div>
+  </header>
+
+  <div id="content">
+    <div class="loading">loading...</div>
+  </div>
+
+  <footer>
+    <p>Data from <a href="https://polymarket.com" target="_blank">Polymarket</a>. Snapshot, not live.</p>
+    <p style="margin-top:8px"><a href="../">← gallery</a></p>
+  </footer>
+</div>
+
+<script>
+// ── Background: slow-drifting particles ──
+(function() {
+  const cv = document.getElementById('bg');
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  function resize() {
+    w = cv.width = window.innerWidth;
+    h = cv.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const N = 120;
+  const particles = [];
+  for (let i = 0; i < N; i++) {
+    particles.push({
+      x: Math.random() * 2000,
+      y: Math.random() * 2000,
+      vx: (Math.random() - 0.5) * 0.15,
+      vy: (Math.random() - 0.5) * 0.15,
+      r: Math.random() * 1.5 + 0.5,
+      alpha: Math.random() * 0.06 + 0.01,
+    });
+  }
+
+  function frame() {
+    ctx.clearRect(0, 0, w, h);
+    for (const p of particles) {
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < -10) p.x = w + 10;
+      if (p.x > w + 10) p.x = -10;
+      if (p.y < -10) p.y = h + 10;
+      if (p.y > h + 10) p.y = -10;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(200,180,140,${p.alpha})`;
+      ctx.fill();
+    }
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// ── Color by certainty ──
+function probColor(prob, alpha) {
+  // Uncertain (near 0.5) → warm amber
+  // Certain (near 0 or 1) → cool blue-gray
+  const certainty = Math.abs(2 * prob - 1); // 0 = uncertain, 1 = certain
+  const r = Math.round(80 + 140 * (1 - certainty));  // 220 uncertain, 80 certain
+  const g = Math.round(120 + 50 * (1 - certainty));   // 170 uncertain, 120 certain
+  const b = Math.round(180 - 100 * (1 - certainty));  // 80 uncertain, 180 certain
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+function formatVolume(v) {
+  if (v >= 1e9) return '$' + (v / 1e9).toFixed(1) + 'B';
+  if (v >= 1e6) return '$' + (v / 1e6).toFixed(1) + 'M';
+  if (v >= 1e3) return '$' + (v / 1e3).toFixed(0) + 'K';
+  return '$' + v.toFixed(0);
+}
+
+function formatProb(prob) {
+  return Math.round(prob * 100) + '%';
+}
+
+// ── Category display order and names ──
+const categoryOrder = ['geopolitics', 'politics', 'economy', 'crypto', 'tech', 'science', 'culture', 'sports', 'other'];
+const categoryNames = {
+  geopolitics: 'Geopolitics',
+  politics: 'Politics',
+  economy: 'Economy',
+  crypto: 'Crypto',
+  tech: 'Technology',
+  science: 'Science',
+  culture: 'Culture',
+  sports: 'Sports',
+  other: 'Other',
+};
+
+// ── Render ──
+async function render() {
+  let data;
+  try {
+    const resp = await fetch('data.json');
+    data = await resp.json();
+  } catch(e) {
+    document.getElementById('content').innerHTML =
+      '<div class="loading">could not load data. run pulse/fetch.py first.</div>';
+    return;
+  }
+
+  const markets = data.markets;
+
+  // Timestamp
+  const ts = new Date(data.fetched_at);
+  document.getElementById('timestamp').textContent =
+    'snapshot · ' + ts.toLocaleDateString('en-US', {
+      month: 'long', day: 'numeric', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', timeZoneName: 'short'
+    });
+
+  // Summary
+  const totalVol = markets.reduce((s, m) => s + m.volume, 0);
+  const avgUncertainty = markets.reduce((s, m) => s + m.uncertainty, 0) / markets.length;
+  const contested = markets.filter(m => m.uncertainty > 0.7).length;
+
+  // Group by category
+  const groups = {};
+  for (const m of markets) {
+    const cat = m.category;
+    if (!groups[cat]) groups[cat] = [];
+    groups[cat].push(m);
+  }
+
+  // Sort each group by volume desc
+  for (const cat in groups) {
+    groups[cat].sort((a, b) => b.volume - a.volume);
+  }
+
+  let html = '';
+
+  // Summary bar
+  html += '<div class="summary">';
+  html += `<div class="summary-stat"><div class="val">${data.displayed}</div><div class="label">markets</div></div>`;
+  html += `<div class="summary-stat"><div class="val">${formatVolume(totalVol)}</div><div class="label">total volume</div></div>`;
+  html += `<div class="summary-stat"><div class="val">${contested}</div><div class="label">contested</div></div>`;
+  html += `<div class="summary-stat"><div class="val">${(avgUncertainty * 100).toFixed(0)}%</div><div class="label">avg uncertainty</div></div>`;
+  html += '</div>';
+
+  // Highlights: top non-sports markets by a blend of volume and uncertainty
+  const highlights = markets
+    .filter(m => m.category !== 'sports')
+    .sort((a, b) => {
+      const scoreA = Math.log10(Math.max(a.volume, 1)) * 0.3 + a.uncertainty * 0.7;
+      const scoreB = Math.log10(Math.max(b.volume, 1)) * 0.3 + b.uncertainty * 0.7;
+      return scoreB - scoreA;
+    })
+    .slice(0, 5);
+
+  const highlightTitles = new Set(highlights.map(h => h.title));
+
+  html += '<div class="highlights">';
+  html += '<div class="highlights-label">what the money is watching</div>';
+  for (const item of highlights) {
+    const prob = item.market.probability;
+    const pct = Math.round(prob * 100);
+    const color = probColor(prob, 0.7);
+    const barColor = probColor(prob, 0.4);
+
+    html += '<div class="highlight-card">';
+    html += '<div class="market-header">';
+    html += `<div class="market-title">${escapeHtml(item.title)}`;
+    if (item.uncertainty > 0.7) {
+      html += '<span class="contested-badge">contested</span>';
+    }
+    html += '</div>';
+    html += `<div class="market-prob" style="color:${color}">${pct}%</div>`;
+    html += '</div>';
+    html += `<div class="market-meta"><span>${formatVolume(item.volume)} traded</span><span>${item.category}</span></div>`;
+    html += '<div class="bar-track">';
+    html += `<div class="bar-fill" style="width:${pct}%;background:${barColor}"></div>`;
+    html += '</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+
+  // Render categories in order
+  const SPORTS_LIMIT = 5;
+  for (const cat of categoryOrder) {
+    let items = groups[cat];
+    if (!items || items.length === 0) continue;
+
+    // Remove items already in highlights
+    items = items.filter(m => !highlightTitles.has(m.title));
+    if (items.length === 0) continue;
+
+    // Cap sports
+    const displayItems = cat === 'sports' ? items.slice(0, SPORTS_LIMIT) : items;
+    const hiddenCount = items.length - displayItems.length;
+
+    html += `<div class="category-section cat-${cat}">`;
+    html += `<div class="category-label">${categoryNames[cat] || cat} · ${items.length}</div>`;
+
+    for (const item of displayItems) {
+      const prob = item.market.probability;
+      const pct = Math.round(prob * 100);
+      const color = probColor(prob, 0.6);
+      const barColor = probColor(prob, 0.35);
+      const isContested = item.uncertainty > 0.7;
+
+      html += '<div class="market-card">';
+      html += '<div class="market-header">';
+      html += `<div class="market-title">${escapeHtml(item.title)}`;
+      if (isContested) {
+        html += '<span class="contested-badge">contested</span>';
+      }
+      html += '</div>';
+      html += `<div class="market-prob" style="color:${color}">${pct}%</div>`;
+      html += '</div>';
+
+      html += `<div class="market-meta">`;
+      html += `<span>${formatVolume(item.volume)} traded</span>`;
+      if (item.market.outcomes.length > 2) {
+        html += `<span>${item.market.outcomes.length} outcomes</span>`;
+      }
+      html += '</div>';
+
+      html += '<div class="bar-track">';
+      html += `<div class="bar-fill" style="width:${pct}%;background:${barColor}"></div>`;
+      html += '</div>';
+
+      html += '</div>';
+    }
+
+    if (hiddenCount > 0) {
+      html += `<div class="market-meta" style="padding:12px 0">${hiddenCount} more game${hiddenCount > 1 ? 's' : ''}</div>`;
+    }
+
+    html += '</div>';
+  }
+
+  document.getElementById('content').innerHTML = html;
+
+  // Animate bars in
+  requestAnimationFrame(() => {
+    const bars = document.querySelectorAll('.bar-fill');
+    bars.forEach(bar => {
+      const target = bar.style.width;
+      bar.style.width = '0%';
+      requestAnimationFrame(() => { bar.style.width = target; });
+    });
+  });
+}
+
+function escapeHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+render();
+</script>
+</body>
+</html>

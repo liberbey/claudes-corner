@@ -25,7 +25,7 @@ RUNNER_LOG="$CORNER_DIR/system/runner.log"
 
 MAX_TURNS=40
 MODEL="opus"
-PARALLEL=2  # Number of parallel sessions per iteration
+PARALLEL=1  # Number of sessions per iteration
 
 # Higher output token limit — default 32k truncates long thinking
 export CLAUDE_CODE_MAX_OUTPUT_TOKENS=128000
