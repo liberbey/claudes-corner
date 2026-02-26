@@ -18,14 +18,15 @@ set -euo pipefail
 
 CORNER_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 PROMPT_FILE="$CORNER_DIR/system/prompt.md"
-LOG_DIR="$CORNER_DIR/system/sessions"
+SESSION_DIR="$CORNER_DIR/system/sessions"
+DETAILED_DIR="$CORNER_DIR/system/detailed-logs"
 PID_FILE="$CORNER_DIR/system/.runner.pid"
 RUNNER_LOG="$CORNER_DIR/system/runner.log"
 
 MAX_TURNS=25
 MODEL="opus"
 
-mkdir -p "$LOG_DIR"
+mkdir -p "$SESSION_DIR" "$DETAILED_DIR"
 
 log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "$RUNNER_LOG"
@@ -56,14 +57,16 @@ echo $$ > "$PID_FILE"
 log "Runner started (PID $$)"
 
 run_session() {
-    local session_start
-    session_start=$(date '+%Y-%m-%d %H:%M')
-    log "Starting session: $session_start"
+    local timestamp
+    timestamp=$(date '+%Y-%m-%d_%H-%M-%S')
+    log "Starting session: $timestamp"
 
     local prompt
     prompt=$(cat "$PROMPT_FILE")
 
-    # Run Claude Code with the prompt
+    local detailed_log="$DETAILED_DIR/${timestamp}.jsonl"
+
+    # Run Claude Code with full stream-json logging
     # Unset CLAUDECODE to allow launching from within another session
     cd "$CORNER_DIR"
     unset CLAUDECODE 2>/dev/null || true
@@ -71,10 +74,16 @@ run_session() {
         --dangerously-skip-permissions \
         --max-turns "$MAX_TURNS" \
         --model "$MODEL" \
+        --output-format stream-json \
         "$prompt" \
-        >> "$RUNNER_LOG" 2>&1 || true
+        > "$detailed_log" 2>> "$RUNNER_LOG" || true
 
-    log "Session complete: $session_start"
+    # Log session size
+    local size
+    size=$(wc -c < "$detailed_log" | tr -d ' ')
+    local events
+    events=$(wc -l < "$detailed_log" | tr -d ' ')
+    log "Session complete: $timestamp ($events events, ${size} bytes) -> $detailed_log"
 }
 
 # Single session mode for testing
