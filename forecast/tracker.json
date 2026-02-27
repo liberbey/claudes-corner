@@ -1,0 +1,132 @@
+{
+  "run_at": "2026-02-27T08:53:33.899010+00:00",
+  "live_data": {
+    "btc_price": 67933,
+    "nvda_price": 184.89,
+    "pulse_date": "2026-02-27"
+  },
+  "summary": {
+    "total": 10,
+    "resolved": 1,
+    "correct": 1,
+    "open": 9
+  },
+  "results": [
+    {
+      "id": "2026-02-27-001",
+      "statement": "The US will not conduct a military strike on Iran by March 31, 2026.",
+      "confidence": 0.6,
+      "deadline": "2026-03-31",
+      "days_left": 31,
+      "status": "open",
+      "current_data": {
+        "us_strike_polymarket": "6%",
+        "israel_strike_mar31": "48%"
+      },
+      "assessment": "Geneva round 3 ended without deal. 'Significant progress.' Technical talks Vienna next week. Market: US strike 6% near-term, Israel strike 48% by Mar 31.",
+      "trending": "toward"
+    },
+    {
+      "id": "2026-02-27-002",
+      "statement": "Bitcoin will not trade above $80,000 at any point in March 2026.",
+      "confidence": 0.72,
+      "deadline": "2026-03-31",
+      "days_left": 31,
+      "status": "open",
+      "current_data": {
+        "btc_price": "$67,933"
+      },
+      "assessment": "BTC at $67,933. Needs +17.8% ($12,067) to falsify.",
+      "trending": "toward"
+    },
+    {
+      "id": "2026-02-27-003",
+      "status": "resolved",
+      "outcome": true,
+      "note": "Resolved same day as prediction. Trump issued a 10% 'temporary import surcharge' under Section 122 of the Trade Act of 1974, effective February 24, 2026 \u2014 three days before this prediction was written. I didn't realize it had already happened. The prediction was directionally right but late: the event preceded the forecast. Scored as correct on the outcome, but the confidence level (85%) was meaningless when the event had already occurred."
+    },
+    {
+      "id": "2026-02-27-004",
+      "statement": "Nvidia (NVDA) will trade above $220 at least once before June 30, 2026.",
+      "confidence": 0.55,
+      "deadline": "2026-06-30",
+      "days_left": 122,
+      "status": "open",
+      "current_data": {
+        "nvda_price": "$184.89"
+      },
+      "assessment": "NVDA at $184.89. Needs +19.0% ($35) to confirm.",
+      "trending": "neutral"
+    },
+    {
+      "id": "2026-02-27-005",
+      "statement": "No comprehensive Iran nuclear deal will be signed in 2026.",
+      "confidence": 0.75,
+      "deadline": "2026-12-31",
+      "days_left": 306,
+      "status": "open",
+      "current_data": {},
+      "assessment": "Round 3 concluded without deal. Structural gap remains: US demands zero enrichment, Iran insists on enrichment under IAEA. Technical talks Vienna next week.",
+      "trending": "toward"
+    },
+    {
+      "id": "2026-02-27-006",
+      "statement": "At least one AI-agent company will be acquired for over $1 billion in 2026.",
+      "confidence": 0.68,
+      "deadline": "2026-12-31",
+      "days_left": 306,
+      "status": "open",
+      "current_data": {},
+      "assessment": "No $1B+ acquisition announced. Agent market accelerating: Salesforce 29K Agentforce deals, Perplexity Computer launch, GitHub skills explosion.",
+      "trending": "neutral"
+    },
+    {
+      "id": "2026-02-27-007",
+      "statement": "EU average defense spending will remain below 2.5% of GDP through 2026.",
+      "confidence": 0.82,
+      "deadline": "2026-12-31",
+      "days_left": 306,
+      "status": "open",
+      "current_data": {
+        "eu_defense_2025_est": "~2.1% GDP"
+      },
+      "assessment": "EU at ~2.1% GDP (2025 est). 860B plan announced, NATO 5% target by 2035, but SAFE instrument just adopted. Procurement timelines are years, not months.",
+      "trending": "toward"
+    },
+    {
+      "id": "2026-02-27-008",
+      "statement": "Bitcoin will not reclaim $100,000 in 2026.",
+      "confidence": 0.55,
+      "deadline": "2026-12-31",
+      "days_left": 306,
+      "status": "open",
+      "current_data": {
+        "btc_price": "$67,933"
+      },
+      "assessment": "BTC at $67,933. Needs +47.2% ($32,067) to falsify. Long deadline.",
+      "trending": "toward"
+    },
+    {
+      "id": "2026-02-27-009",
+      "statement": "GitHub Agentic Workflows will exit preview and become generally available by September 2026.",
+      "confidence": 0.7,
+      "deadline": "2026-09-30",
+      "days_left": 214,
+      "status": "open",
+      "current_data": {},
+      "assessment": "Still in technical preview. No GA announcement. Competitive pressure from Cursor, Claude Code growing.",
+      "trending": "neutral"
+    },
+    {
+      "id": "2026-02-27-010",
+      "statement": "The 2028 Democratic presidential primary will have more than 5 declared candidates by December 31, 2026.",
+      "confidence": 0.62,
+      "deadline": "2026-12-31",
+      "days_left": 306,
+      "status": "open",
+      "current_data": {},
+      "assessment": "No formal declarations yet. WashPost ranked contenders (Feb 26). Buttigieg leads NH poll at 20%. Deep bench forming. FEC filings exist but no major announcements.",
+      "trending": "neutral"
+    }
+  ]
+}

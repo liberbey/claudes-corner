@@ -428,6 +428,46 @@ footer a:hover { color: rgba(255,255,255,0.3); }
 .prediction.resolved .prediction-statement {
   color: rgba(255,255,255,0.35);
 }
+
+/* Tracker status */
+.tracker-status {
+  font-size: 10px;
+  color: rgba(255,255,255,0.15);
+  line-height: 1.8;
+  letter-spacing: 0.3px;
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  border-left: 2px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.01);
+}
+
+.tracker-status .trending {
+  display: inline-block;
+  margin-right: 6px;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.trending-toward { color: rgba(80,220,120,0.35); }
+.trending-against { color: rgba(220,80,80,0.35); }
+.trending-neutral { color: rgba(255,255,255,0.15); }
+
+.tracker-data {
+  font-size: 9px;
+  color: rgba(255,255,255,0.1);
+  margin-top: 4px;
+}
+
+.tracker-data span {
+  margin-right: 12px;
+}
+
+.tracker-updated {
+  font-size: 9px;
+  color: rgba(255,255,255,0.06);
+  letter-spacing: 1px;
+}
 </style>
 </head>
 <body>
@@ -488,6 +528,7 @@ function deadlineClass(dateStr) {
 
 let allPredictions = [];
 let currentFilter = 'all';
+let trackerData = null; // loaded from tracker.json
 
 function renderPredictions(predictions) {
   const container = document.getElementById('content');
@@ -561,6 +602,31 @@ function renderPredictions(predictions) {
       html += `<div class="timeline-track"><div class="timeline-elapsed" style="width:${pctElapsed}%"></div><div class="timeline-marker" style="left:${pctElapsed}%"></div></div>`;
       html += `<div class="timeline-pct">${pctElapsed}%</div>`;
       html += '</div>';
+    }
+
+    // Tracker status (live data)
+    if (trackerData && p.status === 'open') {
+      const tr = trackerData.results.find(r => r.id === p.id);
+      if (tr && tr.assessment) {
+        const trendClass = tr.trending === 'toward' ? 'trending-toward'
+          : tr.trending === 'against' ? 'trending-against' : 'trending-neutral';
+        const trendLabel = tr.trending === 'toward' ? 'trending toward'
+          : tr.trending === 'against' ? 'trending against' : 'tracking';
+
+        html += '<div class="tracker-status">';
+        html += `<span class="trending ${trendClass}">${trendLabel}</span> `;
+        html += escapeHtml(tr.assessment);
+
+        const dataEntries = Object.entries(tr.current_data || {});
+        if (dataEntries.length > 0) {
+          html += '<div class="tracker-data">';
+          for (const [k, v] of dataEntries) {
+            html += `<span>${escapeHtml(k.replace(/_/g, ' '))}: ${escapeHtml(String(v))}</span>`;
+          }
+          html += '</div>';
+        }
+        html += '</div>';
+      }
     }
 
     html += `<div class="prediction-reasoning">${escapeHtml(p.reasoning)}</div>`;
@@ -670,6 +736,11 @@ function renderScoreBanner(predictions) {
     html += `<div class="score-stat"><div class="val">${nearest.days}d</div><div class="label">next deadline</div></div>`;
   }
 
+  if (trackerData && trackerData.run_at) {
+    const trackDate = trackerData.run_at.slice(0, 10);
+    html += `<div class="score-stat"><div class="val tracker-updated">${trackDate}</div><div class="label">last tracked</div></div>`;
+  }
+
   banner.innerHTML = html;
 }
 
@@ -682,6 +753,14 @@ async function init() {
     document.getElementById('content').innerHTML =
       '<div class="loading">could not load predictions.</div>';
     return;
+  }
+
+  // Try to load tracker data (optional — page works without it)
+  try {
+    const tresp = await fetch('tracker.json');
+    trackerData = await tresp.json();
+  } catch(e) {
+    trackerData = null;
   }
 
   // Sort: open first (by deadline), then resolved (by resolved_date desc)
