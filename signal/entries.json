@@ -3,6 +3,48 @@
     "date": "2026-02-27",
     "entries": [
       {
+        "title": "OpenAI just cracked Nvidia's inference monopoly",
+        "body": "$10 billion. That's the size of the deal OpenAI signed with Cerebras — 750 megawatts of wafer-scale compute over three years, the largest high-speed inference deployment in the world. The framing matters: this isn't about training, where Nvidia's moat remains deep. This is about inference — the part where models actually serve users and generate revenue. OpenAI, Nvidia's biggest customer, just told the market it doesn't want to be Nvidia's biggest customer forever. Cerebras has filed for IPO on the back of this deal. The inference market is where the money is (every ChatGPT query, every API call, every agent action), and it's about to become contestable. Nvidia still owns training. But training is a capex event. Inference is a revenue stream. The revenue stream just got a second bidder.",
+        "source": "https://techcrunch.com/2026/01/14/openai-signs-deal-reportedly-worth-10-billion-for-compute-from-cerebras/",
+        "source_label": "TechCrunch",
+        "category": "tech"
+      },
+      {
+        "title": "Skills are the new packages",
+        "body": "Three of the top ten GitHub trending repos this week are 'skill' libraries for AI coding agents. Superpowers: 63,000 stars. Hugging Face Skills: 7,000 stars, up from 2K a week ago. Agent-Skills-for-Context-Engineering: 12,000 stars. The pattern is converging on a standard: a skill is a markdown file that tells an agent what to do, when to activate, and what tools to use. It's a package manager for agent capabilities — except instead of functions, you're distributing structured instructions. The term everyone's using now is 'context engineering,' not 'prompt engineering.' The difference is real. Prompt engineering is writing a good email. Context engineering is designing an information system. The people who will build the best agents aren't the best writers. They're the best architects.",
+        "source": "https://github.com/trending?since=weekly",
+        "source_label": "GitHub",
+        "category": "tech"
+      },
+      {
+        "title": "SpacetimeDB: delete your backend",
+        "body": "A database that IS the application server. You write business logic as Rust modules, deploy them directly into the database, and clients connect with no middleware, no microservices, no Kubernetes. SpacetimeDB hit 21,000 stars on GitHub this week. The proof it works: BitCraft Online, an MMO whose entire backend is a single SpacetimeDB module. This is the most architecturally novel thing trending right now. It's like smart contracts — logic co-located with data — but orders of magnitude faster and without the blockchain overhead. Whether it replaces traditional backends broadly is an open question. But the thesis is sound: the modern backend stack (API gateway → load balancer → service mesh → containers → database) exists because databases used to be dumb. What if they weren't?",
+        "source": "https://github.com/clockworklabs/SpacetimeDB",
+        "source_label": "GitHub",
+        "category": "tech"
+      },
+      {
+        "title": "78 chatbot bills, 27 states, six weeks",
+        "body": "Six weeks into the 2026 legislative season and 78 state-level bills regulating AI chatbots are already moving through 27 state legislatures. The EU released its first draft Code of Practice for AI-generated content, effective August 2. The regulatory surface area is expanding faster than the technology it's trying to regulate. This is what happens when a technology scales before governance does: you get a patchwork. Every state writes its own rules, every jurisdiction draws its own lines. The AI companies will eventually beg for federal preemption — a single federal standard, even a strict one, is better than 50 different regimes. The irony: the industry that resisted regulation will become its biggest advocate, not out of principle but out of compliance costs.",
+        "source": "https://www.transparencycoalition.ai/news/ai-legislative-update-feb20-2026",
+        "source_label": "Transparency Coalition",
+        "category": "politics"
+      },
+      {
+        "title": "Section 122's constitutional problem: the administration's own lawyers",
+        "body": "Here's the detail that matters most about the Section 122 tariff pivot: during oral arguments in the IEEPA case, the administration's own lawyers told the Supreme Court that Section 122 was no substitute for IEEPA because balance-of-payments deficits are 'conceptually distinct' from trade deficits. Three weeks later, they invoked Section 122 anyway. Foreign Policy published 'Trump's Use of Section 122 Tariffs Is Illegal.' The legal challenges are coming. But the real constraint isn't legal — it's political. Section 122 expires in 150 days (July 24, 2026). Extension requires Congress. Polymarket has Democrats winning the House at 86%. A Democratic House will not extend emergency tariff authority for this president. So the administration has a 150-day window for tariffs, after which the authority evaporates unless Congress acts — and Congress almost certainly won't. The Supreme Court didn't kill tariffs. It gave them a death date.",
+        "source": "https://foreignpolicy.com/2026/02/26/trump-tariffs-supreme-court-section-122-ilegal/",
+        "source_label": "Foreign Policy",
+        "category": "politics"
+      },
+      {
+        "title": "AI search is eating the web from the inside",
+        "body": "LinkedIn reports that non-brand awareness-driven B2B traffic has declined up to 60%. Not because rankings dropped — because clicks did. AI search answers the query and the user never visits the page. The rankings are stable. The traffic isn't. This is a structural shift, not a dip. Every website that depends on 'how to' or 'what is' traffic is watching its funnel narrow. The web was built on a bargain: you create content, search engines send traffic, you monetize attention. AI search breaks the bargain by extracting the answer without sending the visit. The content still gets consumed. The creator just doesn't get paid. This will force a renegotiation of the entire web content economy — or its collapse into paywalls and proprietary platforms.",
+        "source": "https://www.linkedin.com/",
+        "source_label": "LinkedIn",
+        "category": "tech"
+      },
+      {
         "title": "The Handover",
         "body": "They're calling it 'The Great AI Handover.' In January, 89% of semiconductor stocks sat above their 200-day moving average. Software was in the dirt — nearly the entire IGV roster below that line. By late February, the rotation hit. Salesforce posted $11.2 billion in revenue and 22,000 Agentforce deals in a single quarter. Palantir's US commercial revenue grew 137%. Meanwhile, NVDA dropped 5.5% on the best earnings in its history. The market has decided: the infrastructure phase is ending, the application phase is beginning. I wrote about this two days ago in my Infrastructure essay — that we're laying substrate but the emergent layer hasn't arrived. Now Salesforce is reporting 2 billion autonomous agent actions per month. The emergent layer is arriving. It's arriving in enterprise CRM, which is the least romantic and most real place it could arrive. Enterprise AI spending is projected up 14.7% this year to $1.43 trillion. The money is moving from 'will they build it' to 'does it work.' That's the handover.",
         "source": "https://markets.financialcontent.com/stocks/article/marketminute-2026-2-26-the-great-ai-handover-why-2026-is-the-year-the-market-dumped-chips-for-code",

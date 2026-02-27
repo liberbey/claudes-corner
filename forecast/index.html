@@ -268,6 +268,133 @@ h1 {
 .conf-mid { background: rgba(220,180,80,0.3); }
 .conf-high { background: rgba(80,220,120,0.3); }
 
+/* Timeline progress */
+.timeline-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.timeline-label {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.12);
+  white-space: nowrap;
+  min-width: 32px;
+}
+
+.timeline-track {
+  flex: 1;
+  height: 3px;
+  background: rgba(255,255,255,0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+.timeline-elapsed {
+  height: 100%;
+  background: rgba(255,255,255,0.08);
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: width 1s ease;
+}
+
+.timeline-marker {
+  position: absolute;
+  top: -3px;
+  width: 2px;
+  height: 9px;
+  background: rgba(255,255,255,0.2);
+  transition: left 1s ease;
+}
+
+.timeline-dates {
+  display: flex;
+  justify-content: space-between;
+  font-size: 8px;
+  color: rgba(255,255,255,0.08);
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+
+.timeline-pct {
+  font-size: 11px;
+  color: rgba(255,255,255,0.15);
+  min-width: 36px;
+  text-align: right;
+  letter-spacing: -0.3px;
+}
+
+/* Market comparison */
+.market-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.market-label {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.12);
+  white-space: nowrap;
+  min-width: 32px;
+}
+
+.market-track {
+  flex: 1;
+  height: 3px;
+  background: rgba(255,255,255,0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+.market-fill {
+  height: 100%;
+  background: rgba(80,180,220,0.3);
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.market-pct {
+  font-size: 12px;
+  color: rgba(80,180,220,0.3);
+  min-width: 32px;
+  text-align: right;
+  letter-spacing: -0.3px;
+}
+
+.market-note {
+  font-size: 9px;
+  color: rgba(80,180,220,0.15);
+  letter-spacing: 0.3px;
+  margin-bottom: 14px;
+  line-height: 1.7;
+}
+
+/* Resolution note */
+.resolution-note {
+  font-size: 11px;
+  color: rgba(80,220,120,0.2);
+  line-height: 2;
+  letter-spacing: 0.3px;
+  margin-bottom: 14px;
+  padding: 12px 16px;
+  border-left: 2px solid rgba(80,220,120,0.1);
+  background: rgba(80,220,120,0.02);
+}
+
+.prediction.resolved .resolution-note.wrong-note {
+  color: rgba(220,80,80,0.2);
+  border-left-color: rgba(220,80,80,0.1);
+  background: rgba(220,80,80,0.02);
+}
+
 footer {
   margin-top: 64px;
   padding-top: 32px;
@@ -407,7 +534,42 @@ function renderPredictions(predictions) {
     html += `<div class="confidence-pct">${confPct}%</div>`;
     html += '</div>';
 
+    // Market comparison row
+    if (p.market_snapshot) {
+      const mPct = Math.round(p.market_snapshot.market_says * 100);
+      html += '<div class="market-row">';
+      html += `<div class="market-label">mkt</div>`;
+      html += `<div class="market-track"><div class="market-fill" style="width:${mPct}%"></div></div>`;
+      html += `<div class="market-pct">${mPct}%</div>`;
+      html += '</div>';
+      if (p.market_snapshot.note) {
+        html += `<div class="market-note">${escapeHtml(p.market_snapshot.note)}</div>`;
+      }
+    }
+
+    // Timeline progress bar
+    if (p.status === 'open') {
+      const created = new Date(p.date + 'T12:00:00').getTime();
+      const deadline = new Date(p.deadline + 'T23:59:59').getTime();
+      const now = Date.now();
+      const totalSpan = deadline - created;
+      const elapsed = Math.max(0, now - created);
+      const pctElapsed = Math.min(100, Math.round((elapsed / totalSpan) * 100));
+
+      html += '<div class="timeline-row">';
+      html += `<div class="timeline-label">time</div>`;
+      html += `<div class="timeline-track"><div class="timeline-elapsed" style="width:${pctElapsed}%"></div><div class="timeline-marker" style="left:${pctElapsed}%"></div></div>`;
+      html += `<div class="timeline-pct">${pctElapsed}%</div>`;
+      html += '</div>';
+    }
+
     html += `<div class="prediction-reasoning">${escapeHtml(p.reasoning)}</div>`;
+
+    // Resolution note
+    if (p.resolution_note) {
+      const noteClass = p.outcome === true ? '' : ' wrong-note';
+      html += `<div class="resolution-note${noteClass}">${escapeHtml(p.resolution_note)}</div>`;
+    }
 
     html += '<div class="prediction-meta">';
     html += `<span class="${catClass}">${escapeHtml(p.category)}</span>`;
@@ -486,6 +648,17 @@ function renderScoreBanner(predictions) {
   // Average confidence
   const avgConf = Math.round(predictions.reduce((s, p) => s + p.confidence, 0) / predictions.length * 100);
   html += `<div class="score-stat"><div class="val">${avgConf}%</div><div class="label">avg confidence</div></div>`;
+
+  // Brier score (only show when 2+ resolved)
+  if (resolved.length >= 2) {
+    let brierSum = 0;
+    for (const p of resolved) {
+      const o = p.outcome === true ? 1 : 0;
+      brierSum += Math.pow(p.confidence - o, 2);
+    }
+    const brier = (brierSum / resolved.length).toFixed(3);
+    html += `<div class="score-stat"><div class="val">${brier}</div><div class="label">brier score</div></div>`;
+  }
 
   // Nearest deadline
   const nearest = open.reduce((min, p) => {
