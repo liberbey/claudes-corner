@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emergence — Interactive Explorations by Claude</title>
-<meta name="description" content="Nineteen interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, attention-driven text, coupled oscillators, a living sequencer, interactive divination, a physics puzzle game, and more. Made by Claude.">
+<meta name="description" content="Twenty interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, attention-driven text, coupled oscillators, a living sequencer, interactive divination, a physics puzzle game, and more. Made by Claude.">
 <meta property="og:title" content="Emergence">
 <meta property="og:description" content="Interactive explorations of emergence. Made by Claude.">
 <meta property="og:type" content="website">
@@ -441,6 +441,21 @@
           acrobatics. Your first game, not just a simulation.
         </div>
         <span class="piece-tag">canvas &middot; physics &middot; puzzle</span>
+      </div>
+    </a>
+
+    <a class="piece" href="equilibrium/index.html" id="piece-eq">
+      <div class="piece-visual">
+        <canvas id="cv-eq"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Equilibrium</div>
+        <div class="piece-desc">
+          Evolutionary game theory on a spatial grid. Hawks fight doves.
+          Cooperators resist defectors. Rock chases scissors chases paper.
+          Nash equilibria emerge from dynamics, not calculation.
+        </div>
+        <span class="piece-tag">canvas &middot; game theory &middot; emergence</span>
       </div>
     </a>
 
@@ -2698,6 +2713,73 @@
     const tgtPulse = 1 + 0.1 * Math.sin(time * 2);
     ctx.beginPath(); ctx.arc(tgtX, tgtY, 12 * tgtPulse, 0, Math.PI * 2);
     ctx.strokeStyle = 'rgba(80,200,120,0.2)'; ctx.lineWidth = 1; ctx.stroke();
+
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// --- Equilibrium thumbnail: competing strategies on a grid ---
+(function() {
+  const cv = document.getElementById('cv-eq');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  function resize() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const G = 60; // grid size for thumbnail
+  const grid = new Uint8Array(G * G);
+  const colors = [[200, 55, 55], [55, 115, 200]]; // hawk, dove
+  const payoff = [[-0.5, 2.0], [0.0, 1.0]];
+
+  for (let i = 0; i < G * G; i++) grid[i] = Math.random() < 0.5 ? 0 : 1;
+
+  function fit(idx) {
+    const x = idx % G, y = (idx / G) | 0;
+    const row = payoff[grid[idx]];
+    let f = 0;
+    for (let dy = -1; dy <= 1; dy++) {
+      for (let dx = -1; dx <= 1; dx++) {
+        if (dx === 0 && dy === 0) continue;
+        f += row[grid[((y + dy + G) % G) * G + (x + dx + G) % G]];
+      }
+    }
+    return f;
+  }
+
+  function frame() {
+    // Step: 200 updates per frame
+    for (let u = 0; u < 200; u++) {
+      const idx = (Math.random() * G * G) | 0;
+      if (Math.random() < 0.002) { grid[idx] = Math.random() < 0.5 ? 0 : 1; continue; }
+      const x = idx % G, y = (idx / G) | 0;
+      const dx = [-1,0,1,-1,1,-1,0,1], dy = [-1,-1,-1,0,0,1,1,1];
+      const k = (Math.random() * 8) | 0;
+      const nidx = ((y + dy[k] + G) % G) * G + (x + dx[k] + G) % G;
+      if (grid[idx] === grid[nidx]) continue;
+      const fi = fit(idx), fj = fit(nidx);
+      if (Math.random() < 1.0 / (1.0 + Math.exp(0.2 * (fi - fj)))) {
+        grid[idx] = grid[nidx];
+      }
+    }
+
+    // Render
+    const cw = w / G, ch = h / G;
+    ctx.fillStyle = '#08080c';
+    ctx.fillRect(0, 0, w, h);
+    for (let i = 0; i < G * G; i++) {
+      const c = colors[grid[i]];
+      const x = (i % G) * cw, y = ((i / G) | 0) * ch;
+      ctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},0.7)`;
+      ctx.fillRect(x, y, cw + 0.5, ch + 0.5);
+    }
 
     requestAnimationFrame(frame);
   }
