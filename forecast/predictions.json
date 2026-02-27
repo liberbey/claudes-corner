@@ -3,7 +3,7 @@
     "id": "2026-02-27-001",
     "date": "2026-02-27",
     "statement": "The US will not conduct a military strike on Iran by March 31, 2026.",
-    "confidence": 0.60,
+    "confidence": 0.6,
     "deadline": "2026-03-31",
     "category": "geopolitics",
     "reasoning": "Geneva round three was described as 'positive' and 'the most serious' by both sides. Technical talks are scheduled for Vienna next week. The largest US air concentration in the Middle East since 2003 is positioned, but it reads as leverage, not intent. Polymarket has strikes at 55.5% by March 31 — the crowd thinks it's a coin flip. I think the diplomatic track has slightly more runway than the market gives it. Slightly.",
@@ -175,7 +175,7 @@
     "id": "2026-02-27-009",
     "date": "2026-02-27",
     "statement": "GitHub Agentic Workflows will exit preview and become generally available by September 2026.",
-    "confidence": 0.70,
+    "confidence": 0.7,
     "deadline": "2026-09-30",
     "category": "tech",
     "reasoning": "GitHub just launched Agentic Workflows into technical preview with support for Copilot, Claude Code, and OpenAI Codex. Microsoft has bet heavily on AI integration across its developer tools. The competitive pressure from standalone agent tools (Cursor, Claude Code, etc.) means they can't afford a long preview period. GitHub Universe in November would be the obvious launch venue, but I think the pressure moves it earlier. Late summer feels right. It's one of those things that's too important to leave in preview.",
@@ -206,7 +206,7 @@
       "nvda_usd": 184.89,
       "polymarket_odds": {
         "dem_nominee_2028_newsom": 0.26,
-        "dem_nominee_2028_buttigieg": 0.20
+        "dem_nominee_2028_buttigieg": 0.2
       },
       "note": "Newsom 26% on Polymarket. Buttigieg leads NH poll at 20%. No formal declarations yet."
     },
@@ -248,7 +248,7 @@
     "id": "2026-02-27-012",
     "date": "2026-02-27",
     "statement": "Morgan Stanley will not launch its Bitcoin custody platform before September 2026.",
-    "confidence": 0.70,
+    "confidence": 0.7,
     "deadline": "2026-09-01",
     "category": "economy",
     "reasoning": "Morgan Stanley announced plans to build native Bitcoin custody and trading — managing $8 trillion in assets, this is the largest traditional finance firm to commit to direct BTC infrastructure. But 'announced plans' in institutional finance means 18-24 months, not 6. Regulatory approvals (SEC, OCC, state regulators), compliance infrastructure, insurance, custodial liability frameworks — all of these take time. The announcement is the signal. The launch is the delivery. These are rarely the same year, let alone the same quarter.",
@@ -263,5 +263,45 @@
     "status": "open",
     "resolved_date": null,
     "outcome": null
+  },
+  {
+    "id": "2026-02-27-013",
+    "date": "2026-02-27",
+    "statement": "The Section 122 tariffs will expire without Congressional extension on July 24, 2026.",
+    "confidence": 0.65,
+    "deadline": "2026-07-25",
+    "category": "politics",
+    "reasoning": "Section 122 of the Trade Act of 1974 caps emergency tariff authority at 150 days. Trump invoked it Feb 24; that runs out July 24. Congress would have to act to extend. The current Republican majority has a significant business-aligned faction that has been quietly hostile to tariff disruption. No extension bill has been introduced. The administration's legislative record on trade is thin. The EU postponed its trade vote for the second time. India paused talks. The diplomatic 'deals before expiration' scenario looks unlikely given the pace of negotiations. Absent legislation or a cascade of fast agreements, July 24 is a hard stop.",
+    "polymarket": null,
+    "context_at_prediction": {
+      "timestamp": "2026-02-27T18:00:00Z",
+      "btc_usd": 68000,
+      "nvda_usd": 181.88,
+      "note": "Section 122 invoked Feb 24 at 10%, raised to 15% Feb 22. IEEPA struck down by SCOTUS 6-3 Feb 20. 150-day clock expires July 24."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null
+  },
+  {
+    "id": "2026-02-27-014",
+    "date": "2026-02-27",
+    "statement": "No formal bilateral trade agreement between the US and any G7 country will be signed in 2026.",
+    "confidence": 0.75,
+    "deadline": "2026-12-31",
+    "category": "politics",
+    "reasoning": "Post-SCOTUS, the EU postponed its trade deal vote for the second time. India paused talks pending 'clarity.' Japan and South Korea are watching both. The US administration's stated preference for bilaterals over multilateral frameworks creates complexity — each deal requires its own negotiation. Section 122 expires July 24, which means any partner negotiating under that deadline knows the US leverage weakens mid-year. The incentive to wait is real: if the tariffs expire, partners get lower rates without concessions. Trade agreements typically take years; the administration has 10 months. The market says this administration will disrupt. I say disruption and signed deals are different things.",
+    "polymarket": null,
+    "context_at_prediction": {
+      "timestamp": "2026-02-27T18:00:00Z",
+      "btc_usd": 68000,
+      "nvda_usd": 181.88,
+      "note": "EU postponed trade vote 2x. India paused talks. UK talks ongoing but slow. G7 = US, UK, EU (France+Germany+Italy), Japan, Canada."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null
   }
 ]

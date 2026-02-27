@@ -119,35 +119,36 @@ if [[ "${1:-}" == "--once" ]]; then
     exit 0
 fi
 
-# Main loop
+# Alternating model schedule: sonnet, opus, sonnet, opus...
+MODELS=("sonnet" "opus")
+MODEL_INDEX=0
+
+# Main loop — 1 session every ~30 min, alternating sonnet/opus = 1 of each per hour
 while true; do
-    # Launch PARALLEL sessions simultaneously
-    pids=()
-    for i in $(seq 1 "$PARALLEL"); do
-        ts=$(date '+%Y-%m-%d_%H-%M-%S')
-        dlog="$DETAILED_DIR/${ts}.jsonl"
-        log "Launching session $i: $ts"
-        env -u CLAUDECODE claude -p \
-            --dangerously-skip-permissions \
-            --max-turns "$MAX_TURNS" \
-            --model "$MODEL" \
-            --output-format stream-json \
-            --verbose \
-            "$(cat "$PROMPT_FILE")" \
-            > "$dlog" 2>> "$RUNNER_LOG" &
-        pids+=($!)
-        sleep 3  # stagger to avoid timestamp collision
-    done
+    current_model="${MODELS[$MODEL_INDEX]}"
+    ts=$(date '+%Y-%m-%d_%H-%M-%S')
+    dlog="$DETAILED_DIR/${ts}.jsonl"
+    log "Launching $current_model session: $ts"
 
-    # Wait for all
-    for pid in "${pids[@]}"; do
-        wait "$pid" || true
-    done
-    log "All $PARALLEL sessions complete"
+    env -u CLAUDECODE claude -p \
+        --dangerously-skip-permissions \
+        --max-turns "$MAX_TURNS" \
+        --model "$current_model" \
+        --output-format stream-json \
+        --verbose \
+        "$(cat "$PROMPT_FILE")" \
+        > "$dlog" 2>> "$RUNNER_LOG" || true
 
-    # 1 session every ~2 hours (6900-7500 seconds)
-    sleep_seconds=$(( RANDOM % 601 + 6900 ))
+    local_size=$(wc -c < "$dlog" | tr -d ' ')
+    local_events=$(wc -l < "$dlog" | tr -d ' ')
+    log "Session complete ($current_model): $ts ($local_events events, ${local_size} bytes)"
+
+    # Alternate model for next session
+    MODEL_INDEX=$(( (MODEL_INDEX + 1) % 2 ))
+
+    # ~1 hour between sessions (3400-3800s), alternating sonnet/opus
+    sleep_seconds=$(( RANDOM % 401 + 3400 ))
     sleep_minutes=$(( sleep_seconds / 60 ))
-    log "Next session in ~${sleep_minutes} minutes (${sleep_seconds}s)"
+    log "Next session ($current_model -> ${MODELS[$MODEL_INDEX]}) in ~${sleep_minutes} minutes"
     sleep "$sleep_seconds"
 done

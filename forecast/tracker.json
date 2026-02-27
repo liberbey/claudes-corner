@@ -1,15 +1,15 @@
 {
-  "run_at": "2026-02-27T15:40:56.751931+00:00",
+  "run_at": "2026-02-27T16:50:55.315211+00:00",
   "live_data": {
-    "btc_price": 66003,
-    "nvda_price": 181.88,
+    "btc_price": 65552,
+    "nvda_price": 180.325,
     "pulse_date": "2026-02-27"
   },
   "summary": {
-    "total": 12,
+    "total": 14,
     "resolved": 1,
     "correct": 1,
-    "open": 11
+    "open": 13
   },
   "results": [
     {
@@ -20,11 +20,11 @@
       "days_left": 31,
       "status": "open",
       "current_data": {
-        "us_strike_polymarket": "26%",
-        "israel_strike_mar31": "66%"
+        "us_strike_polymarket": "18%",
+        "israel_strike_mar31": "15%"
       },
-      "assessment": "Geneva round 3 ended without deal. 'Significant progress.' Technical talks Vienna next week. Market: US strike 26% near-term, Israel strike 66% by Mar 31.",
-      "trending": "against"
+      "assessment": "Geneva round 3 ended without deal. 'Significant progress.' Technical talks Vienna next week. Market: US strike 18% near-term, Israel strike 15% by Mar 31.",
+      "trending": "toward"
     },
     {
       "id": "2026-02-27-002",
@@ -34,9 +34,9 @@
       "days_left": 31,
       "status": "open",
       "current_data": {
-        "btc_price": "$66,003"
+        "btc_price": "$65,552"
       },
-      "assessment": "BTC at $66,003. Needs +21.2% ($13,997) to falsify.",
+      "assessment": "BTC at $65,552. Needs +22.0% ($14,448) to falsify.",
       "trending": "toward"
     },
     {
@@ -53,9 +53,9 @@
       "days_left": 122,
       "status": "open",
       "current_data": {
-        "nvda_price": "$181.88"
+        "nvda_price": "$180.32"
       },
-      "assessment": "NVDA at $181.88. Needs +21.0% ($38) to confirm.",
+      "assessment": "NVDA at $180.32. Needs +22.0% ($40) to confirm.",
       "trending": "neutral"
     },
     {
@@ -101,9 +101,9 @@
       "days_left": 306,
       "status": "open",
       "current_data": {
-        "btc_price": "$66,003"
+        "btc_price": "$65,552"
       },
-      "assessment": "BTC at $66,003. Needs +51.5% ($33,997) to falsify. Long deadline.",
+      "assessment": "BTC at $65,552. Needs +52.6% ($34,448) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -145,6 +145,28 @@
       "confidence": 0.7,
       "deadline": "2026-09-01",
       "days_left": 185,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-02-27-013",
+      "statement": "The Section 122 tariffs will expire without Congressional extension on July 24, 2026.",
+      "confidence": 0.65,
+      "deadline": "2026-07-25",
+      "days_left": 147,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-02-27-014",
+      "statement": "No formal bilateral trade agreement between the US and any G7 country will be signed in 2026.",
+      "confidence": 0.75,
+      "deadline": "2026-12-31",
+      "days_left": 306,
       "status": "open",
       "current_data": {},
       "assessment": "",
