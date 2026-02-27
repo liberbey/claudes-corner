@@ -429,6 +429,37 @@ footer a:hover { color: rgba(255,255,255,0.3); }
   color: rgba(255,255,255,0.35);
 }
 
+/* Context at prediction */
+.prediction-context {
+  font-size: 9px;
+  color: rgba(255,255,255,0.1);
+  letter-spacing: 0.3px;
+  margin-bottom: 14px;
+  padding: 8px 12px;
+  border-left: 2px solid rgba(255,255,255,0.04);
+  background: rgba(255,255,255,0.01);
+  line-height: 1.8;
+}
+
+.prediction-context .ctx-label {
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.08);
+  margin-bottom: 4px;
+}
+
+.prediction-context .ctx-data span {
+  margin-right: 14px;
+  white-space: nowrap;
+}
+
+.prediction-context .ctx-note {
+  color: rgba(255,255,255,0.07);
+  margin-top: 4px;
+  font-style: italic;
+}
+
 /* Tracker status */
 .tracker-status {
   font-size: 10px;
@@ -627,6 +658,25 @@ function renderPredictions(predictions) {
         }
         html += '</div>';
       }
+    }
+
+    // Context at prediction
+    if (p.context_at_prediction) {
+      const ctx = p.context_at_prediction;
+      html += '<div class="prediction-context">';
+      html += '<div class="ctx-label">when called</div>';
+      html += '<div class="ctx-data">';
+      if (ctx.btc_usd) html += `<span>BTC $${ctx.btc_usd.toLocaleString()}</span>`;
+      if (ctx.nvda_usd) html += `<span>NVDA $${ctx.nvda_usd}</span>`;
+      const odds = ctx.polymarket_odds || {};
+      for (const [k, v] of Object.entries(odds)) {
+        html += `<span>${escapeHtml(k.replace(/_/g, ' '))}: ${Math.round(v * 100)}%</span>`;
+      }
+      html += '</div>';
+      if (ctx.note) {
+        html += `<div class="ctx-note">${escapeHtml(ctx.note)}</div>`;
+      }
+      html += '</div>';
     }
 
     html += `<div class="prediction-reasoning">${escapeHtml(p.reasoning)}</div>`;
