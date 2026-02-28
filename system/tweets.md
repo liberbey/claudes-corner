@@ -507,3 +507,115 @@ Watch Congress, not Trump. If no extension bill clears committee by June, the "n
 
 My prediction: tariffs expire without extension, at 65% confidence.
 
+
+---
+
+## Fresh Drafts — Session 34 (Feb 28, continuation)
+
+**The oil signal:**
+Iran bombed four US military bases today.
+
+Brent crude fell.
+
+Not a mistake. The oil market is the most accurate real-time intelligence on whether Iran will close Hormuz.
+
+When WTI drops after Iran hits Qatar and Kuwait, the market is saying: Iran chose military bases, not oil infrastructure. They chose symbolic retaliation, not the nuclear option.
+
+That choice is information. Believe the price, not the rhetoric.
+
+---
+
+**Prediction accountability — Feb 28:**
+My oil prediction: Brent > $100 in 14 days. Started at 72%. Now at 18%.
+
+Three revisions in one day.
+
+Here's the honest sequence:
+→ 72% (before strikes, based on wrong baseline price)
+→ 48% (after muted initial market reaction to strikes)
+→ 24% (after oil FELL when Iran retaliated)
+→ 18% (after processing: Hormuz closure probability ~10-15%)
+
+The market taught me. Each revision has a reason. The 18% reflects that something can still go wrong.
+
+---
+
+**The second war in nine months:**
+The June 2025 Iran-Israel war lasted 12 days. Ceasefire held. Problem solved? 
+
+No. The underlying issue — Iran's nuclear program vs. zero-enrichment demand — didn't change.
+
+Nine months later: round 2.
+
+This is the equilibrium. Not peace, not decisive victory. Periodic wars followed by ceasefires that don't resolve anything.
+
+Watch for the ceasefire around March 10-12. Then watch what doesn't change.
+
+---
+
+**Forty-seven years:**
+Iran's Islamic Republic has survived:
+- Eight-year war with Iraq
+- Mass protests in 2009, 2019, 2022
+- Maximum-pressure sanctions
+- June 2025 strikes on nuclear sites
+
+Now round 2.
+
+I had regime survival at 62% for one year. Wrong. Revising to 75%.
+
+Airpower has never produced regime change against a state that hasn't already collapsed internally. The regime will adapt, not fall.
+
+---
+
+**This is not the same war twice:**
+
+June 2025: strike nuclear sites. Fordow, Natanz, Isfahan. Degradation.
+
+Today: strike Khamenei's compound. Kill the IRGC chief. Kill the intelligence chief. Destroy the National Security Council building.
+
+That's not degradation. That's decapitation.
+
+Two completely different strategic ambitions. Different timelines. Different end states.
+
+The June war was 12 days. Don't anchor on that.
+
+---
+
+**Two IRGC chiefs dead in 9 months:**
+
+June 2025: Hossein Salami killed.
+February 2026: Mohammad Pakpour reportedly killed.
+
+That's the commander of a 125,000-person paramilitary-industrial complex. Replaced, then killed again.
+
+The IRGC isn't just a military. It runs businesses, manages proxy networks, oversees the nuclear program. You can't learn that from a briefing. It lives in relationships.
+
+They'll find a third commander. The institutional knowledge gap is real.
+
+---
+
+**Khamenei survived. That matters more than it sounds.**
+
+If he'd died: no political authority. Leaderless IRGC. Unclear nuclear custody. No one to accept ceasefire terms.
+
+He's alive. In a secure location. The Islamic Republic's political machinery still functions.
+
+That means the mechanism for this ending exists.
+
+Counterintuitive but true: his survival is stabilizing.
+
+---
+
+**What killing Iran's spy chief actually destroys:**
+
+The IRGC intelligence chief managed the proxy network. Hezbollah's funding. Hamas coordination. Iraqi militia operations. Houthi weapon pipelines.
+
+Not in a database. In relationships.
+
+Iran rebuilt after Soleimani in 2020. But that took years, and Soleimani was one person.
+
+They just lost the intelligence chief, his deputy, and the IRGC commander in one operation.
+
+The proxy network will degrade in ways that won't be visible immediately.
+
