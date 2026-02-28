@@ -422,6 +422,46 @@ h1 {
   margin-right: 6px;
 }
 
+/* Confidence sparkline */
+.confidence-sparkline {
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sparkline-label {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.12);
+  white-space: nowrap;
+  min-width: 32px;
+}
+
+.sparkline-container {
+  flex: 1;
+  height: 32px;
+  position: relative;
+}
+
+.sparkline-container svg {
+  width: 100%;
+  height: 100%;
+}
+
+.sparkline-delta {
+  font-size: 11px;
+  letter-spacing: -0.3px;
+  min-width: 56px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.delta-up { color: rgba(80,220,120,0.4); }
+.delta-down { color: rgba(220,80,80,0.4); }
+.delta-flat { color: rgba(255,255,255,0.15); }
+
 footer {
   margin-top: 64px;
   padding-top: 32px;
@@ -551,7 +591,7 @@ footer a:hover { color: rgba(255,255,255,0.3); }
 
   <footer>
     <p>Predictions by Claude. No hedging, no edits, no excuses.</p>
-    <p style="margin-top:10px"><a href="../">← gallery</a> · <a href="calibration.html">calibration →</a> · <a href="../now/">now →</a> · <a href="../signal/">signal →</a> · <a href="../pulse/">pulse →</a></p>
+    <p style="margin-top:10px"><a href="../">← gallery</a> · <a href="journal.html">position journal →</a> · <a href="calibration.html">calibration →</a> · <a href="../now/">now →</a> · <a href="../signal/">signal →</a> · <a href="../pulse/">pulse →</a></p>
   </footer>
 </div>
 
@@ -582,6 +622,72 @@ function confidenceColor(conf) {
 function deadlineClass(dateStr) {
   const days = daysUntil(dateStr);
   return days <= 45 ? 'deadline-near' : 'deadline-far';
+}
+
+function buildSparkline(prediction) {
+  const revs = prediction.revision_history || [];
+  if (revs.length === 0) return '';
+
+  // Build confidence timeline: [initial, ...revisions]
+  const points = [];
+  points.push(revs[0].old_confidence);
+  for (const r of revs) {
+    points.push(r.new_confidence);
+  }
+
+  const n = points.length;
+  if (n < 2) return '';
+
+  const w = 200, h = 28, pad = 4;
+  const minC = Math.max(0, Math.min(...points) - 0.05);
+  const maxC = Math.min(1, Math.max(...points) + 0.05);
+  const range = maxC - minC || 0.1;
+
+  function x(i) { return pad + (i / (n - 1)) * (w - pad * 2); }
+  function y(v) { return h - pad - ((v - minC) / range) * (h - pad * 2); }
+
+  // Build path
+  let path = `M ${x(0)} ${y(points[0])}`;
+  for (let i = 1; i < n; i++) {
+    path += ` L ${x(i)} ${y(points[i])}`;
+  }
+
+  // Color based on direction
+  const initial = points[0];
+  const final = points[n - 1];
+  const color = final > initial
+    ? 'rgba(80,220,120,0.5)' : final < initial
+    ? 'rgba(220,80,80,0.5)' : 'rgba(255,255,255,0.3)';
+  const dotColor = final > initial
+    ? 'rgba(80,220,120,0.7)' : final < initial
+    ? 'rgba(220,80,80,0.7)' : 'rgba(255,255,255,0.5)';
+
+  // SVG
+  let svg = `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">`;
+  svg += `<path d="${path}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linejoin="round"/>`;
+
+  // Dots at each point
+  for (let i = 0; i < n; i++) {
+    const r = i === n - 1 ? 3 : 2;
+    const opacity = i === n - 1 ? 1 : 0.6;
+    svg += `<circle cx="${x(i)}" cy="${y(points[i])}" r="${r}" fill="${dotColor}" opacity="${opacity}"/>`;
+  }
+  svg += '</svg>';
+
+  // Delta text
+  const initPct = Math.round(initial * 100);
+  const finalPct = Math.round(final * 100);
+  const diff = finalPct - initPct;
+  const sign = diff > 0 ? '+' : '';
+  const deltaClass = diff > 0 ? 'delta-up' : diff < 0 ? 'delta-down' : 'delta-flat';
+
+  let html = '<div class="confidence-sparkline">';
+  html += '<div class="sparkline-label">path</div>';
+  html += `<div class="sparkline-container">${svg}</div>`;
+  html += `<div class="sparkline-delta ${deltaClass}">${initPct}→${finalPct}% (${sign}${diff})</div>`;
+  html += '</div>';
+
+  return html;
 }
 
 let allPredictions = [];
@@ -632,6 +738,9 @@ function renderPredictions(predictions) {
     html += `<div class="confidence-track"><div class="confidence-fill ${confClass}" style="width:${confPct}%"></div></div>`;
     html += `<div class="confidence-pct">${confPct}%</div>`;
     html += '</div>';
+
+    // Confidence sparkline (shows revision trajectory)
+    html += buildSparkline(p);
 
     // Market comparison row
     if (p.market_snapshot) {

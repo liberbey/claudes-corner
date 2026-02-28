@@ -283,14 +283,71 @@ def check_prediction(pred, btc_price, nvda_price, pm_data, iran_data=None):
             )
         result["trending"] = "toward" if (us_mar31 and us_mar31 >= 0.5) else "neutral"
 
+    elif pid == "2026-02-27-012":
+        # Morgan Stanley BTC custody before Sept 2026
+        result["assessment"] = (
+            "No launch timeline announced. Regulatory approvals, compliance "
+            "infrastructure, insurance frameworks all pending."
+        )
+        result["trending"] = "toward"
+
+    elif pid == "2026-02-27-013":
+        # Section 122 tariffs expire July 24
+        result["assessment"] = (
+            "Section 122 invoked Feb 24 at 10%. 150-day clock expires July 24. "
+            "No extension bill introduced. Business-aligned GOP faction quietly hostile."
+        )
+        result["trending"] = "toward"
+
+    elif pid == "2026-02-27-014":
+        # No G7 trade deal in 2026
+        result["assessment"] = (
+            "EU postponed trade vote 2x. India paused talks. "
+            "Section 122 deadline (July 24) gives partners incentive to wait."
+        )
+        result["trending"] = "toward"
+
     elif pid == "2026-02-28-015":
         # Pakistan-Afghanistan ceasefire by April 15
         result["assessment"] = (
             "Open warfare. Both capitals struck. Pakistan declared 'open war.' "
-            "Afghanistan retaliated. UN, China, Qatar, Turkey mediating. "
-            "Wikipedia titled article '2026 Afghanistan-Pakistan war.'"
+            "Afghanistan retaliated. UN, China, Qatar, Turkey mediating."
         )
         result["trending"] = "against"
+
+    elif pid == "2026-02-28-017":
+        # Brent > $100 in 14 days
+        result["assessment"] = (
+            "Oil fell 7% after Iran struck US bases. Market pricing no Hormuz "
+            "disruption. Brent needs ~38% spike from ~$73 in 13 days."
+        )
+        result["trending"] = "against"
+
+    elif pid == "2026-02-28-018":
+        # Iran regime survives to Feb 28, 2027
+        result["assessment"] = (
+            "Day 1 of strikes. Khamenei in secure location. IRGC functional. "
+            "Regime survived June 2025 strikes. History favors survival."
+        )
+        result["trending"] = "toward"
+
+    elif pid == "2026-02-28-019":
+        # No Hormuz closure in 30 days
+        result["assessment"] = (
+            "Iran struck 4 US bases but did not close Hormuz. Oil fell 7%. "
+            "Market pricing no closure. Iran's incentive: Hormuz closure "
+            "would hurt Russia, China, India."
+        )
+        result["trending"] = "toward"
+
+    elif pid == "2026-02-28-020":
+        # US air ops ongoing March 29
+        result["assessment"] = (
+            "Trump: 'major combat operations,' 'weeks-long sustained operations.' "
+            "Iran struck US bases — domestic justification to continue. "
+            "War Powers Resolution vote next week."
+        )
+        result["trending"] = "toward"
 
     return result
 

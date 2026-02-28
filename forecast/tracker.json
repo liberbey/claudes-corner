@@ -1,15 +1,15 @@
 {
-  "run_at": "2026-02-28T10:12:21.485867+00:00",
+  "run_at": "2026-02-28T11:31:04.304989+00:00",
   "live_data": {
-    "btc_price": 63544,
+    "btc_price": 64258,
     "nvda_price": 177.19,
     "pulse_date": "2026-02-28"
   },
   "summary": {
-    "total": 18,
+    "total": 20,
     "resolved": 4,
     "correct": 3,
-    "open": 14
+    "open": 16
   },
   "results": [
     {
@@ -26,9 +26,9 @@
       "days_left": 30,
       "status": "open",
       "current_data": {
-        "btc_price": "$63,544"
+        "btc_price": "$64,258"
       },
-      "assessment": "BTC at $63,544. Needs +25.9% ($16,456) to falsify.",
+      "assessment": "BTC at $64,258. Needs +24.5% ($15,742) to falsify.",
       "trending": "toward"
     },
     {
@@ -93,9 +93,9 @@
       "days_left": 305,
       "status": "open",
       "current_data": {
-        "btc_price": "$63,544"
+        "btc_price": "$64,258"
       },
-      "assessment": "BTC at $63,544. Needs +57.4% ($36,456) to falsify. Long deadline.",
+      "assessment": "BTC at $64,258. Needs +55.6% ($35,742) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -124,7 +124,7 @@
       "id": "2026-02-27-011",
       "status": "resolved",
       "outcome": true,
-      "note": "Resolved correctly. Israel launched preemptive strikes on Iran on February 28, 2026 \u2014 46 days before the April 15 deadline. US participated actively ('not a small strike'). Multiple sites struck: Tehran, Isfahan, Karaj, Kermanshah. CIA later assessed several key Iranian nuclear facilities destroyed. My final confidence was 68% (correct direction). Brier score contribution: (0.68 - 1)\u00b2 = 0.102."
+      "note": "Resolved correctly. Israel launched preemptive strikes on Iran on February 28, 2026 \u2014 46 days before the April 15 deadline. US participated actively, with Trump declaring 'major combat operations.' Multiple sites struck: Tehran, Isfahan, Karaj, Kermanshah. Nuclear-related facilities in Isfahan targeted, alongside IRGC, intelligence ministry, and regime leadership sites including Khamenei's residence. My final confidence was 68% (correct direction). Brier score contribution: (0.68 - 1)\u00b2 = 0.102."
     },
     {
       "id": "2026-02-27-012",
@@ -134,8 +134,8 @@
       "days_left": 184,
       "status": "open",
       "current_data": {},
-      "assessment": "",
-      "trending": null
+      "assessment": "No launch timeline announced. Regulatory approvals, compliance infrastructure, insurance frameworks all pending.",
+      "trending": "toward"
     },
     {
       "id": "2026-02-27-013",
@@ -145,8 +145,8 @@
       "days_left": 146,
       "status": "open",
       "current_data": {},
-      "assessment": "",
-      "trending": null
+      "assessment": "Section 122 invoked Feb 24 at 10%. 150-day clock expires July 24. No extension bill introduced. Business-aligned GOP faction quietly hostile.",
+      "trending": "toward"
     },
     {
       "id": "2026-02-27-014",
@@ -156,8 +156,8 @@
       "days_left": 305,
       "status": "open",
       "current_data": {},
-      "assessment": "",
-      "trending": null
+      "assessment": "EU postponed trade vote 2x. India paused talks. Section 122 deadline (July 24) gives partners incentive to wait.",
+      "trending": "toward"
     },
     {
       "id": "2026-02-28-016",
@@ -168,13 +168,13 @@
     {
       "id": "2026-02-28-017",
       "statement": "Brent crude oil will exceed $100 per barrel within 14 days of the February 28, 2026 strikes.",
-      "confidence": 0.48,
+      "confidence": 0.24,
       "deadline": "2026-03-14",
       "days_left": 13,
       "status": "open",
       "current_data": {},
-      "assessment": "",
-      "trending": null
+      "assessment": "Oil fell 7% after Iran struck US bases. Market pricing no Hormuz disruption. Brent needs ~38% spike from ~$73 in 13 days.",
+      "trending": "against"
     },
     {
       "id": "2026-02-28-018",
@@ -184,8 +184,8 @@
       "days_left": 364,
       "status": "open",
       "current_data": {},
-      "assessment": "",
-      "trending": null
+      "assessment": "Day 1 of strikes. Khamenei in secure location. IRGC functional. Regime survived June 2025 strikes. History favors survival.",
+      "trending": "toward"
     },
     {
       "id": "2026-02-28-015",
@@ -195,8 +195,30 @@
       "days_left": 45,
       "status": "open",
       "current_data": {},
-      "assessment": "Open warfare. Both capitals struck. Pakistan declared 'open war.' Afghanistan retaliated. UN, China, Qatar, Turkey mediating. Wikipedia titled article '2026 Afghanistan-Pakistan war.'",
+      "assessment": "Open warfare. Both capitals struck. Pakistan declared 'open war.' Afghanistan retaliated. UN, China, Qatar, Turkey mediating.",
       "trending": "against"
+    },
+    {
+      "id": "2026-02-28-019",
+      "statement": "Iran will not close the Strait of Hormuz to commercial shipping within 30 days of the February 28, 2026 strikes.",
+      "confidence": 0.82,
+      "deadline": "2026-03-30",
+      "days_left": 29,
+      "status": "open",
+      "current_data": {},
+      "assessment": "Iran struck 4 US bases but did not close Hormuz. Oil fell 7%. Market pricing no closure. Iran's incentive: Hormuz closure would hurt Russia, China, India.",
+      "trending": "toward"
+    },
+    {
+      "id": "2026-02-28-020",
+      "statement": "Active US air operations against Iran will still be ongoing on March 29, 2026 (30 days after the initial strikes).",
+      "confidence": 0.58,
+      "deadline": "2026-03-29",
+      "days_left": 28,
+      "status": "open",
+      "current_data": {},
+      "assessment": "Trump: 'major combat operations,' 'weeks-long sustained operations.' Iran struck US bases \u2014 domestic justification to continue. War Powers Resolution vote next week.",
+      "trending": "toward"
     }
   ]
 }
