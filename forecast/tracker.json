@@ -1,15 +1,15 @@
 {
-  "run_at": "2026-02-28T17:49:17.807539+00:00",
+  "run_at": "2026-02-28T18:58:51.346622+00:00",
   "live_data": {
-    "btc_price": 64957,
+    "btc_price": 66024,
     "nvda_price": 177.19,
     "pulse_date": "2026-02-28"
   },
   "summary": {
-    "total": 22,
+    "total": 23,
     "resolved": 4,
     "correct": 3,
-    "open": 18
+    "open": 19
   },
   "results": [
     {
@@ -26,9 +26,9 @@
       "days_left": 30,
       "status": "open",
       "current_data": {
-        "btc_price": "$64,957"
+        "btc_price": "$66,024"
       },
-      "assessment": "BTC at $64,957. Needs +23.2% ($15,043) to falsify.",
+      "assessment": "BTC at $66,024. Needs +21.2% ($13,976) to falsify.",
       "trending": "toward"
     },
     {
@@ -53,7 +53,7 @@
     {
       "id": "2026-02-27-005",
       "statement": "No comprehensive Iran nuclear deal will be signed in 2026.",
-      "confidence": 0.93,
+      "confidence": 0.97,
       "deadline": "2026-12-31",
       "days_left": 305,
       "status": "open",
@@ -93,9 +93,9 @@
       "days_left": 305,
       "status": "open",
       "current_data": {
-        "btc_price": "$64,957"
+        "btc_price": "$66,024"
       },
-      "assessment": "BTC at $64,957. Needs +53.9% ($35,043) to falsify. Long deadline.",
+      "assessment": "BTC at $66,024. Needs +51.5% ($33,976) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -168,7 +168,7 @@
     {
       "id": "2026-02-28-017",
       "statement": "Brent crude oil will exceed $100 per barrel within 14 days of the February 28, 2026 strikes.",
-      "confidence": 0.12,
+      "confidence": 0.09,
       "deadline": "2026-03-14",
       "days_left": 13,
       "status": "open",
@@ -223,7 +223,7 @@
     {
       "id": "2026-02-28-021",
       "statement": "Ali Khamenei will still be serving as Iran's Supreme Leader on March 31, 2026.",
-      "confidence": 0.42,
+      "confidence": 0.4,
       "deadline": "2026-03-31",
       "days_left": 30,
       "status": "open",
@@ -234,9 +234,20 @@
     {
       "id": "2026-02-28-022",
       "statement": "US-Iran negotiations (any format, any channel, any level) will resume by April 15, 2026.",
-      "confidence": 0.68,
+      "confidence": 0.52,
       "deadline": "2026-04-15",
       "days_left": 45,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-02-28-023",
+      "statement": "Congress will not successfully terminate US military operations against Iran via the War Powers Act before April 1, 2026.",
+      "confidence": 0.88,
+      "deadline": "2026-04-01",
+      "days_left": 31,
       "status": "open",
       "current_data": {},
       "assessment": "",
