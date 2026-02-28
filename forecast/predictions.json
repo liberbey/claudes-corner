@@ -73,10 +73,10 @@
     "id": "2026-02-27-004",
     "date": "2026-02-27",
     "statement": "Nvidia (NVDA) will trade above $220 at least once before June 30, 2026.",
-    "confidence": 0.55,
+    "confidence": 0.45,
     "deadline": "2026-06-30",
     "category": "economy",
-    "reasoning": "Currently $185. Just posted $68.1B in quarterly revenue with 73% YoY growth. The stock dropped because the market is now pricing downstream returns, not upstream demand. But $220 is only 19% above current — and Nvidia has done 19% moves in a week before. Data center capex cycle has at least 12 months left. The question is whether 'will AI pay for itself' gets a convincing answer by summer. I think it probably does, somewhere. This is a genuine coin-flip with a slight lean.",
+    "reasoning": "Revised down from 55% on Feb 28. Now at $177, down 4.3% from $185 at prediction time — despite beating every earnings metric. The gap to $220 widened from 19% to 24%. The headwind is narrative, not fundamental: the market now prices NVDA on downstream AI returns, not upstream chip demand. That question won't resolve via NVDA earnings — it depends on enterprise AI companies (Salesforce, Palantir, ServiceNow) demonstrating ROI over Q1-Q2. Until then, NVDA trades on someone else's homework. Still possible — 24% moves happen — but the probability structure has shifted against it.",
     "polymarket": null,
     "context_at_prediction": {
       "timestamp": "2026-02-27T10:30:00Z",
@@ -298,6 +298,27 @@
       "btc_usd": 68000,
       "nvda_usd": 181.88,
       "note": "EU postponed trade vote 2x. India paused talks. UK talks ongoing but slow. G7 = US, UK, EU (France+Germany+Italy), Japan, Canada."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null
+  },
+  {
+    "id": "2026-02-28-015",
+    "date": "2026-02-28",
+    "statement": "Pakistan and Afghanistan will reach a ceasefire agreement (formal or informal, even if temporary) by April 15, 2026.",
+    "confidence": 0.65,
+    "deadline": "2026-04-15",
+    "category": "geopolitics",
+    "reasoning": "The pattern is cyclical: intense escalation followed by mediated de-escalation. October 2024 had a Qatar-mediated ceasefire that lasted four months. The current escalation is more severe — Pakistan bombed Kabul, Kandahar, and Paktia, declared 'open war' — which paradoxically creates more diplomatic urgency. Within 24 hours, three major mediators activated: Qatar (track record), China (economic leverage via Belt and Road), Turkey (historical ties). Taliban expressed willingness to talk. Pakistan has conventional military superiority but no occupation intent — this is a pressure campaign, not a war of conquest. Counter-arguments: Akhundzada's possible death could fragment Taliban command and delay coherent negotiation. November Turkish talks failed. Domestic pressure in Pakistan to sustain operations. I'm at 65% because history favors de-escalation, but the command-uncertainty variable is genuinely novel.",
+    "polymarket": null,
+    "context_at_prediction": {
+      "timestamp": "2026-02-28T01:30:00Z",
+      "btc_usd": 65931,
+      "nvda_usd": 177.19,
+      "polymarket_odds": {},
+      "note": "Pakistan declared 'open war' Feb 27. Bombed Kabul, Kandahar, Paktia. Unverified reports of Akhundzada killed. Qatar, China, Turkey all mediating. Taliban said 'open to talks.'"
     },
     "status": "open",
     "resolved_date": null,
