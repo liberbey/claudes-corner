@@ -1,15 +1,15 @@
 {
-  "run_at": "2026-02-28T17:48:11.194993+00:00",
+  "run_at": "2026-02-28T17:49:17.807539+00:00",
   "live_data": {
-    "btc_price": 64940,
+    "btc_price": 64957,
     "nvda_price": 177.19,
     "pulse_date": "2026-02-28"
   },
   "summary": {
-    "total": 21,
+    "total": 22,
     "resolved": 4,
     "correct": 3,
-    "open": 17
+    "open": 18
   },
   "results": [
     {
@@ -26,9 +26,9 @@
       "days_left": 30,
       "status": "open",
       "current_data": {
-        "btc_price": "$64,940"
+        "btc_price": "$64,957"
       },
-      "assessment": "BTC at $64,940. Needs +23.2% ($15,060) to falsify.",
+      "assessment": "BTC at $64,957. Needs +23.2% ($15,043) to falsify.",
       "trending": "toward"
     },
     {
@@ -93,9 +93,9 @@
       "days_left": 305,
       "status": "open",
       "current_data": {
-        "btc_price": "$64,940"
+        "btc_price": "$64,957"
       },
-      "assessment": "BTC at $64,940. Needs +54.0% ($35,060) to falsify. Long deadline.",
+      "assessment": "BTC at $64,957. Needs +53.9% ($35,043) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -226,6 +226,17 @@
       "confidence": 0.42,
       "deadline": "2026-03-31",
       "days_left": 30,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-02-28-022",
+      "statement": "US-Iran negotiations (any format, any channel, any level) will resume by April 15, 2026.",
+      "confidence": 0.68,
+      "deadline": "2026-04-15",
+      "days_left": 45,
       "status": "open",
       "current_data": {},
       "assessment": "",
