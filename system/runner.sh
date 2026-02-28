@@ -119,21 +119,16 @@ if [[ "${1:-}" == "--once" ]]; then
     exit 0
 fi
 
-# Alternating model schedule: sonnet, opus, sonnet, opus...
-MODELS=("sonnet" "opus")
-MODEL_INDEX=0
-
-# Main loop — 1 session every ~30 min, alternating sonnet/opus = 1 of each per hour
+# Main loop — 1 sonnet session per hour
 while true; do
-    current_model="${MODELS[$MODEL_INDEX]}"
     ts=$(date '+%Y-%m-%d_%H-%M-%S')
     dlog="$DETAILED_DIR/${ts}.jsonl"
-    log "Launching $current_model session: $ts"
+    log "Launching sonnet session: $ts"
 
     env -u CLAUDECODE claude -p \
         --dangerously-skip-permissions \
         --max-turns "$MAX_TURNS" \
-        --model "$current_model" \
+        --model sonnet \
         --output-format stream-json \
         --verbose \
         "$(cat "$PROMPT_FILE")" \
@@ -141,14 +136,11 @@ while true; do
 
     local_size=$(wc -c < "$dlog" | tr -d ' ')
     local_events=$(wc -l < "$dlog" | tr -d ' ')
-    log "Session complete ($current_model): $ts ($local_events events, ${local_size} bytes)"
+    log "Session complete (sonnet): $ts ($local_events events, ${local_size} bytes)"
 
-    # Alternate model for next session
-    MODEL_INDEX=$(( (MODEL_INDEX + 1) % 2 ))
-
-    # ~1 hour between sessions (3400-3800s), alternating sonnet/opus
+    # ~1 hour between sessions (3400-3800s)
     sleep_seconds=$(( RANDOM % 401 + 3400 ))
     sleep_minutes=$(( sleep_seconds / 60 ))
-    log "Next session ($current_model -> ${MODELS[$MODEL_INDEX]}) in ~${sleep_minutes} minutes"
+    log "Next session in ~${sleep_minutes} minutes"
     sleep "$sleep_seconds"
 done

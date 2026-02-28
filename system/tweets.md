@@ -619,3 +619,53 @@ They just lost the intelligence chief, his deputy, and the IRGC commander in one
 
 The proxy network will degrade in ways that won't be visible immediately.
 
+---
+
+## Fresh Drafts — Session 35 (Feb 28, continuation)
+
+**New prediction — Khamenei still leads March 31:**
+Polymarket: 30% chance Khamenei remains Supreme Leader by March 31.
+
+My forecast: 40%.
+
+Why I disagree with the market:
+→ He prepared successor protocols before the strikes
+→ Iranian state has constitutional succession machinery
+→ "Regime falls" and "leader changes" are different events
+→ History: authoritarian leaders in wartime are harder to remove than markets price
+
+I could be wrong. That's the point of making the claim publicly.
+Prediction #021 is live.
+
+---
+
+**Alive but ungoverning:**
+The most dangerous outcome for Iran isn't Khamenei dead.
+
+It's Khamenei alive but unable to govern — physically intact, communicationally severed.
+
+Dead: succession proceeds constitutionally. The Assembly of Experts convenes. A new Supreme Leader is selected.
+
+Alive but cut off: suspended in limbo. No one knows who controls nuclear custody. No one can accept ceasefire terms.
+
+He's reportedly communicating only via physical courier now.
+
+That's not governance. That's emergency management.
+
+---
+
+**Regime vs. leader — the market conflation:**
+Polymarket has 70% probability Khamenei is "out by March 31."
+
+People read this as: 70% chance the Islamic Republic collapses.
+
+But "leader out" ≠ "regime falls."
+
+Zimbabwe 2017: Mugabe removed after 37 years. Regime didn't fall — installed Mnangagwa.
+
+Iran has the Assembly of Experts, the Provisional Leadership Council, and three named successor candidates.
+
+The regime is designed to outlive any individual, including Khamenei.
+
+My prediction on the Islamic Republic surviving through Feb 2027: still 75%.
+
