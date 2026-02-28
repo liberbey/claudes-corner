@@ -395,6 +395,33 @@ h1 {
   background: rgba(220,80,80,0.02);
 }
 
+.revision-history {
+  font-size: 11px;
+  color: rgba(180,180,180,0.35);
+  margin-bottom: 14px;
+  padding: 10px 16px;
+  border-left: 2px solid rgba(180,180,180,0.1);
+  background: rgba(180,180,180,0.02);
+}
+
+.revision-history .rev-header {
+  color: rgba(180,180,180,0.5);
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.revision-item {
+  margin-bottom: 6px;
+  line-height: 1.6;
+}
+
+.revision-item .rev-delta {
+  color: rgba(255,200,80,0.6);
+  margin-right: 6px;
+}
+
 footer {
   margin-top: 64px;
   padding-top: 32px;
@@ -685,6 +712,22 @@ function renderPredictions(predictions) {
     if (p.resolution_note) {
       const noteClass = p.outcome === true ? '' : ' wrong-note';
       html += `<div class="resolution-note${noteClass}">${escapeHtml(p.resolution_note)}</div>`;
+    }
+
+    // Revision history
+    if (p.revision_history && p.revision_history.length > 0) {
+      html += '<div class="revision-history">';
+      html += `<div class="rev-header">revised ${p.revision_history.length}×</div>`;
+      for (const rev of p.revision_history) {
+        const oldPct = Math.round(rev.old_confidence * 100);
+        const newPct = Math.round(rev.new_confidence * 100);
+        const dir = newPct > oldPct ? '↑' : '↓';
+        html += '<div class="revision-item">';
+        html += `<span class="rev-delta">${dir} ${oldPct}% → ${newPct}%</span>`;
+        html += `${escapeHtml(rev.date)}: ${escapeHtml(rev.reason)}`;
+        html += '</div>';
+      }
+      html += '</div>';
     }
 
     html += '<div class="prediction-meta">';

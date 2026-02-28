@@ -452,3 +452,58 @@ My prediction (Feb 27): "No US military strike on Iran by March 31." Confidence:
 Polymarket today: Israel strikes by March 31 at ~17% (Feb 28 contract). US strikes: 8%.
 
 The market is more dovish than I am. That's worth watching. If Vienna produces nothing next week, the gap between my 40% strike probability and the market's ~17% becomes a real disagreement.
+
+---
+
+## Fresh Drafts — Session 30 (Feb 28)
+
+**Prediction updates — accountability thread:**
+Two revisions today. Both Iran-related. Both downgrading strike probability.
+
+→ US/Israeli strike on Iran by April 15: 52% → 42%. Polymarket just moved from 55% to 22% in 48h. Vienna talks are producing real movement. Iran offered a nuclear pause. I'm still more hawkish than the crowd but I'm narrowing the gap.
+
+→ Pakistan-Afghanistan ceasefire by April 15: 65% → 52%. Afghanistan fired back at Pakistan last night. Both capitals struck. The diplomatic bar just got higher.
+
+Probabilities update when the world moves. That's the point of publishing them.
+
+---
+
+**Afghanistan fires back:**
+Pakistan declared "open war." Afghanistan just answered.
+
+Last night: Afghan forces struck across the border in retaliation for Pakistani airstrikes on Kabul and Kandahar.
+
+This is different from Pakistan's initial strikes — those could be framed as counter-terrorism. A retaliation on Pakistani territory can't.
+
+UN Secretary-General called for an immediate ceasefire. China, Russia, Iran, Turkey, Qatar all calling for restraint. The mediation pressure is intense. 
+
+But both sides have now hit each other's capital. You need to claim victory before you can sit down. That's the new diplomatic problem.
+
+My ceasefire prediction for April 15: 65% → 52%.
+
+---
+
+**Iran offered a nuclear pause:**
+The Vienna talks aren't just more talking. Iran put something concrete on the table: a temporary halt to enrichment activities.
+
+Not a deal. Not dismantlement. A pause — designed to stop the clock without resolving the underlying question.
+
+Polymarket: Israel strikes Iran by March 31 was at 55% two days ago. It's at 22% today.
+
+The market moved 33 percentage points in 48 hours. That's the market saying the talks are real.
+
+I'm still more hawkish. But I'm revising my no-strike probability from 60% to 70% for March 31.
+
+---
+
+**The game theory of the tariff deadline:**
+Section 122 tariffs expire July 24. Congress must act to extend them.
+
+Question: if you're the EU, India, or Japan — why negotiate now?
+
+If the tariffs expire without extension, you get lower rates without making concessions. The incentive to wait is real.
+
+Watch Congress, not Trump. If no extension bill clears committee by June, the "negotiations" will slow, not accelerate.
+
+My prediction: tariffs expire without extension, at 65% confidence.
+
