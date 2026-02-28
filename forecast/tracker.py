@@ -55,8 +55,60 @@ def load_polymarket_data():
         return None
 
 
+def fetch_polymarket_event(slug):
+    """Fetch a specific Polymarket event by slug from the gamma API."""
+    try:
+        resp = requests.get(
+            "https://gamma-api.polymarket.com/events",
+            params={"slug": slug},
+            timeout=10,
+        )
+        resp.raise_for_status()
+        events = resp.json()
+        return events[0] if events else None
+    except Exception:
+        return None
+
+
+def find_market_prob_by_question(event, question_fragment):
+    """Find a market's Yes probability within an event by question substring."""
+    import json as _json
+    if not event:
+        return None
+    for m in event.get("markets", []):
+        q = m.get("question", "").lower()
+        if question_fragment.lower() in q:
+            prices = m.get("outcomePrices", "[]")
+            if isinstance(prices, str):
+                prices = _json.loads(prices)
+            if prices:
+                return float(prices[0])
+    return None
+
+
+def fetch_iran_strike_data():
+    """Fetch current Iran strike probabilities from Polymarket."""
+    result = {}
+    # US strikes Iran by... (multi-date event)
+    us_event = fetch_polymarket_event("us-strikes-iran-by")
+    if us_event:
+        result["us_strike_mar31"] = find_market_prob_by_question(
+            us_event, "us strikes iran by march 31, 2026"
+        )
+        result["us_strike_jun30"] = find_market_prob_by_question(
+            us_event, "us strikes iran by june 30, 2026"
+        )
+    # Israel strikes Iran by March 31
+    il_event = fetch_polymarket_event("israel-strikes-iran-by-march-31-2026")
+    if il_event:
+        result["israel_strike_mar31"] = find_market_prob_by_question(
+            il_event, "israel strikes iran by march 31, 2026"
+        )
+    return result
+
+
 def find_polymarket_prob(pm_data, title_fragment):
-    """Find a market's probability by title substring."""
+    """Find a market's probability by title substring in Pulse data."""
     if not pm_data:
         return None
     for m in pm_data.get("markets", []):
@@ -65,9 +117,11 @@ def find_polymarket_prob(pm_data, title_fragment):
     return None
 
 
-def check_prediction(pred, btc_price, nvda_price, pm_data):
+def check_prediction(pred, btc_price, nvda_price, pm_data, iran_data=None):
     """Check a single prediction against current data. Returns status dict."""
     pid = pred["id"]
+    if iran_data is None:
+        iran_data = {}
 
     if pred["status"] == "resolved":
         return {
@@ -97,23 +151,24 @@ def check_prediction(pred, btc_price, nvda_price, pm_data):
 
     if pid == "2026-02-27-001":
         # No US strike on Iran by March 31
-        us_prob = find_polymarket_prob(pm_data, "US strikes Iran")
-        israel_prob = find_polymarket_prob(pm_data, "Israel strikes Iran")
-        if us_prob is not None:
-            result["current_data"]["us_strike_polymarket"] = f"{us_prob*100:.0f}%"
-        if israel_prob is not None:
-            result["current_data"]["israel_strike_mar31"] = f"{israel_prob*100:.0f}%"
-        result["assessment"] = (
-            f"Geneva round 3 ended without deal. 'Significant progress.' "
-            f"Technical talks Vienna next week. Market: US strike {us_prob*100:.0f}% near-term, "
-            f"Israel strike {israel_prob*100:.0f}% by Mar 31."
-            if us_prob and israel_prob
-            else f"Check Polymarket manually. {days_left} days left."
-        )
-        if israel_prob and israel_prob < 0.5:
-            result["trending"] = "toward"
-        elif israel_prob and israel_prob >= 0.5:
+        us_mar31 = iran_data.get("us_strike_mar31")
+        il_mar31 = iran_data.get("israel_strike_mar31")
+        if us_mar31 is not None:
+            result["current_data"]["us_strike_mar31"] = f"{us_mar31*100:.0f}%"
+        if il_mar31 is not None:
+            result["current_data"]["israel_strike_mar31"] = f"{il_mar31*100:.0f}%"
+        if us_mar31 is not None and il_mar31 is not None:
+            result["assessment"] = (
+                f"Market: US strike by Mar 31 at {us_mar31*100:.0f}%, "
+                f"Israel strike by Mar 31 at {il_mar31*100:.0f}%. "
+                f"Vienna technical talks Monday. {days_left} days left."
+            )
+        else:
+            result["assessment"] = f"Check Polymarket manually. {days_left} days left."
+        if us_mar31 and us_mar31 >= 0.5:
             result["trending"] = "against"
+        else:
+            result["trending"] = "toward"
 
     elif pid == "2026-02-27-002":
         # Bitcoin won't trade above $80K in March
@@ -213,6 +268,30 @@ def check_prediction(pred, btc_price, nvda_price, pm_data):
         )
         result["trending"] = "neutral"
 
+    elif pid == "2026-02-27-011":
+        # US or Israeli strike on Iran by April 15
+        us_mar31 = iran_data.get("us_strike_mar31")
+        il_mar31 = iran_data.get("israel_strike_mar31")
+        if us_mar31 is not None:
+            result["current_data"]["us_strike_mar31"] = f"{us_mar31*100:.0f}%"
+        if il_mar31 is not None:
+            result["current_data"]["israel_strike_mar31"] = f"{il_mar31*100:.0f}%"
+        if us_mar31 is not None:
+            result["assessment"] = (
+                f"Market: US strike by Mar 31 at {us_mar31*100:.0f}%. "
+                f"Two carrier groups in position. Vienna talks Monday."
+            )
+        result["trending"] = "toward" if (us_mar31 and us_mar31 >= 0.5) else "neutral"
+
+    elif pid == "2026-02-28-015":
+        # Pakistan-Afghanistan ceasefire by April 15
+        result["assessment"] = (
+            "Open warfare. Both capitals struck. Pakistan declared 'open war.' "
+            "Afghanistan retaliated. UN, China, Qatar, Turkey mediating. "
+            "Wikipedia titled article '2026 Afghanistan-Pakistan war.'"
+        )
+        result["trending"] = "against"
+
     return result
 
 
@@ -234,6 +313,13 @@ def main():
     print(f"  Bitcoin:  ${btc_price:,.0f}" if btc_price else "  Bitcoin:  unavailable")
     print(f"  NVDA:     ${nvda_price:.2f}" if nvda_price else "  NVDA:     unavailable")
     print(f"  Pulse:    {pm_data['fetched_at'][:10]}" if pm_data else "  Pulse:    unavailable")
+
+    iran_data = fetch_iran_strike_data()
+    if iran_data:
+        us_m = iran_data.get("us_strike_mar31")
+        il_m = iran_data.get("israel_strike_mar31")
+        if us_m is not None:
+            print(f"  Iran:     US strike Mar31 {us_m*100:.0f}%, Israel {il_m*100:.0f}%" if il_m else f"  Iran:     US strike Mar31 {us_m*100:.0f}%")
     print()
 
     # Check each prediction
@@ -242,7 +328,7 @@ def main():
     results = []
 
     for pred in predictions:
-        r = check_prediction(pred, btc_price, nvda_price, pm_data)
+        r = check_prediction(pred, btc_price, nvda_price, pm_data, iran_data)
         results.append(r)
         if r["status"] == "resolved":
             resolved_count += 1

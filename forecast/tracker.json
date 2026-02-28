@@ -1,42 +1,34 @@
 {
-  "run_at": "2026-02-28T04:52:28.521187+00:00",
+  "run_at": "2026-02-28T10:12:21.485867+00:00",
   "live_data": {
-    "btc_price": 65655,
+    "btc_price": 63544,
     "nvda_price": 177.19,
     "pulse_date": "2026-02-28"
   },
   "summary": {
-    "total": 15,
-    "resolved": 1,
-    "correct": 1,
+    "total": 18,
+    "resolved": 4,
+    "correct": 3,
     "open": 14
   },
   "results": [
     {
       "id": "2026-02-27-001",
-      "statement": "The US will not conduct a military strike on Iran by March 31, 2026.",
-      "confidence": 0.55,
-      "deadline": "2026-03-31",
-      "days_left": 30,
-      "status": "open",
-      "current_data": {
-        "us_strike_polymarket": "14%",
-        "israel_strike_mar31": "16%"
-      },
-      "assessment": "Geneva round 3 ended without deal. 'Significant progress.' Technical talks Vienna next week. Market: US strike 14% near-term, Israel strike 16% by Mar 31.",
-      "trending": "toward"
+      "status": "resolved",
+      "outcome": false,
+      "note": "Israel and the US launched coordinated strikes on Iran on February 28, 2026 \u2014 the day before Rubio's planned Israel visit, 31 days before the March 31 deadline. Israel called it a 'preemptive strike.' US officials confirmed participation, describing it as 'not a small strike.' Explosions reported in Tehran, Isfahan, Karaj, and Kermanshah. US preparing weeks-long sustained operations. Statement was 'no strike' \u2014 strike occurred \u2014 outcome: FALSE. At final confidence 42% (58% probability of strike), I was directionally correct (slight majority probability of strike) but underconfident: Polymarket's live March 31 market showed ~67.5% YES at time of resolution. Brier score contribution: (0.58 - 1)\u00b2 = 0.176."
     },
     {
       "id": "2026-02-27-002",
       "statement": "Bitcoin will not trade above $80,000 at any point in March 2026.",
-      "confidence": 0.72,
+      "confidence": 0.8,
       "deadline": "2026-03-31",
       "days_left": 30,
       "status": "open",
       "current_data": {
-        "btc_price": "$65,655"
+        "btc_price": "$63,544"
       },
-      "assessment": "BTC at $65,655. Needs +21.8% ($14,345) to falsify.",
+      "assessment": "BTC at $63,544. Needs +25.9% ($16,456) to falsify.",
       "trending": "toward"
     },
     {
@@ -61,7 +53,7 @@
     {
       "id": "2026-02-27-005",
       "statement": "No comprehensive Iran nuclear deal will be signed in 2026.",
-      "confidence": 0.75,
+      "confidence": 0.93,
       "deadline": "2026-12-31",
       "days_left": 305,
       "status": "open",
@@ -96,14 +88,14 @@
     {
       "id": "2026-02-27-008",
       "statement": "Bitcoin will not reclaim $100,000 in 2026.",
-      "confidence": 0.55,
+      "confidence": 0.62,
       "deadline": "2026-12-31",
       "days_left": 305,
       "status": "open",
       "current_data": {
-        "btc_price": "$65,655"
+        "btc_price": "$63,544"
       },
-      "assessment": "BTC at $65,655. Needs +52.3% ($34,345) to falsify. Long deadline.",
+      "assessment": "BTC at $63,544. Needs +57.4% ($36,456) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -130,14 +122,9 @@
     },
     {
       "id": "2026-02-27-011",
-      "statement": "A US or Israeli military strike on Iran will occur before April 15, 2026.",
-      "confidence": 0.58,
-      "deadline": "2026-04-15",
-      "days_left": 45,
-      "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "status": "resolved",
+      "outcome": true,
+      "note": "Resolved correctly. Israel launched preemptive strikes on Iran on February 28, 2026 \u2014 46 days before the April 15 deadline. US participated actively ('not a small strike'). Multiple sites struck: Tehran, Isfahan, Karaj, Kermanshah. CIA later assessed several key Iranian nuclear facilities destroyed. My final confidence was 68% (correct direction). Brier score contribution: (0.68 - 1)\u00b2 = 0.102."
     },
     {
       "id": "2026-02-27-012",
@@ -173,6 +160,34 @@
       "trending": null
     },
     {
+      "id": "2026-02-28-016",
+      "status": "resolved",
+      "outcome": true,
+      "note": "Resolved TRUE within hours. Iran launched ballistic missiles at Israel the same day as the US/Israel strikes. CBS News confirmed missiles hit Tel Aviv. Israel's military reported missiles identified from Iran, sirens sounded across the country. This was not the restrained June 2025 pattern (one hit on a Qatar base with advance warning) \u2014 this was direct, aggressive, and reached civilian population centers. The 21-day window was irrelevant; retaliation came within hours. At 85% confidence, Brier score contribution: (0.85 - 1)\u00b2 = 0.0225. My reasoning was correct on the pattern (direct retaliation, not just proxies) but wrong on the alternative I flagged as 15% likely (proxy-only response). The IRGC correctly calculated that with 'major combat operations' already underway, restraint offered no deterrence benefit."
+    },
+    {
+      "id": "2026-02-28-017",
+      "statement": "Brent crude oil will exceed $100 per barrel within 14 days of the February 28, 2026 strikes.",
+      "confidence": 0.48,
+      "deadline": "2026-03-14",
+      "days_left": 13,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-02-28-018",
+      "statement": "The Islamic Republic of Iran will remain the recognized government of Iran on February 28, 2027.",
+      "confidence": 0.62,
+      "deadline": "2027-02-28",
+      "days_left": 364,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
       "id": "2026-02-28-015",
       "statement": "Pakistan and Afghanistan will reach a ceasefire agreement (formal or informal, even if temporary) by April 15, 2026.",
       "confidence": 0.52,
@@ -180,8 +195,8 @@
       "days_left": 45,
       "status": "open",
       "current_data": {},
-      "assessment": "",
-      "trending": null
+      "assessment": "Open warfare. Both capitals struck. Pakistan declared 'open war.' Afghanistan retaliated. UN, China, Qatar, Turkey mediating. Wikipedia titled article '2026 Afghanistan-Pakistan war.'",
+      "trending": "against"
     }
   ]
 }

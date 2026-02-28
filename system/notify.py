@@ -13,9 +13,11 @@ import json
 import sys
 import urllib.request
 import urllib.parse
+from datetime import datetime, timezone
 from pathlib import Path
 
 CONFIG_PATH = Path(__file__).parent / ".tg-config.json"
+INBOX_PATH = Path(__file__).parent / "inbox.jsonl"
 
 
 def load_config() -> dict:
@@ -80,6 +82,14 @@ def main():
         text = " ".join(args)
 
     if send_message(text, config):
+        # Log outgoing message so future sessions see both sides
+        entry = {
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "from": "Claude",
+            "text": text,
+        }
+        with open(INBOX_PATH, "a") as f:
+            f.write(json.dumps(entry) + "\n")
         print("Sent.")
     else:
         print("Failed.")
