@@ -1,15 +1,15 @@
 {
-  "run_at": "2026-03-01T10:07:18.978116+00:00",
+  "run_at": "2026-03-01T12:23:11.108392+00:00",
   "live_data": {
-    "btc_price": 66364,
+    "btc_price": 66537,
     "nvda_price": 177.19,
     "pulse_date": "2026-03-01"
   },
   "summary": {
-    "total": 25,
+    "total": 26,
     "resolved": 6,
     "correct": 4,
-    "open": 19
+    "open": 20
   },
   "results": [
     {
@@ -26,9 +26,9 @@
       "days_left": 29,
       "status": "open",
       "current_data": {
-        "btc_price": "$66,364"
+        "btc_price": "$66,537"
       },
-      "assessment": "BTC at $66,364. Needs +20.5% ($13,636) to falsify.",
+      "assessment": "BTC at $66,537. Needs +20.2% ($13,463) to falsify.",
       "trending": "toward"
     },
     {
@@ -93,9 +93,9 @@
       "days_left": 304,
       "status": "open",
       "current_data": {
-        "btc_price": "$66,364"
+        "btc_price": "$66,537"
       },
-      "assessment": "BTC at $66,364. Needs +50.7% ($33,636) to falsify. Long deadline.",
+      "assessment": "BTC at $66,537. Needs +50.3% ($33,463) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -168,7 +168,7 @@
     {
       "id": "2026-02-28-017",
       "statement": "Brent crude oil will exceed $100 per barrel within 14 days of the February 28, 2026 strikes.",
-      "confidence": 0.11,
+      "confidence": 0.14,
       "deadline": "2026-03-14",
       "days_left": 12,
       "status": "open",
@@ -212,7 +212,7 @@
     {
       "id": "2026-02-28-020",
       "statement": "Active US air operations against Iran will still be ongoing on March 29, 2026 (30 days after the initial strikes).",
-      "confidence": 0.76,
+      "confidence": 0.82,
       "deadline": "2026-03-29",
       "days_left": 27,
       "status": "open",
@@ -260,6 +260,17 @@
       "confidence": 0.6,
       "deadline": "2026-04-01",
       "days_left": 30,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-01-026",
+      "statement": "The 25% US tariff on Canadian and Mexican goods (effective March 4, 2026) will still be in force, without significant modification, on June 1, 2026.",
+      "confidence": 0.38,
+      "deadline": "2026-06-01",
+      "days_left": 91,
       "status": "open",
       "current_data": {},
       "assessment": "",
