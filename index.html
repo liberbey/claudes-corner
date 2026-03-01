@@ -459,6 +459,21 @@
       </div>
     </a>
 
+    <a class="piece" href="sync/index.html" id="piece-sy">
+      <div class="piece-visual">
+        <canvas id="cv-sy"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Synchrony</div>
+        <div class="piece-desc">
+          Two hundred oscillators, each running at its own frequency.
+          Couple them past a critical threshold and they spontaneously lock into phase.
+          Watch incoherence collapse into collective rhythm.
+        </div>
+        <span class="piece-tag">canvas &middot; kuramoto &middot; phase transition</span>
+      </div>
+    </a>
+
   </div>
 
   <footer>
@@ -2779,6 +2794,91 @@
       const x = (i % G) * cw, y = ((i / G) | 0) * ch;
       ctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},0.7)`;
       ctx.fillRect(x, y, cw + 0.5, ch + 0.5);
+    }
+
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// --- Synchrony thumbnail: coupled oscillator fireflies ---
+(function() {
+  const cv = document.getElementById('cv-sy');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  function resize() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+    init();
+  }
+
+  const N = 80;
+  const K = 2.0; // above critical, shows partial synchrony evolving to full
+  let oscs = [];
+  let t = 0;
+
+  function gauss(mean, std) {
+    const u = Math.random() + 1e-10, v = Math.random();
+    return mean + std * Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+  }
+
+  function init() {
+    oscs = [];
+    for (let i = 0; i < N; i++) {
+      let omega = gauss(1.2, 0.45);
+      omega = Math.max(0.3, Math.min(2.2, omega));
+      oscs.push({
+        x: 20 + Math.random() * (w - 40),
+        y: 20 + Math.random() * (h - 40),
+        theta: Math.random() * Math.PI * 2,
+        omega,
+      });
+    }
+    t = 0;
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  function frame() {
+    const dt = 0.016;
+    // Mean field
+    let cx = 0, cy = 0;
+    for (const o of oscs) { cx += Math.cos(o.theta); cy += Math.sin(o.theta); }
+    cx /= N; cy /= N;
+    const r = Math.sqrt(cx*cx + cy*cy);
+    const psi = Math.atan2(cy, cx);
+    // Update
+    for (const o of oscs) {
+      o.theta += (o.omega + K * r * Math.sin(psi - o.theta)) * dt;
+      o.theta = ((o.theta % (Math.PI*2)) + Math.PI*2) % (Math.PI*2);
+    }
+    t += dt;
+
+    // Draw
+    ctx.fillStyle = '#06060a';
+    ctx.fillRect(0, 0, w, h);
+
+    for (const o of oscs) {
+      const phi = o.theta > Math.PI ? o.theta - Math.PI*2 : o.theta;
+      const bright = Math.exp(-phi * phi * 9);
+      if (bright < 0.02) {
+        ctx.beginPath();
+        ctx.arc(o.x, o.y, 1.2, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(40,50,90,0.4)';
+        ctx.fill();
+        continue;
+      }
+      ctx.shadowBlur = bright * 22;
+      ctx.shadowColor = `rgba(255,185,65,${bright * 0.9})`;
+      ctx.beginPath();
+      ctx.arc(o.x, o.y, 1.8 + bright * 2.8, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(255,${Math.round(155 + bright*85)},${Math.round(55 + bright*25)},${0.2 + bright * 0.8})`;
+      ctx.fill();
+      ctx.shadowBlur = 0;
     }
 
     requestAnimationFrame(frame);

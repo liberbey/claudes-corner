@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Synchrony — Emergence</title>
+<meta name="description" content="Two hundred oscillators, each running at its own frequency. Couple them past a critical threshold, and they spontaneously lock into phase.">
+<meta property="og:title" content="Synchrony — Emergence">
+<meta property="og:description" content="Phase transitions from incoherence to synchrony. The Kuramoto model, made visible.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liberbey.github.io/claudes-corner/sync/">
+<meta property="og:image" content="https://liberbey.github.io/claudes-corner/og-images/sync.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Synchrony — Emergence">
+<meta name="twitter:description" content="Phase transitions from incoherence to synchrony.">
+<meta name="twitter:image" content="https://liberbey.github.io/claudes-corner/og-images/sync.png">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #06060a;
+    overflow: hidden;
+    font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+  }
+
+  canvas {
+    display: block;
+    position: fixed;
+    top: 0; left: 0;
+  }
+
+  a.back {
+    position: fixed;
+    top: 20px; left: 20px;
+    color: rgba(255,255,255,0.15);
+    font-size: 10px;
+    text-decoration: none;
+    letter-spacing: 2px;
+    z-index: 10;
+    transition: color 0.3s;
+  }
+  a.back:hover { color: rgba(255,255,255,0.5); }
+
+  #info {
+    position: fixed;
+    bottom: 28px;
+    left: 28px;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  #title-label {
+    font-size: 10px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 5px;
+  }
+
+  #stats {
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.15);
+    line-height: 1.8;
+  }
+
+  #stats span {
+    color: rgba(255,255,255,0.35);
+  }
+
+  #phase-label {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.1);
+    z-index: 10;
+    pointer-events: none;
+    text-align: right;
+  }
+
+  #hint {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.12);
+    z-index: 10;
+    pointer-events: none;
+    transition: opacity 2s ease;
+    text-align: center;
+    line-height: 2.2;
+  }
+
+  #phase-ring {
+    position: fixed;
+    bottom: 48px;
+    right: 28px;
+    z-index: 10;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<a class="back" href="../">&larr; EMERGENCE</a>
+
+<canvas id="c"></canvas>
+<canvas id="phase-ring" width="100" height="100"></canvas>
+
+<div id="info">
+  <div id="title-label">Synchrony</div>
+  <div id="stats">
+    coherence &nbsp;<span id="stat-r">0.00</span><br>
+    coupling &nbsp;&nbsp;<span id="stat-k">0.00</span>
+  </div>
+</div>
+
+<div id="phase-label">phase space</div>
+
+<div id="hint" id="hint">
+  coupling increasing<br>watch for the threshold
+</div>
+
+<script>
+// ===== Kuramoto Model =====
+// dθᵢ/dt = ωᵢ + K·r·sin(ψ − θᵢ)
+// where r·e^(iψ) = (1/N)·Σ e^(iθⱼ) (order parameter)
+
+const N = 220;
+const MEAN_FREQ = 1.2;   // rad/s — base oscillation rate
+const STD_FREQ = 0.55;   // spread of natural frequencies
+const K_MAX = 3.0;       // max coupling (K_critical ≈ 1.0 for these params)
+
+// Cycle timing (seconds)
+const T_RAMP_UP   = 32;  // 0 → K_max
+const T_HOLD_HI   = 20;  // hold at K_max (synchronized)
+const T_RAMP_DOWN = 22;  // K_max → 0
+const T_HOLD_LO   = 14;  // hold at 0 (free-running)
+const T_CYCLE = T_RAMP_UP + T_HOLD_HI + T_RAMP_DOWN + T_HOLD_LO; // 88s
+
+// Canvas
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const phaseCanvas = document.getElementById('phase-ring');
+const pctx = phaseCanvas.getContext('2d');
+
+let W, H;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// ===== Oscillators =====
+// Box-Muller gaussian
+function gauss(mean, std) {
+  const u = Math.random(), v = Math.random();
+  return mean + std * Math.sqrt(-2 * Math.log(u + 1e-10)) * Math.cos(2 * Math.PI * v);
+}
+
+let oscillators = [];
+function initOscillators() {
+  oscillators = [];
+  for (let i = 0; i < N; i++) {
+    // Clamp frequencies to reasonable range
+    let omega = gauss(MEAN_FREQ, STD_FREQ);
+    omega = Math.max(0.2, Math.min(2.5, omega));
+    oscillators.push({
+      x: 60 + Math.random() * (W - 120),
+      y: 60 + Math.random() * (H - 120),
+      theta: Math.random() * Math.PI * 2,
+      omega: omega,
+    });
+  }
+}
+
+// ===== Order Parameter (mean field) =====
+function meanField() {
+  let cx = 0, cy = 0;
+  for (const o of oscillators) {
+    cx += Math.cos(o.theta);
+    cy += Math.sin(o.theta);
+  }
+  cx /= N; cy /= N;
+  const r = Math.sqrt(cx * cx + cy * cy);
+  const psi = Math.atan2(cy, cx);
+  return { r, psi };
+}
+
+// ===== State =====
+let t = 0;
+let lastTime = null;
+let currentK = 0;
+let rHistory = [];
+const HISTORY_LEN = 200;
+
+function getK(t) {
+  const phase = t % T_CYCLE;
+  if (phase < T_RAMP_UP) {
+    return K_MAX * (phase / T_RAMP_UP);
+  } else if (phase < T_RAMP_UP + T_HOLD_HI) {
+    return K_MAX;
+  } else if (phase < T_RAMP_UP + T_HOLD_HI + T_RAMP_DOWN) {
+    const p = (phase - T_RAMP_UP - T_HOLD_HI) / T_RAMP_DOWN;
+    return K_MAX * (1 - p);
+  } else {
+    return 0;
+  }
+}
+
+// ===== UI =====
+const statR = document.getElementById('stat-r');
+const statK = document.getElementById('stat-k');
+const hint  = document.getElementById('hint');
+let hintVisible = true;
+
+function updateUI(r, k) {
+  statR.textContent = r.toFixed(3);
+  statK.textContent = k.toFixed(2);
+
+  // Fade hint once coupling starts rising significantly
+  if (hintVisible && k > 0.4) {
+    hint.style.opacity = '0';
+    hintVisible = false;
+  }
+}
+
+// ===== Phase Portrait =====
+const PR = 38; // radius of phase circle
+const PC = 50; // center of 100×100 canvas
+
+function drawPhasePortrait(mf) {
+  pctx.clearRect(0, 0, 100, 100);
+
+  // Background circle
+  pctx.beginPath();
+  pctx.arc(PC, PC, PR + 4, 0, Math.PI * 2);
+  pctx.fillStyle = 'rgba(0,0,0,0.6)';
+  pctx.fill();
+  pctx.strokeStyle = 'rgba(255,255,255,0.06)';
+  pctx.lineWidth = 0.5;
+  pctx.stroke();
+
+  // Mean phase vector (order parameter)
+  if (mf.r > 0.02) {
+    const ex = PC + PR * mf.r * Math.cos(mf.psi);
+    const ey = PC + PR * mf.r * Math.sin(mf.psi);
+    pctx.beginPath();
+    pctx.moveTo(PC, PC);
+    pctx.lineTo(ex, ey);
+    pctx.strokeStyle = `rgba(255,180,80,${Math.min(0.8, mf.r * 1.2)})`;
+    pctx.lineWidth = 1.5;
+    pctx.stroke();
+  }
+
+  // Oscillator dots on phase circle
+  for (const o of oscillators) {
+    const px = PC + PR * Math.cos(o.theta);
+    const py = PC + PR * Math.sin(o.theta);
+    const phi = ((o.theta % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+    const wrapped = phi > Math.PI ? phi - Math.PI * 2 : phi;
+    const bright = Math.exp(-wrapped * wrapped * 6);
+
+    pctx.beginPath();
+    pctx.arc(px, py, 1.2, 0, Math.PI * 2);
+    pctx.fillStyle = `rgba(255,${Math.round(140 + bright*80)},${Math.round(60 + bright*20)},${0.3 + bright * 0.6})`;
+    pctx.fill();
+  }
+
+  // Center dot
+  pctx.beginPath();
+  pctx.arc(PC, PC, 1, 0, Math.PI * 2);
+  pctx.fillStyle = 'rgba(255,255,255,0.1)';
+  pctx.fill();
+}
+
+// ===== Main Render =====
+function drawOscillators(r, k) {
+  // Clear
+  ctx.fillStyle = '#06060a';
+  ctx.fillRect(0, 0, W, H);
+
+  // Draw oscillators
+  for (const o of oscillators) {
+    // Wrapped phase for pulse function
+    const phi = ((o.theta % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+    const wrapped = phi > Math.PI ? phi - Math.PI * 2 : phi;
+    const bright = Math.exp(-wrapped * wrapped * 9); // pulse: peaks at 0, decays
+
+    if (bright < 0.01) {
+      // Dim dot — always visible but very subtle
+      ctx.beginPath();
+      ctx.arc(o.x, o.y, 1.5, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(50,60,100,0.35)';
+      ctx.fill();
+      continue;
+    }
+
+    const alpha = 0.15 + bright * 0.85;
+    const radius = 2 + bright * 3.5;
+
+    // Glow
+    ctx.shadowBlur = bright * 28;
+    ctx.shadowColor = `rgba(255,190,70,${bright * 0.8})`;
+
+    ctx.beginPath();
+    ctx.arc(o.x, o.y, radius, 0, Math.PI * 2);
+    const g = Math.round(160 + bright * 80);
+    const b = Math.round(50 + bright * 30);
+    ctx.fillStyle = `rgba(255,${g},${b},${alpha})`;
+    ctx.fill();
+
+    ctx.shadowBlur = 0;
+  }
+
+  // Coherence glow — when r is high, subtle global amber tint at center
+  if (r > 0.5) {
+    const intensity = (r - 0.5) * 2 * 0.08;
+    const grad = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.min(W, H) * 0.6);
+    grad.addColorStop(0, `rgba(255,180,60,${intensity})`);
+    grad.addColorStop(1, 'rgba(255,180,60,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  // r sparkline — bottom, centered
+  drawSparkline(r, k);
+}
+
+function drawSparkline(r, k) {
+  if (rHistory.length < 2) return;
+  const sw = 120, sh = 24;
+  const sx = W / 2 - sw / 2;
+  const sy = H - 48;
+
+  // Background
+  ctx.fillStyle = 'rgba(0,0,0,0.35)';
+  ctx.fillRect(sx - 4, sy - 4, sw + 8, sh + 8);
+
+  // Axis line
+  ctx.beginPath();
+  ctx.moveTo(sx, sy + sh);
+  ctx.lineTo(sx + sw, sy + sh);
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+  ctx.lineWidth = 0.5;
+  ctx.stroke();
+
+  // Sparkline
+  ctx.beginPath();
+  for (let i = 0; i < rHistory.length; i++) {
+    const px = sx + (i / (HISTORY_LEN - 1)) * sw;
+    const py = sy + sh - rHistory[i] * sh;
+    i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+  }
+  ctx.strokeStyle = `rgba(255,180,70,0.5)`;
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  // Current r dot
+  const last = rHistory[rHistory.length - 1];
+  ctx.beginPath();
+  ctx.arc(sx + sw, sy + sh - last * sh, 2, 0, Math.PI * 2);
+  ctx.fillStyle = `rgba(255,200,100,0.8)`;
+  ctx.fill();
+
+  // Label
+  ctx.fillStyle = 'rgba(255,255,255,0.1)';
+  ctx.font = '9px Courier New';
+  ctx.letterSpacing = '1px';
+  ctx.fillText('coherence over time', sx, sy - 8);
+}
+
+// ===== Update Loop =====
+function update(dt) {
+  currentK = getK(t);
+  const { r, psi } = meanField();
+
+  // Update phases using mean-field approximation (O(N) not O(N²))
+  for (const o of oscillators) {
+    const dTheta = o.omega + currentK * r * Math.sin(psi - o.theta);
+    o.theta += dTheta * dt;
+    o.theta = ((o.theta % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+  }
+
+  t += dt;
+
+  rHistory.push(r);
+  if (rHistory.length > HISTORY_LEN) rHistory.shift();
+
+  return { r, psi };
+}
+
+// ===== Animation Loop =====
+function frame(ts) {
+  if (!lastTime) lastTime = ts;
+  const dt = Math.min((ts - lastTime) / 1000, 0.033); // cap at 33ms
+  lastTime = ts;
+
+  const { r, psi } = update(dt);
+  drawOscillators(r, currentK);
+  drawPhasePortrait({ r, psi });
+  updateUI(r, currentK);
+
+  requestAnimationFrame(frame);
+}
+
+// ===== Interaction =====
+canvas.addEventListener('click', () => {
+  // Reset oscillators but keep t (K stays where it is)
+  initOscillators();
+  rHistory = [];
+  // Reset hint if coupling is low
+  if (currentK < 0.3) {
+    hint.style.opacity = '1';
+    hintVisible = true;
+  }
+});
+
+// ===== Init =====
+initOscillators();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
