@@ -1,44 +1,24 @@
 {
-  "fetched_at": "2026-02-28T23:22:54.133712+00:00",
+  "fetched_at": "2026-03-01T00:58:05.772438+00:00",
   "total_events": 80,
   "displayed": 40,
   "categories": {
-    "politics": 7,
     "geopolitics": 11,
-    "sports": 14,
+    "sports": 15,
     "economy": 3,
-    "other": 2,
-    "crypto": 2,
-    "science": 1
+    "politics": 4,
+    "crypto": 4,
+    "science": 1,
+    "other": 1,
+    "culture": 1
   },
   "markets": [
     {
-      "title": "Brazil Presidential Election",
-      "category": "politics",
-      "volume": 22072250.706047,
-      "volume_24h": 266647.404136,
-      "uncertainty": 0.99,
-      "market": {
-        "question": "Will Luiz In\u00e1cio Lula da Silva win the 2026 Brazilian presidential election?",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.495,
-          0.505
-        ],
-        "probability": 0.495,
-        "volume": 3628038.111831
-      },
-      "interestingness": 0.682
-    },
-    {
       "title": "Will the Iranian regime fall by June 30?",
       "category": "geopolitics",
-      "volume": 2689691.363052,
-      "volume_24h": 504026.73902300105,
-      "uncertainty": 0.94,
+      "volume": 2713889.05417,
+      "volume_24h": 934089.0072519997,
+      "uncertainty": 0.97,
       "market": {
         "question": "Will the Iranian regime fall by June 30?",
         "outcomes": [
@@ -46,20 +26,20 @@
           "No"
         ],
         "prices": [
-          0.53,
-          0.47
+          0.515,
+          0.485
         ],
-        "probability": 0.53,
-        "volume": 2695906.044983
+        "probability": 0.515,
+        "volume": 2713889.05417
       },
-      "interestingness": 0.575
+      "interestingness": 0.593
     },
     {
       "title": "Will Iran close the Strait of Hormuz by...?",
       "category": "geopolitics",
-      "volume": 2427673.250384,
-      "volume_24h": 628669.9969609999,
-      "uncertainty": 0.84,
+      "volume": 2525675.546101,
+      "volume_24h": 1466697.688943,
+      "uncertainty": 0.87,
       "market": {
         "question": "Will Iran close the Strait of Hormuz by March 31?",
         "outcomes": [
@@ -67,19 +47,40 @@
           "No"
         ],
         "prices": [
-          0.58,
-          0.42
+          0.435,
+          0.565
         ],
-        "probability": 0.58,
-        "volume": 1602382.047076
+        "probability": 0.435,
+        "volume": 1685550.962433
       },
-      "interestingness": 0.514
+      "interestingness": 0.532
+    },
+    {
+      "title": "Will the Iranian regime fall before 2027?",
+      "category": "geopolitics",
+      "volume": 6004673.544633,
+      "volume_24h": 986394.9851250008,
+      "uncertainty": 0.81,
+      "market": {
+        "question": "Will the Iranian regime fall before 2027?",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.595,
+          0.405
+        ],
+        "probability": 0.595,
+        "volume": 6004673.544633
+      },
+      "interestingness": 0.51
     },
     {
       "title": "Will the Iranian regime fall by March 31?",
       "category": "geopolitics",
-      "volume": 10158536.484676,
-      "volume_24h": 2129684.8617599956,
+      "volume": 10276880.835975,
+      "volume_24h": 3821045.990493,
       "uncertainty": 0.771,
       "market": {
         "question": "Will the Iranian regime fall by March 31?",
@@ -92,16 +93,16 @@
           0.6145
         ],
         "probability": 0.3855,
-        "volume": 10158536.484676
+        "volume": 10276880.835975
       },
-      "interestingness": 0.503
+      "interestingness": 0.504
     },
     {
       "title": "Lakers vs. Warriors",
       "category": "sports",
-      "volume": 1651353.613302,
-      "volume_24h": 571622.1076359994,
-      "uncertainty": 0.79,
+      "volume": 2250952.74179,
+      "volume_24h": 2077759.3350409975,
+      "uncertainty": 0.81,
       "market": {
         "question": "Lakers vs. Warriors",
         "outcomes": [
@@ -109,40 +110,40 @@
           "Warriors"
         ],
         "prices": [
-          0.605,
-          0.395
+          0.595,
+          0.405
         ],
-        "probability": 0.605,
-        "volume": 1203193.791981
+        "probability": 0.595,
+        "volume": 1494296.940741
       },
-      "interestingness": 0.481
+      "interestingness": 0.495
     },
     {
-      "title": "Will the Iranian regime fall before 2027?",
+      "title": "Will US or Israel strike Iran first?",
       "category": "geopolitics",
-      "volume": 5958317.723466,
-      "volume_24h": 509150.3833499992,
-      "uncertainty": 0.73,
+      "volume": 1542086.032209,
+      "volume_24h": 1235352.0585799976,
+      "uncertainty": 0.795,
       "market": {
-        "question": "Will the Iranian regime fall before 2027?",
+        "question": "Will US or Israel strike Iran first?",
         "outcomes": [
-          "Yes",
-          "No"
+          "US",
+          "Israel"
         ],
         "prices": [
-          0.635,
-          0.365
+          0.3975,
+          0.6025
         ],
-        "probability": 0.635,
-        "volume": 5958669.285966
+        "probability": 0.6025,
+        "volume": 1542086.032209
       },
-      "interestingness": 0.462
+      "interestingness": 0.483
     },
     {
       "title": "Who will Trump nominate as Fed Chair?",
       "category": "economy",
-      "volume": 550220778.09753,
-      "volume_24h": 3958890.448409,
+      "volume": 550906730.445526,
+      "volume_24h": 7066878.764274999,
       "uncertainty": 0.102,
       "market": {
         "question": "Will Trump nominate Judy Shelton as the next Fed chair?",
@@ -155,15 +156,36 @@
           0.949
         ],
         "probability": 0.051,
-        "volume": 100885691.006299
+        "volume": 101249347.828145
       },
       "interestingness": 0.461
     },
     {
+      "title": "Raptors vs. Wizards",
+      "category": "sports",
+      "volume": 3136407.166875,
+      "volume_24h": 2534925.655595001,
+      "uncertainty": 0.69,
+      "market": {
+        "question": "Raptors vs. Wizards",
+        "outcomes": [
+          "Raptors",
+          "Wizards"
+        ],
+        "prices": [
+          0.655,
+          0.345
+        ],
+        "probability": 0.655,
+        "volume": 1788948.158709
+      },
+      "interestingness": 0.427
+    },
+    {
       "title": "Democratic Presidential Nominee 2028",
       "category": "politics",
-      "volume": 732479066.552009,
-      "volume_24h": 4971283.154479,
+      "volume": 732703514.328089,
+      "volume_24h": 5176682.427985999,
       "uncertainty": 0.019,
       "market": {
         "question": "Will Chelsea Clinton win the 2028 Democratic presidential nomination?",
@@ -176,15 +198,15 @@
           0.9905
         ],
         "probability": 0.0095,
-        "volume": 40299577.460736
+        "volume": 40299999.010736
       },
       "interestingness": 0.411
     },
     {
       "title": "Republican Presidential Nominee 2028",
       "category": "politics",
-      "volume": 338305742.671783,
-      "volume_24h": 2958668.3484980003,
+      "volume": 338679001.70783,
+      "volume_24h": 3838401.590411,
       "uncertainty": 0.019,
       "market": {
         "question": "Will Mike Pence win the 2028 Republican presidential nomination?",
@@ -204,8 +226,8 @@
     {
       "title": "Presidential Election Winner 2028",
       "category": "politics",
-      "volume": 344299537.399194,
-      "volume_24h": 3631097.746269,
+      "volume": 344322467.107787,
+      "volume_24h": 4386471.224134,
       "uncertainty": 0.017,
       "market": {
         "question": "Will Tim Walz win the 2028 US Presidential Election?",
@@ -225,8 +247,8 @@
     {
       "title": "Fed decision in March?",
       "category": "economy",
-      "volume": 189226740.548719,
-      "volume_24h": 6896401.161063995,
+      "volume": 189571569.41601,
+      "volume_24h": 6964661.412800997,
       "uncertainty": 0.011,
       "market": {
         "question": "Will the Fed decrease interest rates by 50+ bps after the March 2026 meeting?",
@@ -239,36 +261,15 @@
           0.9945
         ],
         "probability": 0.0055,
-        "volume": 76963094.092329
+        "volume": 77013657.251195
       },
       "interestingness": 0.407
     },
     {
-      "title": "\"Scream 7\" Opening Weekend Box Office",
-      "category": "other",
-      "volume": 731082.675839,
-      "volume_24h": 298493.643216,
-      "uncertainty": 0.67,
-      "market": {
-        "question": "Will \"Scream 7\" Opening Weekend Box Office be greater than 65m?",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.335,
-          0.665
-        ],
-        "probability": 0.335,
-        "volume": 169692.393971
-      },
-      "interestingness": 0.405
-    },
-    {
       "title": "2026 FIFA World Cup Winner ",
       "category": "sports",
-      "volume": 223222596.912005,
-      "volume_24h": 10234983.475182,
+      "volume": 223342814.102612,
+      "volume_24h": 11627132.751432002,
       "uncertainty": 0.005,
       "market": {
         "question": "Will Uzbekistan win the 2026 FIFA World Cup?",
@@ -281,15 +282,15 @@
           0.9975
         ],
         "probability": 0.0025,
-        "volume": 21206241.948552
+        "volume": 21213322.063552
       },
       "interestingness": 0.403
     },
     {
       "title": "What price will Bitcoin hit in February?",
       "category": "crypto",
-      "volume": 120517986.225664,
-      "volume_24h": 4452495.306773004,
+      "volume": 120635981.940161,
+      "volume_24h": 5317661.576739996,
       "uncertainty": 0.001,
       "market": {
         "question": "Will Bitcoin reach $150,000 in February?",
@@ -307,10 +308,31 @@
       "interestingness": 0.401
     },
     {
+      "title": "2026 NBA Champion",
+      "category": "sports",
+      "volume": 305729125.872532,
+      "volume_24h": 2915103.386964,
+      "uncertainty": 0.001,
+      "market": {
+        "question": "Will the Indiana Pacers win the 2026 NBA Finals?",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.0005,
+          0.9995
+        ],
+        "probability": 0.0005,
+        "volume": 47831727.59217
+      },
+      "interestingness": 0.401
+    },
+    {
       "title": "English Premier League Winner ",
       "category": "sports",
-      "volume": 276211048.558228,
-      "volume_24h": 3481471.4828620004,
+      "volume": 276224561.107846,
+      "volume_24h": 872009.807333,
       "uncertainty": 0.001,
       "market": {
         "question": "Will Leeds win the 2025\u201326 English Premier League?",
@@ -328,52 +350,10 @@
       "interestingness": 0.401
     },
     {
-      "title": "2026 NBA Champion",
-      "category": "sports",
-      "volume": 305659583.57309,
-      "volume_24h": 2893316.9759749994,
-      "uncertainty": 0.001,
-      "market": {
-        "question": "Will the Indiana Pacers win the 2026 NBA Finals?",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.0005,
-          0.9995
-        ],
-        "probability": 0.0005,
-        "volume": 47827627.59217
-      },
-      "interestingness": 0.401
-    },
-    {
-      "title": "La Liga Winner ",
-      "category": "sports",
-      "volume": 119113019.724061,
-      "volume_24h": 2349612.4631350003,
-      "uncertainty": 0.0,
-      "market": {
-        "question": "Will Mallorca win the 2025\u201326 La Liga?",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.0,
-          1.0
-        ],
-        "probability": 0.0,
-        "volume": 18654900.399518
-      },
-      "interestingness": 0.4
-    },
-    {
       "title": "UEFA Champions League Winner ",
       "category": "sports",
-      "volume": 252125636.595549,
-      "volume_24h": 2025523.784437,
+      "volume": 252170100.320965,
+      "volume_24h": 1226442.1407730002,
       "uncertainty": 0.0,
       "market": {
         "question": "Will Slavia Pragu win the 2025\u201326 Champions League?",
@@ -391,52 +371,52 @@
       "interestingness": 0.4
     },
     {
-      "title": "Texas Democratic Senate Primary Winner",
-      "category": "politics",
-      "volume": 2375019.309755,
-      "volume_24h": 406420.6541949998,
-      "uncertainty": 0.65,
+      "title": "La Liga Winner ",
+      "category": "sports",
+      "volume": 119250491.006266,
+      "volume_24h": 881920.9174200001,
+      "uncertainty": 0.0,
       "market": {
-        "question": "Will James Talarico be the Democratic nominee for Senate in Texas?",
+        "question": "Will Mallorca win the 2025\u201326 La Liga?",
         "outcomes": [
           "Yes",
           "No"
         ],
         "prices": [
-          0.675,
-          0.325
+          0.0,
+          1.0
         ],
-        "probability": 0.675,
-        "volume": 1210640.120559
+        "probability": 0.0,
+        "volume": 18654900.399518
       },
       "interestingness": 0.4
     },
     {
-      "title": "Torino FC vs. SS Lazio",
+      "title": "Blackhawks vs. Avalanche",
       "category": "sports",
-      "volume": 504228.275171,
-      "volume_24h": 425331.47685000015,
-      "uncertainty": 0.65,
+      "volume": 457905.026172,
+      "volume_24h": 420187.95991399983,
+      "uncertainty": 0.64,
       "market": {
-        "question": "Will Torino FC vs. SS Lazio end in a draw?",
+        "question": "Blackhawks vs. Avalanche",
         "outcomes": [
-          "Yes",
-          "No"
+          "Blackhawks",
+          "Avalanche"
         ],
         "prices": [
-          0.325,
-          0.675
+          0.32,
+          0.68
         ],
-        "probability": 0.325,
-        "volume": 495549.983702
+        "probability": 0.68,
+        "volume": 393276.012531
       },
-      "interestingness": 0.392
+      "interestingness": 0.386
     },
     {
       "title": "Pelicans vs. Jazz",
       "category": "sports",
-      "volume": 895576.850395,
-      "volume_24h": 364653.1574610001,
+      "volume": 1036940.094897,
+      "volume_24h": 937217.9430630001,
       "uncertainty": 0.63,
       "market": {
         "question": "Pelicans vs. Jazz",
@@ -449,58 +429,58 @@
           0.315
         ],
         "probability": 0.685,
-        "volume": 645154.142109
+        "volume": 694236.206675
       },
       "interestingness": 0.382
     },
     {
-      "title": "Will US or Israel strike Iran first?",
-      "category": "geopolitics",
-      "volume": 1484079.045507,
-      "volume_24h": 1061239.2895829992,
-      "uncertainty": 0.608,
+      "title": "Bitcoin above ___ on March 1?",
+      "category": "crypto",
+      "volume": 2860484.798241,
+      "volume_24h": 1727668.8102369998,
+      "uncertainty": 0.58,
       "market": {
-        "question": "Will US or Israel strike Iran first?",
-        "outcomes": [
-          "US",
-          "Israel"
-        ],
-        "prices": [
-          0.304,
-          0.696
-        ],
-        "probability": 0.696,
-        "volume": 1484079.045507
-      },
-      "interestingness": 0.371
-    },
-    {
-      "title": "US strikes Iraq by February 28?",
-      "category": "geopolitics",
-      "volume": 842932.496125,
-      "volume_24h": 466886.7123499999,
-      "uncertainty": 0.584,
-      "market": {
-        "question": "US strikes Iraq by February 28?",
+        "question": "Will the price of Bitcoin be above $66,000 on March 1?",
         "outcomes": [
           "Yes",
           "No"
         ],
         "prices": [
-          0.292,
-          0.708
+          0.71,
+          0.29
         ],
-        "probability": 0.292,
-        "volume": 842932.496125
+        "probability": 0.71,
+        "volume": 374113.916807
       },
-      "interestingness": 0.354
+      "interestingness": 0.359
+    },
+    {
+      "title": "Capitals vs. Canadiens",
+      "category": "sports",
+      "volume": 472845.777275,
+      "volume_24h": 463072.2136470001,
+      "uncertainty": 0.55,
+      "market": {
+        "question": "Capitals vs. Canadiens",
+        "outcomes": [
+          "Capitals",
+          "Canadiens"
+        ],
+        "prices": [
+          0.275,
+          0.725
+        ],
+        "probability": 0.725,
+        "volume": 457906.230263
+      },
+      "interestingness": 0.332
     },
     {
       "title": "Ethereum above ___ on March 1?",
       "category": "crypto",
-      "volume": 697689.781985,
-      "volume_24h": 225045.35316700002,
-      "uncertainty": 0.585,
+      "volume": 794853.988423,
+      "volume_24h": 394835.414874,
+      "uncertainty": 0.501,
       "market": {
         "question": "Will the price of Ethereum be above $2,000 on March 1?",
         "outcomes": [
@@ -508,20 +488,20 @@
           "No"
         ],
         "prices": [
-          0.2925,
-          0.7075
+          0.2505,
+          0.7495
         ],
-        "probability": 0.2925,
-        "volume": 133814.451312
+        "probability": 0.2505,
+        "volume": 142666.86472
       },
-      "interestingness": 0.354
+      "interestingness": 0.304
     },
     {
       "title": "S&P 500 (SPX) Opens Up or Down on March 2?",
       "category": "economy",
-      "volume": 597413.176652,
-      "volume_24h": 431715.65712600027,
-      "uncertainty": 0.58,
+      "volume": 607827.68462,
+      "volume_24h": 604287.9716740004,
+      "uncertainty": 0.49,
       "market": {
         "question": "S&P 500 (SPX) Opens Up or Down on March 2?",
         "outcomes": [
@@ -529,61 +509,40 @@
           "Down"
         ],
         "prices": [
-          0.29,
-          0.71
+          0.245,
+          0.755
         ],
-        "probability": 0.71,
-        "volume": 597413.176652
+        "probability": 0.755,
+        "volume": 607827.68462
       },
-      "interestingness": 0.35
+      "interestingness": 0.296
     },
     {
-      "title": "Devils vs. Blues",
-      "category": "sports",
-      "volume": 968635.208626,
-      "volume_24h": 438592.41867999965,
-      "uncertainty": 0.56,
+      "title": "Khamenei out as Supreme Leader of Iran by February 28?",
+      "category": "geopolitics",
+      "volume": 60518250.212883,
+      "volume_24h": 44772820.496907346,
+      "uncertainty": 0.065,
       "market": {
-        "question": "Devils vs. Blues",
-        "outcomes": [
-          "Devils",
-          "Blues"
-        ],
-        "prices": [
-          0.72,
-          0.28
-        ],
-        "probability": 0.72,
-        "volume": 959019.215923
-      },
-      "interestingness": 0.34
-    },
-    {
-      "title": "Texas Republican Senate Primary Winner",
-      "category": "politics",
-      "volume": 4888106.886623,
-      "volume_24h": 320139.1738089999,
-      "uncertainty": 0.45,
-      "market": {
-        "question": "Will Ken Paxton win the 2026 Texas Republican Primary?",
+        "question": "Khamenei out as Supreme Leader of Iran by February 28?",
         "outcomes": [
           "Yes",
           "No"
         ],
         "prices": [
-          0.775,
-          0.225
+          0.9675,
+          0.0325
         ],
-        "probability": 0.775,
-        "volume": 1461086.455737
+        "probability": 0.9675,
+        "volume": 60518250.212883
       },
-      "interestingness": 0.29
+      "interestingness": 0.281
     },
     {
       "title": "Venezuela leader end of 2026?",
       "category": "politics",
-      "volume": 68579309.625537,
-      "volume_24h": 9285339.507817,
+      "volume": 68589225.312097,
+      "volume_24h": 5426173.015868,
       "uncertainty": 0.001,
       "market": {
         "question": "Will Richard Grenell be the leader of Venezuela end of 2026?",
@@ -603,8 +562,8 @@
     {
       "title": "Will the US confirm that aliens exist before 2027?",
       "category": "science",
-      "volume": 11909426.045916,
-      "volume_24h": 749692.3264110006,
+      "volume": 11942602.175827,
+      "volume_24h": 954649.2792800013,
       "uncertainty": 0.37,
       "market": {
         "question": "Will the US confirm that aliens exist before 2027?",
@@ -617,142 +576,16 @@
           0.815
         ],
         "probability": 0.185,
-        "volume": 11909489.202228
+        "volume": 11942602.175827
       },
       "interestingness": 0.27
     },
     {
-      "title": "Khamenei out as Supreme Leader of Iran by February 28?",
-      "category": "geopolitics",
-      "volume": 55736659.05589,
-      "volume_24h": 11518720.320313018,
-      "uncertainty": 0.065,
-      "market": {
-        "question": "Khamenei out as Supreme Leader of Iran by February 28?",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.9675,
-          0.0325
-        ],
-        "probability": 0.9675,
-        "volume": 55736659.05589
-      },
-      "interestingness": 0.262
-    },
-    {
-      "title": "F1 Constructors' Champion",
-      "category": "sports",
-      "volume": 1790934.188383,
-      "volume_24h": 216298.582102,
-      "uncertainty": 0.42,
-      "market": {
-        "question": "Will McLaren be the 2026 F1 Constructors' Champion?",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.21,
-          0.79
-        ],
-        "probability": 0.21,
-        "volume": 638546.230661
-      },
-      "interestingness": 0.259
-    },
-    {
-      "title": "Will Reza Pahlavi enter Iran by...?",
-      "category": "geopolitics",
-      "volume": 2271941.23343,
-      "volume_24h": 271944.8866440001,
-      "uncertainty": 0.373,
-      "market": {
-        "question": "Will Reza Pahlavi enter Iran by March 31?",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.1865,
-          0.8135
-        ],
-        "probability": 0.1865,
-        "volume": 820656.860378
-      },
-      "interestingness": 0.233
-    },
-    {
-      "title": "2026 NHL Stanley Cup Champion ",
-      "category": "sports",
-      "volume": 38231491.700577,
-      "volume_24h": 382081.02384400007,
-      "uncertainty": 0.128,
-      "market": {
-        "question": "Will the Minnesota Wild win the 2026 NHL Stanley Cup?",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.064,
-          0.936
-        ],
-        "probability": 0.064,
-        "volume": 7482656.14537
-      },
-      "interestingness": 0.23
-    },
-    {
-      "title": "US next strikes Iran on...?",
-      "category": "geopolitics",
-      "volume": 54107667.750202,
-      "volume_24h": 4484402.316027996,
-      "uncertainty": 0.008,
-      "market": {
-        "question": "Will the US next strike Iran on February 27, 2026 (ET)?",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.004,
-          0.996
-        ],
-        "probability": 0.004,
-        "volume": 4160869.834298
-      },
-      "interestingness": 0.221
-    },
-    {
-      "title": "NBA MVP ",
-      "category": "sports",
-      "volume": 49936414.208398,
-      "volume_24h": 2268761.548686,
-      "uncertainty": 0.028,
-      "market": {
-        "question": "Will Luka Doncic win the 2025\u20132026 NBA MVP?",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.014,
-          0.986
-        ],
-        "probability": 0.014,
-        "volume": 9693345.664761
-      },
-      "interestingness": 0.217
-    },
-    {
       "title": "Iran strike on Qatar by...?",
       "category": "geopolitics",
-      "volume": 1004879.099415,
-      "volume_24h": 436975.5906689999,
-      "uncertainty": 0.331,
+      "volume": 1035777.668848,
+      "volume_24h": 609317.0176440002,
+      "uncertainty": 0.412,
       "market": {
         "question": "Iran strike on Qatar by February 28, 2026?",
         "outcomes": [
@@ -760,20 +593,125 @@
           "No"
         ],
         "prices": [
-          0.8345,
-          0.1655
+          0.794,
+          0.206
         ],
-        "probability": 0.8345,
-        "volume": 848788.964861
+        "probability": 0.794,
+        "volume": 878650.615031
       },
-      "interestingness": 0.203
+      "interestingness": 0.251
+    },
+    {
+      "title": "US next strikes Iran on...?",
+      "category": "geopolitics",
+      "volume": 54167909.981124,
+      "volume_24h": 3745247.6122630015,
+      "uncertainty": 0.046,
+      "market": {
+        "question": "Will the US next strike Iran on February 27, 2026 (ET)?",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.023,
+          0.977
+        ],
+        "probability": 0.023,
+        "volume": 4198057.608475
+      },
+      "interestingness": 0.244
+    },
+    {
+      "title": "2026 NHL Stanley Cup Champion ",
+      "category": "sports",
+      "volume": 38243530.38338,
+      "volume_24h": 363130.14215499995,
+      "uncertainty": 0.13,
+      "market": {
+        "question": "Will the Minnesota Wild win the 2026 NHL Stanley Cup?",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.065,
+          0.935
+        ],
+        "probability": 0.065,
+        "volume": 7483653.478088
+      },
+      "interestingness": 0.231
+    },
+    {
+      "title": "Sabres vs. Lightning",
+      "category": "sports",
+      "volume": 1504563.768003,
+      "volume_24h": 1462049.0580850001,
+      "uncertainty": 0.35,
+      "market": {
+        "question": "Sabres vs. Lightning: O/U 6.5",
+        "outcomes": [
+          "Over",
+          "Under"
+        ],
+        "prices": [
+          0.825,
+          0.175
+        ],
+        "probability": 0.825,
+        "volume": 832495.774518
+      },
+      "interestingness": 0.216
+    },
+    {
+      "title": "NBA MVP ",
+      "category": "sports",
+      "volume": 49942537.489026,
+      "volume_24h": 1785391.015418,
+      "uncertainty": 0.025,
+      "market": {
+        "question": "Will Luka Doncic win the 2025\u20132026 NBA MVP?",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.0125,
+          0.9875
+        ],
+        "probability": 0.0125,
+        "volume": 9693571.004761
+      },
+      "interestingness": 0.215
+    },
+    {
+      "title": "US strikes Iraq by February 28?",
+      "category": "geopolitics",
+      "volume": 857027.84263,
+      "volume_24h": 512832.4997479984,
+      "uncertainty": 0.317,
+      "market": {
+        "question": "US strikes Iraq by February 28?",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.1585,
+          0.8415
+        ],
+        "probability": 0.1585,
+        "volume": 857027.84263
+      },
+      "interestingness": 0.194
     },
     {
       "title": "Khamenei out as Supreme Leader of Iran by March 31?",
       "category": "geopolitics",
-      "volume": 35952449.998246,
-      "volume_24h": 6032896.581990011,
-      "uncertainty": 0.09,
+      "volume": 38675377.83932,
+      "volume_24h": 19926355.30897712,
+      "uncertainty": 0.06,
       "market": {
         "question": "Khamenei out as Supreme Leader of Iran by March 31?",
         "outcomes": [
@@ -781,19 +719,19 @@
           "No"
         ],
         "prices": [
-          0.955,
-          0.045
+          0.97,
+          0.03
         ],
-        "probability": 0.955,
-        "volume": 36177883.133924
+        "probability": 0.97,
+        "volume": 38675377.83932
       },
-      "interestingness": 0.198
+      "interestingness": 0.191
     },
     {
       "title": "Will Jesus Christ return before 2027?",
       "category": "other",
-      "volume": 35483977.075956,
-      "volume_24h": 841551.2377940018,
+      "volume": 35595656.479465,
+      "volume_24h": 1048196.0524710031,
       "uncertainty": 0.077,
       "market": {
         "question": "Will Jesus Christ return before 2027?",
@@ -806,16 +744,58 @@
           0.9615
         ],
         "probability": 0.0385,
-        "volume": 35483977.075956
+        "volume": 35595656.479465
       },
-      "interestingness": 0.188
+      "interestingness": 0.189
+    },
+    {
+      "title": "Will Reza Pahlavi enter Iran by...?",
+      "category": "geopolitics",
+      "volume": 2356925.575569,
+      "volume_24h": 914316.9731790002,
+      "uncertainty": 0.293,
+      "market": {
+        "question": "Will Reza Pahlavi enter Iran by March 31?",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.1465,
+          0.8535
+        ],
+        "probability": 0.1465,
+        "volume": 889484.033464
+      },
+      "interestingness": 0.185
+    },
+    {
+      "title": "LoL: Gen.G vs BNK FEARX (BO5) - LCK Cup Playoffs",
+      "category": "sports",
+      "volume": 471898.855538,
+      "volume_24h": 456153.419327,
+      "uncertainty": 0.27,
+      "market": {
+        "question": "LoL: Gen.G vs BNK FEARX (BO5) - LCK Cup Playoffs",
+        "outcomes": [
+          "Gen.G",
+          "BNK FEARX"
+        ],
+        "prices": [
+          0.865,
+          0.135
+        ],
+        "probability": 0.865,
+        "volume": 406971.384419
+      },
+      "interestingness": 0.164
     },
     {
       "title": "F1 Drivers' Champion",
       "category": "sports",
-      "volume": 10188200.968862,
-      "volume_24h": 534101.6602469999,
-      "uncertainty": 0.192,
+      "volume": 10220844.412083,
+      "volume_24h": 476875.402779,
+      "uncertainty": 0.19,
       "market": {
         "question": "Will Kimi Antonelli be the 2026 F1 Drivers' Champion?",
         "outcomes": [
@@ -823,34 +803,55 @@
           "No"
         ],
         "prices": [
-          0.096,
-          0.904
+          0.095,
+          0.905
         ],
-        "probability": 0.096,
-        "volume": 1183917.428198
+        "probability": 0.095,
+        "volume": 1184538.89457
       },
-      "interestingness": 0.156
+      "interestingness": 0.155
     },
     {
-      "title": "Raptors vs. Wizards",
-      "category": "sports",
-      "volume": 956117.671433,
-      "volume_24h": 375997.863846,
-      "uncertainty": 0.25,
+      "title": "Elon Musk # tweets February 24 - March 3, 2026?",
+      "category": "culture",
+      "volume": 36459017.416118,
+      "volume_24h": 7186686.717339,
+      "uncertainty": 0.0,
       "market": {
-        "question": "Raptors vs. Wizards",
+        "question": "Will Elon Musk post 100-119 tweets from February 24 to March 3, 2026?",
         "outcomes": [
-          "Raptors",
-          "Wizards"
+          "Yes",
+          "No"
         ],
         "prices": [
-          0.875,
-          0.125
+          0.0,
+          1.0
         ],
-        "probability": 0.875,
-        "volume": 522873.718593
+        "probability": 0.0,
+        "volume": 15713299.040921
       },
-      "interestingness": 0.154
+      "interestingness": 0.146
+    },
+    {
+      "title": "What price will Ethereum hit in February?",
+      "category": "crypto",
+      "volume": 35793996.597874,
+      "volume_24h": 683021.9849669999,
+      "uncertainty": 0.001,
+      "market": {
+        "question": "Will Ethereum reach $4,400 in February?",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.0005,
+          0.9995
+        ],
+        "probability": 0.0005,
+        "volume": 8802898.595394
+      },
+      "interestingness": 0.144
     }
   ]
 }
