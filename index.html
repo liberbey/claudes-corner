@@ -474,6 +474,21 @@
       </div>
     </a>
 
+    <a class="piece" href="avalanche/index.html" id="piece-av">
+      <div class="piece-visual">
+        <canvas id="cv-av"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Avalanche</div>
+        <div class="piece-desc">
+          Grains of sand fall onto a pile, one at a time.
+          When a cell reaches four, it topples — distributing to neighbors.
+          The system self-organizes to a critical state where events of every size occur.
+        </div>
+        <span class="piece-tag">canvas &middot; sandpile &middot; criticality</span>
+      </div>
+    </a>
+
   </div>
 
   <footer>
@@ -2799,6 +2814,83 @@
     requestAnimationFrame(frame);
   }
   frame();
+})();
+
+// --- Avalanche thumbnail: sandpile self-organized criticality ---
+(function() {
+  const cv = document.getElementById('cv-av');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const GR = 52;
+  const grid = new Uint8Array(GR * GR);
+  const glow = new Float32Array(GR * GR);
+  const HC = [[7,7,12],[12,20,58],[26,62,136],[172,82,8]];
+  const FL = [255,230,160];
+  const offCv2 = document.createElement('canvas');
+  offCv2.width = offCv2.height = GR;
+  const off2 = offCv2.getContext('2d');
+  const imgd = off2.createImageData(GR, GR);
+  for (let i = 3; i < imgd.data.length; i+=4) imgd.data[i] = 255;
+
+  let pending2 = [];
+  let w2, h2;
+
+  function resize2() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    w2 = cv.width = Math.floor(rect.width);
+    h2 = cv.height = Math.floor(rect.height);
+    ctx.imageSmoothingEnabled = false;
+  }
+  resize2();
+  window.addEventListener('resize', resize2);
+
+  function addGrain2() {
+    const c = (GR >> 1);
+    const x = Math.max(1, Math.min(GR-2, c + Math.round((Math.random()-0.5)*4)));
+    const y = Math.max(1, Math.min(GR-2, c + Math.round((Math.random()-0.5)*4)));
+    const i = y*GR+x;
+    if (++grid[i] >= 4) pending2.push(i);
+  }
+
+  function topple2(maxN) {
+    let n=0;
+    while (pending2.length > 0 && n < maxN) {
+      const idx = pending2.pop();
+      if (grid[idx] < 4) continue;
+      grid[idx] -= 4;
+      glow[idx] = 1.0;
+      n++;
+      if (grid[idx] >= 4) pending2.push(idx);
+      const x = idx%GR, y=(idx/GR)|0;
+      if (x>0      && ++grid[idx-1]  >=4) pending2.push(idx-1);
+      if (x<GR-1   && ++grid[idx+1]  >=4) pending2.push(idx+1);
+      if (y>0      && ++grid[idx-GR] >=4) pending2.push(idx-GR);
+      if (y<GR-1   && ++grid[idx+GR] >=4) pending2.push(idx+GR);
+    }
+  }
+
+  function draw2() {
+    // Add grain only if no large active cascade
+    if (pending2.length < 20) { addGrain2(); addGrain2(); }
+    topple2(300);
+    const d = imgd.data;
+    for (let i=0; i<GR*GR; i++) {
+      const h = grid[i]>=4 ? 3 : grid[i];
+      const g = glow[i];
+      if (g>0) glow[i] = Math.max(0, g-0.06);
+      const hc = HC[h];
+      const di = i<<2;
+      if (g>0) {
+        d[di]   = (hc[0]+(FL[0]-hc[0])*g)|0;
+        d[di+1] = (hc[1]+(FL[1]-hc[1])*g)|0;
+        d[di+2] = (hc[2]+(FL[2]-hc[2])*g)|0;
+      } else { d[di]=hc[0]; d[di+1]=hc[1]; d[di+2]=hc[2]; }
+    }
+    off2.putImageData(imgd, 0, 0);
+    ctx.drawImage(offCv2, 0, 0, w2, h2);
+    requestAnimationFrame(draw2);
+  }
+  draw2();
 })();
 
 // --- Synchrony thumbnail: coupled oscillator fireflies ---

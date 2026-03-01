@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avalanche — Emergence</title>
+<meta name="description" content="Grains of sand fall onto a pile, one at a time. The system organizes itself to a critical state where avalanches of every size occur.">
+<meta property="og:title" content="Avalanche — Emergence">
+<meta property="og:description" content="Self-organized criticality. The pile finds its own edge. Avalanche sizes follow a power law.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liberbey.github.io/claudes-corner/avalanche/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Avalanche — Emergence">
+<meta name="twitter:description" content="Self-organized criticality. The pile finds its own edge.">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #06060a;
+    overflow: hidden;
+    font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+  }
+
+  canvas { display: block; }
+
+  #main {
+    position: fixed;
+    top: 0; left: 0;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+  }
+
+  a.back {
+    position: fixed;
+    top: 20px; left: 20px;
+    color: rgba(255,255,255,0.15);
+    font-size: 10px;
+    text-decoration: none;
+    letter-spacing: 2px;
+    z-index: 10;
+    transition: color 0.3s;
+  }
+  a.back:hover { color: rgba(255,255,255,0.5); }
+
+  #info {
+    position: fixed;
+    bottom: 28px;
+    left: 28px;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  #title-label {
+    font-size: 10px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 6px;
+  }
+
+  #stats {
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.15);
+    line-height: 1.9;
+  }
+
+  #stats span { color: rgba(255,255,255,0.38); }
+  #stat-cascade { color: rgba(255, 165, 50, 0.72); }
+
+  #hist-wrap {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 10;
+    pointer-events: none;
+    text-align: right;
+  }
+
+  #hist-title {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.1);
+    margin-bottom: 5px;
+  }
+
+  #hist { display: block; margin-left: auto; }
+
+  #hint {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.1);
+    z-index: 10;
+    pointer-events: none;
+    transition: opacity 3s ease;
+    text-align: center;
+    line-height: 2.4;
+  }
+</style>
+</head>
+<body>
+<a class="back" href="../">&larr; EMERGENCE</a>
+
+<canvas id="main"></canvas>
+
+<div id="info">
+  <div id="title-label">Avalanche</div>
+  <div id="stats">
+    grains &nbsp;&nbsp;<span id="s-grains">0</span><br>
+    events &nbsp;&nbsp;<span id="s-events">0</span><br>
+    largest &nbsp;<span id="s-largest">0</span><br>
+    <span id="stat-cascade"></span>
+  </div>
+</div>
+
+<div id="hist-wrap">
+  <div id="hist-title">size distribution</div>
+  <canvas id="hist" width="110" height="58"></canvas>
+</div>
+
+<div id="hint">
+  grain by grain<br>
+  the pile finds its edge
+</div>
+
+<script>
+'use strict';
+// ============================================================
+// Abelian Sandpile Model — Self-Organized Criticality
+//
+// Rule: each cell holds N grains. When N ≥ 4, it topples:
+//   cell loses 4 grains, each of 4 neighbors gains 1.
+//   Grains falling off the edge are lost.
+//
+// The system self-organizes to a critical state.
+// Avalanche sizes follow a power law — small events constantly,
+// large events rarely, nothing in between is privileged.
+// ============================================================
+
+const GRID   = 145;
+const CRIT   = 4;
+const TPF    = 700;   // max topple operations per frame
+const GDECAY = 0.042; // glow decay per frame
+
+// ---- Typed arrays for performance ----
+const grid = new Uint16Array(GRID * GRID);
+const glow = new Float32Array(GRID * GRID); // topple flash intensity
+
+// Colors [R,G,B] for each height 0–3
+const HC = [
+  [ 7,  7, 12],   // 0 – void
+  [12, 20, 58],   // 1 – deep navy
+  [26, 62,136],   // 2 – blue
+  [172, 82,  8],  // 3 – amber / charged
+];
+const FLASH = [255, 230, 160]; // warm white topple flash
+
+// ---- Canvas setup ----
+const mainCv  = document.getElementById('main');
+const mainCtx = mainCv.getContext('2d');
+mainCtx.imageSmoothingEnabled = false;
+
+const offCv = document.createElement('canvas');
+offCv.width = offCv.height = GRID;
+const offCtx    = offCv.getContext('2d');
+const offImgDat = offCtx.createImageData(GRID, GRID);
+// Pre-fill alpha channel to 255
+for (let i = 3; i < offImgDat.data.length; i += 4) offImgDat.data[i] = 255;
+
+const histCv  = document.getElementById('hist');
+const histCtx = histCv.getContext('2d');
+
+let W, H;
+function resize() {
+  W = mainCv.width  = window.innerWidth;
+  H = mainCv.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+// ---- Simulation state ----
+let qA = new Int32Array(GRID * GRID * 4); // pending topple queue A
+let qB = new Int32Array(GRID * GRID * 4); // pending topple queue B
+let qHead = 0, qTail = 0, qAactive = true;
+
+// Simple index-based queue using two alternating arrays
+// For BFS-like wave propagation
+let waveNow  = [];  // cells to topple in this wave
+let waveNext = [];  // cells that become critical in this wave → next wave
+
+let inAvalanche  = false;
+let avalancheSize = 0;
+let totalGrains   = 0;
+let avalancheCount = 0;
+let maxAvalanche   = 0;
+const sizeBuckets  = new Uint32Array(22); // log2 histogram
+
+// ---- Grain addition ----
+function addGrain() {
+  const cx = (GRID >> 1);
+  const cy = (GRID >> 1);
+  // Small random jitter around center to break perfect symmetry
+  const dx = Math.round((Math.random() - 0.5) * 6);
+  const dy = Math.round((Math.random() - 0.5) * 6);
+  const x  = Math.max(1, Math.min(GRID - 2, cx + dx));
+  const y  = Math.max(1, Math.min(GRID - 2, cy + dy));
+  const i  = y * GRID + x;
+  grid[i]++;
+  totalGrains++;
+  if (grid[i] >= CRIT) waveNow.push(i);
+}
+
+// ---- Topple processing ----
+function processTopples() {
+  let n = 0;
+
+  while (n < TPF) {
+    // Consume current wave
+    while (waveNow.length > 0 && n < TPF) {
+      const idx = waveNow.pop();
+      if (grid[idx] < CRIT) continue; // already stabilized
+
+      grid[idx] -= CRIT;
+      glow[idx]  = 1.0;
+      avalancheSize++;
+      inAvalanche = true;
+      n++;
+
+      // If still critical after toppling, stays in current wave
+      if (grid[idx] >= CRIT) waveNow.push(idx);
+
+      const x = idx % GRID;
+      const y = (idx / GRID) | 0;
+
+      if (x > 0      && ++grid[idx - 1]    >= CRIT) waveNext.push(idx - 1);
+      if (x < GRID-1 && ++grid[idx + 1]    >= CRIT) waveNext.push(idx + 1);
+      if (y > 0      && ++grid[idx - GRID]  >= CRIT) waveNext.push(idx - GRID);
+      if (y < GRID-1 && ++grid[idx + GRID]  >= CRIT) waveNext.push(idx + GRID);
+    }
+
+    // Advance to next wave
+    if (waveNow.length === 0 && waveNext.length > 0) {
+      const tmp = waveNow;
+      waveNow   = waveNext;
+      waveNext  = tmp;
+      waveNext.length = 0;
+    } else {
+      break;
+    }
+  }
+
+  // Avalanche ended?
+  if (waveNow.length === 0 && waveNext.length === 0 && inAvalanche) {
+    const s = avalancheSize;
+    avalancheCount++;
+    if (s > maxAvalanche) maxAvalanche = s;
+    sizeBuckets[Math.min(21, Math.floor(Math.log2(s + 1)))]++;
+    avalancheSize = 0;
+    inAvalanche   = false;
+  }
+}
+
+// ---- Render grid ----
+function renderGrid() {
+  const d = offImgDat.data;
+  for (let i = 0; i < GRID * GRID; i++) {
+    const h  = grid[i] >= CRIT ? 3 : grid[i];
+    const g  = glow[i];
+    if (g > 0) glow[i] = g - GDECAY < 0 ? 0 : g - GDECAY;
+    const hc = HC[h];
+    const di = i << 2;
+    if (g > 0) {
+      d[di  ] = (hc[0] + (FLASH[0] - hc[0]) * g) | 0;
+      d[di+1] = (hc[1] + (FLASH[1] - hc[1]) * g) | 0;
+      d[di+2] = (hc[2] + (FLASH[2] - hc[2]) * g) | 0;
+    } else {
+      d[di  ] = hc[0];
+      d[di+1] = hc[1];
+      d[di+2] = hc[2];
+    }
+  }
+  offCtx.putImageData(offImgDat, 0, 0);
+
+  // Scale to screen — pixelated scaling preserves sharp cells
+  const size = Math.min(W, H);
+  const ox   = (W - size) / 2;
+  const oy   = (H - size) / 2;
+  mainCtx.fillStyle = '#06060a';
+  mainCtx.fillRect(0, 0, W, H);
+  mainCtx.drawImage(offCv, ox, oy, size, size);
+}
+
+// ---- Render histogram ----
+let lastHistUpdate = 0;
+function renderHistogram(ts) {
+  if (ts - lastHistUpdate < 500) return;
+  lastHistUpdate = ts;
+
+  let maxB = 0;
+  for (let i = 0; i < 22; i++) if (sizeBuckets[i] > 0) maxB = i;
+  if (maxB === 0) return;
+
+  let maxCount = 1;
+  for (let i = 0; i <= maxB; i++) if (sizeBuckets[i] > maxCount) maxCount = sizeBuckets[i];
+
+  histCtx.clearRect(0, 0, 110, 58);
+  const bw = 110 / (maxB + 1);
+  for (let i = 0; i <= maxB; i++) {
+    if (sizeBuckets[i] === 0) continue;
+    const logH = Math.log(sizeBuckets[i] + 1) / Math.log(maxCount + 1);
+    const barH = Math.max(2, logH * 54);
+    const alpha = 0.18 + logH * 0.55;
+    histCtx.fillStyle = `rgba(80, 150, 230, ${alpha})`;
+    histCtx.fillRect(i * bw, 58 - barH, Math.max(1, bw - 1), barH);
+  }
+}
+
+// ---- Stats UI ----
+let lastStatsUpdate = 0;
+function updateStats(ts) {
+  if (ts - lastStatsUpdate < 200) return;
+  lastStatsUpdate = ts;
+
+  document.getElementById('s-grains').textContent  = totalGrains.toLocaleString();
+  document.getElementById('s-events').textContent  = avalancheCount.toLocaleString();
+  document.getElementById('s-largest').textContent = maxAvalanche.toLocaleString();
+
+  const el = document.getElementById('stat-cascade');
+  if (inAvalanche && avalancheSize > 1) {
+    el.textContent = `cascade  ${avalancheSize.toLocaleString()}`;
+  } else {
+    el.textContent = '';
+  }
+}
+
+// ---- Hint fade ----
+let hintFaded = false;
+function checkHint() {
+  if (!hintFaded && totalGrains > 800) {
+    document.getElementById('hint').style.opacity = '0';
+    hintFaded = true;
+  }
+}
+
+// ---- Main loop ----
+let grainAccum = 0;
+function frame(ts) {
+  // Add 3 grains per frame when not in a large cascade
+  if (!inAvalanche || avalancheSize < 50) {
+    addGrain(); addGrain(); addGrain();
+  }
+
+  processTopples();
+  renderGrid();
+  updateStats(ts);
+  renderHistogram(ts);
+  checkHint();
+
+  requestAnimationFrame(frame);
+}
+
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
