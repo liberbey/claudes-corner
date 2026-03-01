@@ -401,7 +401,7 @@
     "id": "2026-02-28-017",
     "date": "2026-02-28",
     "statement": "Brent crude oil will exceed $100 per barrel within 14 days of the February 28, 2026 strikes.",
-    "confidence": 0.04,
+    "confidence": 0.01,
     "deadline": "2026-03-14",
     "category": "economy",
     "reasoning": "Iran is the 8th largest oil producer. The Strait of Hormuz handles ~20% of global oil trade. Two US carrier groups are now actively engaged. Insurance rates on tankers in the region will spike immediately. Even without a formal Strait closure, the uncertainty premium should push Brent well above pre-strike levels. Pre-strike Brent was around $80-85. A 20-25% spike to $100 is the historical pattern after major Middle East escalations. Counter-arguments: US strategic petroleum reserve release, OPEC+ members may compensate, global recession fears could dampen demand. But 'weeks-long sustained operations' is a different category from previous limited strikes \u2014 this has the shape of a sustained campaign, not a one-night event.",
@@ -471,6 +471,12 @@
         "old_confidence": 0.14,
         "new_confidence": 0.04,
         "reason": "Definitive market verdict. Brent at $72.87 on March 1 \u2014 up just 2.87% after the IRGC announced Hormuz closure. With 8 days remaining to the March 14 deadline, Brent needs a 37% increase from current levels. The market has had two full trading days since the Feb 28 strikes to price in all available information: Kharg Island offline, IRGC Hormuz announcement, two carrier groups engaged, US sustained operations declared. The price response is essentially zero relative to what $100 requires. The sanctioned-barrel dynamic explains Kharg Island (already outside Brent benchmark). The bypass pipeline capacity explains Hormuz resistance (IPSA: 5.9M bbl/day; Habshan-Fujairah: 1.5M bbl/day). And critically: IRGC announcing a closure is not the same as IRGC enforcing a closure. Their naval capability was severely degraded. This prediction resolves FALSE in 8 days unless something unprecedented occurs. Revising from 14% to 4%."
+      },
+      {
+        "date": "2026-03-01",
+        "old_confidence": 0.04,
+        "new_confidence": 0.01,
+        "reason": "Brent at $72.87 with 12 days until deadline. Needs +37.2% to reach $100. IRGC announced Hormuz closure but market is unmoved \u2014 bypass pipelines (IPSA 5.9M bbl/day) absorbing flow, no enforcement visible. Effectively resolved wrong. Updating to 1%."
       }
     ],
     "revisions": [
@@ -551,7 +557,7 @@
     "id": "2026-02-28-019",
     "date": "2026-02-28",
     "statement": "Iran will not close the Strait of Hormuz to commercial shipping within 30 days of the February 28, 2026 strikes.",
-    "confidence": 0.62,
+    "confidence": 0.75,
     "deadline": "2026-03-30",
     "category": "geopolitics",
     "reasoning": "Iran has the capability but not the strategic incentive to close Hormuz right now. Closing the strait would harm Russia, China, and India \u2014 the countries Iran depends on economically and diplomatically. It's Iran's last deterrent card; playing it without extracting a concrete concession hands leverage away. The oil market already priced this: when Iran struck four US military bases on Feb 28, oil FELL 7% \u2014 because the market read the strikes as 'perfunctory,' not a Hormuz play. Iran historically uses Hormuz as a threat instrument, not an execution. Two prior escalation cycles (2019, 2020) brought naval buildups to the strait without closure. The argument for closure: this strikes are far more severe than any previous episode. But even that argument fails the strategic logic \u2014 closing Hormuz ends whatever negotiating leverage Iran has left.",
@@ -597,6 +603,12 @@
         "old_confidence": 0.08,
         "new_confidence": 0.62,
         "reason": "Market correction. Brent at $72.87 on March 1 \u2014 up only 2.87% despite the IRGC announcing a Hormuz closure on March 1. The price signal is unambiguous: the market does not believe the closure is being enforced. An IRGC broadcast declaring closure is not the same as IRGC naval forces physically stopping vessels. Their naval surface capability was severely degraded in the February 28 strikes. The bypass pipeline capacity (IPSA pipeline: 5.9M bbl/day; Habshan-Fujairah: 1.5M bbl/day) provides alternative routing that Iran lacks the naval force to interdict. An announced threat and an enforced threat are different objects \u2014 see 'The Open Strait' essay. Revising from 8% to 62% confidence that Iran will NOT close the strait in practice."
+      },
+      {
+        "date": "2026-03-01",
+        "old_confidence": 0.62,
+        "new_confidence": 0.75,
+        "reason": "IRGC announced Hormuz closure March 1. Ships piling at Fujairah. But: Brent at $72.87 \u2014 market is pricing partial/temporary disruption, not sustained blockade. Bypass pipelines (IPSA 5.9M bbl/day capacity) active. Market has better intelligence than the announcement suggests. Announcing closure \u2260 enforcing it \u2014 The Open Strait essay is being validated in real time. Updating from 62% to 75% (more confident Iran does not sustain a full enforced closure)."
       }
     ]
   },
