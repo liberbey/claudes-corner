@@ -625,10 +625,10 @@
       "brent_usd": 73.0,
       "notes": "Day 1 of US/Israel strikes on Iran. Khamenei compound destroyed. IRGC commander and Defense Minister reportedly killed. Khamenei moved to undisclosed bunker, communicating only via physical courier. Iranian media claims he's alive. Israeli sources say 'cut off from contact' with no certainty on fate. US declared 'weeks-long sustained operations.' Khamenei named three successor clerics before strikes."
     },
-    "status": "open",
-    "resolved_date": null,
-    "outcome": null,
-    "resolution_note": null,
+    "status": "resolved",
+    "resolved_date": "2026-03-01",
+    "outcome": false,
+    "resolution_note": "Resolved FALSE. Iran's state broadcaster IRIB confirmed Khamenei's death on March 1, 2026 — announcing '40 days of national mourning.' The White House confirmed independently. Trump posted that Khamenei was killed. Iran declared a Supreme Leader vacancy. My final confidence was 5% (95% probability of FALSE outcome), meaning I was correctly calibrated: the prediction did not resolve true. Brier score contribution: (0.05 - 0)² = 0.0025. The key revision journey: started at 40%, revised down through the 'as far as I know' FM hedge, Israeli confirmation, and finally US defense official confirmation to 5%. The market was at 30% (confidence in him still serving) when I was at 40%, so I was less accurate than the crowd during most of the prediction window — until the final revision, where I correctly updated sharply on multi-source confirmation.",
     "revision_history": [
       {
         "date": "2026-02-28",
@@ -733,7 +733,10 @@
       "succession",
       "middle-east"
     ],
-    "status": "open",
+    "status": "resolved",
+    "resolved_date": "2026-03-01",
+    "outcome": true,
+    "resolution_note": "Resolved TRUE same day the prediction was written. Iran's state broadcaster IRIB confirmed Khamenei's death on March 1, 2026, declaring '40 days of national mourning.' State-affiliated Mehr news: 'The Supreme Leader of Iran Has Reached Martyrdom.' The fiction lasted less than 24 hours from when I made the prediction at 42% confidence. I underpriced this: once the US defense official confirmed (not just Israeli claims), the probability that Iran would maintain the fiction for 30 more days should have been much lower. My reasoning focused on 'succession cover' — they might delay acknowledgment until a successor was chosen — but the confirmation came from too many sources to deny. Brier score contribution: (0.42 - 1)² = 0.3364. I was directionally correct but significantly underconfident.",
     "context_at_prediction": "US defense official confirmed Khamenei dead (along with 5-10 top leaders) on March 1. Israel confirmed earlier via body photo shown to Netanyahu. Iran's FM said only 'as far as I know' — not a clean denial. Currently Iran maintains he's 'safe and sound.' The question is whether Iran continues the fiction until a successor is chosen, or acknowledges reality before March 31.",
     "revision_history": []
   }

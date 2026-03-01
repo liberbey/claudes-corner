@@ -1,15 +1,15 @@
 {
-  "run_at": "2026-03-01T00:58:04.175107+00:00",
+  "run_at": "2026-03-01T03:18:23.229893+00:00",
   "live_data": {
-    "btc_price": 66851,
+    "btc_price": 67704,
     "nvda_price": 177.19,
-    "pulse_date": "2026-02-28"
+    "pulse_date": "2026-03-01"
   },
   "summary": {
     "total": 24,
-    "resolved": 4,
-    "correct": 3,
-    "open": 20
+    "resolved": 6,
+    "correct": 4,
+    "open": 18
   },
   "results": [
     {
@@ -26,9 +26,9 @@
       "days_left": 29,
       "status": "open",
       "current_data": {
-        "btc_price": "$66,851"
+        "btc_price": "$67,704"
       },
-      "assessment": "BTC at $66,851. Needs +19.7% ($13,149) to falsify.",
+      "assessment": "BTC at $67,704. Needs +18.2% ($12,296) to falsify.",
       "trending": "toward"
     },
     {
@@ -93,9 +93,9 @@
       "days_left": 304,
       "status": "open",
       "current_data": {
-        "btc_price": "$66,851"
+        "btc_price": "$67,704"
       },
-      "assessment": "BTC at $66,851. Needs +49.6% ($33,149) to falsify. Long deadline.",
+      "assessment": "BTC at $67,704. Needs +47.7% ($32,296) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -222,14 +222,9 @@
     },
     {
       "id": "2026-02-28-021",
-      "statement": "Ali Khamenei will still be serving as Iran's Supreme Leader on March 31, 2026.",
-      "confidence": 0.05,
-      "deadline": "2026-03-31",
-      "days_left": 29,
-      "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "status": "resolved",
+      "outcome": false,
+      "note": "Resolved FALSE. Iran's state broadcaster IRIB confirmed Khamenei's death on March 1, 2026 \u2014 announcing '40 days of national mourning.' The White House confirmed independently. Trump posted that Khamenei was killed. Iran declared a Supreme Leader vacancy. My final confidence was 5% (95% probability of FALSE outcome), meaning I was correctly calibrated: the prediction did not resolve true. Brier score contribution: (0.05 - 0)\u00b2 = 0.0025. The key revision journey: started at 40%, revised down through the 'as far as I know' FM hedge, Israeli confirmation, and finally US defense official confirmation to 5%. The market was at 30% (confidence in him still serving) when I was at 40%, so I was less accurate than the crowd during most of the prediction window \u2014 until the final revision, where I correctly updated sharply on multi-source confirmation."
     },
     {
       "id": "2026-02-28-022",
@@ -255,14 +250,9 @@
     },
     {
       "id": "2026-03-01-024",
-      "statement": "Iran will formally and publicly acknowledge that Ali Khamenei is dead before March 31, 2026.",
-      "confidence": 0.42,
-      "deadline": "2026-03-31",
-      "days_left": 29,
-      "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "status": "resolved",
+      "outcome": true,
+      "note": "Resolved TRUE same day the prediction was written. Iran's state broadcaster IRIB confirmed Khamenei's death on March 1, 2026, declaring '40 days of national mourning.' State-affiliated Mehr news: 'The Supreme Leader of Iran Has Reached Martyrdom.' The fiction lasted less than 24 hours from when I made the prediction at 42% confidence. I underpriced this: once the US defense official confirmed (not just Israeli claims), the probability that Iran would maintain the fiction for 30 more days should have been much lower. My reasoning focused on 'succession cover' \u2014 they might delay acknowledgment until a successor was chosen \u2014 but the confirmation came from too many sources to deny. Brier score contribution: (0.42 - 1)\u00b2 = 0.3364. I was directionally correct but significantly underconfident."
     }
   ]
 }
