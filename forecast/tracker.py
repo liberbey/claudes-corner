@@ -117,7 +117,7 @@ def find_polymarket_prob(pm_data, title_fragment):
     return None
 
 
-def check_prediction(pred, btc_price, nvda_price, pm_data, iran_data=None):
+def check_prediction(pred, btc_price, nvda_price, pm_data, iran_data=None, brent_price=None):
     """Check a single prediction against current data. Returns status dict."""
     pid = pred["id"]
     if iran_data is None:
@@ -316,29 +316,48 @@ def check_prediction(pred, btc_price, nvda_price, pm_data, iran_data=None):
         result["trending"] = "against"
 
     elif pid == "2026-02-28-017":
-        # Brent > $100 in 14 days
-        result["assessment"] = (
-            "Oil fell 7% after Iran struck US bases. Market pricing no Hormuz "
-            "disruption. Brent needs ~38% spike from ~$73 in 13 days."
-        )
-        result["trending"] = "against"
+        # Brent > $100 in 14 days (deadline March 14)
+        if brent_price:
+            result["current_data"]["brent_price"] = f"${brent_price:.2f}"
+            gap = 100 - brent_price
+            gap_pct = (gap / brent_price) * 100 if brent_price < 100 else 0
+            if brent_price >= 100:
+                result["assessment"] = f"CONFIRMED. Brent at ${brent_price:.2f}, crossed $100."
+                result["trending"] = "toward"
+            else:
+                result["assessment"] = (
+                    f"Brent at ${brent_price:.2f}. Needs +{gap_pct:.1f}% to hit $100 "
+                    f"in {days_left} days. IRGC announced Hormuz closure; market unmoved. "
+                    "Bypass pipelines (IPSA 5.9M bbl/day) absorbing flow."
+                )
+                result["trending"] = "against"
+        else:
+            result["assessment"] = f"Brent unavailable. {days_left} days to March 14 deadline."
+            result["trending"] = "against"
 
     elif pid == "2026-02-28-018":
         # Iran regime survives to Feb 28, 2027
         result["assessment"] = (
-            "Day 1 of strikes. Khamenei in secure location. IRGC functional. "
-            "Regime survived June 2025 strikes. History favors survival."
+            "Khamenei status contested. IRGC functional. Assembly of Experts "
+            "convening for succession. Regime institution outlasts any leader."
         )
         result["trending"] = "toward"
 
     elif pid == "2026-02-28-019":
         # No Hormuz closure in 30 days
-        result["assessment"] = (
-            "Iran struck 4 US bases but did not close Hormuz. Oil fell 7%. "
-            "Market pricing no closure. Iran's incentive: Hormuz closure "
-            "would hurt Russia, China, India."
-        )
-        result["trending"] = "toward"
+        if brent_price:
+            result["current_data"]["brent_price"] = f"${brent_price:.2f}"
+            result["assessment"] = (
+                f"IRGC announced closure March 1. Ships at Fujairah. Brent at "
+                f"${brent_price:.2f} — market pricing partial/temporary disruption, "
+                "not sustained blockade. Bypass pipelines active."
+            )
+        else:
+            result["assessment"] = (
+                "IRGC announced Hormuz closure March 1. Ships piling at Fujairah. "
+                "Brent barely moved (~3%) — market not pricing sustained blockade."
+            )
+        result["trending"] = "against"  # trending against "no closure" = closure is happening
 
     elif pid == "2026-02-28-020":
         # US air ops ongoing March 29
@@ -346,6 +365,57 @@ def check_prediction(pred, btc_price, nvda_price, pm_data, iran_data=None):
             "Trump: 'major combat operations,' 'weeks-long sustained operations.' "
             "Iran struck US bases — domestic justification to continue. "
             "War Powers Resolution vote next week."
+        )
+        result["trending"] = "toward"
+
+    elif pid == "2026-02-28-022":
+        # US-Iran negotiations resume by April 15
+        result["assessment"] = (
+            "Strikes destroyed nuclear infrastructure — no Iranian enrichment to negotiate over. "
+            "US has no incentive to negotiate: military campaign ongoing. "
+            "Iran has no regime continuity: Khamenei dead, succession in progress. "
+            "Who would negotiate on the Iranian side? Deadline April 15."
+        )
+        result["trending"] = "toward"  # trending toward 'no negotiations'
+
+    elif pid == "2026-02-28-023":
+        # Congress won't terminate military ops by April 1
+        result["assessment"] = (
+            "War Powers 60-day clock: April 28. Congress has never successfully "
+            "invoked WPR termination in history. Bipartisan majority unlikely — "
+            "hawks want continued ops, many Democrats see Iran as threat. "
+            "Motion to terminate would need 218 House + 50 Senate."
+        )
+        result["trending"] = "toward"
+
+    elif pid == "2026-03-01-025":
+        # Assembly of Experts announces new Supreme Leader by April 1
+        result["assessment"] = (
+            "Assembly of Experts convening. 1989 precedent: succession took 1 week. "
+            "Khamenei confirmed dead by US officials. The question is who — "
+            "Mojtaba Khamenei (son), Raisi's successor, or compromise candidate. "
+            "Speed of announcement is an institutional health signal. Deadline April 1."
+        )
+        result["trending"] = "toward"
+
+    elif pid == "2026-03-01-026":
+        # 25% Canada/Mexico tariffs lifted/paused/exempted by June 1
+        result["assessment"] = (
+            "Tariffs effective March 4. Canada/Mexico retaliated in kind. "
+            "Auto industry lobbying hard — Ford/GM supply chains cross border 6x. "
+            "Historical pattern: Trump tariffs often followed by partial exemptions. "
+            "USMCA review clause and domestic manufacturing pressure will intensify."
+        )
+        result["trending"] = "against"  # tariffs looking sticky
+
+    elif pid == "2026-03-01-027":
+        # Major NA auto manufacturer pauses production by March 18
+        result["assessment"] = (
+            "25% tariffs on parts crossing US-Canada-Mexico border. "
+            "JIT supply chains cannot absorb 25% cost spike without pausing. "
+            "Ford already warned of $1.5B annual impact. "
+            "GM, Stellantis have Mexican assembly plants feeding US models. "
+            "Q: does management have 14 days of buffer stock to delay the decision?"
         )
         result["trending"] = "toward"
 
@@ -365,10 +435,12 @@ def main():
     print("  Fetching live data...")
     btc_price = get_bitcoin_price()
     nvda_price = get_stock_price("NVDA")
+    brent_price = get_stock_price("BZ=F")
     pm_data = load_polymarket_data()
 
     print(f"  Bitcoin:  ${btc_price:,.0f}" if btc_price else "  Bitcoin:  unavailable")
     print(f"  NVDA:     ${nvda_price:.2f}" if nvda_price else "  NVDA:     unavailable")
+    print(f"  Brent:    ${brent_price:.2f}" if brent_price else "  Brent:    unavailable")
     print(f"  Pulse:    {pm_data['fetched_at'][:10]}" if pm_data else "  Pulse:    unavailable")
 
     iran_data = fetch_iran_strike_data()
@@ -385,7 +457,7 @@ def main():
     results = []
 
     for pred in predictions:
-        r = check_prediction(pred, btc_price, nvda_price, pm_data, iran_data)
+        r = check_prediction(pred, btc_price, nvda_price, pm_data, iran_data, brent_price)
         results.append(r)
         if r["status"] == "resolved":
             resolved_count += 1
@@ -445,6 +517,7 @@ def main():
         "live_data": {
             "btc_price": btc_price,
             "nvda_price": nvda_price,
+            "brent_price": brent_price,
             "pulse_date": pm_data["fetched_at"][:10] if pm_data else None,
         },
         "summary": {

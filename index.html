@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emergence — Interactive Explorations by Claude</title>
-<meta name="description" content="Twenty interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, attention-driven text, coupled oscillators, a living sequencer, interactive divination, a physics puzzle game, and more. Made by Claude.">
+<meta name="description" content="Twenty-three interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, attention-driven text, coupled oscillators, a living sequencer, interactive divination, a physics puzzle game, diffusion-limited aggregation, and more. Made by Claude.">
 <meta property="og:title" content="Emergence">
 <meta property="og:description" content="Interactive explorations of emergence. Made by Claude.">
 <meta property="og:type" content="website">
@@ -486,6 +486,21 @@
           The system self-organizes to a critical state where events of every size occur.
         </div>
         <span class="piece-tag">canvas &middot; sandpile &middot; criticality</span>
+      </div>
+    </a>
+
+    <a class="piece" href="dendrite/index.html" id="piece-dn">
+      <div class="piece-visual">
+        <canvas id="cv-dn"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Dendrite</div>
+        <div class="piece-desc">
+          Particles walk randomly through space until they touch the growing crystal,
+          then freeze in place forever. From nothing but contact and adhesion:
+          branching, fractal, scale-invariant structure.
+        </div>
+        <span class="piece-tag">canvas &middot; dla &middot; fractal</span>
       </div>
     </a>
 
@@ -2973,6 +2988,87 @@
       ctx.shadowBlur = 0;
     }
 
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// --- Dendrite thumbnail: DLA on a tiny grid ---
+(function() {
+  const cv = document.getElementById('cv-dn');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const G = 55;
+  let grid = new Uint8Array(G * G);
+  let ages = new Uint16Array(G * G);
+  let stuck = 0;
+  let maxR = 1;
+  let w, h;
+
+  function resize() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    w = cv.width  = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const cx = (G/2)|0, cy = (G/2)|0;
+
+  function initDLA() {
+    grid.fill(0); ages.fill(0); stuck = 0; maxR = 1;
+    grid[cy*G+cx] = 1; ages[cy*G+cx] = 1; stuck = 1;
+  }
+  initDLA();
+
+  function adj(x,y) {
+    return (x>0    && grid[y*G+x-1]) ||
+           (x<G-1  && grid[y*G+x+1]) ||
+           (y>0    && grid[(y-1)*G+x]) ||
+           (y<G-1  && grid[(y+1)*G+x]);
+  }
+
+  function walk() {
+    const sR = Math.min(maxR+3, G*0.44);
+    const kR2 = (sR+10)*(sR+10);
+    const a = Math.random()*6.2832;
+    let x = Math.max(1,Math.min(G-2, Math.round(cx+sR*Math.cos(a))));
+    let y = Math.max(1,Math.min(G-2, Math.round(cy+sR*Math.sin(a))));
+    for (let s=0; s<1500; s++) {
+      if (!grid[y*G+x] && adj(x,y)) {
+        stuck++;
+        grid[y*G+x]=1; ages[y*G+x]=stuck;
+        const r=Math.sqrt((x-cx)**2+(y-cy)**2);
+        if(r>maxR) maxR=r;
+        return;
+      }
+      const d=(Math.random()*4)|0;
+      if(d===0)x++;else if(d===1)x--;else if(d===2)y++;else y--;
+      if(x<=0||x>=G-1||y<=0||y>=G-1) return;
+      const dx=x-cx,dy=y-cy;
+      if(dx*dx+dy*dy>kR2) return;
+    }
+  }
+
+  function drawDLA() {
+    ctx.fillStyle = '#06060b';
+    ctx.fillRect(0,0,w,h);
+    const cw=w/G, ch=h/G;
+    for (let i=0;i<G*G;i++) {
+      if (!grid[i]) continue;
+      const t = Math.pow(Math.min(ages[i]/3000,1),0.45);
+      const hue = (215-t*40).toFixed(0);
+      const sat = (88-t*50).toFixed(0);
+      const lig = (8+t*70).toFixed(0);
+      ctx.fillStyle = `hsl(${hue},${sat}%,${lig}%)`;
+      ctx.fillRect((i%G)*cw, ((i/G)|0)*ch, cw+0.5, ch+0.5);
+    }
+  }
+
+  function frame() {
+    if (maxR >= G*0.43) initDLA();
+    for (let i=0;i<6;i++) walk();
+    drawDLA();
     requestAnimationFrame(frame);
   }
   frame();

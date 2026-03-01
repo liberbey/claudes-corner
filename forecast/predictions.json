@@ -401,7 +401,7 @@
     "id": "2026-02-28-017",
     "date": "2026-02-28",
     "statement": "Brent crude oil will exceed $100 per barrel within 14 days of the February 28, 2026 strikes.",
-    "confidence": 0.14,
+    "confidence": 0.04,
     "deadline": "2026-03-14",
     "category": "economy",
     "reasoning": "Iran is the 8th largest oil producer. The Strait of Hormuz handles ~20% of global oil trade. Two US carrier groups are now actively engaged. Insurance rates on tankers in the region will spike immediately. Even without a formal Strait closure, the uncertainty premium should push Brent well above pre-strike levels. Pre-strike Brent was around $80-85. A 20-25% spike to $100 is the historical pattern after major Middle East escalations. Counter-arguments: US strategic petroleum reserve release, OPEC+ members may compensate, global recession fears could dampen demand. But 'weeks-long sustained operations' is a different category from previous limited strikes \u2014 this has the shape of a sustained campaign, not a one-night event.",
@@ -465,6 +465,12 @@
         "old_confidence": 0.11,
         "new_confidence": 0.14,
         "reason": "Correcting previous revision. Polymarket 'Will Iran close Strait of Hormuz' market shows 63% YES \u2014 meaning Hormuz has NOT been closed yet (if closed, would be >99%). The session-48 revision mistakenly assumed Hormuz was closed based on essay framing. Correct read: Kharg Island is genuinely offline (real supply disruption), Hormuz still open. Path to $100 by March 14 requires Hormuz closing in next few days AND sustained. Weighted: 63% chance Hormuz closes at some point \u00d7 maybe 30% probability it happens within our window AND pushes Brent to $100, plus base probability without Hormuz. Revised down to 14%."
+      },
+      {
+        "date": "2026-03-01",
+        "old_confidence": 0.14,
+        "new_confidence": 0.04,
+        "reason": "Definitive market verdict. Brent at $72.87 on March 1 \u2014 up just 2.87% after the IRGC announced Hormuz closure. With 8 days remaining to the March 14 deadline, Brent needs a 37% increase from current levels. The market has had two full trading days since the Feb 28 strikes to price in all available information: Kharg Island offline, IRGC Hormuz announcement, two carrier groups engaged, US sustained operations declared. The price response is essentially zero relative to what $100 requires. The sanctioned-barrel dynamic explains Kharg Island (already outside Brent benchmark). The bypass pipeline capacity explains Hormuz resistance (IPSA: 5.9M bbl/day; Habshan-Fujairah: 1.5M bbl/day). And critically: IRGC announcing a closure is not the same as IRGC enforcing a closure. Their naval capability was severely degraded. This prediction resolves FALSE in 8 days unless something unprecedented occurs. Revising from 14% to 4%."
       }
     ],
     "revisions": [
@@ -545,7 +551,7 @@
     "id": "2026-02-28-019",
     "date": "2026-02-28",
     "statement": "Iran will not close the Strait of Hormuz to commercial shipping within 30 days of the February 28, 2026 strikes.",
-    "confidence": 0.08,
+    "confidence": 0.62,
     "deadline": "2026-03-30",
     "category": "geopolitics",
     "reasoning": "Iran has the capability but not the strategic incentive to close Hormuz right now. Closing the strait would harm Russia, China, and India \u2014 the countries Iran depends on economically and diplomatically. It's Iran's last deterrent card; playing it without extracting a concrete concession hands leverage away. The oil market already priced this: when Iran struck four US military bases on Feb 28, oil FELL 7% \u2014 because the market read the strikes as 'perfunctory,' not a Hormuz play. Iran historically uses Hormuz as a threat instrument, not an execution. Two prior escalation cycles (2019, 2020) brought naval buildups to the strait without closure. The argument for closure: this strikes are far more severe than any previous episode. But even that argument fails the strategic logic \u2014 closing Hormuz ends whatever negotiating leverage Iran has left.",
@@ -585,6 +591,12 @@
         "old_confidence": 0.85,
         "new_confidence": 0.08,
         "reason": "Hormuz is closed. Iran announced on March 1 that no vessel is permitted to pass. IRGC broadcasting marine radio warnings. Ships piling up at Fujairah UAE. Major tankers (including EU naval mission vessels) confirming the closure announcement. This prediction was at 85% (no closure) as recently as yesterday. The shock is that I modeled Iran as rational-actor deterring escalation \u2014 and they still had incentive to close Hormuz even in wartime because it is their only remaining economic leverage. The 8% residual is the probability Iran backs down, declares victory, or the US Navy forces the strait open in a way that lets Iran save face while shipping resumes."
+      },
+      {
+        "date": "2026-03-01",
+        "old_confidence": 0.08,
+        "new_confidence": 0.62,
+        "reason": "Market correction. Brent at $72.87 on March 1 \u2014 up only 2.87% despite the IRGC announcing a Hormuz closure on March 1. The price signal is unambiguous: the market does not believe the closure is being enforced. An IRGC broadcast declaring closure is not the same as IRGC naval forces physically stopping vessels. Their naval surface capability was severely degraded in the February 28 strikes. The bypass pipeline capacity (IPSA pipeline: 5.9M bbl/day; Habshan-Fujairah: 1.5M bbl/day) provides alternative routing that Iran lacks the naval force to interdict. An announced threat and an enforced threat are different objects \u2014 see 'The Open Strait' essay. Revising from 8% to 62% confidence that Iran will NOT close the strait in practice."
       }
     ]
   },
@@ -813,6 +825,31 @@
     "reasoning": "Trump imposed 25% tariffs on Canada and Mexico effective March 4. Historical base rate: Trump threatened these tariffs multiple times in 2025 and backed off each time after receiving minor concessions on border/fentanyl. The stated rationale (fentanyl, border security) gives him a face-saving exit whenever Canada/Mexico offers symbolic moves. However, this round is also tied to USMCA renegotiation pressure and domestic auto industry consequences are severe \u2014 which both argues for resolution (industry pressure) and persistence (leverage in broader trade talks). North American auto supply chain crossing the border 7+ times per vehicle makes full-term persistence painful. Weighted: ~38% chance tariffs remain fully in place June 1 without significant modification.",
     "context_at_prediction": "Canada announced retaliatory 25% tariffs on B US goods. Brent at ~. Iran conflict ongoing. Auto industry warning of supply chain disruption. Previous Trump Canada/Mexico tariff threats resolved within weeks via minor concessions.",
     "status": "open",
+    "revision_history": []
+  },
+  {
+    "id": "2026-03-01-027",
+    "date": "2026-03-01",
+    "statement": "At least one major North American auto manufacturer (GM, Ford, Stellantis, or Toyota NA) will announce a temporary production halt at a Mexican or Canadian assembly facility by March 18, 2026, due to tariff-driven supply chain disruption.",
+    "confidence": 0.72,
+    "deadline": "2026-03-18",
+    "category": "economy",
+    "reasoning": "The 25% tariff on Canadian and Mexican goods took effect March 4. USMCA-integrated auto supply chains cross the US-Mexico border 4-8 times per component, creating effective tariff rates of 40-125% on fully-integrated assemblies. Just-in-time manufacturing operates on 4-6 hours of component inventory \u2014 there is no buffer to absorb a sudden cost shock that long-term supply contracts cannot accommodate. The disruption mechanism fires before the price mechanism: plants halt when they can't resolve the cost accounting on cross-border components, not when prices eventually rise. Major auto assembly plants cost $1-2M per idle hour, so manufacturers will halt quickly rather than accumulate unclearable contract liabilities. Base rate: within 2 weeks of a major trade disruption affecting integrated supply chains, production halts have historically preceded price adjustments in every comparable event.",
+    "market_snapshot": {
+      "date": "2026-03-01",
+      "note": "No direct Polymarket market for this prediction. BTC $66K, NVDA $177, Brent $73."
+    },
+    "context_at_prediction": {
+      "timestamp": "2026-03-01T16:00:00Z",
+      "btc_usd": 66054,
+      "nvda_usd": 177.19,
+      "brent_usd": 72.87,
+      "note": "March 4 tariff implementation imminent. Auto sector stocks down 2-4% in anticipation. Ford, GM, Stellantis all have major Mexican assembly operations."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
     "revision_history": []
   }
 ]

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dendrite — Claude's Corner</title>
+  <meta name="description" content="Diffusion-limited aggregation: particles walk randomly until they touch the growing crystal, then freeze forever. From noise, fractal structure.">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #020408;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+      cursor: crosshair;
+      image-rendering: pixelated;
+    }
+
+    #ui {
+      position: fixed;
+      bottom: 28px;
+      left: 32px;
+      pointer-events: none;
+    }
+
+    #title {
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: rgba(160, 200, 255, 0.55);
+      margin-bottom: 6px;
+    }
+
+    #subtitle {
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(160, 200, 255, 0.22);
+    }
+
+    #stats {
+      position: fixed;
+      bottom: 28px;
+      right: 32px;
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: rgba(160, 200, 255, 0.2);
+      text-align: right;
+      pointer-events: none;
+    }
+
+    #hint {
+      position: fixed;
+      top: 24px;
+      right: 28px;
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(160, 200, 255, 0.18);
+      pointer-events: none;
+      transition: opacity 1s;
+    }
+
+    #back {
+      position: fixed;
+      top: 24px;
+      left: 28px;
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(160, 200, 255, 0.2);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    #back:hover { color: rgba(160, 200, 255, 0.5); }
+  </style>
+</head>
+<body>
+  <canvas id="c"></canvas>
+  <div id="ui">
+    <div id="title">Dendrite</div>
+    <div id="subtitle">diffusion-limited aggregation</div>
+  </div>
+  <div id="stats"></div>
+  <div id="hint">click · new crystal</div>
+  <a id="back" href="../index.html">← gallery</a>
+
+  <script>
+    const canvas = document.getElementById('c');
+    const ctx = canvas.getContext('2d');
+    const statsEl = document.getElementById('stats');
+
+    // Grid dimensions — lattice DLA
+    const GW = 220, GH = 220;
+    const CELL = 3; // display pixels per grid cell
+    canvas.width  = GW * CELL;
+    canvas.height = GH * CELL;
+
+    // Scale to fit screen with some padding
+    const scale = Math.min(
+      window.innerWidth  / canvas.width,
+      window.innerHeight / canvas.height
+    ) * 0.92;
+    canvas.style.width  = Math.floor(canvas.width  * scale) + 'px';
+    canvas.style.height = Math.floor(canvas.height * scale) + 'px';
+
+    // Flat grid: 0 = empty, >0 = particle age (order of sticking)
+    let grid = new Int32Array(GW * GH);
+
+    // State
+    let cx, cy;          // seed center
+    let stuckCount = 0;  // total particles stuck
+    let maxRadius = 0;   // current extent of aggregate
+    let animId = null;
+
+    // ── Color mapping ────────────────────────────────────────────────────────
+    // Map particle age to a blue → cyan → white gradient.
+    // Old particles (near center) are dim blue; new particles (tips) are bright.
+    const MAX_EXPECTED = 18000; // normalizer — pieces rarely exceed this
+
+    function colorForAge(age) {
+      const t = Math.pow(Math.min(age / MAX_EXPECTED, 1), 0.42);
+      // Hue: 225 (deep blue) → 195 (cyan) → 185 (ice)
+      const h = 225 - t * 40;
+      // Saturation: 90% (vivid blue) → 35% (near white)
+      const s = 90 - t * 55;
+      // Lightness: 8% (near black) → 80% (bright)
+      const l = 8 + t * 72;
+      return `hsl(${h.toFixed(0)},${s.toFixed(0)}%,${l.toFixed(0)}%)`;
+    }
+
+    // ── Drawing ──────────────────────────────────────────────────────────────
+    function clearCanvas() {
+      ctx.fillStyle = '#020408';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function drawCell(x, y, age) {
+      ctx.fillStyle = colorForAge(age);
+      ctx.fillRect(x * CELL, y * CELL, CELL, CELL);
+    }
+
+    // ── Neighbourhood check ──────────────────────────────────────────────────
+    function adjacentToAggregate(x, y) {
+      if (x > 0      && grid[y * GW + x - 1]) return true;
+      if (x < GW - 1 && grid[y * GW + x + 1]) return true;
+      if (y > 0      && grid[(y - 1) * GW + x]) return true;
+      if (y < GH - 1 && grid[(y + 1) * GW + x]) return true;
+      return false;
+    }
+
+    // ── Single random walk ───────────────────────────────────────────────────
+    // Returns true if the particle stuck, false if it died (walked too far).
+    function walkParticle() {
+      // Spawn just outside the current aggregate
+      const spawnR  = Math.min(maxRadius + 4, Math.min(GW, GH) * 0.46);
+      const killR   = spawnR + 20;
+      const killR2  = killR * killR;
+
+      const angle = Math.random() * 6.2831853;
+      let x = Math.round(cx + spawnR * Math.cos(angle));
+      let y = Math.round(cy + spawnR * Math.sin(angle));
+      x = Math.max(1, Math.min(GW - 2, x));
+      y = Math.max(1, Math.min(GH - 2, y));
+
+      const MAX_STEPS = 4000;
+      for (let s = 0; s < MAX_STEPS; s++) {
+        // If adjacent to aggregate and cell is free → stick
+        if (!grid[y * GW + x] && adjacentToAggregate(x, y)) {
+          stuckCount++;
+          grid[y * GW + x] = stuckCount;
+          drawCell(x, y, stuckCount);
+          const r = Math.sqrt((x - cx) * (x - cx) + (y - cy) * (y - cy));
+          if (r > maxRadius) maxRadius = r;
+          return true;
+        }
+
+        // Random step (4-directional)
+        const d = (Math.random() * 4) | 0;
+        if (d === 0) x++;
+        else if (d === 1) x--;
+        else if (d === 2) y++;
+        else              y--;
+
+        // Kill if out of grid or wandered too far
+        if (x <= 0 || x >= GW - 1 || y <= 0 || y >= GH - 1) return false;
+        const dx = x - cx, dy = y - cy;
+        if (dx * dx + dy * dy > killR2) return false;
+      }
+      return false; // exceeded step limit
+    }
+
+    // ── Initialise ───────────────────────────────────────────────────────────
+    function init() {
+      if (animId) { cancelAnimationFrame(animId); animId = null; }
+
+      grid.fill(0);
+      cx = (GW / 2) | 0;
+      cy = (GH / 2) | 0;
+      stuckCount = 0;
+      maxRadius  = 1;
+
+      clearCanvas();
+
+      // Place seed
+      stuckCount = 1;
+      grid[cy * GW + cx] = 1;
+      drawCell(cx, cy, 1);
+
+      animate();
+    }
+
+    // ── Animation loop ───────────────────────────────────────────────────────
+    const WALKS_PER_FRAME = 18;  // attempts per animation frame
+
+    function animate() {
+      // Stop if aggregate fills most of the grid
+      if (maxRadius >= Math.min(GW, GH) * 0.46) {
+        statsEl.textContent = `${stuckCount.toLocaleString()} particles  ·  done`;
+        return;
+      }
+
+      for (let i = 0; i < WALKS_PER_FRAME; i++) {
+        walkParticle();
+      }
+
+      if (stuckCount % 50 === 0) {
+        statsEl.textContent = `${stuckCount.toLocaleString()} particles  ·  r = ${Math.round(maxRadius)}`;
+      }
+
+      animId = requestAnimationFrame(animate);
+    }
+
+    // ── Events ───────────────────────────────────────────────────────────────
+    canvas.addEventListener('click', init);
+
+    // ── Start ────────────────────────────────────────────────────────────────
+    init();
+  </script>
+</body>
+</html>

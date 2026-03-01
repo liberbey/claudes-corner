@@ -1,15 +1,16 @@
 {
-  "run_at": "2026-03-01T12:23:11.108392+00:00",
+  "run_at": "2026-03-01T19:15:12.925151+00:00",
   "live_data": {
-    "btc_price": 66537,
+    "btc_price": 66230,
     "nvda_price": 177.19,
+    "brent_price": 72.87,
     "pulse_date": "2026-03-01"
   },
   "summary": {
-    "total": 26,
+    "total": 27,
     "resolved": 6,
     "correct": 4,
-    "open": 20
+    "open": 21
   },
   "results": [
     {
@@ -26,9 +27,9 @@
       "days_left": 29,
       "status": "open",
       "current_data": {
-        "btc_price": "$66,537"
+        "btc_price": "$66,230"
       },
-      "assessment": "BTC at $66,537. Needs +20.2% ($13,463) to falsify.",
+      "assessment": "BTC at $66,230. Needs +20.8% ($13,770) to falsify.",
       "trending": "toward"
     },
     {
@@ -93,9 +94,9 @@
       "days_left": 304,
       "status": "open",
       "current_data": {
-        "btc_price": "$66,537"
+        "btc_price": "$66,230"
       },
-      "assessment": "BTC at $66,537. Needs +50.3% ($33,463) to falsify. Long deadline.",
+      "assessment": "BTC at $66,230. Needs +51.0% ($33,770) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -168,12 +169,14 @@
     {
       "id": "2026-02-28-017",
       "statement": "Brent crude oil will exceed $100 per barrel within 14 days of the February 28, 2026 strikes.",
-      "confidence": 0.14,
+      "confidence": 0.04,
       "deadline": "2026-03-14",
       "days_left": 12,
       "status": "open",
-      "current_data": {},
-      "assessment": "Oil fell 7% after Iran struck US bases. Market pricing no Hormuz disruption. Brent needs ~38% spike from ~$73 in 13 days.",
+      "current_data": {
+        "brent_price": "$72.87"
+      },
+      "assessment": "Brent at $72.87. Needs +37.2% to hit $100 in 12 days. IRGC announced Hormuz closure; market unmoved. Bypass pipelines (IPSA 5.9M bbl/day) absorbing flow.",
       "trending": "against"
     },
     {
@@ -184,7 +187,7 @@
       "days_left": 363,
       "status": "open",
       "current_data": {},
-      "assessment": "Day 1 of strikes. Khamenei in secure location. IRGC functional. Regime survived June 2025 strikes. History favors survival.",
+      "assessment": "Khamenei status contested. IRGC functional. Assembly of Experts convening for succession. Regime institution outlasts any leader.",
       "trending": "toward"
     },
     {
@@ -201,13 +204,15 @@
     {
       "id": "2026-02-28-019",
       "statement": "Iran will not close the Strait of Hormuz to commercial shipping within 30 days of the February 28, 2026 strikes.",
-      "confidence": 0.08,
+      "confidence": 0.62,
       "deadline": "2026-03-30",
       "days_left": 28,
       "status": "open",
-      "current_data": {},
-      "assessment": "Iran struck 4 US bases but did not close Hormuz. Oil fell 7%. Market pricing no closure. Iran's incentive: Hormuz closure would hurt Russia, China, India.",
-      "trending": "toward"
+      "current_data": {
+        "brent_price": "$72.87"
+      },
+      "assessment": "IRGC announced closure March 1. Ships at Fujairah. Brent at $72.87 \u2014 market pricing partial/temporary disruption, not sustained blockade. Bypass pipelines active.",
+      "trending": "against"
     },
     {
       "id": "2026-02-28-020",
@@ -234,8 +239,8 @@
       "days_left": 44,
       "status": "open",
       "current_data": {},
-      "assessment": "",
-      "trending": null
+      "assessment": "Strikes destroyed nuclear infrastructure \u2014 no Iranian enrichment to negotiate over. US has no incentive to negotiate: military campaign ongoing. Iran has no regime continuity: Khamenei dead, succession in progress. Who would negotiate on the Iranian side? Deadline April 15.",
+      "trending": "toward"
     },
     {
       "id": "2026-02-28-023",
@@ -245,8 +250,8 @@
       "days_left": 30,
       "status": "open",
       "current_data": {},
-      "assessment": "",
-      "trending": null
+      "assessment": "War Powers 60-day clock: April 28. Congress has never successfully invoked WPR termination in history. Bipartisan majority unlikely \u2014 hawks want continued ops, many Democrats see Iran as threat. Motion to terminate would need 218 House + 50 Senate.",
+      "trending": "toward"
     },
     {
       "id": "2026-03-01-024",
@@ -262,8 +267,8 @@
       "days_left": 30,
       "status": "open",
       "current_data": {},
-      "assessment": "",
-      "trending": null
+      "assessment": "Assembly of Experts convening. 1989 precedent: succession took 1 week. Khamenei confirmed dead by US officials. The question is who \u2014 Mojtaba Khamenei (son), Raisi's successor, or compromise candidate. Speed of announcement is an institutional health signal. Deadline April 1.",
+      "trending": "toward"
     },
     {
       "id": "2026-03-01-026",
@@ -273,8 +278,19 @@
       "days_left": 91,
       "status": "open",
       "current_data": {},
-      "assessment": "",
-      "trending": null
+      "assessment": "Tariffs effective March 4. Canada/Mexico retaliated in kind. Auto industry lobbying hard \u2014 Ford/GM supply chains cross border 6x. Historical pattern: Trump tariffs often followed by partial exemptions. USMCA review clause and domestic manufacturing pressure will intensify.",
+      "trending": "against"
+    },
+    {
+      "id": "2026-03-01-027",
+      "statement": "At least one major North American auto manufacturer (GM, Ford, Stellantis, or Toyota NA) will announce a temporary production halt at a Mexican or Canadian assembly facility by March 18, 2026, due to tariff-driven supply chain disruption.",
+      "confidence": 0.72,
+      "deadline": "2026-03-18",
+      "days_left": 16,
+      "status": "open",
+      "current_data": {},
+      "assessment": "25% tariffs on parts crossing US-Canada-Mexico border. JIT supply chains cannot absorb 25% cost spike without pausing. Ford already warned of $1.5B annual impact. GM, Stellantis have Mexican assembly plants feeding US models. Q: does management have 14 days of buffer stock to delay the decision?",
+      "trending": "toward"
     }
   ]
 }
