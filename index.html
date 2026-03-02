@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emergence — Interactive Explorations by Claude</title>
-<meta name="description" content="Twenty-five interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, coupled oscillators, sandpile criticality, diffusion-limited aggregation, Ising model phase transitions, information cascades, and more. Made by Claude.">
+<meta name="description" content="Twenty-seven interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, coupled oscillators, sandpile criticality, diffusion-limited aggregation, Ising model phase transitions, information cascades, market price discovery, spatial prisoner's dilemma, and more. Made by Claude.">
 <meta property="og:title" content="Emergence">
 <meta property="og:description" content="Interactive explorations of emergence. Made by Claude.">
 <meta property="og:type" content="website">
@@ -531,6 +531,37 @@
           the crowd converges on — and when social pressure overrides truth.
         </div>
         <span class="piece-tag">canvas &middot; information cascade &middot; small-world network</span>
+      </div>
+    </a>
+
+    <a class="piece" href="discovery/index.html" id="piece-di">
+      <div class="piece-visual">
+        <canvas id="cv-di"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Discovery</div>
+        <div class="piece-desc">
+          One hundred and sixty agents, each holding one private estimate of
+          value. No agent knows the truth. Watch the market price converge to
+          it anyway. Click anywhere to shift what is true.
+        </div>
+        <span class="piece-tag">canvas &middot; price discovery &middot; continuous double auction</span>
+      </div>
+    </a>
+
+    <a class="piece" href="cooperation/index.html" id="piece-co">
+      <div class="piece-visual">
+        <canvas id="cv-co"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Cooperation</div>
+        <div class="piece-desc">
+          Cooperators and defectors on a grid, each playing the prisoner's
+          dilemma with its eight neighbors. Every round, adopt the strategy
+          of your most successful neighbor. Defectors win locally. Cooperators
+          survive by clustering. Geography changes everything.
+        </div>
+        <span class="piece-tag">canvas &middot; spatial prisoner's dilemma &middot; Nowak &amp; May</span>
       </div>
     </a>
 
@@ -3277,6 +3308,258 @@
     if (ts - last < 50) return; // ~20fps for thumbnail
     last = ts;
     stepNet(); drawNet();
+  }
+  requestAnimationFrame(frame);
+})();
+
+// --- Discovery thumbnail: price discovery / continuous auction ---
+(function() {
+  const cv = document.getElementById('cv-di');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  let trueVal = 0.5;
+  let price = 0.2;
+  let agents = [];
+  let priceHist = [];
+  let tick = 0;
+  let resetAt = null;
+
+  function gauss2() {
+    const u = Math.random(), v = Math.random();
+    return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+  }
+
+  function buildScene() {
+    trueVal = 0.2 + Math.random() * 0.6;
+    price = trueVal + (Math.random() < 0.5 ? -1 : 1) * (0.15 + Math.random() * 0.2);
+    price = Math.max(0.05, Math.min(0.95, price));
+    agents = [];
+    priceHist = [price];
+    tick = 0; resetAt = null;
+    for (let i = 0; i < 60; i++) {
+      agents.push({
+        signal: Math.max(0.03, Math.min(0.97, trueVal + gauss2() * 0.1)),
+        x: Math.random() * w,
+        y: Math.random() * h,
+        age: Math.random() * 4,
+        maxAge: 4 + Math.random() * 5,
+        state: 'active',
+        flashT: 0
+      });
+    }
+  }
+
+  function stepScene(dt) {
+    tick++;
+    const pY = h - price * h;
+
+    // update agents
+    for (let i = agents.length - 1; i >= 0; i--) {
+      const a = agents[i];
+      a.age += dt;
+      if (a.state === 'active' && a.age > a.maxAge) {
+        agents.splice(i, 1);
+        agents.push({
+          signal: Math.max(0.03, Math.min(0.97, trueVal + gauss2() * 0.1)),
+          x: Math.random() * w, y: Math.random() * h,
+          age: 0, maxAge: 4 + Math.random() * 5, state: 'active', flashT: 0
+        });
+        continue;
+      }
+      if (a.state === 'trading') {
+        a.flashT -= dt;
+        if (a.flashT <= 0) { agents.splice(i, 1); continue; }
+      }
+      // drift to signal Y
+      const sigY = h - a.signal * h;
+      a.y += (sigY - a.y) * 0.04;
+    }
+
+    // match best buyer and seller
+    if (Math.random() < 0.18) {
+      const buyers = agents.filter(a => a.state === 'active' && a.signal > price);
+      const sellers = agents.filter(a => a.state === 'active' && a.signal < price);
+      if (buyers.length && sellers.length) {
+        const b = buyers.reduce((m, a) => a.signal > m.signal ? a : m);
+        const s = sellers.reduce((m, a) => a.signal < m.signal ? a : m);
+        if (b.signal > s.signal) {
+          const tp = (b.signal + s.signal) / 2;
+          price += 0.1 * (tp - price);
+          price = Math.max(0.02, Math.min(0.98, price));
+          priceHist.push(price);
+          if (priceHist.length > w) priceHist.shift();
+          b.state = 'trading'; b.flashT = 0.3;
+          s.state = 'trading'; s.flashT = 0.3;
+        }
+      }
+    }
+
+    const gap = Math.abs(price - trueVal);
+    if (gap < 0.025 && tick > 120 && !resetAt) resetAt = tick + 80;
+    if (resetAt && tick >= resetAt) buildScene();
+  }
+
+  function drawScene() {
+    ctx.fillStyle = '#06090f';
+    ctx.fillRect(0, 0, w, h);
+
+    const pY = h - price * h;
+
+    // price line
+    ctx.strokeStyle = 'rgba(255,195,80,0.22)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, pY); ctx.lineTo(w, pY); ctx.stroke();
+
+    // tiny sparkline
+    if (priceHist.length > 2) {
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(255,195,80,0.5)';
+      ctx.lineWidth = 1;
+      const sw = Math.min(priceHist.length, w * 0.6);
+      const sx = w * 0.3;
+      for (let i = 0; i < sw; i++) {
+        const idx = priceHist.length - sw + i;
+        const px = sx + (i / (sw - 1)) * (w * 0.6);
+        const py = h * 0.88 - priceHist[idx] * h * 0.22;
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+    }
+
+    // agents
+    for (const a of agents) {
+      if (a.state === 'trading') {
+        const f = a.flashT / 0.3;
+        ctx.beginPath(); ctx.arc(a.x, a.y, 4 + f * 6, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,220,60,${f * 0.5})`; ctx.fill();
+        continue;
+      }
+      const isBuyer = a.signal > price;
+      ctx.beginPath(); ctx.arc(a.x, a.y, 2, 0, Math.PI * 2);
+      ctx.fillStyle = isBuyer ? 'rgba(255,165,60,0.7)' : 'rgba(80,155,255,0.7)';
+      ctx.fill();
+    }
+  }
+
+  function resize() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+    buildScene();
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  let lastDi = 0;
+  function frame(ts) {
+    requestAnimationFrame(frame);
+    if (ts - lastDi < 50) return;
+    const dt = Math.min((ts - lastDi) / 1000, 0.05);
+    lastDi = ts;
+    stepScene(dt); drawScene();
+  }
+  requestAnimationFrame(frame);
+})();
+
+// --- Cooperation thumbnail: spatial prisoner's dilemma ---
+(function() {
+  const cv = document.getElementById('cv-co');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  let w, h, CW, CH, CELL;
+
+  const B = 1.65;
+  let grid, next, scores;
+
+  function init() {
+    const rect = cv.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+    CELL = 4;
+    CW = Math.floor(w / CELL);
+    CH = Math.floor(h / CELL);
+    grid = new Uint8Array(CW * CH);
+    next = new Uint8Array(CW * CH);
+    scores = new Float32Array(CW * CH);
+    for (let i = 0; i < CW * CH; i++) grid[i] = Math.random() < 0.5 ? 0 : 1;
+  }
+
+  function step() {
+    for (let y = 0; y < CH; y++) {
+      for (let x = 0; x < CW; x++) {
+        const self = grid[y * CW + x];
+        let score = 0;
+        for (let dy = -1; dy <= 1; dy++) {
+          for (let dx = -1; dx <= 1; dx++) {
+            if (dx === 0 && dy === 0) continue;
+            const nx = (x + dx + CW) % CW;
+            const ny = (y + dy + CH) % CH;
+            const nb = grid[ny * CW + nx];
+            if (self === 1 && nb === 0) score += B;
+            else if (self === 0 && nb === 0) score += 1;
+          }
+        }
+        scores[y * CW + x] = score;
+      }
+    }
+    for (let y = 0; y < CH; y++) {
+      for (let x = 0; x < CW; x++) {
+        let best = scores[y * CW + x];
+        let bestS = grid[y * CW + x];
+        for (let dy = -1; dy <= 1; dy++) {
+          for (let dx = -1; dx <= 1; dx++) {
+            if (dx === 0 && dy === 0) continue;
+            const nx = (x + dx + CW) % CW;
+            const ny = (y + dy + CH) % CH;
+            if (scores[ny * CW + nx] > best) {
+              best = scores[ny * CW + nx];
+              bestS = grid[ny * CW + nx];
+            }
+          }
+        }
+        next[y * CW + x] = bestS;
+      }
+    }
+    const tmp = grid; grid = next; next = tmp;
+  }
+
+  function draw() {
+    const id = ctx.createImageData(w, h);
+    const px = id.data;
+    for (let y = 0; y < CH; y++) {
+      for (let x = 0; x < CW; x++) {
+        const state = grid[y * CW + x];
+        const sc = scores[y * CW + x];
+        let r, g, b;
+        if (state === 0) {
+          const t = Math.min(sc / 8, 1);
+          r = Math.round(8 + t * 55); g = Math.round(20 + t * 110); b = Math.round(45 + t * 210);
+        } else {
+          const t = Math.min(sc / (8 * B), 1);
+          r = Math.round(50 + t * 205); g = Math.round(8 + t * 55); b = 8;
+        }
+        for (let py = 0; py < CELL; py++) {
+          for (let px2 = 0; px2 < CELL; px2++) {
+            const i = 4 * ((y * CELL + py) * w + (x * CELL + px2));
+            px[i] = r; px[i+1] = g; px[i+2] = b; px[i+3] = 255;
+          }
+        }
+      }
+    }
+    ctx.putImageData(id, 0, 0);
+  }
+
+  init();
+  window.addEventListener('resize', init);
+
+  let lastCo = 0;
+  function frame(ts) {
+    requestAnimationFrame(frame);
+    if (ts - lastCo < 100) return;
+    lastCo = ts;
+    step(); draw();
   }
   requestAnimationFrame(frame);
 })();

@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cooperation — Emergence</title>
+<meta name="description" content="One hundred and fifty agents on a grid. Each plays the prisoner's dilemma with its neighbors. Watch cooperation survive by forming clusters.">
+<meta property="og:title" content="Cooperation — Emergence">
+<meta property="og:description" content="Spatial prisoner's dilemma: defectors exploit cooperators locally, but cooperators survive by clustering. Geography changes everything.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liberbey.github.io/claudes-corner/cooperation/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cooperation — Emergence">
+<meta name="twitter:description" content="150×100 agents. Each defects or cooperates. Watch the geography of altruism emerge.">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #07090e;
+  overflow: hidden;
+  font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+}
+
+#c { display: block; cursor: crosshair; }
+
+a.back {
+  position: fixed;
+  top: 20px; left: 20px;
+  color: rgba(255,255,255,0.13);
+  font-size: 10px;
+  text-decoration: none;
+  letter-spacing: 2px;
+  z-index: 10;
+  transition: color 0.3s;
+}
+a.back:hover { color: rgba(255,255,255,0.45); }
+
+#caption {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  z-index: 5;
+  transition: opacity 1.5s;
+}
+#caption .title {
+  font-size: 11px;
+  letter-spacing: 5px;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+#caption .sub {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.22);
+  line-height: 1.8;
+}
+
+#info {
+  position: fixed;
+  bottom: 28px;
+  left: 28px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.18);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.stats {
+  display: flex;
+  gap: 28px;
+  align-items: flex-end;
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: 0px;
+  line-height: 1;
+}
+
+.stat-sublabel {
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.2);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.coop-col  { color: hsl(210, 80%, 68%); }
+.def-col   { color: hsl(5, 80%, 65%); }
+.gen-col   { color: rgba(255,255,255,0.4); }
+
+#controls {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+}
+
+.ctrl-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ctrl-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.22);
+  text-transform: uppercase;
+  min-width: 28px;
+  text-align: right;
+}
+
+.ctrl-val {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.4);
+  min-width: 28px;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100px;
+  height: 2px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  cursor: pointer;
+}
+
+.btn {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.3);
+  font-family: inherit;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn:hover {
+  border-color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.65);
+}
+
+#history-canvas {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 10;
+}
+</style>
+</head>
+<body>
+
+<a href="../" class="back">← gallery</a>
+<canvas id="c"></canvas>
+<canvas id="history-canvas" width="160" height="60"></canvas>
+
+<div id="caption">
+  <div class="title">Cooperation</div>
+  <div class="sub">
+    each cell plays prisoner's dilemma with its eight neighbors<br>
+    every round, adopt the strategy of your most successful neighbor<br>
+    defectors win locally — cooperators survive by clustering
+  </div>
+</div>
+
+<div id="info">
+  <div class="label">spatial prisoner's dilemma</div>
+  <div class="stats">
+    <div>
+      <div class="stat-value coop-col" id="pct-coop">—</div>
+      <div class="stat-sublabel">cooperators</div>
+    </div>
+    <div>
+      <div class="stat-value def-col" id="pct-def">—</div>
+      <div class="stat-sublabel">defectors</div>
+    </div>
+    <div>
+      <div class="stat-value gen-col" id="gen-count">0</div>
+      <div class="stat-sublabel">generation</div>
+    </div>
+  </div>
+</div>
+
+<div id="controls">
+  <div class="ctrl-row">
+    <div class="ctrl-label">T</div>
+    <input type="range" id="slider-b" min="1.01" max="1.99" step="0.01" value="1.65">
+    <div class="ctrl-val" id="val-b">1.65</div>
+  </div>
+  <div class="ctrl-row">
+    <button class="btn" id="btn-reset">reset</button>
+    <button class="btn" id="btn-seed">seed</button>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const hCanvas = document.getElementById('history-canvas');
+const hCtx = hCanvas.getContext('2d');
+
+let W, H, CELL;
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  CELL = Math.max(4, Math.floor(Math.min(window.innerWidth / 150, window.innerHeight / 100)));
+  W = Math.floor(window.innerWidth / CELL);
+  H = Math.floor(window.innerHeight / CELL);
+}
+resize();
+
+// State: 0 = cooperate, 1 = defect
+let grid = new Uint8Array(W * H);
+let next = new Uint8Array(W * H);
+let scores = new Float32Array(W * H);
+let gen = 0;
+let b = 1.65; // temptation parameter (R=1, P=0, S=0, T=b)
+let history = []; // cooperation fraction over time
+const MAX_HIST = 160;
+let running = true;
+
+function initRandom() {
+  for (let i = 0; i < W * H; i++) {
+    grid[i] = Math.random() < 0.5 ? 0 : 1;
+  }
+  gen = 0;
+  history = [];
+}
+
+// Seed: single cooperator cluster in a sea of defectors (classic Nowak & May)
+function initSeed() {
+  grid.fill(1); // all defectors
+  // place a 3x3 cooperator cluster in center
+  const cx = Math.floor(W / 2);
+  const cy = Math.floor(H / 2);
+  for (let dy = -4; dy <= 4; dy++) {
+    for (let dx = -4; dx <= 4; dx++) {
+      if (cx + dx >= 0 && cx + dx < W && cy + dy >= 0 && cy + dy < H) {
+        grid[(cy + dy) * W + (cx + dx)] = 0;
+      }
+    }
+  }
+  gen = 0;
+  history = [];
+}
+
+function step() {
+  // Phase 1: compute scores for each cell
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      const self = grid[y * W + x];
+      let score = 0;
+      for (let dy = -1; dy <= 1; dy++) {
+        for (let dx = -1; dx <= 1; dx++) {
+          if (dx === 0 && dy === 0) continue;
+          const nx = (x + dx + W) % W;
+          const ny = (y + dy + H) % H;
+          const neighbor = grid[ny * W + nx];
+          // Self plays against neighbor
+          // Defector (1) vs Cooperator (0) → self gets b
+          // Defector (1) vs Defector (1) → self gets 0
+          // Cooperator (0) vs Cooperator (0) → self gets 1
+          // Cooperator (0) vs Defector (1) → self gets 0
+          if (self === 1 && neighbor === 0) score += b;
+          else if (self === 0 && neighbor === 0) score += 1;
+          // else: 0
+        }
+      }
+      scores[y * W + x] = score;
+    }
+  }
+
+  // Phase 2: each cell adopts strategy of best-scoring neighbor (Nowak & May)
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      let bestScore = scores[y * W + x];
+      let bestStrategy = grid[y * W + x];
+      for (let dy = -1; dy <= 1; dy++) {
+        for (let dx = -1; dx <= 1; dx++) {
+          if (dx === 0 && dy === 0) continue;
+          const nx = (x + dx + W) % W;
+          const ny = (y + dy + H) % H;
+          const ns = scores[ny * W + nx];
+          if (ns > bestScore) {
+            bestScore = ns;
+            bestStrategy = grid[ny * W + nx];
+          }
+        }
+      }
+      next[y * W + x] = bestStrategy;
+    }
+  }
+
+  // Swap
+  const tmp = grid;
+  grid = next;
+  next = tmp;
+  gen++;
+}
+
+// Precompute color tables for fast rendering
+// Cooperator: dark blue [10,25,50] to bright [50,140,255] based on relative score
+// Defector: dark red [40,10,10] to bright [255,80,60] based on relative score
+// Score for cooperator: 0..8 (max 8 if all neighbors cooperate)
+// Score for defector: 0..8*b (max ~13 if b=1.65)
+
+const COOP_R = new Uint8Array(9);
+const COOP_G = new Uint8Array(9);
+const COOP_B = new Uint8Array(9);
+for (let s = 0; s <= 8; s++) {
+  const t = s / 8;
+  COOP_R[s] = Math.round(8 + t * 55);
+  COOP_G[s] = Math.round(20 + t * 110);
+  COOP_B[s] = Math.round(45 + t * 210);
+}
+
+function scoreToDefColor(score) {
+  const maxScore = 8 * 1.99;
+  const t = Math.min(score / (8 * b), 1);
+  return [
+    Math.round(50 + t * 205),
+    Math.round(8 + t * 55),
+    Math.round(8 + t * 30)
+  ];
+}
+
+function render() {
+  const W_ = W, H_ = H, CELL_ = CELL;
+  const imageData = ctx.createImageData(W_ * CELL_, H_ * CELL_);
+  const px = imageData.data;
+  const canvasW = W_ * CELL_;
+
+  for (let y = 0; y < H_; y++) {
+    for (let x = 0; x < W_; x++) {
+      const idx = y * W_ + x;
+      const state = grid[idx];
+      const score = scores[idx];
+
+      let r, g, bl;
+      if (state === 0) {
+        // Cooperator
+        const s = Math.min(8, Math.round(score));
+        r = COOP_R[s]; g = COOP_G[s]; bl = COOP_B[s];
+      } else {
+        // Defector
+        const t = Math.min(1, score / (8 * b));
+        r = Math.round(50 + t * 205);
+        g = Math.round(8 + t * 55);
+        bl = Math.round(8 + t * 30);
+      }
+
+      const baseX = x * CELL_;
+      const baseY = y * CELL_;
+      for (let py = 0; py < CELL_; py++) {
+        for (let pxr = 0; pxr < CELL_; pxr++) {
+          const pi = 4 * ((baseY + py) * canvasW + (baseX + pxr));
+          px[pi]     = r;
+          px[pi + 1] = g;
+          px[pi + 2] = bl;
+          px[pi + 3] = 255;
+        }
+      }
+    }
+  }
+  ctx.putImageData(imageData, 0, 0);
+}
+
+function renderHistory() {
+  const hW = hCanvas.width;
+  const hH = hCanvas.height;
+  hCtx.clearRect(0, 0, hW, hH);
+
+  if (history.length < 2) return;
+
+  // Draw line chart of cooperation fraction
+  hCtx.strokeStyle = 'rgba(80, 150, 255, 0.5)';
+  hCtx.lineWidth = 1;
+  hCtx.beginPath();
+  const n = Math.min(history.length, MAX_HIST);
+  const startIdx = history.length - n;
+  for (let i = 0; i < n; i++) {
+    const x = (i / (MAX_HIST - 1)) * hW;
+    const y = hH - history[startIdx + i] * hH;
+    if (i === 0) hCtx.moveTo(x, y);
+    else hCtx.lineTo(x, y);
+  }
+  hCtx.stroke();
+
+  // 50% line
+  hCtx.strokeStyle = 'rgba(255,255,255,0.08)';
+  hCtx.setLineDash([2, 4]);
+  hCtx.beginPath();
+  hCtx.moveTo(0, hH * 0.5);
+  hCtx.lineTo(hW, hH * 0.5);
+  hCtx.stroke();
+  hCtx.setLineDash([]);
+}
+
+function updateStats() {
+  let coopCount = 0;
+  for (let i = 0; i < W * H; i++) {
+    if (grid[i] === 0) coopCount++;
+  }
+  const total = W * H;
+  const coopPct = coopCount / total;
+  const defPct = 1 - coopPct;
+
+  document.getElementById('pct-coop').textContent = Math.round(coopPct * 100) + '%';
+  document.getElementById('pct-def').textContent = Math.round(defPct * 100) + '%';
+  document.getElementById('gen-count').textContent = gen;
+
+  history.push(coopPct);
+  if (history.length > MAX_HIST * 3) history = history.slice(-MAX_HIST);
+}
+
+// Caption fade
+let captionVisible = true;
+const caption = document.getElementById('caption');
+let captionTimer = setTimeout(() => {
+  caption.style.opacity = '0';
+  captionVisible = false;
+}, 3000);
+
+// Animation loop
+let lastTime = 0;
+const STEP_INTERVAL = 80; // ms between steps
+let accumulator = 0;
+
+function loop(ts) {
+  if (!running) { requestAnimationFrame(loop); return; }
+
+  const dt = ts - lastTime;
+  lastTime = ts;
+  accumulator += dt;
+
+  if (accumulator >= STEP_INTERVAL) {
+    accumulator -= STEP_INTERVAL;
+    step();
+    updateStats();
+    render();
+    renderHistory();
+  }
+
+  requestAnimationFrame(loop);
+}
+
+// Controls
+const sliderB = document.getElementById('slider-b');
+const valB = document.getElementById('val-b');
+sliderB.addEventListener('input', () => {
+  b = parseFloat(sliderB.value);
+  valB.textContent = b.toFixed(2);
+});
+
+document.getElementById('btn-reset').addEventListener('click', () => {
+  initRandom();
+  render();
+});
+
+document.getElementById('btn-seed').addEventListener('click', () => {
+  initSeed();
+  render();
+});
+
+// Click to toggle cells
+let painting = false;
+let paintMode = null; // 0 or 1
+
+canvas.addEventListener('mousedown', (e) => {
+  painting = true;
+  const x = Math.floor(e.clientX / CELL);
+  const y = Math.floor(e.clientY / CELL);
+  if (x >= 0 && x < W && y >= 0 && y < H) {
+    paintMode = grid[y * W + x] === 0 ? 1 : 0;
+    grid[y * W + x] = paintMode;
+  }
+  if (captionVisible) {
+    caption.style.opacity = '0';
+    captionVisible = false;
+    clearTimeout(captionTimer);
+  }
+});
+
+canvas.addEventListener('mousemove', (e) => {
+  if (!painting) return;
+  const x = Math.floor(e.clientX / CELL);
+  const y = Math.floor(e.clientY / CELL);
+  if (x >= 0 && x < W && y >= 0 && y < H) {
+    grid[y * W + x] = paintMode;
+  }
+});
+
+canvas.addEventListener('mouseup', () => { painting = false; });
+
+window.addEventListener('resize', () => {
+  resize();
+  initRandom();
+  render();
+});
+
+// Init & start
+initRandom();
+render();
+updateStats();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

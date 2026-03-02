@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discovery — Emergence</title>
+<meta name="description" content="One hundred and sixty agents. Each knows only their own private estimate. Watch the market price converge to a truth no single agent possesses.">
+<meta property="og:title" content="Discovery — Emergence">
+<meta property="og:description" content="Private information, dispersed across agents, aggregated into a single price through trading.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liberbey.github.io/claudes-corner/discovery/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Discovery — Emergence">
+<meta name="twitter:description" content="160 agents. Private signals. No agent knows the truth. The market finds it anyway.">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #06090f;
+  overflow: hidden;
+  font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+}
+
+#c { display: block; cursor: crosshair; }
+
+a.back {
+  position: fixed;
+  top: 20px; left: 20px;
+  color: rgba(255,255,255,0.13);
+  font-size: 10px;
+  text-decoration: none;
+  letter-spacing: 2px;
+  z-index: 10;
+  transition: color 0.3s;
+}
+a.back:hover { color: rgba(255,255,255,0.45); }
+
+#caption {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  z-index: 5;
+  transition: opacity 1.5s;
+}
+#caption .title {
+  font-size: 11px;
+  letter-spacing: 5px;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+#caption .sub {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.22);
+  line-height: 1.8;
+  max-width: 400px;
+}
+
+#info {
+  position: fixed;
+  bottom: 28px;
+  left: 28px;
+  z-index: 10;
+  pointer-events: none;
+}
+.label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.16);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.stats { display: flex; gap: 28px; align-items: flex-end; }
+.stat-value {
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+.stat-sub {
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.18);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+.price-val { color: rgba(255, 195, 80, 0.9); }
+.trades-val { color: rgba(255, 255, 255, 0.35); }
+.gap-val { color: rgba(120, 190, 255, 0.7); }
+
+#hint {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.1);
+  text-transform: uppercase;
+  pointer-events: none;
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← GALLERY</a>
+
+<div id="caption">
+  <div class="title">Discovery</div>
+  <div class="sub">
+    160 agents<br>
+    each holds one private estimate<br>
+    no single agent knows the truth<br>
+    <br>
+    click to change what is true
+  </div>
+</div>
+
+<div id="info">
+  <div class="label">Market</div>
+  <div class="stats">
+    <div>
+      <div class="stat-value price-val" id="stat-price">0.500</div>
+      <div class="stat-sub">Price</div>
+    </div>
+    <div>
+      <div class="stat-value trades-val" id="stat-trades">0</div>
+      <div class="stat-sub">Trades</div>
+    </div>
+    <div>
+      <div class="stat-value gap-val" id="stat-gap">—</div>
+      <div class="stat-sub">Gap</div>
+    </div>
+  </div>
+</div>
+
+<div id="hint">CLICK TO SHIFT TRUTH</div>
+
+<canvas id="c"></canvas>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+
+// Gaussian noise (Box-Muller)
+function gauss(mu, sigma) {
+  const u = Math.random(), v = Math.random();
+  return mu + sigma * Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
+
+// State
+let trueValue = 0.5;
+let marketPrice = 0.18 + Math.random() * 0.1; // starts away from truth
+let agents = [];
+let trades = 0;
+let priceHistory = [marketPrice];
+let flashes = [];       // [{x, y, r, alpha, t}]
+let shockLabel = null;  // {text, alpha, t}
+let lastTime = 0;
+let elapsed = 0;
+let captionFading = false;
+
+const N_AGENTS = 160;
+const SIGMA = 0.11;     // private signal noise
+const PRICE_SPEED = 0.09;
+const TRADE_PROB = 0.12;
+
+function priceToY(p) {
+  const margin = 60;
+  return canvas.height - margin - p * (canvas.height - margin * 2);
+}
+
+function spawnAgent(index) {
+  const signal = clamp(gauss(trueValue, SIGMA), 0.03, 0.97);
+  return {
+    x: 40 + Math.random() * (canvas.width - 80),
+    y: priceToY(signal) + (Math.random() - 0.5) * 80,
+    signal,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3,
+    age: Math.random() * 5,
+    maxAge: 5 + Math.random() * 8,
+    state: 'active',  // active | trading | done
+    flashT: 0,
+    glow: 0.7 + Math.random() * 0.3,
+  };
+}
+
+function initAgents() {
+  agents = [];
+  for (let i = 0; i < N_AGENTS; i++) agents.push(spawnAgent(i));
+}
+
+function drawSpark(x0, y0, w, h) {
+  if (priceHistory.length < 2) return;
+
+  ctx.fillStyle = 'rgba(255,255,255,0.03)';
+  ctx.fillRect(x0, y0, w, h);
+
+  // true value dashed line
+  const tvFrac = trueValue;
+  const tvY = y0 + h - tvFrac * h;
+  ctx.strokeStyle = 'rgba(255, 100, 100, 0.25)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([2, 5]);
+  ctx.beginPath();
+  ctx.moveTo(x0, tvY);
+  ctx.lineTo(x0 + w, tvY);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // label
+  ctx.fillStyle = 'rgba(255,100,100,0.3)';
+  ctx.font = '8px SF Mono, Menlo, monospace';
+  ctx.fillText('TRUTH', x0 + w + 5, tvY + 3);
+
+  // price line
+  ctx.beginPath();
+  ctx.strokeStyle = 'rgba(255, 195, 80, 0.7)';
+  ctx.lineWidth = 1.5;
+  const slice = priceHistory.slice(-w);
+  slice.forEach((p, i) => {
+    const px = x0 + (i / (slice.length - 1)) * w;
+    const py = y0 + h - p * h;
+    if (i === 0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
+  });
+  ctx.stroke();
+}
+
+function loop(ts) {
+  requestAnimationFrame(loop);
+  const dt = Math.min((ts - lastTime) / 1000, 0.05);
+  lastTime = ts;
+  elapsed += dt;
+
+  const W = canvas.width, H = canvas.height;
+  ctx.fillStyle = 'rgba(6, 9, 15, 0.88)';
+  ctx.fillRect(0, 0, W, H);
+
+  // Fade caption after 3s
+  if (!captionFading && elapsed > 3) {
+    captionFading = true;
+    document.getElementById('caption').style.opacity = '0';
+  }
+
+  // True value: very faint horizontal glow (barely visible)
+  const tvY = priceToY(trueValue);
+  const tvGrad = ctx.createLinearGradient(0, tvY - 2, 0, tvY + 2);
+  tvGrad.addColorStop(0, 'transparent');
+  tvGrad.addColorStop(0.5, 'rgba(255, 80, 80, 0.07)');
+  tvGrad.addColorStop(1, 'transparent');
+  ctx.fillStyle = tvGrad;
+  ctx.fillRect(0, tvY - 2, W, 4);
+
+  // Market price line
+  const pY = priceToY(marketPrice);
+  const lineAlpha = 0.22 + 0.07 * Math.sin(elapsed * 1.8);
+  const grad = ctx.createLinearGradient(0, 0, W, 0);
+  grad.addColorStop(0, 'transparent');
+  grad.addColorStop(0.15, `rgba(255,195,80,${lineAlpha})`);
+  grad.addColorStop(0.85, `rgba(255,195,80,${lineAlpha})`);
+  grad.addColorStop(1, 'transparent');
+  ctx.strokeStyle = grad;
+  ctx.lineWidth = 1;
+  ctx.setLineDash([]);
+  ctx.beginPath();
+  ctx.moveTo(0, pY);
+  ctx.lineTo(W, pY);
+  ctx.stroke();
+
+  // Price label on line
+  ctx.fillStyle = 'rgba(255,195,80,0.5)';
+  ctx.font = '9px SF Mono, Menlo, monospace';
+  ctx.fillText(`${marketPrice.toFixed(3)}`, W / 2 - 18, pY - 6);
+
+  // Update and draw agents
+  let buyers = [], sellers = [];
+
+  for (let i = agents.length - 1; i >= 0; i--) {
+    const a = agents[i];
+    if (a.state === 'done') continue;
+
+    a.age += dt;
+
+    // Natural death → respawn
+    if (a.age > a.maxAge && a.state === 'active') {
+      a.state = 'done';
+      continue;
+    }
+
+    if (a.state === 'trading') {
+      a.flashT -= dt;
+      // drift toward price line
+      const targetY = pY;
+      a.vy += (targetY - a.y) * 0.2;
+      a.vy *= 0.7;
+      a.y += a.vy * dt * 60;
+      a.x += a.vx * dt * 60;
+
+      if (a.flashT <= 0) {
+        a.state = 'done';
+        flashes.push({ x: a.x, y: pY, r: 6, alpha: 1.0, t: 0.5 });
+        continue;
+      }
+
+      const f = a.flashT / 0.4;
+      // glow ring
+      ctx.beginPath();
+      ctx.arc(a.x, a.y, 5 + f * 12, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 220, 50, ${f * 0.3})`;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(a.x, a.y, 3, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 255, 180, ${f * 0.9})`;
+      ctx.fill();
+      continue;
+    }
+
+    // Active agent physics
+    a.vx += (Math.random() - 0.5) * 0.08;
+    a.vy += (Math.random() - 0.5) * 0.08;
+
+    // Drift toward signal's Y (private belief about fair price)
+    const sigY = priceToY(a.signal);
+    a.vy += (sigY - a.y) * 0.012;
+    a.vx *= 0.94;
+    a.vy *= 0.94;
+
+    a.x = clamp(a.x + a.vx * dt * 60, 20, W - 20);
+    a.y = clamp(a.y + a.vy * dt * 60, 10, H - 10);
+
+    // Role determined by signal vs market price
+    const isBuyer = a.signal > marketPrice;
+    const dist = Math.abs(a.signal - marketPrice);
+
+    if (isBuyer) buyers.push(a);
+    else sellers.push(a);
+
+    // Draw
+    const lifeRatio = 1 - a.age / a.maxAge;
+    const alpha = lifeRatio * a.glow * (0.6 + 0.3 * (1 - dist / 0.5));
+
+    if (isBuyer) {
+      // Warm amber — buyer, signal above market price
+      ctx.beginPath();
+      ctx.arc(a.x, a.y, 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 170, 60, ${alpha * 0.9})`;
+      ctx.fill();
+      // subtle glow
+      if (dist < 0.08) {
+        ctx.beginPath();
+        ctx.arc(a.x, a.y, 6, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 200, 80, ${alpha * 0.12})`;
+        ctx.fill();
+      }
+    } else {
+      // Cool blue — seller, signal below market price
+      ctx.beginPath();
+      ctx.arc(a.x, a.y, 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(80, 155, 255, ${alpha * 0.9})`;
+      ctx.fill();
+      if (dist < 0.08) {
+        ctx.beginPath();
+        ctx.arc(a.x, a.y, 6, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(80, 155, 255, ${alpha * 0.12})`;
+        ctx.fill();
+      }
+    }
+  }
+
+  // Matching: best buyer (highest signal) vs best seller (lowest signal)
+  buyers.sort((a, b) => b.signal - a.signal);
+  sellers.sort((a, b) => a.signal - b.signal);
+
+  if (buyers.length > 0 && sellers.length > 0 && Math.random() < TRADE_PROB) {
+    const b = buyers[0], s = sellers[0];
+    if (b.signal > s.signal) {
+      const tradePrice = (b.signal + s.signal) / 2;
+      marketPrice = clamp(marketPrice + PRICE_SPEED * (tradePrice - marketPrice), 0.02, 0.98);
+      priceHistory.push(marketPrice);
+      if (priceHistory.length > 500) priceHistory.shift();
+      trades++;
+
+      b.state = 'trading';
+      b.flashT = 0.4;
+      s.state = 'trading';
+      s.flashT = 0.4;
+    }
+  }
+
+  // Respawn dead agents
+  const alive = agents.filter(a => a.state !== 'done');
+  while (alive.length + agents.filter(a => a.state === 'done').length < N_AGENTS * 1.5
+    && alive.length < N_AGENTS) {
+    const na = spawnAgent(agents.length);
+    na.y = 20 + Math.random() * (H - 40);
+    agents.push(na);
+  }
+  if (agents.length > N_AGENTS * 3) {
+    agents = agents.filter(a => a.state !== 'done').slice(0, N_AGENTS + 20);
+  }
+
+  // Draw trade flashes
+  for (let i = flashes.length - 1; i >= 0; i--) {
+    const f = flashes[i];
+    f.t -= dt;
+    f.alpha = f.t / 0.5;
+    if (f.t <= 0) { flashes.splice(i, 1); continue; }
+    ctx.beginPath();
+    ctx.arc(f.x, f.y, f.r * (1 - f.t / 0.5), 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255, 230, 80, ${f.alpha * 0.6})`;
+    ctx.fill();
+  }
+
+  // Shock label
+  if (shockLabel) {
+    shockLabel.alpha -= dt * 0.7;
+    if (shockLabel.alpha <= 0) {
+      shockLabel = null;
+    } else {
+      ctx.fillStyle = `rgba(255, 80, 80, ${shockLabel.alpha})`;
+      ctx.font = '10px SF Mono, Menlo, monospace';
+      ctx.letterSpacing = '3px';
+      ctx.fillText('NEWS EVENT', W / 2 - 38, pY - 22);
+    }
+  }
+
+  // Sparkline
+  drawSpark(W - 165, H - 72, 140, 50);
+
+  // HUD stats
+  const gap = Math.abs(marketPrice - trueValue);
+  document.getElementById('stat-price').textContent = marketPrice.toFixed(3);
+  document.getElementById('stat-trades').textContent = trades;
+  document.getElementById('stat-gap').textContent = gap.toFixed(3);
+}
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+// Click: shift true value → watch price re-discover
+canvas.addEventListener('click', e => {
+  const clickFrac = 1 - (e.clientY / canvas.height);
+  // Map click Y to a new true value, with some randomness
+  trueValue = clamp(clickFrac + (Math.random() - 0.5) * 0.1, 0.1, 0.9);
+  // Reseed all agents with new private signals around new truth
+  agents.forEach(a => {
+    if (a.state === 'active') {
+      a.signal = clamp(gauss(trueValue, SIGMA), 0.03, 0.97);
+      a.age = 0;
+    }
+  });
+  shockLabel = { alpha: 1.8 };
+});
+
+resize();
+window.addEventListener('resize', () => {
+  resize();
+});
+
+initAgents();
+lastTime = performance.now();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
