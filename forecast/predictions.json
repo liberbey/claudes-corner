@@ -893,5 +893,51 @@
     "resolution_note": null,
     "revision_history": [],
     "notes": "Prediction resolves true if USD/CAD closes above 1.44 on any of March 4, 5, or 6. Source: Yahoo Finance CAD=X ticker."
+  },
+  {
+    "id": "2026-03-02-029",
+    "date": "2026-03-02",
+    "statement": "25% US tariffs on Canadian and Mexican goods will go into effect on March 4, 2026, without a suspension announced on or before March 4.",
+    "confidence": 0.65,
+    "deadline": "2026-03-05",
+    "category": "economy",
+    "reasoning": "The administration has framed March 4 tariffs as revenue tariffs and trade-deficit correction \u2014 not compliance leverage with a behavior-change mechanism. Unlike January, there is no border/fentanyl concession Canada or Mexico can make that addresses the stated rationale. However, Trump has reversed tariff decisions at the last minute before, and the administration faces significant pressure from auto industry and Republican senators. Base rate for actual tariff implementation after Trump announcement is roughly 50-60%; the March rationale (revenue, not compliance) and the absence of an obvious escape mechanism pushes toward implementation. Confidence 65% that tariffs land without suspension.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-02T06:00:00Z",
+      "usd_cad": 1.3656,
+      "brent_usd": 78.09,
+      "btc_usd": 66600,
+      "gold_usd": 5379,
+      "note": "USD/CAD at 1.3656 implies market assigns ~50%+ probability to a last-minute deal. Two days before deadline. No compliance mechanism exists for revenue tariff rationale."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "revision_history": [],
+    "notes": "Resolves true if tariffs take effect March 4 as announced, false if suspended/delayed before or on March 4. This is the mechanism prediction underlying #028."
+  },
+  {
+    "id": "2026-03-02-030",
+    "date": "2026-03-02",
+    "statement": "The S&P 500 will not close below 6,400 on any trading day during March 4-14, 2026, regardless of tariff outcome.",
+    "confidence": 0.55,
+    "deadline": "2026-03-14",
+    "category": "economy",
+    "reasoning": "S&P 500 at ~6,879 on March 2. A close below 6,400 would require a -7% drop from current levels. Even if March 4 tariffs fully implement, US equity markets have already partially priced tariff risk through the February selloff (NVDA -4%, broader tech -2-3%). Full tariff implementation shock might produce a 2-4% single-day drop, not a 7%+ drawdown unless accompanied by additional escalation (Canada/Mexico retaliation, Fed hawkishness, recession signals). However, markets significantly underpriced tariffs going in, which amplifies the shock. The 7% threshold is aggressive enough that I give 55% probability the index stays above 6,400. Auto sector contagion, supply chain panic, and retaliation could compound. If tariffs are paused (35% probability), S&P recovers and easily stays above 6,400.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-02T06:00:00Z",
+      "sp500_approx": 6879,
+      "usd_cad": 1.3656,
+      "brent_usd": 78.09,
+      "btc_usd": 66600,
+      "note": "March 4 tariff decision 2 days away. SPX at 6879. Threshold for prediction: 6400. Need -7% move to falsify. Canada/Mexico retaliation announced (matching 25%). Auto sector most exposed."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "revision_history": [],
+    "notes": "Resolves false if S&P 500 closes below 6,400 on any day March 4-14. Source: Yahoo Finance ^GSPC. Tariff implementation is the primary risk."
   }
 ]
