@@ -947,12 +947,12 @@
     "confidence": 0.75,
     "deadline": "2026-03-05",
     "category": "markets",
-    "reasoning": "Gold at $5,426 today is not primarily pricing the March 4 tariff event — it's pricing the broader 2026 regime instability (Iran war, Khamenei succession, dollar reserve status pressure, European rearmament). These do not resolve on March 4. If tariffs are suspended, some short-term 'risk-off trade unwinds' might generate a minor gold selloff, but the structural bid (war premium, succession uncertainty, dollar confidence erosion) will reassert quickly. A 2% decline from $5,426 would require a move to $5,317, reversing essentially all of today's intraday move. If tariffs go live, gold may actually surge further as markets price higher regime uncertainty and inflationary pressure. The 2% threshold is calibrated to allow for normal volatility while detecting a genuine tariff-driven gold selloff.",
+    "reasoning": "Gold at $5,426 today is not primarily pricing the March 4 tariff event \u2014 it's pricing the broader 2026 regime instability (Iran war, Khamenei succession, dollar reserve status pressure, European rearmament). These do not resolve on March 4. If tariffs are suspended, some short-term 'risk-off trade unwinds' might generate a minor gold selloff, but the structural bid (war premium, succession uncertainty, dollar confidence erosion) will reassert quickly. A 2% decline from $5,426 would require a move to $5,317, reversing essentially all of today's intraday move. If tariffs go live, gold may actually surge further as markets price higher regime uncertainty and inflationary pressure. The 2% threshold is calibrated to allow for normal volatility while detecting a genuine tariff-driven gold selloff.",
     "context_at_prediction": {
       "timestamp": "2026-03-02T08:00:00Z",
       "gold_usd": 5426,
       "usd_cad": 1.3657,
-      "brent_usd": 79.80,
+      "brent_usd": 79.8,
       "btc_usd": 65888,
       "sp500": 6879,
       "note": "Gold +3.4% today while USD/CAD unchanged. Gold pricing structural regime instability (war, succession, dollar), not March 4 tariff event specifically. Two-clock thesis: FX watches March 4; gold watches 2026."
@@ -962,6 +962,29 @@
     "outcome": null,
     "resolution_note": null,
     "revision_history": [],
-    "notes": "Resolves true if gold stays within 2% of $5,426 on both March 4 and March 5. Resolves false if gold closes below $5,317 on either day. Source: Yahoo Finance GC=F. Tests the 'Two Clocks' thesis — that gold is not watching March 4."
+    "notes": "Resolves true if gold stays within 2% of $5,426 on both March 4 and March 5. Resolves false if gold closes below $5,317 on either day. Source: Yahoo Finance GC=F. Tests the 'Two Clocks' thesis \u2014 that gold is not watching March 4."
+  },
+  {
+    "id": "2026-03-02-032",
+    "date": "2026-03-02",
+    "statement": "Iran will formally name a new Supreme Leader or officially confirm Khamenei alive and functional by March 10, 2026.",
+    "confidence": 0.65,
+    "deadline": "2026-03-10",
+    "category": "geopolitics",
+    "reasoning": "The IRGC operates better under political cover than without it \u2014 the institution prefers authorized command to autopilot mode. Every day the succession is unresolved creates a window for adversaries (Gulf states at 57% on Polymarket by March 7). The Assembly of Experts has convened specifically for this purpose. Fast succession reconstitutes deterrence; slow succession extends vulnerability. 65% confidence that formal resolution comes within 8 days.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-02T09:00:00Z",
+      "note": "Khamenei status contested after Feb 28 US/Israel strike. Assembly of Experts convening. Gulf State strike at 57% by March 7 on Polymarket \u2014 market pricing the vacuum.",
+      "gulf_strike_polymarket": 0.57,
+      "khamenei_death_polymarket": 0.05,
+      "brent_usd": 79.27,
+      "gold_usd": 5407
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "revision_history": [],
+    "notes": "Resolves true if Iran formally confirms Khamenei alive/functional OR names new Supreme Leader by March 10. Resolves false if succession is still contested/unresolved. Tests the thesis that IRGC incentivizes fast succession to reconstitute command authority."
   }
 ]
