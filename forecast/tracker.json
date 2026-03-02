@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-02T09:10:00.045816+00:00",
+  "run_at": "2026-03-02T11:19:54.129574+00:00",
   "live_data": {
-    "btc_price": 66274,
+    "btc_price": 66082,
     "nvda_price": 177.19,
-    "brent_price": 79.3,
+    "brent_price": 78.32,
     "sp500": 6878.88,
-    "usdcad": 1.3656,
-    "gold": 5408.9,
+    "usdcad": 1.3659,
+    "gold": 5400.4,
     "hl_btc_funding": {
-      "funding_pct_hr": -0.0006,
-      "mark_price": 66316.0
+      "funding_pct_hr": -0.00067,
+      "mark_price": 66099.0
     },
     "pulse_date": "2026-03-02"
   },
   "summary": {
-    "total": 31,
+    "total": 33,
     "resolved": 6,
     "correct": 4,
-    "open": 25
+    "open": 27
   },
   "results": [
     {
@@ -34,9 +34,9 @@
       "days_left": 28,
       "status": "open",
       "current_data": {
-        "btc_price": "$66,274"
+        "btc_price": "$66,082"
       },
-      "assessment": "BTC at $66,274. Needs +20.7% ($13,726) to falsify.",
+      "assessment": "BTC at $66,082. Needs +21.1% ($13,918) to falsify.",
       "trending": "toward"
     },
     {
@@ -101,9 +101,9 @@
       "days_left": 303,
       "status": "open",
       "current_data": {
-        "btc_price": "$66,274"
+        "btc_price": "$66,082"
       },
-      "assessment": "BTC at $66,274. Needs +50.9% ($33,726) to falsify. Long deadline.",
+      "assessment": "BTC at $66,082. Needs +51.3% ($33,918) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -181,9 +181,9 @@
       "days_left": 11,
       "status": "open",
       "current_data": {
-        "brent_price": "$79.30"
+        "brent_price": "$78.32"
       },
-      "assessment": "Brent at $79.30. Needs +26.1% to hit $100 in 11 days. IRGC announced Hormuz closure; market unmoved. Bypass pipelines (IPSA 5.9M bbl/day) absorbing flow.",
+      "assessment": "Brent at $78.32. Needs +27.7% to hit $100 in 11 days. IRGC announced Hormuz closure; market unmoved. Bypass pipelines (IPSA 5.9M bbl/day) absorbing flow.",
       "trending": "against"
     },
     {
@@ -216,9 +216,9 @@
       "days_left": 27,
       "status": "open",
       "current_data": {
-        "brent_price": "$79.30"
+        "brent_price": "$78.32"
       },
-      "assessment": "IRGC announced closure March 1. Ships at Fujairah. Brent at $79.30 \u2014 market pricing partial/temporary disruption, not sustained blockade. Bypass pipelines active.",
+      "assessment": "IRGC announced closure March 1. Ships at Fujairah. Brent at $78.32 \u2014 market pricing partial/temporary disruption, not sustained blockade. Bypass pipelines active.",
       "trending": "against"
     },
     {
@@ -307,9 +307,9 @@
       "days_left": 3,
       "status": "open",
       "current_data": {
-        "usd_cad": "1.3656"
+        "usd_cad": "1.3659"
       },
-      "assessment": "USD/CAD at 1.3656. Needs +5.4% to reach 1.44. Market still pricing deal, not tariff shock. March 4 is the test.",
+      "assessment": "USD/CAD at 1.3659. Needs +5.4% to reach 1.44. Market still pricing deal, not tariff shock. March 4 is the test.",
       "trending": "against"
     },
     {
@@ -320,9 +320,9 @@
       "days_left": 2,
       "status": "open",
       "current_data": {
-        "usd_cad": "1.3656"
+        "usd_cad": "1.3659"
       },
-      "assessment": "USD/CAD at 1.3656 \u2014 market still pricing deal, not tariffs. 25% effective March 4. No suspension/exemption announced yet. Resolve manually after March 4.",
+      "assessment": "USD/CAD at 1.3659 \u2014 market still pricing deal, not tariffs. 25% effective March 4. No suspension/exemption announced yet. Resolve manually after March 4.",
       "trending": "toward"
     },
     {
@@ -346,10 +346,32 @@
       "days_left": 2,
       "status": "open",
       "current_data": {
-        "gold": "$5,409"
+        "gold": "$5,400"
       },
-      "assessment": "Gold at $5,409 (-0.3% from $5,426 reference). Resolves March 5. Testing whether gold reacts to tariff news.",
+      "assessment": "Gold at $5,400 (-0.5% from $5,426 reference). Resolves March 5. Testing whether gold reacts to tariff news.",
       "trending": "toward"
+    },
+    {
+      "id": "2026-03-02-032",
+      "statement": "Iran will formally name a new Supreme Leader or officially confirm Khamenei alive and functional by March 10, 2026.",
+      "confidence": 0.65,
+      "deadline": "2026-03-10",
+      "days_left": 7,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-02-033",
+      "statement": "At least one Gulf State (Saudi Arabia, UAE, or Bahrain) will conduct or acknowledge a military strike against Iranian forces or Iranian-backed forces by March 10, 2026.",
+      "confidence": 0.6,
+      "deadline": "2026-03-10",
+      "days_left": 7,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
     }
   ]
 }

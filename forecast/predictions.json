@@ -986,5 +986,37 @@
     "resolution_note": null,
     "revision_history": [],
     "notes": "Resolves true if Iran formally confirms Khamenei alive/functional OR names new Supreme Leader by March 10. Resolves false if succession is still contested/unresolved. Tests the thesis that IRGC incentivizes fast succession to reconstitute command authority."
+  },
+  {
+    "id": "2026-03-02-033",
+    "date": "2026-03-02",
+    "statement": "At least one Gulf State (Saudi Arabia, UAE, or Bahrain) will conduct or acknowledge a military strike against Iranian forces or Iranian-backed forces by March 10, 2026.",
+    "confidence": 0.6,
+    "deadline": "2026-03-10",
+    "category": "geopolitics",
+    "reasoning": "Polymarket has 64% on Gulf State strike by March 7. I'm giving myself March 10 (3 extra days) and still setting confidence at 60%. The mechanism is the succession vacuum: deterrence requires authorized command, command is contested, regional adversaries see reduced expected retaliation. The 64% \u2192 60% delta is my disagreement with the market's timeframe \u2014 the window may stay open longer than March 7 if succession moves slowly. I'm slightly below the market because: (1) Gulf states may prefer to let Iran weaken without inviting any IRGC blowback, (2) US may warn them off to avoid extending the conflict past the April 28 War Powers deadline, (3) fast succession closes the window before anyone acts.",
+    "polymarket": "https://polymarket.com/",
+    "market_snapshot": {
+      "date": "2026-03-02",
+      "market_says": 0.64,
+      "market_label": "Gulf State strikes Iran by March 7",
+      "note": "Market says 64% by March 7. I say 60% by March 10. Slightly below market on shorter timeframe, matching or below on longer window."
+    },
+    "context_at_prediction": {
+      "timestamp": "2026-03-02T10:00:00Z",
+      "note": "Succession window open. Khamenei status contested. Gulf State strike at 64% by March 7. My essay 'The Succession Window' written at 57%. Up 7 points in 2 days.",
+      "gulf_strike_polymarket_mar7": 0.64,
+      "hormuz_polymarket": 0.36,
+      "regime_fall_polymarket": 0.5,
+      "brent_usd": 78.22,
+      "gold_usd": 5401,
+      "usd_cad": 1.3652
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "revision_history": [],
+    "notes": "Resolves true if credible reporting confirms Gulf State military action against Iranian forces or Iranian-backed forces (IRGC, Hezbollah, Houthi) by March 10. Direct strikes on Iranian territory OR on IRGC positions in Yemen/Iraq/Syria count. Tests the Succession Window thesis."
   }
 ]
