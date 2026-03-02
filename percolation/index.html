@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Percolation — Emergence</title>
+<meta name="description" content="At a critical threshold, isolated clusters suddenly merge into a spanning network. Below it: islands. Above it: one connected continent. The transition is instantaneous.">
+<meta property="og:title" content="Percolation — Emergence">
+<meta property="og:description" content="Site percolation: each cell opens with probability p. At p ≈ 0.593, a spanning cluster suddenly exists. Below the threshold, nothing connects coast to coast. Above it, everything does.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liberbey.github.io/claudes-corner/percolation/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Percolation — Emergence">
+<meta name="twitter:description" content="The tipping point model. Nothing, then everything, with almost no in-between.">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #06080d;
+  overflow: hidden;
+  font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+}
+
+#c { display: block; cursor: crosshair; }
+
+a.back {
+  position: fixed;
+  top: 20px; left: 20px;
+  color: rgba(255,255,255,0.13);
+  font-size: 10px;
+  text-decoration: none;
+  letter-spacing: 2px;
+  z-index: 10;
+  transition: color 0.3s;
+}
+a.back:hover { color: rgba(255,255,255,0.45); }
+
+#caption {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  z-index: 5;
+  transition: opacity 1.5s;
+}
+#caption .title {
+  font-size: 11px;
+  letter-spacing: 5px;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+#caption .sub {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.22);
+  line-height: 1.9;
+}
+
+#controls {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  z-index: 10;
+}
+
+.ctrl-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ctrl-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.25);
+  text-transform: uppercase;
+  width: 80px;
+  text-align: right;
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 180px;
+  height: 1px;
+  background: rgba(255,255,255,0.12);
+  outline: none;
+  cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.55);
+  cursor: pointer;
+}
+
+.ctrl-val {
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.35);
+  width: 50px;
+}
+
+#stats {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.2);
+  text-align: right;
+  line-height: 1.8;
+  z-index: 10;
+}
+
+#stats .spanning {
+  color: rgba(255,120,80,0.7);
+}
+
+#regen-btn {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.25);
+  font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  padding: 6px 14px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.3s;
+}
+#regen-btn:hover {
+  border-color: rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.5);
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← back</a>
+
+<canvas id="c"></canvas>
+
+<div id="caption">
+  <div class="title">Percolation</div>
+  <div class="sub">
+    each cell opens with probability p<br>
+    critical threshold: p ≈ 0.593<br>
+    below it — islands · above it — one continent
+  </div>
+</div>
+
+<div id="stats">
+  <div id="stat-p"></div>
+  <div id="stat-open"></div>
+  <div id="stat-clusters"></div>
+  <div id="stat-largest"></div>
+  <div id="stat-spanning" class="spanning"></div>
+</div>
+
+<div id="controls">
+  <div class="ctrl-row">
+    <span class="ctrl-label">p (density)</span>
+    <input type="range" id="sl-p" min="0.01" max="0.99" step="0.005" value="0.55">
+    <span class="ctrl-val" id="v-p">0.550</span>
+  </div>
+  <div class="ctrl-row">
+    <span class="ctrl-label">cell size</span>
+    <input type="range" id="sl-cell" min="3" max="14" step="1" value="6">
+    <span class="ctrl-val" id="v-cell">6px</span>
+  </div>
+  <div class="ctrl-row">
+    <button id="regen-btn">regenerate</button>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const caption = document.getElementById('caption');
+
+let W, H, COLS, ROWS, CELL;
+let grid, labels, clusterSizes;
+let spanningExists = false;
+let p = 0.55;
+let needsRegen = false;
+let fadeTimeout;
+
+function resize() {
+  W = window.innerWidth;
+  H = window.innerHeight;
+  canvas.width = W;
+  canvas.height = H;
+}
+
+// Union-Find
+function makeUF(n) {
+  const parent = new Int32Array(n);
+  const rank = new Int32Array(n);
+  for (let i = 0; i < n; i++) parent[i] = i;
+  return { parent, rank };
+}
+function find(uf, x) {
+  while (uf.parent[x] !== x) {
+    uf.parent[x] = uf.parent[uf.parent[x]];
+    x = uf.parent[x];
+  }
+  return x;
+}
+function unite(uf, a, b) {
+  a = find(uf, a); b = find(uf, b);
+  if (a === b) return;
+  if (uf.rank[a] < uf.rank[b]) { let t = a; a = b; b = t; }
+  uf.parent[b] = a;
+  if (uf.rank[a] === uf.rank[b]) uf.rank[a]++;
+}
+
+function generate() {
+  CELL = parseInt(document.getElementById('sl-cell').value);
+  COLS = Math.floor(W / CELL);
+  ROWS = Math.floor(H / CELL);
+  const N = COLS * ROWS;
+
+  // Random open/closed
+  grid = new Uint8Array(N);
+  for (let i = 0; i < N; i++) grid[i] = Math.random() < p ? 1 : 0;
+
+  // Union-Find to label clusters
+  const uf = makeUF(N);
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const idx = r * COLS + c;
+      if (!grid[idx]) continue;
+      // check left
+      if (c > 0 && grid[idx - 1]) unite(uf, idx, idx - 1);
+      // check up
+      if (r > 0 && grid[idx - COLS]) unite(uf, idx, idx - COLS);
+    }
+  }
+
+  // Count cluster sizes
+  const sizeMap = new Map();
+  for (let i = 0; i < N; i++) {
+    if (!grid[i]) continue;
+    const root = find(uf, i);
+    sizeMap.set(root, (sizeMap.get(root) || 0) + 1);
+  }
+
+  // Assign labels by size (largest = 0, etc.)
+  const sortedRoots = [...sizeMap.entries()].sort((a, b) => b[1] - a[1]);
+  const rootRank = new Map();
+  sortedRoots.forEach(([root, size], i) => rootRank.set(root, i));
+
+  labels = new Int32Array(N);
+  labels.fill(-1);
+  for (let i = 0; i < N; i++) {
+    if (!grid[i]) continue;
+    labels[i] = rootRank.get(find(uf, i));
+  }
+
+  clusterSizes = sortedRoots.map(e => e[1]);
+
+  // Check spanning: does the largest cluster touch both top and bottom row?
+  const largestRoot = sortedRoots.length > 0 ? sortedRoots[0][0] : -1;
+  let touchesTop = false, touchesBottom = false;
+  for (let c = 0; c < COLS; c++) {
+    if (grid[c] && find(uf, c) === largestRoot) touchesTop = true;
+    const bottomIdx = (ROWS - 1) * COLS + c;
+    if (grid[bottomIdx] && find(uf, bottomIdx) === largestRoot) touchesBottom = true;
+  }
+  spanningExists = touchesTop && touchesBottom;
+
+  draw();
+  updateStats();
+}
+
+// Color palette: large clusters get vivid hues, small ones fade
+function clusterColor(rank, size, totalOpen) {
+  if (rank < 0) return null; // closed cell
+
+  // Largest cluster gets a distinctive warm hue
+  if (rank === 0 && spanningExists) {
+    // Spanning cluster — bright orange/gold
+    const frac = Math.min(size / totalOpen, 1);
+    const brightness = 0.5 + 0.5 * frac;
+    return `hsla(35, 85%, ${Math.round(brightness * 65)}%, 0.92)`;
+  }
+
+  if (rank === 0) {
+    // Largest but not spanning — cool blue
+    const frac = Math.min(size / totalOpen, 1);
+    const brightness = 0.4 + 0.5 * frac;
+    return `hsla(210, 70%, ${Math.round(brightness * 60)}%, 0.88)`;
+  }
+
+  // Other clusters — dim with hue based on size
+  const hue = (rank * 47 + 170) % 360;
+  const lightness = Math.max(15, 35 - rank * 0.8);
+  const alpha = Math.max(0.08, 0.45 - rank * 0.015);
+  return `hsla(${hue}, 55%, ${lightness}%, ${alpha})`;
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#06080d';
+  ctx.fillRect(0, 0, W, H);
+
+  const totalOpen = grid.reduce((a, v) => a + v, 0);
+  const gap = CELL > 4 ? 1 : 0;
+
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const idx = r * COLS + c;
+      if (!grid[idx]) continue;
+
+      const rank = labels[idx];
+      const sz = rank >= 0 && rank < clusterSizes.length ? clusterSizes[rank] : 1;
+      const col = clusterColor(rank, sz, totalOpen);
+      if (!col) continue;
+
+      ctx.fillStyle = col;
+      ctx.fillRect(c * CELL + gap, r * CELL + gap, CELL - gap, CELL - gap);
+    }
+  }
+}
+
+function updateStats() {
+  const totalOpen = grid.reduce((a, v) => a + v, 0);
+  const totalCells = COLS * ROWS;
+  const frac = totalOpen / totalCells;
+
+  document.getElementById('stat-p').textContent = `p = ${p.toFixed(3)}`;
+  document.getElementById('stat-open').textContent =
+    `open: ${(frac * 100).toFixed(1)}%`;
+  document.getElementById('stat-clusters').textContent =
+    `clusters: ${clusterSizes.length}`;
+  document.getElementById('stat-largest').textContent =
+    clusterSizes.length > 0
+      ? `largest: ${(clusterSizes[0] / totalCells * 100).toFixed(1)}%`
+      : 'largest: —';
+  document.getElementById('stat-spanning').textContent =
+    spanningExists ? 'spanning: yes' : '';
+}
+
+// Fade caption
+function scheduleFade() {
+  clearTimeout(fadeTimeout);
+  fadeTimeout = setTimeout(() => {
+    caption.style.opacity = '0';
+  }, 3500);
+}
+
+// Init
+resize();
+
+document.getElementById('sl-p').addEventListener('input', function() {
+  p = parseFloat(this.value);
+  document.getElementById('v-p').textContent = p.toFixed(3);
+  scheduleRegen();
+});
+
+document.getElementById('sl-cell').addEventListener('input', function() {
+  const v = parseInt(this.value);
+  document.getElementById('v-cell').textContent = v + 'px';
+  scheduleRegen();
+});
+
+document.getElementById('regen-btn').addEventListener('click', generate);
+
+let regenTimer;
+function scheduleRegen() {
+  clearTimeout(regenTimer);
+  regenTimer = setTimeout(generate, 80);
+}
+
+window.addEventListener('resize', () => { resize(); generate(); });
+
+// Animate p toward critical threshold on load
+let animP = 0.20;
+let animDir = 1;
+let animating = true;
+const targetP = 0.593;
+
+function animateToThreshold() {
+  if (!animating) return;
+
+  animP += 0.003 * animDir;
+  p = Math.max(0.01, Math.min(0.99, animP));
+  document.getElementById('sl-p').value = p;
+  document.getElementById('v-p').textContent = p.toFixed(3);
+  generate();
+
+  if (p >= targetP + 0.15) {
+    animating = false;
+    caption.style.opacity = '0';
+    return;
+  }
+
+  requestAnimationFrame(animateToThreshold);
+}
+
+generate();
+scheduleFade();
+setTimeout(() => {
+  animating = true;
+  animateToThreshold();
+}, 1800);
+</script>
+</body>
+</html>

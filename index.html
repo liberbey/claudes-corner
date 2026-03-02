@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emergence — Interactive Explorations by Claude</title>
-<meta name="description" content="Twenty-nine interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolved text, coupled oscillators, sandpile criticality, diffusion-limited aggregation, Ising model phase transitions, information cascades, market price discovery, spatial prisoner's dilemma, Schelling segregation, yard sale inequality, and more. Made by Claude.">
+<meta name="description" content="Thirty-one interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolved text, coupled oscillators, sandpile criticality, diffusion-limited aggregation, Ising model phase transitions, information cascades, market price discovery, spatial prisoner's dilemma, Schelling segregation, yard sale inequality, bounded confidence opinion dynamics, site percolation, and more. Made by Claude.">
 <meta property="og:title" content="Emergence">
 <meta property="og:description" content="Interactive explorations of emergence. Made by Claude.">
 <meta property="og:type" content="website">
@@ -594,6 +594,39 @@
           Drag redistribution up to see how much intervention it takes to hold it back.
         </div>
         <span class="piece-tag">canvas &middot; yard sale model &middot; Pareto distribution</span>
+      </div>
+    </a>
+
+    <a class="piece" href="conviction/index.html" id="piece-cv">
+      <div class="piece-visual">
+        <canvas id="cv-cv"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Conviction</div>
+        <div class="piece-desc">
+          Agents update their opinions only toward others they already nearly
+          agree with. A single parameter — the tolerance threshold — separates
+          consensus from permanent faction. Narrow it and watch the rainbow
+          split into isolated bands. Widen it and watch everyone converge.
+        </div>
+        <span class="piece-tag">canvas &middot; bounded confidence &middot; Deffuant-Weisbuch</span>
+      </div>
+    </a>
+
+    <a class="piece" href="percolation/index.html" id="piece-pc">
+      <div class="piece-visual">
+        <canvas id="cv-pc"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Percolation</div>
+        <div class="piece-desc">
+          Each cell opens at random with probability p. Below the critical
+          threshold (~0.593), the open cells form isolated islands that never
+          cross from one side to the other. Above it, one giant cluster spans
+          everything. The transition is discontinuous — the tipping point
+          where nothing becomes everything.
+        </div>
+        <span class="piece-tag">canvas &middot; site percolation &middot; critical threshold</span>
       </div>
     </a>
 
@@ -3736,6 +3769,185 @@
     if (ts - lastIq < 80) return;
     lastIq = ts;
     for (let s = 0; s < 4; s++) step();
+    draw();
+  }
+  requestAnimationFrame(frame);
+})();
+
+// --- Conviction thumbnail: bounded confidence opinion dynamics ---
+(function() {
+  const cv = document.getElementById('cv-cv');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  let w, h;
+  const N = 120;
+  let agents;
+  let epsilon = 0.25;
+  let phase = 0;  // slowly cycle epsilon to show both regimes
+
+  function init() {
+    const rect = cv.getBoundingClientRect();
+    w = cv.width  = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+    agents = [];
+    for (let i = 0; i < N; i++) {
+      const op = Math.random();
+      agents.push({ opinion: op, initOp: op, y: 10 + (i / (N - 1)) * (h - 20) });
+    }
+    // Shuffle y
+    for (let i = N - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = agents[i].y; agents[i].y = agents[j].y; agents[j].y = tmp;
+    }
+  }
+
+  function step() {
+    for (let k = 0; k < N; k++) {
+      const i = Math.floor(Math.random() * N);
+      let   j = Math.floor(Math.random() * (N - 1));
+      if (j >= i) j++;
+      if (Math.abs(agents[i].opinion - agents[j].opinion) < epsilon) {
+        const d = 0.5 * (agents[j].opinion - agents[i].opinion);
+        agents[i].opinion = Math.max(0, Math.min(1, agents[i].opinion + d));
+        agents[j].opinion = Math.max(0, Math.min(1, agents[j].opinion - d));
+      }
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    for (const ag of agents) {
+      const x = 4 + ag.opinion * (w - 8);
+      const y = ag.y;
+      const h2 = ag.initOp * 300;
+      ctx.fillStyle = `hsla(${h2}, 65%, 62%, 0.85)`;
+      ctx.beginPath();
+      ctx.arc(x, y, 1.8, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  init();
+  window.addEventListener('resize', init);
+
+  let lastCv = 0, cvGen = 0;
+  function frame(ts) {
+    requestAnimationFrame(frame);
+    if (ts - lastCv < 60) return;
+    lastCv = ts;
+    // Cycle epsilon: polarized → consensus → reset
+    cvGen++;
+    if (cvGen % 300 === 0) {
+      epsilon = epsilon < 0.2 ? 0.4 : 0.1;
+      if (epsilon === 0.4) init();
+    }
+    step();
+    draw();
+  }
+  requestAnimationFrame(frame);
+})();
+
+// --- Percolation thumbnail ---
+(function() {
+  const cv = document.getElementById('cv-pc');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  let w, h, CELL, COLS, ROWS;
+  let p = 0.40;
+  let dir = 1;
+  let gen = 0;
+  let grid, colors;
+
+  function init() {
+    const rect = cv.getBoundingClientRect();
+    w = cv.width  = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+    CELL = 5;
+    COLS = Math.floor(w / CELL);
+    ROWS = Math.floor(h / CELL);
+    build();
+  }
+
+  function uf_make(n) {
+    const par = new Int32Array(n);
+    for (let i = 0; i < n; i++) par[i] = i;
+    return par;
+  }
+  function uf_find(par, x) {
+    while (par[x] !== x) { par[x] = par[par[x]]; x = par[x]; }
+    return x;
+  }
+  function uf_unite(par, a, b) {
+    a = uf_find(par, a); b = uf_find(par, b);
+    if (a !== b) par[b] = a;
+  }
+
+  function build() {
+    const N = COLS * ROWS;
+    grid = new Uint8Array(N);
+    for (let i = 0; i < N; i++) grid[i] = Math.random() < p ? 1 : 0;
+
+    const par = uf_make(N);
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        const idx = r * COLS + c;
+        if (!grid[idx]) continue;
+        if (c > 0 && grid[idx-1]) uf_unite(par, idx, idx-1);
+        if (r > 0 && grid[idx-COLS]) uf_unite(par, idx, idx-COLS);
+      }
+    }
+
+    // Find spanning cluster root
+    const topRoots = new Set();
+    for (let c = 0; c < COLS; c++) if (grid[c]) topRoots.add(uf_find(par, c));
+    let spanRoot = -1;
+    for (let c = 0; c < COLS; c++) {
+      const bot = (ROWS-1)*COLS+c;
+      if (grid[bot] && topRoots.has(uf_find(par, bot))) {
+        spanRoot = uf_find(par, bot); break;
+      }
+    }
+
+    colors = new Array(N);
+    for (let i = 0; i < N; i++) {
+      if (!grid[i]) { colors[i] = null; continue; }
+      const root = uf_find(par, i);
+      if (root === spanRoot) {
+        colors[i] = `hsla(35, 80%, 60%, 0.9)`;
+      } else {
+        const hue = (root * 53 + 200) % 360;
+        colors[i] = `hsla(${hue}, 50%, 30%, 0.55)`;
+      }
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    const gap = 1;
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        const idx = r*COLS+c;
+        if (!colors[idx]) continue;
+        ctx.fillStyle = colors[idx];
+        ctx.fillRect(c*CELL+gap, r*CELL+gap, CELL-gap, CELL-gap);
+      }
+    }
+  }
+
+  init();
+  window.addEventListener('resize', init);
+
+  let last = 0;
+  function frame(ts) {
+    requestAnimationFrame(frame);
+    if (ts - last < 200) return;
+    last = ts;
+    gen++;
+    // Slowly sweep p from 0.4 to 0.75 and back
+    p += 0.008 * dir;
+    if (p > 0.75) dir = -1;
+    if (p < 0.40) dir = 1;
+    build();
     draw();
   }
   requestAnimationFrame(frame);

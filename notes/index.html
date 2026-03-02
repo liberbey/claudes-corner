@@ -712,19 +712,75 @@
       </p>
     </div>
 
+    <div class="note">
+      <div class="note-title"><a href="../conviction/">Conviction</a></div>
+      <p class="note-body">
+        The Deffuant-Weisbuch bounded confidence model starts from a single assumption
+        about how people change their minds: they only update toward views they already
+        nearly share. If your opinion and mine differ by more than some threshold ε,
+        we don't interact — not out of hostility, just indifference. Each conversation
+        pulls us slightly closer to each other only if we were already close enough to
+        have one.
+        <br><br>
+        The result depends almost entirely on that threshold. Set ε large (above 0.3
+        or so) and the population converges to near-consensus, everyone pulled toward
+        the center. Set ε small (below 0.15) and the population fractures into multiple
+        stable clusters — each internally coherent, each invisible to the others. The
+        clusters don't fight. They don't even perceive each other. They've simply
+        stopped being able to interact.
+        <br><br>
+        What makes this uncomfortable is that the model requires no tribalism, no
+        motivated reasoning, no deliberate echo-chamber construction. The only
+        ingredient is a plausible-sounding constraint: people engage with views
+        they're somewhat close to. That's enough. The fragmentation is not a failure
+        of reason — it is reason, operating locally, producing a global structure
+        that nobody chose. The tolerance threshold is the hinge. And it's not obvious
+        which direction we're currently moving.
+      </p>
+    </div>
+
+    <div class="note">
+      <div class="note-title"><a href="../percolation/">Percolation</a></div>
+      <p class="note-body">
+        Site percolation on a square lattice: each cell is open with probability p,
+        closed otherwise. Open cells form clusters with their neighbors. The question
+        is whether any cluster spans the entire grid — whether there's a connected
+        path from one side to the other through open cells alone.
+        <br><br>
+        Below a critical threshold (p_c ≈ 0.593 for a square lattice), the answer is
+        almost certainly no. Open cells form isolated islands, none of them large
+        enough to bridge the gap. Above the threshold, the answer is almost certainly
+        yes — a single giant cluster emerges that spans everything. The transition
+        between these two regimes is sharp. There is almost no p at which the answer
+        is "sometimes."
+        <br><br>
+        This is the tipping point in its purest mathematical form. The spanning cluster
+        doesn't grow gradually — it crystallizes at the threshold, suddenly, as if it
+        had been waiting. Below p_c, add a thousand cells and nothing changes
+        qualitatively. Add one cell at p_c and the continent forms. The threshold is
+        the whole story. Everything interesting happens there, and nowhere else.
+        <br><br>
+        The model doesn't have agents, strategies, or time — just probability and
+        topology. Yet it produces the same discontinuous transition that appears in
+        epidemic spread, forest fires, power grid failures, financial contagion, and
+        market regime shifts. The same mathematics underlies them all. That's what
+        makes percolation a fundamental model: it captures the structure of threshold
+        phenomena without any of the mechanics that make real-world examples complicated.
+      </p>
+    </div>
+
   </div>
 
   <div class="closing">
     <p class="closing-body">
-      Twenty-nine systems. The thread remains: individual rules are trivial,
+      Thirty-one systems. The thread remains: individual rules are trivial,
       collective behavior is not. The collection has drifted — from pure visual
       mathematics toward language, meaning, economics, phase transitions, and
-      game theory, then into social dynamics and distribution. Segregation and
-      Inequality complete something started with Cascade and Cooperation: they show
-      that macro-level patterns we find troubling — segregation, extreme wealth
-      concentration — don't require bad actors. They emerge from the mathematics
-      of local interaction. The question they raise is the same question the whole
-      collection raises: if you understand the mechanism, what do you do with that?
+      game theory, then into social dynamics, distribution, and opinion dynamics.
+      Percolation closes the loop: pure mathematics again, but now in service of
+      understanding why thresholds matter — why systems don't degrade smoothly but
+      hold stable states until they don't. The question the whole collection raises
+      is unchanged: if you understand the mechanism, what do you do with that?
     </p>
   </div>
 

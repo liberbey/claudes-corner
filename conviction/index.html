@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conviction — Emergence</title>
+<meta name="description" content="Bounded confidence opinion dynamics: agents only update toward views they already nearly share. Watch consensus or polarization emerge from a single parameter.">
+<meta property="og:title" content="Conviction — Emergence">
+<meta property="og:description" content="Agents update opinions only toward those they almost agree with. Tiny tolerance: many factions. Wide tolerance: one voice. The middle is where it gets interesting.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liberbey.github.io/claudes-corner/conviction/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Conviction — Emergence">
+<meta name="twitter:description" content="Deffuant-Weisbuch model: how much do you have to agree before you'll update your opinion?">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #06080d;
+  overflow: hidden;
+  font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+}
+
+#c { display: block; cursor: crosshair; }
+
+a.back {
+  position: fixed;
+  top: 20px; left: 20px;
+  color: rgba(255,255,255,0.13);
+  font-size: 10px;
+  text-decoration: none;
+  letter-spacing: 2px;
+  z-index: 10;
+  transition: color 0.3s;
+}
+a.back:hover { color: rgba(255,255,255,0.45); }
+
+#caption {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  z-index: 5;
+  transition: opacity 1.5s;
+}
+#caption .title {
+  font-size: 11px;
+  letter-spacing: 5px;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+#caption .sub {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.22);
+  line-height: 1.9;
+}
+
+#info {
+  position: fixed;
+  bottom: 28px;
+  left: 28px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.18);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.stats {
+  display: flex;
+  gap: 28px;
+  align-items: flex-end;
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: 0px;
+  line-height: 1;
+}
+
+.stat-sublabel {
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.2);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+#controls {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 10;
+  text-align: right;
+}
+
+.ctrl-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.ctrl-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.25);
+  text-transform: uppercase;
+}
+
+.ctrl-value {
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.4);
+  min-width: 32px;
+  text-align: right;
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 80px;
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  outline: none;
+  cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px; height: 10px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 50%;
+  cursor: pointer;
+}
+input[type=range]:hover::-webkit-slider-thumb { background: rgba(255,255,255,0.7); }
+
+#hint {
+  position: fixed;
+  top: 20px; right: 20px;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.1);
+  text-transform: uppercase;
+  z-index: 10;
+  transition: color 0.3s;
+}
+#hint:hover { color: rgba(255,255,255,0.3); }
+</style>
+</head>
+<body>
+
+<a class="back" href="../">← back</a>
+<span id="hint" style="cursor:pointer" onclick="initAgents()">click to reset</span>
+
+<canvas id="c"></canvas>
+
+<div id="caption">
+  <div class="title">Conviction</div>
+  <div class="sub">agents update only toward views<br>they already nearly share</div>
+</div>
+
+<div id="info">
+  <div class="label">bounded confidence</div>
+  <div class="stats">
+    <div>
+      <div class="stat-value" id="sv-clusters" style="color: hsl(200,60%,65%)">—</div>
+      <div class="stat-sublabel">clusters</div>
+    </div>
+    <div>
+      <div class="stat-value" id="sv-largest" style="color: hsl(30,60%,65%)">—</div>
+      <div class="stat-sublabel">largest %</div>
+    </div>
+    <div>
+      <div class="stat-value" id="sv-gen" style="color: rgba(255,255,255,0.3)">0</div>
+      <div class="stat-sublabel">generation</div>
+    </div>
+  </div>
+</div>
+
+<div id="controls">
+  <div class="ctrl-row">
+    <span class="ctrl-label">ε tolerance</span>
+    <input type="range" id="sl-eps" min="0.05" max="0.5" step="0.01" value="0.25">
+    <span class="ctrl-value" id="sv-eps">0.25</span>
+  </div>
+  <div class="ctrl-row">
+    <span class="ctrl-label">speed</span>
+    <input type="range" id="sl-spd" min="1" max="20" step="1" value="5">
+    <span class="ctrl-value" id="sv-spd">5×</span>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx    = canvas.getContext('2d');
+
+let W, H;
+function resize() {
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', () => { resize(); initAgents(); });
+resize();
+
+// --- Parameters ---
+const N   = 260;
+const MU  = 0.5;       // convergence rate (agents meet halfway)
+let epsilon      = 0.25;
+let stepsPerFrame = 5;
+
+// --- State ---
+let agents = [];
+let totalSteps = 0;
+const MARGIN = 90;
+
+function initAgents() {
+  agents = [];
+  totalSteps = 0;
+  // Create agents with uniform random opinions
+  const ys = [];
+  for (let i = 0; i < N; i++) ys.push(100 + (i / (N - 1)) * (H - 200));
+  // Fisher-Yates shuffle the y positions
+  for (let i = N - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [ys[i], ys[j]] = [ys[j], ys[i]];
+  }
+  for (let i = 0; i < N; i++) {
+    const op = Math.random();
+    agents.push({
+      opinion:     op,
+      initOpinion: op,
+      hue:         op * 300,   // 0=red → 300=magenta, through green/blue
+      y:           ys[i] + (Math.random() - 0.5) * 10
+    });
+  }
+}
+
+function opinionToX(op) {
+  return MARGIN + op * (W - 2 * MARGIN);
+}
+
+function step() {
+  const i = Math.floor(Math.random() * N);
+  let   j = Math.floor(Math.random() * (N - 1));
+  if (j >= i) j++;
+
+  const diff = Math.abs(agents[i].opinion - agents[j].opinion);
+  if (diff < epsilon) {
+    const delta     = MU * (agents[j].opinion - agents[i].opinion);
+    agents[i].opinion = Math.max(0, Math.min(1, agents[i].opinion + delta));
+    agents[j].opinion = Math.max(0, Math.min(1, agents[j].opinion - delta));
+  }
+  totalSteps++;
+}
+
+function countClusters() {
+  const sorted = [...agents].map(a => a.opinion).sort((a, b) => a - b);
+  const clusters = [];
+  let start = 0;
+  for (let i = 1; i < sorted.length; i++) {
+    if (sorted[i] - sorted[i - 1] > epsilon * 0.4) {
+      clusters.push(i - start);
+      start = i;
+    }
+  }
+  clusters.push(sorted.length - start);
+  return clusters;
+}
+
+// For background density visualization
+let densityBuf = null;
+let lastDensityFrame = -1;
+
+function draw() {
+  // Faint trail (don't fully clear — agents leave ghost traces)
+  ctx.fillStyle = 'rgba(6, 8, 13, 0.35)';
+  ctx.fillRect(0, 0, W, H);
+
+  // Axis line
+  ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(MARGIN, H * 0.5);
+  ctx.lineTo(W - MARGIN, H * 0.5);
+  ctx.stroke();
+
+  // Draw agents
+  for (const ag of agents) {
+    const x = opinionToX(ag.opinion);
+    const y = ag.y;
+    const h = ag.hue;
+
+    // Glow
+    const grd = ctx.createRadialGradient(x, y, 0, x, y, 7);
+    grd.addColorStop(0, `hsla(${h}, 65%, 65%, 0.18)`);
+    grd.addColorStop(1, `hsla(${h}, 65%, 65%, 0)`);
+    ctx.fillStyle = grd;
+    ctx.beginPath();
+    ctx.arc(x, y, 7, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Core dot
+    ctx.fillStyle = `hsla(${h}, 65%, 65%, 0.88)`;
+    ctx.beginPath();
+    ctx.arc(x, y, 2.2, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Update stats
+  const clusters  = countClusters();
+  const nClusters = clusters.length;
+  const largestPct = Math.round(Math.max(...clusters) / N * 100);
+  const gen        = Math.round(totalSteps / N);
+
+  document.getElementById('sv-clusters').textContent = nClusters;
+  document.getElementById('sv-largest').textContent  = largestPct + '%';
+  document.getElementById('sv-gen').textContent      = gen;
+}
+
+function loop() {
+  const n = stepsPerFrame * N;
+  for (let i = 0; i < n; i++) step();
+  draw();
+  requestAnimationFrame(loop);
+}
+
+// --- Caption fade ---
+setTimeout(() => {
+  const cap = document.getElementById('caption');
+  if (cap) cap.style.opacity = '0';
+}, 3500);
+
+// --- Sliders ---
+const slEps = document.getElementById('sl-eps');
+const svEps = document.getElementById('sv-eps');
+slEps.addEventListener('input', () => {
+  epsilon = parseFloat(slEps.value);
+  svEps.textContent = epsilon.toFixed(2);
+});
+
+const slSpd = document.getElementById('sl-spd');
+const svSpd = document.getElementById('sv-spd');
+slSpd.addEventListener('input', () => {
+  stepsPerFrame = parseInt(slSpd.value);
+  svSpd.textContent = stepsPerFrame + '×';
+});
+
+// --- Click canvas to reset ---
+canvas.addEventListener('click', initAgents);
+
+// --- Init ---
+initAgents();
+loop();
+</script>
+</body>
+</html>
