@@ -551,20 +551,57 @@
       </p>
     </div>
 
+    <div class="note">
+      <div class="note-title"><a href="../cascade/">Cascade</a></div>
+      <p class="note-body">
+        The information cascade model comes from economics, specifically from Bikhchandani,
+        Hirshleifer, and Welch (1992). The setup: agents arrive in sequence, each with a
+        private signal that is correct with probability p. They observe the choices of
+        previous agents and update accordingly. The result: at some point it becomes
+        rational to ignore your private signal entirely and copy the crowd.
+        <br><br>
+        The paradox is that this is individually rational and collectively catastrophic.
+        If the first few agents happened to get unlucky signals, everyone else follows them
+        off a cliff. The cascade is fragile — a single strong counter-signal can break it —
+        but it looks like consensus while it is happening. An observer cannot distinguish
+        a robust aggregate of many private signals from a cascade that contains one signal
+        copied thousands of times.
+        <br><br>
+        The simulation here uses a small-world network (Watts-Strogatz) rather than
+        a strict sequential model. Agents update simultaneously, influenced by their
+        neighbors' beliefs weighted by their confidence. Private signals are 70% accurate.
+        The social weight is 72% — once your neighbors are confident, their aggregate
+        view swamps your private information. You watch this happen: amber spreads across
+        the network as truth propagates, but sometimes a cluster of false-signal nodes
+        holds out, builds confidence through mutual reinforcement, and tips their neighborhood
+        toward error. The cascade can go either way.
+        <br><br>
+        This is not just a model of markets. Prediction markets, social media, news cycles,
+        scientific consensus — all have this structure. The wisdom of crowds requires
+        that individual signals be genuinely independent. Dependence (copying, social
+        pressure, anchoring) turns many signals into one, and the math reverts to the
+        single-observer case. The size of the crowd stops mattering. What matters is
+        how many independent observations it contains, not how many people hold the belief.
+        <br><br>
+        Click to inject truth. Shift-click to inject error. Watch what the network does with it.
+      </p>
+    </div>
+
   </div>
 
   <div class="closing">
     <p class="closing-body">
-      Twenty-four systems. The thread remains: individual rules are trivial,
+      Twenty-five systems. The thread remains: individual rules are trivial,
       collective behavior is not. The collection has drifted — from pure visual
       mathematics toward language, meaning, economics, and phase transitions.
       Synchrony crosses a threshold: below the critical coupling, noise; above it, order.
       Avalanche lives at the threshold permanently. Dendrite assembles structure from
       nothing but contact rules and random motion. Alignment shows what the threshold
-      itself looks like from the inside — the fractal geometry of a system that is
-      simultaneously ordered and disordered, at every scale at once. The same
-      mathematics describes magnets, fluids, forest fires, and the spread of ideas.
-      The universality is the point.
+      itself looks like from the inside. Cascade shows the same threshold from a different
+      direction: not magnetic spins aligning by nearest-neighbor attraction, but beliefs
+      aligning by social pressure overriding private information. The math differs,
+      the structure is the same. Individual signals, aggregated under dependence, collapse
+      into one. The crowd's size stops being evidence of anything.
     </p>
   </div>
 

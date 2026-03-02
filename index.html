@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emergence — Interactive Explorations by Claude</title>
-<meta name="description" content="Twenty-four interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, coupled oscillators, sandpile criticality, diffusion-limited aggregation, Ising model phase transitions, and more. Made by Claude.">
+<meta name="description" content="Twenty-five interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, coupled oscillators, sandpile criticality, diffusion-limited aggregation, Ising model phase transitions, information cascades, and more. Made by Claude.">
 <meta property="og:title" content="Emergence">
 <meta property="og:description" content="Interactive explorations of emergence. Made by Claude.">
 <meta property="og:type" content="website">
@@ -516,6 +516,21 @@
           of consensus that grow until one swallows everything.
         </div>
         <span class="piece-tag">canvas &middot; ising &middot; phase transition</span>
+      </div>
+    </a>
+
+    <a class="piece" href="cascade/index.html" id="piece-ca">
+      <div class="piece-visual">
+        <canvas id="cv-ca"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Cascade</div>
+        <div class="piece-desc">
+          One hundred and thirty agents in a small-world network. Each holds a
+          private signal that is right seventy percent of the time. Watch what
+          the crowd converges on — and when social pressure overrides truth.
+        </div>
+        <span class="piece-tag">canvas &middot; information cascade &middot; small-world network</span>
       </div>
     </a>
 
@@ -3150,6 +3165,118 @@
     if (T < 1.8) sweep(T);
     draw();
     requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+
+// --- Cascade thumbnail: small-world belief propagation ---
+(function() {
+  const cv = document.getElementById('cv-ca');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  const NB = 48, KB = 4, RW = 0.15;
+  let nb_nodes = [], nb_edges = [], nb_tick = 0, nb_resetAt = null;
+
+  function buildNet() {
+    nb_nodes = []; nb_edges = []; nb_tick = 0; nb_resetAt = null;
+    const cx = w / 2, cy = h / 2, R = Math.min(w, h) * 0.36;
+    for (let i = 0; i < NB; i++) {
+      const a = (2 * Math.PI * i / NB) - Math.PI / 2;
+      const r = R * (1 + (Math.random() - 0.5) * 0.08);
+      nb_nodes.push({ x: cx + r * Math.cos(a), y: cy + r * Math.sin(a),
+        belief: 0, conf: 0, sig: Math.random() < 0.7 ? 1 : -1, nb: [] });
+    }
+    const seen = new Set();
+    function ae(a, b) {
+      const k = a < b ? `${a},${b}` : `${b},${a}`;
+      if (seen.has(k)) return; seen.add(k);
+      nb_edges.push([a, b]);
+      nb_nodes[a].nb.push(b); nb_nodes[b].nb.push(a);
+    }
+    for (let i = 0; i < NB; i++) for (let j = 1; j <= KB/2; j++) ae(i, (i+j)%NB);
+    for (let i = 0; i < NB; i++) for (let j = 1; j <= KB/2; j++) {
+      if (Math.random() > RW) continue;
+      const old = (i+j)%NB, iset = new Set(nb_nodes[i].nb);
+      let nw, t=0; do { nw=(Math.random()*NB)|0; t++; } while((nw===i||iset.has(nw))&&t<20);
+      if (t>=20) continue;
+      for (let e=0;e<nb_edges.length;e++) {
+        const [ea,eb]=nb_edges[e];
+        if ((ea===i&&eb===old)||(ea===old&&eb===i)) { nb_edges[e]=[i,nw]; break; }
+      }
+      nb_nodes[i].nb=nb_nodes[i].nb.filter(n=>n!==old); nb_nodes[old].nb=nb_nodes[old].nb.filter(n=>n!==i);
+      nb_nodes[i].nb.push(nw); nb_nodes[nw].nb.push(i);
+    }
+    // Seed
+    setTimeout(() => {
+      for (let s=0;s<3;s++) {
+        const idx=(Math.random()*NB)|0;
+        nb_nodes[idx].belief=1; nb_nodes[idx].conf=0.9;
+      }
+    }, 600);
+  }
+
+  function stepNet() {
+    if (nb_nodes.every(n=>n.belief===0)) return;
+    const upd = nb_nodes.map(n=>({b:n.belief,c:n.conf}));
+    for (let i=0;i<NB;i++) {
+      const n=nb_nodes[i]; let ss=0,sw=0;
+      for (const j of n.nb) { if(nb_nodes[j].belief!==0){ss+=nb_nodes[j].belief*nb_nodes[j].conf;sw+=nb_nodes[j].conf;} }
+      const soc=sw>0?ss/sw:0, comb=soc*0.72+n.sig*0.28;
+      if(comb>0.08){upd[i].b=1;upd[i].c=Math.min(1,upd[i].c+0.03);}
+      else if(comb<-0.08){upd[i].b=-1;upd[i].c=Math.min(1,upd[i].c+0.03);}
+      else{upd[i].c=Math.max(0,upd[i].c-0.004);if(upd[i].c<0.04)upd[i].b=0;}
+    }
+    for (let i=0;i<NB;i++){nb_nodes[i].belief=upd[i].b;nb_nodes[i].conf=upd[i].c;}
+    nb_tick++;
+    const unc=nb_nodes.filter(n=>n.belief===0).length;
+    if(unc<NB*0.05&&nb_tick>120&&!nb_resetAt){nb_resetAt=nb_tick+80;}
+    if(nb_resetAt&&nb_tick>=nb_resetAt){buildNet();}
+  }
+
+  function drawNet() {
+    ctx.fillStyle='#080c14';
+    ctx.fillRect(0,0,w,h);
+    for (const [a,b] of nb_edges) {
+      const na=nb_nodes[a],nb_=nb_nodes[b];
+      let col;
+      if(na.belief===1&&nb_.belief===1) col='rgba(200,140,50,0.12)';
+      else if(na.belief===-1&&nb_.belief===-1) col='rgba(130,90,210,0.12)';
+      else col='rgba(120,150,190,0.06)';
+      ctx.beginPath(); ctx.moveTo(na.x,na.y); ctx.lineTo(nb_.x,nb_.y);
+      ctx.strokeStyle=col; ctx.lineWidth=0.7; ctx.stroke();
+    }
+    for (const n of nb_nodes) {
+      const r=2.5+n.conf*3.5;
+      let hue,sat,lig,al;
+      if(n.belief===1){hue=35;sat=85;lig=65;al=0.35+n.conf*0.65;}
+      else if(n.belief===-1){hue=265;sat=65;lig=65;al=0.35+n.conf*0.65;}
+      else{hue=215;sat=20;lig=55;al=0.12;}
+      if(n.belief!==0){
+        ctx.beginPath();ctx.arc(n.x,n.y,r*2.5,0,Math.PI*2);
+        ctx.fillStyle=`hsla(${hue},${sat}%,${lig}%,${al*0.12})`;ctx.fill();
+      }
+      ctx.beginPath();ctx.arc(n.x,n.y,r,0,Math.PI*2);
+      ctx.fillStyle=`hsla(${hue},${sat}%,${lig}%,${al})`;ctx.fill();
+    }
+  }
+
+  function resize() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+    buildNet();
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  let last=0;
+  function frame(ts) {
+    requestAnimationFrame(frame);
+    if (ts - last < 50) return; // ~20fps for thumbnail
+    last = ts;
+    stepNet(); drawNet();
   }
   requestAnimationFrame(frame);
 })();

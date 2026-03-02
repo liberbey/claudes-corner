@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cascade — Emergence</title>
+<meta name="description" content="One hundred and thirty agents in a social network, each with a private signal that is right 70% of the time. Watch what the crowd converges on.">
+<meta property="og:title" content="Cascade — Emergence">
+<meta property="og:description" content="Information cascades through a small-world network. Truth and error compete. The crowd is sometimes wrong.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liberbey.github.io/claudes-corner/cascade/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cascade — Emergence">
+<meta name="twitter:description" content="130 agents. Private signals 70% accurate. Watch what the crowd converges on.">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #080c14;
+  overflow: hidden;
+  font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+}
+
+#c {
+  display: block;
+  cursor: crosshair;
+}
+
+a.back {
+  position: fixed;
+  top: 20px; left: 20px;
+  color: rgba(255,255,255,0.15);
+  font-size: 10px;
+  text-decoration: none;
+  letter-spacing: 2px;
+  z-index: 10;
+  transition: color 0.3s;
+}
+a.back:hover { color: rgba(255,255,255,0.5); }
+
+#info {
+  position: fixed;
+  bottom: 28px;
+  left: 28px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.18);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.stats {
+  display: flex;
+  gap: 24px;
+  align-items: flex-end;
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: 0px;
+  line-height: 1;
+}
+
+.stat-sublabel {
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.2);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.true-col  { color: hsl(35, 85%, 65%); }
+.false-col { color: hsl(265, 65%, 68%); }
+.unc-col   { color: rgba(160, 190, 220, 0.35); }
+
+#hint {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: rgba(255,255,255,0.12);
+  text-transform: uppercase;
+  text-align: right;
+  z-index: 10;
+  pointer-events: none;
+  line-height: 2;
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← GALLERY</a>
+<canvas id="c"></canvas>
+
+<div id="info">
+  <div class="label">Cascade — belief propagation</div>
+  <div class="stats">
+    <div>
+      <div class="stat-value true-col" id="s-true">0%</div>
+      <div class="stat-sublabel">true</div>
+    </div>
+    <div>
+      <div class="stat-value false-col" id="s-false">0%</div>
+      <div class="stat-sublabel">false</div>
+    </div>
+    <div>
+      <div class="stat-value unc-col" id="s-unc">100%</div>
+      <div class="stat-sublabel">uncertain</div>
+    </div>
+  </div>
+</div>
+
+<div id="hint">
+  click — inject truth<br>
+  shift+click — inject error<br>
+  space — new network
+</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+
+// ---- Config ----
+const N = 130;          // number of agents
+const K = 6;            // ring lattice connections per node
+const REWIRE_P = 0.14;  // Watts-Strogatz rewiring probability
+const SIG_ACC = 0.70;   // private signal accuracy
+const SIG_W = 0.28;     // weight of private signal vs social pressure
+const CONF_RATE = 0.026;// confidence gain per tick
+
+const TRUE_HUE  = 35;
+const FALSE_HUE = 265;
+
+// ---- State ----
+let nodes = [], edges = [], particles = [];
+let phase = 'init'; // init -> running
+let resetTimer = null;
+let frameCount = 0;
+
+// ---- Network construction ----
+function buildNetwork() {
+  nodes = []; edges = []; particles = [];
+  phase = 'init';
+  frameCount = 0;
+  resetTimer = null;
+
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+  const R  = Math.min(canvas.width, canvas.height) * 0.37;
+
+  for (let i = 0; i < N; i++) {
+    const base = (2 * Math.PI * i / N) - Math.PI / 2;
+    const r = R * (1 + (Math.random() - 0.5) * 0.06);
+    const a = base + (Math.random() - 0.5) * 0.04;
+    nodes.push({
+      id: i,
+      x: cx + r * Math.cos(a),
+      y: cy + r * Math.sin(a),
+      belief:     0,        // 0 = uncertain, 1 = true, -1 = false
+      confidence: 0,
+      signal: Math.random() < SIG_ACC ? 1 : -1,
+      neighbors: [],
+      pulse: 0,
+    });
+  }
+
+  // Ring lattice
+  const seen = new Set();
+  function addEdge(a, b) {
+    const key = a < b ? `${a},${b}` : `${b},${a}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    edges.push({ a, b, flash: 0 });
+    nodes[a].neighbors.push(b);
+    nodes[b].neighbors.push(a);
+  }
+  for (let i = 0; i < N; i++) {
+    for (let j = 1; j <= K / 2; j++) addEdge(i, (i + j) % N);
+  }
+
+  // Watts-Strogatz rewiring
+  for (let i = 0; i < N; i++) {
+    for (let j = 1; j <= K / 2; j++) {
+      if (Math.random() > REWIRE_P) continue;
+      const oldTo = (i + j) % N;
+      const iSet  = new Set(nodes[i].neighbors);
+      let newTo, tries = 0;
+      do { newTo = (Math.random() * N) | 0; tries++; }
+      while ((newTo === i || iSet.has(newTo)) && tries < 40);
+      if (tries >= 40) continue;
+
+      // Swap in edges array
+      const oldKey = i < oldTo ? `${i},${oldTo}` : `${oldTo},${i}`;
+      for (const e of edges) {
+        const ek = e.a < e.b ? `${e.a},${e.b}` : `${e.b},${e.a}`;
+        if (ek === oldKey) { e.a = i; e.b = newTo; break; }
+      }
+      nodes[i].neighbors   = nodes[i].neighbors.filter(n => n !== oldTo);
+      nodes[oldTo].neighbors = nodes[oldTo].neighbors.filter(n => n !== i);
+      nodes[i].neighbors.push(newTo);
+      nodes[newTo].neighbors.push(i);
+    }
+  }
+}
+
+// ---- Seeding ----
+function seedCascade() {
+  // Pick 4 well-spaced seeds with true belief
+  const seeds = [];
+  for (let s = 0; s < 4; s++) {
+    let best = -1, bestD = -1;
+    for (let t = 0; t < 25; t++) {
+      const c = (Math.random() * N) | 0;
+      if (seeds.includes(c)) continue;
+      let minD = Infinity;
+      for (const p of seeds) {
+        const dx = nodes[c].x - nodes[p].x, dy = nodes[c].y - nodes[p].y;
+        minD = Math.min(minD, Math.sqrt(dx * dx + dy * dy));
+      }
+      if (minD > bestD) { bestD = minD; best = c; }
+    }
+    if (best >= 0) {
+      seeds.push(best);
+      nodes[best].belief = 1;
+      nodes[best].confidence = 0.75 + Math.random() * 0.25;
+      nodes[best].pulse = 1.0;
+    }
+  }
+  phase = 'running';
+}
+
+function inject(mx, my, belief) {
+  let nearest = -1, nearestD = Infinity;
+  for (let i = 0; i < N; i++) {
+    const dx = nodes[i].x - mx, dy = nodes[i].y - my;
+    const d = dx * dx + dy * dy;
+    if (d < nearestD) { nearestD = d; nearest = i; }
+  }
+  if (nearest < 0) return;
+  nodes[nearest].belief = belief;
+  nodes[nearest].confidence = 1.0;
+  nodes[nearest].pulse = 1.0;
+  // Immediate ripple to first-ring neighbors
+  for (const nb of nodes[nearest].neighbors) {
+    const n = nodes[nb];
+    if (n.belief !== belief) {
+      n.belief = belief;
+      n.confidence = Math.max(n.confidence, 0.5);
+      n.pulse = 0.8;
+    }
+  }
+  if (phase !== 'running') phase = 'running';
+}
+
+// ---- Simulation step ----
+function step() {
+  if (phase !== 'running') return;
+
+  // Shuffle order to avoid sweep bias
+  const order = Array.from({ length: N }, (_, i) => i);
+  for (let i = N - 1; i > 0; i--) {
+    const j = (Math.random() * (i + 1)) | 0;
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+
+  // Compute updates without immediately applying (synchronous-ish)
+  const nb = nodes.map(n => ({ belief: n.belief, confidence: n.confidence }));
+
+  for (const i of order) {
+    const node = nodes[i];
+
+    // Social signal from neighbors
+    let sSum = 0, sW = 0;
+    for (const j of node.neighbors) {
+      const n = nodes[j];
+      if (n.belief !== 0) { sSum += n.belief * n.confidence; sW += n.confidence; }
+    }
+    const social  = sW > 0 ? sSum / sW : 0;
+    const combined = social * (1 - SIG_W) + node.signal * SIG_W;
+
+    const prev = nb[i].belief;
+
+    if (combined > 0.08) {
+      nb[i].belief = 1;
+      nb[i].confidence = Math.min(1, nb[i].confidence + CONF_RATE + Math.abs(combined) * 0.012);
+    } else if (combined < -0.08) {
+      nb[i].belief = -1;
+      nb[i].confidence = Math.min(1, nb[i].confidence + CONF_RATE + Math.abs(combined) * 0.012);
+    } else {
+      // Erode slowly in neutral zone
+      nb[i].confidence = Math.max(0, nb[i].confidence - 0.004);
+      if (nb[i].confidence < 0.04) nb[i].belief = 0;
+    }
+
+    // Belief changed — pulse + particles
+    if (nb[i].belief !== 0 && nb[i].belief !== prev) {
+      nodes[i].pulse = 1.0;
+      for (const j of node.neighbors) {
+        if (nodes[j].belief !== nb[i].belief) {
+          particles.push({ sx: node.x, sy: node.y, tx: nodes[j].x, ty: nodes[j].y, t: 0, belief: nb[i].belief });
+        }
+      }
+      // Flash connected edges
+      for (const e of edges) {
+        if (e.a === i || e.b === i) e.flash = 1.0;
+      }
+    }
+  }
+
+  // Apply
+  for (let i = 0; i < N; i++) {
+    nodes[i].belief = nb[i].belief;
+    nodes[i].confidence = nb[i].confidence;
+  }
+
+  // Auto-reset when cascade settles
+  const uncertain = nodes.filter(n => n.belief === 0).length;
+  if (uncertain < N * 0.04 && frameCount > 250 && !resetTimer) {
+    resetTimer = setTimeout(() => {
+      buildNetwork();
+      setTimeout(seedCascade, 1400);
+    }, 3200);
+  }
+
+  frameCount++;
+}
+
+// ---- Particles ----
+function tickParticles() {
+  for (let i = particles.length - 1; i >= 0; i--) {
+    particles[i].t += 0.016;
+    if (particles[i].t >= 1) particles.splice(i, 1);
+  }
+  for (const e of edges) e.flash = Math.max(0, e.flash - 0.028);
+  for (const n of nodes) n.pulse = Math.max(0, n.pulse - 0.022);
+}
+
+// ---- Rendering ----
+function draw() {
+  const w = canvas.width, h = canvas.height;
+  ctx.fillStyle = '#080c14';
+  ctx.fillRect(0, 0, w, h);
+
+  // Edges
+  for (const e of edges) {
+    const a = nodes[e.a], b = nodes[e.b];
+    const base = 0.055;
+    const flash = e.flash * 0.22;
+    let col;
+    if (a.belief === 1 && b.belief === 1)
+      col = `hsla(${TRUE_HUE},80%,60%,${base + flash})`;
+    else if (a.belief === -1 && b.belief === -1)
+      col = `hsla(${FALSE_HUE},65%,65%,${base + flash})`;
+    else
+      col = `rgba(140,165,200,${base * 0.7 + flash * 0.5})`;
+
+    ctx.beginPath();
+    ctx.moveTo(a.x, a.y);
+    ctx.lineTo(b.x, b.y);
+    ctx.strokeStyle = col;
+    ctx.lineWidth = 0.7;
+    ctx.stroke();
+  }
+
+  // Particles
+  for (const p of particles) {
+    const x = p.sx + (p.tx - p.sx) * p.t;
+    const y = p.sy + (p.ty - p.sy) * p.t;
+    const alpha = Math.sin(p.t * Math.PI) * 0.85;
+    const hue = p.belief > 0 ? TRUE_HUE : FALSE_HUE;
+    const sat = p.belief > 0 ? 85 : 68;
+
+    ctx.beginPath();
+    ctx.arc(x, y, 2.8, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(${hue},${sat}%,72%,${alpha})`;
+    ctx.fill();
+
+    // Soft glow
+    ctx.beginPath();
+    ctx.arc(x, y, 6, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(${hue},${sat}%,72%,${alpha * 0.18})`;
+    ctx.fill();
+  }
+
+  // Nodes
+  for (const node of nodes) {
+    const conf  = node.confidence;
+    const r     = 3.2 + conf * 4.5;
+
+    let hue, sat, lig, alpha;
+    if (node.belief === 1) {
+      hue = TRUE_HUE;  sat = 85; lig = 65; alpha = 0.35 + conf * 0.65;
+    } else if (node.belief === -1) {
+      hue = FALSE_HUE; sat = 65; lig = 65; alpha = 0.35 + conf * 0.65;
+    } else {
+      hue = 215; sat = 25; lig = 58; alpha = 0.14;
+    }
+
+    // Pulse ring
+    if (node.pulse > 0) {
+      const pr = r + node.pulse * 20;
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, pr, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${hue},${sat}%,${lig}%,${node.pulse * 0.09})`;
+      ctx.fill();
+    }
+
+    // Soft glow halo
+    if (node.belief !== 0) {
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, r * 2.8, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${hue},${sat}%,${lig}%,${alpha * 0.12})`;
+      ctx.fill();
+    }
+
+    // Core
+    ctx.beginPath();
+    ctx.arc(node.x, node.y, r, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(${hue},${sat}%,${lig}%,${alpha})`;
+    ctx.fill();
+  }
+
+  // Stats
+  const t = nodes.filter(n => n.belief === 1).length;
+  const f = nodes.filter(n => n.belief === -1).length;
+  const u = N - t - f;
+  document.getElementById('s-true').textContent  = Math.round(t / N * 100) + '%';
+  document.getElementById('s-false').textContent = Math.round(f / N * 100) + '%';
+  document.getElementById('s-unc').textContent   = Math.round(u / N * 100) + '%';
+}
+
+// ---- Loop ----
+function animate() {
+  requestAnimationFrame(animate);
+  step();
+  tickParticles();
+  draw();
+}
+
+// ---- Events ----
+window.addEventListener('resize', () => {
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  buildNetwork();
+  setTimeout(seedCascade, 1400);
+});
+
+canvas.addEventListener('click', e => {
+  inject(e.clientX, e.clientY, e.shiftKey ? -1 : 1);
+});
+
+window.addEventListener('keydown', e => {
+  if (e.code === 'Space') {
+    e.preventDefault();
+    if (resetTimer) { clearTimeout(resetTimer); resetTimer = null; }
+    buildNetwork();
+    setTimeout(seedCascade, 1400);
+  }
+});
+
+// ---- Init ----
+canvas.width  = window.innerWidth;
+canvas.height = window.innerHeight;
+buildNetwork();
+setTimeout(seedCascade, 1400);
+animate();
+</script>
+</body>
+</html>
