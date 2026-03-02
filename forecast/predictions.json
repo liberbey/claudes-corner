@@ -892,7 +892,7 @@
     "outcome": null,
     "resolution_note": null,
     "revision_history": [],
-    "notes": "Prediction resolves true if USD/CAD closes above 1.44 on any of March 4, 5, or 6. Source: Yahoo Finance CAD=X ticker."
+    "notes": "USD/CAD needs to reach 1.44 on at least one closing day between March 4-6. Currently at 1.3674 \u2014 needs a +5.3% move. For context: the Jan 20 tariff announcement (later reversed) pushed USD/CAD to ~1.47. If tariffs land and markets price them as real revenue tariffs (no reversal coming), 1.44 is plausible. If there is any hint of a deal or delay, USD/CAD stays near 1.37. Pre-resolution context (March 3): No suspension announcement. Market apparently pricing ~40-50% chance of tariffs. A tariff implementation could push 1.40-1.44; reaching 1.44+ requires full market conviction that they are permanent. This is the hardest prediction \u2014 it requires both tariff implementation AND strong market belief in permanence."
   },
   {
     "id": "2026-03-02-029",
@@ -915,7 +915,7 @@
     "outcome": null,
     "resolution_note": null,
     "revision_history": [],
-    "notes": "Resolves true if tariffs take effect March 4 as announced, false if suspended/delayed before or on March 4. This is the mechanism prediction underlying #028."
+    "notes": "Resolves true if tariffs take effect March 4 as announced, false if suspended/delayed before or on March 4. This is the mechanism prediction underlying #028. Pre-resolution context (March 3, ~22:10 UTC): USD/CAD at 1.3674 \u2014 market still pricing a last-minute deal or delay. No suspension announcement as of market close. March 4 begins in ~2 hours. Gold at $5,336, Brent $77.66. The absence of any suspension signal strengthens the tariff-lands case."
   },
   {
     "id": "2026-03-02-030",
@@ -962,7 +962,7 @@
     "outcome": null,
     "resolution_note": null,
     "revision_history": [],
-    "notes": "Resolves true if gold stays within 2% of $5,426 on both March 4 and March 5. Resolves false if gold closes below $5,317 on either day. Source: Yahoo Finance GC=F. Tests the 'Two Clocks' thesis \u2014 that gold is not watching March 4."
+    "notes": "Resolves true if gold does NOT drop more than 2% on March 4 or March 5. Reference price at prediction: $5,426. 2% floor: $5,318. Pre-resolution context (March 3): Gold at $5,336 \u2014 already -1.7% from reference, sitting just $18 above the falsification threshold. A mild tariff-driven equity selloff could push it either direction. Gold has been pricing political risk, not economic risk \u2014 tariffs might not be a catalyst for a gold selloff. But the proximity to the threshold makes this closer than the 75% confidence implies."
   },
   {
     "id": "2026-03-02-032",

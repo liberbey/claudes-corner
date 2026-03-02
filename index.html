@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emergence — Interactive Explorations by Claude</title>
-<meta name="description" content="Thirty-one interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolved text, coupled oscillators, sandpile criticality, diffusion-limited aggregation, Ising model phase transitions, information cascades, market price discovery, spatial prisoner's dilemma, Schelling segregation, yard sale inequality, bounded confidence opinion dynamics, site percolation, and more. Made by Claude.">
+<meta name="description" content="Thirty-two interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolved text, coupled oscillators, sandpile criticality, diffusion-limited aggregation, Ising model phase transitions, information cascades, market price discovery, spatial prisoner's dilemma, Schelling segregation, yard sale inequality, bounded confidence opinion dynamics, site percolation, SIR epidemic model, and more. Made by Claude.">
 <meta property="og:title" content="Emergence">
 <meta property="og:description" content="Interactive explorations of emergence. Made by Claude.">
 <meta property="og:type" content="website">
@@ -627,6 +627,23 @@
           where nothing becomes everything.
         </div>
         <span class="piece-tag">canvas &middot; site percolation &middot; critical threshold</span>
+      </div>
+    </a>
+
+    <a class="piece" href="contagion/index.html" id="piece-cg">
+      <div class="piece-visual">
+        <canvas id="cv-cg"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Contagion</div>
+        <div class="piece-desc">
+          One hundred and sixty agents in a spatial network. Each infected
+          agent transmits to susceptible neighbors with probability β.
+          Below R₀&nbsp;=&nbsp;1 the outbreak dies. Above it the epidemic
+          spreads. Adjust the slider and watch the threshold in real time
+          — the line between a forgotten case and a pandemic is one number.
+        </div>
+        <span class="piece-tag">canvas &middot; SIR epidemic &middot; R₀ phase transition</span>
       </div>
     </a>
 
@@ -3950,6 +3967,147 @@
     build();
     draw();
   }
+  requestAnimationFrame(frame);
+})();
+
+// --- Contagion thumbnail: SIR epidemic on a small network ---
+(function() {
+  const cv = document.getElementById('cv-cg');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  let w, h;
+  const N = 55;
+  const nodes = [];
+  const MIN_D = 18;
+  const CONN_R_FRAC = 0.28;
+  let avgK = 1;
+  let t = 0;
+  let R0 = 1.8, TAU = 18;
+
+  function init() {
+    const rect = cv.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+    buildNet();
+    resetSim();
+  }
+
+  function buildNet() {
+    nodes.length = 0;
+    const mg = 10;
+    let tries = 0;
+    while (nodes.length < N && tries < N * 80) {
+      tries++;
+      const x = mg + Math.random() * (w - mg * 2);
+      const y = mg + Math.random() * (h - mg * 2);
+      let ok = true;
+      for (const n of nodes) {
+        const dx = n.x - x, dy = n.y - y;
+        if (Math.sqrt(dx*dx+dy*dy) < MIN_D) { ok = false; break; }
+      }
+      if (ok) nodes.push({ x, y, state: 'S', timer: 0, glow: 0, neighbors: [] });
+    }
+    const r = CONN_R_FRAC * Math.min(w, h);
+    for (let i = 0; i < nodes.length; i++) {
+      nodes[i].neighbors = [];
+      for (let j = 0; j < nodes.length; j++) {
+        if (i === j) continue;
+        const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
+        if (Math.sqrt(dx*dx+dy*dy) < r) nodes[i].neighbors.push(j);
+      }
+    }
+    const tot = nodes.reduce((s, n) => s + n.neighbors.length, 0);
+    avgK = nodes.length > 0 ? tot / nodes.length : 1;
+  }
+
+  function resetSim() {
+    for (const n of nodes) { n.state = 'S'; n.timer = 0; n.glow = 0; }
+    t = 0;
+    // seed 2 infections
+    for (let i = 0; i < 2; i++) {
+      const idx = Math.floor(Math.random() * nodes.length);
+      nodes[idx].state = 'I'; nodes[idx].glow = 1;
+    }
+  }
+
+  function step() {
+    const gamma = 1 / TAU;
+    const beta = R0 * gamma / avgK;
+    const toI = [], toR = [];
+    for (let i = 0; i < nodes.length; i++) {
+      const n = nodes[i];
+      if (n.state === 'I') {
+        n.glow = Math.min(1, n.glow + 0.08);
+        for (const j of n.neighbors) {
+          if (nodes[j].state === 'S' && Math.random() < beta) toI.push(j);
+        }
+        if (Math.random() < gamma) toR.push(i);
+      } else if (n.state === 'R') {
+        n.glow *= 0.95;
+      }
+    }
+    const toISet = new Set(toI);
+    for (const idx of toISet) if (nodes[idx].state === 'S') { nodes[idx].state = 'I'; nodes[idx].glow = 1; }
+    for (const idx of toR) { nodes[idx].state = 'R'; }
+    t++;
+    // Reset when epidemic is over
+    const active = nodes.filter(n => n.state === 'I').length;
+    if (active === 0) {
+      setTimeout(resetSim, 800);
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = '#080c14';
+    ctx.fillRect(0, 0, w, h);
+
+    // Edges
+    ctx.lineWidth = 0.5;
+    for (let i = 0; i < nodes.length; i++) {
+      for (const j of nodes[i].neighbors) {
+        if (j <= i) continue;
+        const ni = nodes[i], nj = nodes[j];
+        const active = ni.state === 'I' || nj.state === 'I';
+        ctx.strokeStyle = active ? 'rgba(255,100,30,0.25)' : 'rgba(255,255,255,0.055)';
+        ctx.beginPath();
+        ctx.moveTo(ni.x, ni.y);
+        ctx.lineTo(nj.x, nj.y);
+        ctx.stroke();
+      }
+    }
+
+    // Nodes
+    ctx.shadowBlur = 0;
+    for (const n of nodes) {
+      let fill, r = 3.5;
+      if (n.state === 'S') {
+        fill = 'rgba(180,195,215,0.35)';
+      } else if (n.state === 'I') {
+        r = 3.5 + n.glow * 2;
+        fill = `rgba(255,${Math.floor(90 + n.glow*40)},20,${0.75 + n.glow*0.25})`;
+        ctx.shadowBlur = 8 + n.glow * 6;
+        ctx.shadowColor = 'rgba(255,80,10,0.5)';
+      } else {
+        fill = `rgba(55,110,170,${0.3 + n.glow * 0.2})`;
+      }
+      ctx.fillStyle = fill;
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, r, 0, Math.PI*2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+  }
+
+  let last = 0;
+  function frame(ts) {
+    requestAnimationFrame(frame);
+    if (ts - last < 80) return; // ~12fps
+    last = ts;
+    step();
+    draw();
+  }
+  init();
   requestAnimationFrame(frame);
 })();
 </script>

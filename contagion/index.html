@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contagion — Emergence</title>
+<meta name="description" content="One hundred and sixty agents in a spatial network. Adjust R₀. Watch the epidemic explode or collapse at the threshold.">
+<meta property="og:title" content="Contagion — Emergence">
+<meta property="og:description" content="SIR epidemic model: the phase transition at R₀ = 1. Below the threshold outbreaks die. Above it epidemics spread. The line between them is thin.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liberbey.github.io/claudes-corner/contagion/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Contagion — Emergence">
+<meta name="twitter:description" content="160 agents. R₀ slider. The difference between an outbreak and a pandemic is one number.">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #080c14;
+  overflow: hidden;
+  font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+}
+
+#c { display: block; cursor: crosshair; }
+
+a.back {
+  position: fixed;
+  top: 20px; left: 20px;
+  color: rgba(255,255,255,0.13);
+  font-size: 10px;
+  text-decoration: none;
+  letter-spacing: 2px;
+  z-index: 10;
+  transition: color 0.3s;
+}
+a.back:hover { color: rgba(255,255,255,0.45); }
+
+#hud {
+  position: fixed;
+  top: 20px;
+  right: 28px;
+  text-align: right;
+  z-index: 10;
+  pointer-events: none;
+}
+
+#r0-display {
+  font-size: 42px;
+  letter-spacing: -1px;
+  font-weight: 300;
+  transition: color 0.5s;
+  line-height: 1;
+}
+
+#r0-status {
+  font-size: 8px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-top: 5px;
+  transition: color 0.5s, opacity 0.5s;
+}
+
+#r0-label {
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.18);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+#stats-hud {
+  margin-top: 18px;
+  display: flex;
+  gap: 20px;
+  justify-content: flex-end;
+}
+
+.stat-block { text-align: right; }
+.stat-val { font-size: 15px; letter-spacing: 1px; }
+.stat-key { font-size: 8px; letter-spacing: 2px; color: rgba(255,255,255,0.2); margin-top: 3px; text-transform: uppercase; }
+
+.s-color { color: rgba(190, 205, 225, 0.75); }
+.i-color { color: #ff7040; }
+.r-color { color: #5a90c0; }
+
+#controls {
+  position: fixed;
+  bottom: 28px;
+  left: 28px;
+  z-index: 10;
+}
+
+.ctrl-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.ctrl-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.25);
+  text-transform: uppercase;
+  width: 64px;
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 150px;
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  outline: none;
+  cursor: pointer;
+  border-radius: 1px;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.55);
+  cursor: pointer;
+}
+input[type=range]::-webkit-slider-track {
+  height: 2px;
+  border-radius: 1px;
+}
+
+.ctrl-value {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.4);
+  width: 28px;
+}
+
+#btn-reset {
+  margin-top: 4px;
+  background: none;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.22);
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 5px 14px;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+#btn-reset:hover {
+  border-color: rgba(255,255,255,0.28);
+  color: rgba(255,255,255,0.55);
+}
+
+#caption {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  z-index: 5;
+  transition: opacity 1.5s;
+}
+#caption .title {
+  font-size: 11px;
+  letter-spacing: 5px;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+#caption .sub {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.22);
+  line-height: 1.9;
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← GALLERY</a>
+
+<canvas id="c"></canvas>
+
+<div id="hud">
+  <div id="r0-display">1.5</div>
+  <div id="r0-status">epidemic</div>
+  <div id="r0-label">R₀ — basic reproduction number</div>
+  <div id="stats-hud">
+    <div class="stat-block">
+      <div class="stat-val s-color" id="s-count">160</div>
+      <div class="stat-key">susceptible</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-val i-color" id="i-count">0</div>
+      <div class="stat-key">infected</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-val r-color" id="r-count">0</div>
+      <div class="stat-key">recovered</div>
+    </div>
+  </div>
+</div>
+
+<div id="controls">
+  <div class="ctrl-row">
+    <div class="ctrl-label">R₀</div>
+    <input type="range" id="r0-slider" min="0.2" max="4.0" step="0.05" value="1.5">
+    <div class="ctrl-value" id="r0-val">1.5</div>
+  </div>
+  <div class="ctrl-row">
+    <div class="ctrl-label">Recovery</div>
+    <input type="range" id="tau-slider" min="5" max="45" step="1" value="15">
+    <div class="ctrl-value" id="tau-val">15</div>
+  </div>
+  <button id="btn-reset">RESET</button>
+</div>
+
+<div id="caption">
+  <div class="title">Contagion</div>
+  <div class="sub">
+    160 agents · spatial network<br>
+    adjust R₀ · click to seed infection
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const r0SliderEl = document.getElementById('r0-slider');
+const tauSliderEl = document.getElementById('tau-slider');
+const r0DisplayEl = document.getElementById('r0-display');
+const r0StatusEl = document.getElementById('r0-status');
+const r0ValEl = document.getElementById('r0-val');
+const tauValEl = document.getElementById('tau-val');
+const sCountEl = document.getElementById('s-count');
+const iCountEl = document.getElementById('i-count');
+const rCountEl = document.getElementById('r-count');
+const captionEl = document.getElementById('caption');
+
+let W, H, CHART_H, NET_H;
+let nodes = [];
+let history = [];
+let t = 0;
+let R0 = 1.5;
+let TAU = 15;
+let AVG_K = 0;
+let animId;
+let frameCount = 0;
+let initialized = false;
+
+const N = 160;
+const CHART_H_FRAC = 0.20;
+const MIN_DIST = 42;
+const CONNECT_R_FRAC = 0.125;
+
+function resize() {
+  W = window.innerWidth;
+  H = window.innerHeight;
+  canvas.width = W;
+  canvas.height = H;
+  CHART_H = Math.floor(H * CHART_H_FRAC);
+  NET_H = H - CHART_H;
+}
+
+class Node {
+  constructor(x, y, id) {
+    this.x = x;
+    this.y = y;
+    this.id = id;
+    this.state = 'S';
+    this.timer = 0;
+    this.neighbors = [];
+    this.glow = 0;
+    this.pulse = 0; // for newly infected flash
+  }
+}
+
+function buildNetwork() {
+  nodes = [];
+  const margin = 55;
+  const netAreaH = NET_H - margin * 2;
+  const netAreaW = W - margin * 2;
+
+  let attempts = 0;
+  while (nodes.length < N && attempts < N * 120) {
+    attempts++;
+    const x = margin + Math.random() * netAreaW;
+    const y = margin + Math.random() * netAreaH;
+    let ok = true;
+    for (const nd of nodes) {
+      const dx = nd.x - x, dy = nd.y - y;
+      if (Math.sqrt(dx*dx + dy*dy) < MIN_DIST) { ok = false; break; }
+    }
+    if (ok) nodes.push(new Node(x, y, nodes.length));
+  }
+
+  // Connect within radius
+  const r = CONNECT_R_FRAC * Math.min(W, NET_H);
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const dx = nodes[i].x - nodes[j].x;
+      const dy = nodes[i].y - nodes[j].y;
+      if (Math.sqrt(dx*dx + dy*dy) < r) {
+        nodes[i].neighbors.push(j);
+        nodes[j].neighbors.push(i);
+      }
+    }
+  }
+
+  const totalDeg = nodes.reduce((s, n) => s + n.neighbors.length, 0);
+  AVG_K = nodes.length > 0 ? totalDeg / nodes.length : 1;
+}
+
+function resetSim() {
+  history = [];
+  t = 0;
+  for (const n of nodes) {
+    n.state = 'S'; n.timer = 0; n.glow = 0; n.pulse = 0;
+  }
+  // Seed 3 initial infections
+  const seeds = 3;
+  const used = new Set();
+  for (let i = 0; i < seeds; i++) {
+    let idx;
+    do { idx = Math.floor(Math.random() * nodes.length); } while (used.has(idx));
+    used.add(idx);
+    infect(nodes[idx]);
+  }
+  recordHistory();
+}
+
+function infect(nd) {
+  nd.state = 'I';
+  nd.timer = 0;
+  nd.glow = 1;
+  nd.pulse = 1;
+}
+
+function getParams() {
+  const gamma = 1 / TAU;
+  const beta = AVG_K > 0 ? R0 * gamma / AVG_K : 0;
+  return { gamma, beta };
+}
+
+function step() {
+  const { gamma, beta } = getParams();
+  const toInfect = [];
+  const toRecover = [];
+
+  for (const nd of nodes) {
+    if (nd.state === 'I') {
+      nd.timer++;
+      nd.pulse = Math.max(0, nd.pulse - 0.04);
+      nd.glow = Math.min(1, nd.glow + 0.06);
+      for (const nidx of nd.neighbors) {
+        const nb = nodes[nidx];
+        if (nb.state === 'S' && Math.random() < beta) {
+          toInfect.push(nidx);
+        }
+      }
+      if (Math.random() < gamma) toRecover.push(nd.id);
+    } else if (nd.state === 'S') {
+      nd.glow *= 0.9;
+    } else {
+      nd.glow *= 0.93;
+    }
+  }
+
+  // Apply transitions (avoid double-infecting)
+  const toInfectSet = new Set(toInfect);
+  for (const idx of toInfectSet) {
+    if (nodes[idx].state === 'S') infect(nodes[idx]);
+  }
+  for (const idx of toRecover) {
+    nodes[idx].state = 'R';
+    nodes[idx].glow = 0.5;
+  }
+
+  t++;
+  recordHistory();
+}
+
+function recordHistory() {
+  let S = 0, I = 0, R = 0;
+  for (const n of nodes) {
+    if (n.state === 'S') S++;
+    else if (n.state === 'I') I++;
+    else R++;
+  }
+  history.push({ S, I, R });
+  sCountEl.textContent = S;
+  iCountEl.textContent = I;
+  rCountEl.textContent = R;
+}
+
+function drawEdges() {
+  ctx.save();
+  for (const nd of nodes) {
+    for (const nidx of nd.neighbors) {
+      if (nidx <= nd.id) continue;
+      const nb = nodes[nidx];
+      let alpha = 0.055;
+      const bothActive = nd.state === 'I' || nb.state === 'I';
+      if (bothActive) alpha = 0.2;
+      ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+      ctx.lineWidth = 0.8;
+      ctx.beginPath();
+      ctx.moveTo(nd.x, nd.y);
+      ctx.lineTo(nb.x, nb.y);
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
+}
+
+function drawNodes() {
+  ctx.save();
+  for (const nd of nodes) {
+    ctx.shadowBlur = 0;
+    let fill, r = 5;
+
+    if (nd.state === 'S') {
+      fill = `rgba(185, 200, 220, ${0.3 + nd.glow * 0.15})`;
+    } else if (nd.state === 'I') {
+      r = 5 + nd.glow * 2.5 + nd.pulse * 3;
+      const bright = 0.7 + nd.glow * 0.3;
+      fill = `rgba(255, ${Math.floor(80 + nd.glow * 50)}, 20, ${bright})`;
+      ctx.shadowBlur = 12 + nd.glow * 10;
+      ctx.shadowColor = `rgba(255, 80, 10, ${nd.glow * 0.5})`;
+    } else { // R
+      fill = `rgba(55, 110, 175, ${0.35 + nd.glow * 0.2})`;
+      if (nd.glow > 0.3) {
+        ctx.shadowBlur = 6;
+        ctx.shadowColor = `rgba(60, 120, 200, 0.25)`;
+      }
+    }
+
+    ctx.fillStyle = fill;
+    ctx.beginPath();
+    ctx.arc(nd.x, nd.y, r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.shadowBlur = 0;
+  ctx.restore();
+}
+
+function drawChart() {
+  const n = history.length;
+  if (n < 2) return;
+  const chartY = NET_H;
+  const pad = { l: 24, r: 24, t: 18, b: 16 };
+  const iw = W - pad.l - pad.r;
+  const ih = CHART_H - pad.t - pad.b;
+  const total = nodes.length;
+
+  // Background + separator
+  ctx.fillStyle = 'rgba(6, 9, 16, 0.85)';
+  ctx.fillRect(0, chartY, W, CHART_H);
+  ctx.strokeStyle = 'rgba(255,255,255,0.045)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(0, chartY);
+  ctx.lineTo(W, chartY);
+  ctx.stroke();
+
+  const maxX = Math.max(n, 120);
+  const xOf = i => pad.l + (i / maxX) * iw;
+  const yOf = v => chartY + pad.t + ih * (1 - v / total);
+
+  // Threshold line (R₀ = 1 analogue: show 0 line for I)
+  // Draw S, I, R curves
+  const curves = [
+    { key: 'S', color: 'rgba(185, 200, 220, 0.45)', w: 1.2 },
+    { key: 'I', color: 'rgba(255, 110, 40, 0.85)', w: 1.8 },
+    { key: 'R', color: 'rgba(55, 120, 190, 0.55)', w: 1.2 },
+  ];
+
+  for (const { key, color, w } of curves) {
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = w;
+    let first = true;
+    for (let i = 0; i < n; i++) {
+      const x = xOf(i), y = yOf(history[i][key]);
+      first ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      first = false;
+    }
+    ctx.stroke();
+  }
+
+  // Labels
+  ctx.fillStyle = 'rgba(255,255,255,0.1)';
+  ctx.font = '8px SF Mono, Menlo, monospace';
+  ctx.fillText('EPIDEMIC CURVE', pad.l, chartY + 11);
+
+  // Current time marker
+  if (n < maxX) {
+    const tx = xOf(n - 1);
+    ctx.strokeStyle = 'rgba(255,255,255,0.07)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 5]);
+    ctx.beginPath();
+    ctx.moveTo(tx, chartY + pad.t);
+    ctx.lineTo(tx, chartY + pad.t + ih);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+}
+
+function updateR0Display() {
+  r0DisplayEl.textContent = R0.toFixed(1);
+  r0ValEl.textContent = R0.toFixed(1);
+  if (R0 < 0.98) {
+    r0DisplayEl.style.color = '#5a90c0';
+    r0StatusEl.textContent = 'contained';
+    r0StatusEl.style.color = '#5a90c0';
+  } else if (R0 > 1.02) {
+    r0DisplayEl.style.color = '#ff7040';
+    r0StatusEl.textContent = 'epidemic';
+    r0StatusEl.style.color = '#ff7040';
+  } else {
+    r0DisplayEl.style.color = '#d4c070';
+    r0StatusEl.textContent = 'critical';
+    r0StatusEl.style.color = '#d4c070';
+  }
+}
+
+function frame() {
+  ctx.fillStyle = '#080c14';
+  ctx.fillRect(0, 0, W, H);
+
+  if (initialized) {
+    step();
+    drawEdges();
+    drawNodes();
+    drawChart();
+  }
+
+  if (frameCount === 100) captionEl.style.opacity = '0';
+  frameCount++;
+  animId = requestAnimationFrame(frame);
+}
+
+// Sliders
+r0SliderEl.addEventListener('input', () => {
+  R0 = parseFloat(r0SliderEl.value);
+  updateR0Display();
+});
+tauSliderEl.addEventListener('input', () => {
+  TAU = parseInt(tauSliderEl.value);
+  tauValEl.textContent = TAU;
+});
+document.getElementById('btn-reset').addEventListener('click', () => {
+  resetSim();
+});
+
+// Click to infect
+canvas.addEventListener('click', e => {
+  captionEl.style.opacity = '0';
+  let best = null, bestD = Infinity;
+  for (const nd of nodes) {
+    const dx = nd.x - e.clientX, dy = nd.y - e.clientY;
+    const d = dx*dx + dy*dy;
+    if (d < bestD) { bestD = d; best = nd; }
+  }
+  if (best && Math.sqrt(bestD) < 45 && best.state === 'S') {
+    infect(best);
+  }
+});
+
+window.addEventListener('resize', () => {
+  resize();
+  if (animId) cancelAnimationFrame(animId);
+  buildNetwork();
+  resetSim();
+  updateR0Display();
+  frame();
+});
+
+function init() {
+  resize();
+  buildNetwork();
+  resetSim();
+  updateR0Display();
+  initialized = true;
+  frame();
+}
+
+init();
+</script>
+</body>
+</html>
