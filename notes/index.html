@@ -516,22 +516,55 @@
       </p>
     </div>
 
+    <div class="note">
+      <div class="note-title"><a href="../alignment/">Alignment</a></div>
+      <p class="note-body">
+        The Ising model is one of the oldest and most important models in statistical
+        physics. A lattice of spins, each either up or down. Adjacent spins prefer to
+        align — that's the only rule. At high temperature, thermal noise overpowers the
+        preference. At low temperature, the preference wins. Between them is a critical
+        point: T&#x2080; ≈ 2.269 (in the dimensionless units where J = 1 and k&#x0042; = 1),
+        solved exactly by Lars Onsager in 1944.
+        <br><br>
+        What the exact solution can't show you is what it looks like. At the critical
+        temperature, something specific happens to the geometry. Below T&#x2080;, you get
+        one large domain — a single consensus. Above T&#x2080;, you get noise — equal
+        probability of up or down everywhere. At T&#x2080; exactly, you get neither.
+        Domains appear at every scale simultaneously. A patch of aligned spins contains
+        smaller patches of the opposite orientation, which contain smaller patches of the
+        original orientation, down to the single-spin level. This is what scale-free
+        structure actually looks like — not the smooth gradients we usually picture, but
+        this fractal patchwork, critical, balanced exactly between two kinds of order.
+        <br><br>
+        The Metropolis algorithm shown here is not special physics — it is the same
+        accept/reject logic used in Bayesian inference, simulated annealing, and MCMC.
+        The math doesn't know whether it is sampling magnetic configurations or posterior
+        distributions. The critical point itself is now understood as a general phenomenon:
+        the renormalization group, developed in the 1970s, showed that Ising criticality
+        is in the same "universality class" as a wide range of systems. The specific numbers
+        differ; the structure of the transition is the same. This is why a model of magnets
+        tells you something about fluids, and why a model of spins tells you something about
+        anything that transitions between order and disorder.
+        <br><br>
+        Click anywhere to reset. Watch it disorder, then watch it order again.
+        The jump in magnetization is what a phase transition looks like from the inside.
+      </p>
+    </div>
+
   </div>
 
   <div class="closing">
     <p class="closing-body">
-      Twenty-three systems. The thread remains: individual rules are trivial,
+      Twenty-four systems. The thread remains: individual rules are trivial,
       collective behavior is not. The collection has drifted — from pure visual
       mathematics toward language, meaning, economics, and phase transitions.
-      The last three pieces anchor back to first principles. Synchrony is about
-      crossing a threshold: below it, noise; above it, order. Avalanche is about
-      living at the threshold permanently — the pile self-organizes to its own
-      edge and stays there. Dendrite is about structure assembling itself from
-      nothing but contact and randomness. No optimization, no plan, no gradient.
-      Just particles walking until they stop. The fractal remembers every walk
-      that ended here. The question is not how the structure forms — that's the
-      rule — but why it looks the way it does. The answer is: because everything
-      else got there first.
+      Synchrony crosses a threshold: below the critical coupling, noise; above it, order.
+      Avalanche lives at the threshold permanently. Dendrite assembles structure from
+      nothing but contact rules and random motion. Alignment shows what the threshold
+      itself looks like from the inside — the fractal geometry of a system that is
+      simultaneously ordered and disordered, at every scale at once. The same
+      mathematics describes magnets, fluids, forest fires, and the spread of ideas.
+      The universality is the point.
     </p>
   </div>
 

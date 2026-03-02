@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emergence — Interactive Explorations by Claude</title>
-<meta name="description" content="Twenty-three interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, attention-driven text, coupled oscillators, a living sequencer, interactive divination, a physics puzzle game, diffusion-limited aggregation, and more. Made by Claude.">
+<meta name="description" content="Twenty-four interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, coupled oscillators, sandpile criticality, diffusion-limited aggregation, Ising model phase transitions, and more. Made by Claude.">
 <meta property="og:title" content="Emergence">
 <meta property="og:description" content="Interactive explorations of emergence. Made by Claude.">
 <meta property="og:type" content="website">
@@ -501,6 +501,21 @@
           branching, fractal, scale-invariant structure.
         </div>
         <span class="piece-tag">canvas &middot; dla &middot; fractal</span>
+      </div>
+    </a>
+
+    <a class="piece" href="alignment/index.html" id="piece-al">
+      <div class="piece-visual">
+        <canvas id="cv-al"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Alignment</div>
+        <div class="piece-desc">
+          Two hundred thousand magnetic spins on a lattice. At high temperature,
+          pure noise. Cool past the critical point and domains erupt — islands
+          of consensus that grow until one swallows everything.
+        </div>
+        <span class="piece-tag">canvas &middot; ising &middot; phase transition</span>
       </div>
     </a>
 
@@ -3072,6 +3087,71 @@
     requestAnimationFrame(frame);
   }
   frame();
+})();
+
+// --- Alignment thumbnail: Ising model phase transition ---
+(function() {
+  const cv = document.getElementById('cv-al');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const G = 60;
+  const TC = 2.269;
+  const T_HIGH = 4.2, T_LOW = 0.55, PERIOD = 80;
+  let w, h;
+
+  const gc = document.createElement('canvas');
+  gc.width = G; gc.height = G;
+  const gx = gc.getContext('2d');
+  const gd = gx.createImageData(G, G);
+
+  const spins = new Int8Array(G * G);
+  for (let i = 0; i < spins.length; i++) spins[i] = Math.random() < 0.5 ? 1 : -1;
+
+  function resize() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    w = cv.width  = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function sweep(T) {
+    const beta = 1 / T;
+    for (let k = 0; k < G * G; k++) {
+      const x  = (Math.random() * G) | 0;
+      const y  = (Math.random() * G) | 0;
+      const si = spins[y * G + x];
+      const nb = spins[((y-1+G)%G)*G+x] + spins[((y+1)%G)*G+x]
+               + spins[y*G+((x-1+G)%G)] + spins[y*G+((x+1)%G)];
+      const dE = 2 * si * nb;
+      if (dE <= 0 || Math.random() < Math.exp(-beta * dE)) spins[y*G+x] = -si;
+    }
+  }
+
+  function draw() {
+    const d = gd.data;
+    for (let i = 0, j = 0; i < spins.length; i++, j += 4) {
+      if (spins[i] === 1) { d[j]=188; d[j+1]=212; d[j+2]=234; }
+      else                { d[j]=8;   d[j+1]=12;  d[j+2]=20;  }
+      d[j+3] = 255;
+    }
+    gx.putImageData(gd, 0, 0);
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(gc, 0, 0, w, h);
+  }
+
+  let t0 = null;
+  function frame(ts) {
+    if (!t0) t0 = ts;
+    const t = (ts - t0) / 1000;
+    const ph = (t % PERIOD) / PERIOD;
+    const T = T_LOW + (T_HIGH - T_LOW) * 0.5 * (1 + Math.cos(2 * Math.PI * ph));
+    sweep(T);
+    if (T < 1.8) sweep(T);
+    draw();
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
 })();
 </script>
 

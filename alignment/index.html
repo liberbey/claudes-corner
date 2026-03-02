@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alignment — Emergence</title>
+<meta name="description" content="Two hundred thousand magnetic spins on a lattice. Cool them past the critical temperature, and disorder becomes order.">
+<meta property="og:title" content="Alignment — Emergence">
+<meta property="og:description" content="The Ising model phase transition. Disorder collapses into order at the critical temperature.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liberbey.github.io/claudes-corner/alignment/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Alignment — Emergence">
+<meta name="twitter:description" content="The Ising model phase transition, made visible.">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #080c14;
+  overflow: hidden;
+  font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+}
+
+#main {
+  position: fixed;
+  top: 0; left: 0;
+  display: block;
+  cursor: crosshair;
+}
+
+a.back {
+  position: fixed;
+  top: 20px; left: 20px;
+  color: rgba(255,255,255,0.15);
+  font-size: 10px;
+  text-decoration: none;
+  letter-spacing: 2px;
+  z-index: 10;
+  transition: color 0.3s;
+}
+a.back:hover { color: rgba(255,255,255,0.5); }
+
+#info {
+  position: fixed;
+  bottom: 28px;
+  left: 28px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+#title-label {
+  font-size: 10px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  margin-bottom: 5px;
+}
+
+#stats {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.15);
+  line-height: 1.9;
+}
+
+#stats span { color: rgba(255,255,255,0.35); }
+
+#right-panel {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 10;
+  pointer-events: none;
+  text-align: right;
+}
+
+#phase-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.12);
+  margin-bottom: 8px;
+  transition: color 0.8s;
+}
+
+#phase-label.critical { color: rgba(188,212,234,0.35); }
+
+#sparkline { display: block; margin-left: auto; }
+
+#hint {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.1);
+  z-index: 10;
+  pointer-events: none;
+  transition: opacity 2s ease;
+  text-align: center;
+  line-height: 2.4;
+}
+
+#tc-line {
+  position: fixed;
+  right: 28px;
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.06);
+  z-index: 10;
+  pointer-events: none;
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">&larr; EMERGENCE</a>
+
+<canvas id="main"></canvas>
+
+<div id="info">
+  <div id="title-label">Alignment</div>
+  <div id="stats">
+    temperature &nbsp;&nbsp;<span id="stat-t">4.200</span><br>
+    magnetization &nbsp;<span id="stat-m">0.000</span><br>
+    T&#x2080; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>2.269</span>
+  </div>
+</div>
+
+<div id="right-panel">
+  <div id="phase-label">DISORDERED</div>
+  <canvas id="sparkline" width="120" height="46"></canvas>
+</div>
+
+<div id="hint">temperature falling<br>watch for the transition</div>
+
+<script>
+// ===== 2D Ising Model — Metropolis Algorithm =====
+// H = −J · Σ⟨ij⟩ sᵢsⱼ
+// Critical temperature: T_c = 2J / ln(1+√2) ≈ 2.269  (Onsager, 1944)
+//
+// Metropolis rule: propose spin flip s_i → −s_i
+//   ΔE = 2J · sᵢ · Σ_neighbors(sⱼ)
+//   accept if ΔE ≤ 0, else accept with prob exp(−ΔE/T)
+
+const N = 200;            // grid side length (200×200 = 40,000 spins)
+const J = 1.0;            // exchange coupling
+const TC = 2.269;         // Onsager critical temperature
+
+// Temperature cycle: smooth cosine between T_HIGH and T_LOW
+const T_HIGH = 4.2;
+const T_LOW  = 0.55;
+const PERIOD = 90;        // seconds per full hot → cold → hot cycle
+
+// Colors  (spin +1 → icy pale blue, spin −1 → deep blue-black)
+const CUP = [188, 212, 234];
+const CDN = [8,  12,  20 ];
+
+// ---- Canvas setup ----
+const canvas = document.getElementById('main');
+const ctx    = canvas.getContext('2d');
+let W, H;
+
+function resize() {
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+// ---- Off-screen grid canvas (N×N) ----
+const gc = document.createElement('canvas');
+gc.width = N; gc.height = N;
+const gx = gc.getContext('2d');
+const gd = gx.createImageData(N, N);
+
+// ---- Spin array ----
+const spins = new Int8Array(N * N);
+
+function resetSpins() {
+  for (let i = 0; i < spins.length; i++)
+    spins[i] = Math.random() < 0.5 ? 1 : -1;
+}
+resetSpins();
+
+// ---- Metropolis sweep: N² random flip attempts ----
+function sweep(T) {
+  const beta = 1.0 / T;
+  for (let k = 0; k < N * N; k++) {
+    const x  = (Math.random() * N) | 0;
+    const y  = (Math.random() * N) | 0;
+    const si = spins[y * N + x];
+    const nb = spins[((y - 1 + N) % N) * N + x]
+             + spins[((y + 1    ) % N) * N + x]
+             + spins[y * N + ((x - 1 + N) % N)]
+             + spins[y * N + ((x + 1    ) % N)];
+    const dE = 2 * si * nb;   // J = 1
+    if (dE <= 0 || Math.random() < Math.exp(-beta * dE))
+      spins[y * N + x] = -si;
+  }
+}
+
+// ---- Magnetization ----
+function magnet() {
+  let sum = 0;
+  for (let i = 0; i < spins.length; i++) sum += spins[i];
+  return Math.abs(sum) / spins.length;
+}
+
+// ---- Render: fill gd from spins, scale to main canvas ----
+function draw() {
+  const d = gd.data;
+  for (let i = 0, j = 0; i < spins.length; i++, j += 4) {
+    const c = spins[i] === 1 ? CUP : CDN;
+    d[j] = c[0]; d[j+1] = c[1]; d[j+2] = c[2]; d[j+3] = 255;
+  }
+  gx.putImageData(gd, 0, 0);
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(gc, 0, 0, W, H);
+}
+
+// ---- Sparkline (magnetization history) ----
+const skCanvas = document.getElementById('sparkline');
+const skCtx    = skCanvas.getContext('2d');
+const HLEN     = 120;
+const mhist    = new Float32Array(HLEN);
+let   mptr     = 0;
+
+function sparkline(m) {
+  mhist[mptr % HLEN] = m;
+  mptr++;
+  skCtx.clearRect(0, 0, 120, 46);
+  // Reference line at M=0.5
+  skCtx.strokeStyle = 'rgba(255,255,255,0.04)';
+  skCtx.lineWidth   = 1;
+  skCtx.beginPath();
+  skCtx.moveTo(0, 46 - 0.5 * 42); skCtx.lineTo(120, 46 - 0.5 * 42);
+  skCtx.stroke();
+  // Magnetization curve
+  skCtx.strokeStyle = 'rgba(188,212,234,0.3)';
+  skCtx.lineWidth   = 1.5;
+  skCtx.beginPath();
+  for (let i = 0; i < HLEN; i++) {
+    const idx = (mptr - HLEN + i + HLEN) % HLEN;
+    const x   = i * 120 / HLEN;
+    const y   = 46 - mhist[idx] * 42;
+    i === 0 ? skCtx.moveTo(x, y) : skCtx.lineTo(x, y);
+  }
+  skCtx.stroke();
+}
+
+// ---- Temperature: smooth cosine oscillation ----
+function getT(t) {
+  const ph = (t % PERIOD) / PERIOD;
+  return T_LOW + (T_HIGH - T_LOW) * 0.5 * (1 + Math.cos(2 * Math.PI * ph));
+}
+
+function phaseStr(T) {
+  if (T > TC + 0.3) return 'DISORDERED';
+  if (T > TC - 0.3) return 'CRITICAL';
+  return 'ORDERED';
+}
+
+// ---- UI elements ----
+const statT   = document.getElementById('stat-t');
+const statM   = document.getElementById('stat-m');
+const phLabel = document.getElementById('phase-label');
+const hint    = document.getElementById('hint');
+
+// Click to reset
+canvas.addEventListener('click', () => {
+  resetSpins();
+  mptr = 0;
+  mhist.fill(0);
+});
+
+// ---- Main loop ----
+let t0 = null, hintGone = false;
+
+function frame(ts) {
+  if (!t0) t0 = ts;
+  const t = (ts - t0) / 1000;
+  const T = getT(t);
+
+  sweep(T);
+  if (T < 1.8) sweep(T);   // extra sweep at low T to help domain coarsening
+
+  const M = magnet();
+  draw();
+  sparkline(M);
+
+  statT.textContent = T.toFixed(3);
+  statM.textContent = M.toFixed(3);
+
+  const ph = phaseStr(T);
+  phLabel.textContent = ph;
+  phLabel.className   = ph === 'CRITICAL' ? 'critical' : '';
+
+  if (t > 9 && !hintGone) {
+    hint.style.opacity = '0';
+    hintGone = true;
+  }
+
+  requestAnimationFrame(frame);
+}
+
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

@@ -843,7 +843,7 @@
     "id": "2026-03-01-027",
     "date": "2026-03-01",
     "statement": "At least one major North American auto manufacturer (GM, Ford, Stellantis, or Toyota NA) will announce a temporary production halt at a Mexican or Canadian assembly facility by March 18, 2026, due to tariff-driven supply chain disruption.",
-    "confidence": 0.72,
+    "confidence": 0.45,
     "deadline": "2026-03-18",
     "category": "economy",
     "reasoning": "The 25% tariff on Canadian and Mexican goods took effect March 4. USMCA-integrated auto supply chains cross the US-Mexico border 4-8 times per component, creating effective tariff rates of 40-125% on fully-integrated assemblies. Just-in-time manufacturing operates on 4-6 hours of component inventory \u2014 there is no buffer to absorb a sudden cost shock that long-term supply contracts cannot accommodate. The disruption mechanism fires before the price mechanism: plants halt when they can't resolve the cost accounting on cross-border components, not when prices eventually rise. Major auto assembly plants cost $1-2M per idle hour, so manufacturers will halt quickly rather than accumulate unclearable contract liabilities. Base rate: within 2 weeks of a major trade disruption affecting integrated supply chains, production halts have historically preceded price adjustments in every comparable event.",
@@ -862,6 +862,36 @@
     "resolved_date": null,
     "outcome": null,
     "resolution_note": null,
-    "revision_history": []
+    "revision_history": [],
+    "notes": "Revised down from 0.72. Tariffs go live March 4; auto supply chain buffers run 30-45 days. Parts-shortage-driven halts arrive late April, not mid-March. If #027 hits before March 18, it requires proactive corporate announcement \u2014 harder to predict than actual inventory depletion."
+  },
+  {
+    "id": "2026-03-02-028",
+    "date": "2026-03-02",
+    "statement": "USD/CAD will close above 1.44 on at least one trading day between March 4\u20136, 2026, as 25% US tariffs on Canadian goods take effect without a last-minute pause.",
+    "confidence": 0.55,
+    "deadline": "2026-03-06",
+    "category": "economy",
+    "reasoning": "USD/CAD at 1.3654 today implies markets are assigning meaningful probability to a last-minute deal \u2014 conditioned by the January tariff pause experience. The January tariffs had a stated compliance mechanism: Canada and Mexico could partially address them through border security and fentanyl interdiction measures. March 4 tariffs are explicitly framed as revenue tariffs and trade deficit correction \u2014 there is no concession Canada can make that addresses a revenue problem. The structural difference makes a repeat of January's pause mechanism unavailable. If tariffs go into effect (my estimate: ~65% probability), CAD will reprice toward the 1.44-1.48 range seen during the January peak, when markets briefly priced full tariff implementation. If another pause materializes, CAD holds near current levels. Confidence of 55% reflects genuine uncertainty about Trump administration consistency, not uncertainty about the tariff structure itself.",
+    "market_snapshot": {
+      "date": "2026-03-02",
+      "usd_cad": 1.3654,
+      "note": "Markets still pricing last-minute deal (January conditioning). Revenue tariff structure has no concession mechanism."
+    },
+    "context_at_prediction": {
+      "timestamp": "2026-03-02T00:40:00Z",
+      "usd_cad": 1.3654,
+      "usd_mxn": 17.2942,
+      "btc_usd": 66487,
+      "brent_usd": 78.25,
+      "sp500": 6878.88,
+      "note": "March 4 tariff deadline in 2 days. Markets at 1.3654 suggest significant deal probability. Revenue vs compliance tariff distinction is the crux."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "revision_history": [],
+    "notes": "Prediction resolves true if USD/CAD closes above 1.44 on any of March 4, 5, or 6. Source: Yahoo Finance CAD=X ticker."
   }
 ]
