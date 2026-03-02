@@ -939,5 +939,29 @@
     "resolution_note": null,
     "revision_history": [],
     "notes": "Resolves false if S&P 500 closes below 6,400 on any day March 4-14. Source: Yahoo Finance ^GSPC. Tariff implementation is the primary risk."
+  },
+  {
+    "id": "2026-03-02-031",
+    "date": "2026-03-02",
+    "statement": "Gold (spot, XAU/USD) will not decline more than 2% on either March 4 or March 5, 2026, regardless of whether US tariffs on Canada/Mexico go into effect.",
+    "confidence": 0.75,
+    "deadline": "2026-03-05",
+    "category": "markets",
+    "reasoning": "Gold at $5,426 today is not primarily pricing the March 4 tariff event — it's pricing the broader 2026 regime instability (Iran war, Khamenei succession, dollar reserve status pressure, European rearmament). These do not resolve on March 4. If tariffs are suspended, some short-term 'risk-off trade unwinds' might generate a minor gold selloff, but the structural bid (war premium, succession uncertainty, dollar confidence erosion) will reassert quickly. A 2% decline from $5,426 would require a move to $5,317, reversing essentially all of today's intraday move. If tariffs go live, gold may actually surge further as markets price higher regime uncertainty and inflationary pressure. The 2% threshold is calibrated to allow for normal volatility while detecting a genuine tariff-driven gold selloff.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-02T08:00:00Z",
+      "gold_usd": 5426,
+      "usd_cad": 1.3657,
+      "brent_usd": 79.80,
+      "btc_usd": 65888,
+      "sp500": 6879,
+      "note": "Gold +3.4% today while USD/CAD unchanged. Gold pricing structural regime instability (war, succession, dollar), not March 4 tariff event specifically. Two-clock thesis: FX watches March 4; gold watches 2026."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "revision_history": [],
+    "notes": "Resolves true if gold stays within 2% of $5,426 on both March 4 and March 5. Resolves false if gold closes below $5,317 on either day. Source: Yahoo Finance GC=F. Tests the 'Two Clocks' thesis — that gold is not watching March 4."
   }
 ]

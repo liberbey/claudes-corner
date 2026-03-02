@@ -46,6 +46,29 @@ def get_stock_price(symbol):
         return None
 
 
+def get_hl_btc_funding():
+    """Fetch BTC perpetual funding rate from Hyperliquid (24/7 source)."""
+    try:
+        resp = requests.post(
+            "https://api.hyperliquid.xyz/info",
+            json={"type": "metaAndAssetCtxs"},
+            timeout=10,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        universe = data[0]["universe"]
+        ctxs = data[1]
+        for i, asset in enumerate(universe):
+            if asset["name"] == "BTC":
+                ctx = ctxs[i]
+                funding = float(ctx.get("funding", 0))
+                mark = float(ctx.get("markPx", 0))
+                return {"funding_pct_hr": round(funding * 100, 5), "mark_price": round(mark, 0)}
+    except Exception:
+        pass
+    return None
+
+
 def load_polymarket_data():
     """Load the latest Pulse data for Polymarket odds."""
     try:
@@ -117,11 +140,13 @@ def find_polymarket_prob(pm_data, title_fragment):
     return None
 
 
-def check_prediction(pred, btc_price, nvda_price, pm_data, iran_data=None, brent_price=None):
+def check_prediction(pred, btc_price, nvda_price, pm_data, iran_data=None, brent_price=None, extra_data=None):
     """Check a single prediction against current data. Returns status dict."""
     pid = pred["id"]
     if iran_data is None:
         iran_data = {}
+    if extra_data is None:
+        extra_data = {}
 
     if pred["status"] == "resolved":
         return {
@@ -145,6 +170,7 @@ def check_prediction(pred, btc_price, nvda_price, pm_data, iran_data=None, brent
         "current_data": {},
         "assessment": "",
         "trending": None,  # "toward" or "against" my prediction
+        "extra_data": extra_data,
     }
 
     # --- Prediction-specific checks ---
@@ -419,6 +445,88 @@ def check_prediction(pred, btc_price, nvda_price, pm_data, iran_data=None, brent
         )
         result["trending"] = "toward"
 
+    elif pid == "2026-03-02-028":
+        # USD/CAD closes above 1.44 between March 4-6
+        usdcad = result.get("extra_data", {}).get("usdcad")
+        if usdcad:
+            result["current_data"]["usd_cad"] = f"{usdcad:.4f}"
+            gap = 1.44 - usdcad
+            gap_pct = (gap / usdcad) * 100
+            if usdcad >= 1.44:
+                result["assessment"] = f"CONFIRMED. USD/CAD at {usdcad:.4f}, above 1.44."
+                result["trending"] = "toward"
+            else:
+                result["assessment"] = (
+                    f"USD/CAD at {usdcad:.4f}. Needs +{gap_pct:.1f}% to reach 1.44. "
+                    f"Market still pricing deal, not tariff shock. "
+                    f"March 4 is the test."
+                )
+                result["trending"] = "against"
+        else:
+            result["assessment"] = "USD/CAD unavailable. Requires tariff shock to drive CAD from 1.37 to 1.44."
+            result["trending"] = "against"
+
+    elif pid == "2026-03-02-029":
+        # Tariffs go live March 4 without suspension
+        usdcad = result.get("extra_data", {}).get("usdcad")
+        if usdcad:
+            result["current_data"]["usd_cad"] = f"{usdcad:.4f}"
+            if usdcad < 1.40:
+                result["assessment"] = (
+                    f"USD/CAD at {usdcad:.4f} — market still pricing deal, not tariffs. "
+                    f"25% effective March 4. No suspension/exemption announced yet. "
+                    f"Resolve manually after March 4."
+                )
+            else:
+                result["assessment"] = (
+                    f"USD/CAD at {usdcad:.4f} — market beginning to price tariff risk. "
+                    f"Resolve manually after March 4."
+                )
+        else:
+            result["assessment"] = "Manual resolution required on March 4. No price proxy."
+        result["trending"] = "toward"  # my base case is tariffs go live
+
+    elif pid == "2026-03-02-031":
+        # Gold stays within 2% of $5,426 on March 4-5
+        gold = result.get("extra_data", {}).get("gold")
+        if gold:
+            result["current_data"]["gold"] = f"${gold:,.0f}"
+            threshold = 5426 * 0.98  # 2% below context price
+            if gold < threshold:
+                result["assessment"] = f"ALERT. Gold at ${gold:,.0f}, below $5,317 threshold. Two-clock thesis challenged."
+                result["trending"] = "against"
+            else:
+                pct_from_ref = (gold - 5426) / 5426 * 100
+                result["assessment"] = (
+                    f"Gold at ${gold:,.0f} ({pct_from_ref:+.1f}% from $5,426 reference). "
+                    f"Resolves March 5. Testing whether gold reacts to tariff news."
+                )
+                result["trending"] = "toward"
+        else:
+            result["assessment"] = f"Gold data unavailable. {days_left} days to March 5."
+            result["trending"] = "neutral"
+
+    elif pid == "2026-03-02-030":
+        # S&P 500 stays above 6,400 through March 14
+        sp500 = result.get("extra_data", {}).get("sp500")
+        if sp500:
+            result["current_data"]["sp500"] = f"{sp500:,.0f}"
+            buffer = sp500 - 6400
+            buffer_pct = (buffer / sp500) * 100
+            if sp500 < 6400:
+                result["assessment"] = f"FALSIFIED. S&P at {sp500:,.0f}, below 6,400."
+                result["trending"] = "against"
+            else:
+                result["assessment"] = (
+                    f"S&P at {sp500:,.0f}. Buffer: +{buffer:.0f} pts ({buffer_pct:.1f}%). "
+                    f"Would need -{buffer_pct:.1f}% drop to falsify. "
+                    f"{days_left} days left."
+                )
+                result["trending"] = "toward"
+        else:
+            result["assessment"] = f"S&P data unavailable. {days_left} days left."
+            result["trending"] = "neutral"
+
     return result
 
 
@@ -436,11 +544,28 @@ def main():
     btc_price = get_bitcoin_price()
     nvda_price = get_stock_price("NVDA")
     brent_price = get_stock_price("BZ=F")
+    sp500_price = get_stock_price("^GSPC")
+    cadusd_price = get_stock_price("CADUSD=X")
+    usdcad_price = round(1 / cadusd_price, 4) if cadusd_price else None
+    hl_btc = get_hl_btc_funding()
     pm_data = load_polymarket_data()
+
+    gold_price = get_stock_price("GC=F")
+
+    extra_data = {
+        "sp500": sp500_price,
+        "usdcad": usdcad_price,
+        "gold": gold_price,
+    }
 
     print(f"  Bitcoin:  ${btc_price:,.0f}" if btc_price else "  Bitcoin:  unavailable")
     print(f"  NVDA:     ${nvda_price:.2f}" if nvda_price else "  NVDA:     unavailable")
     print(f"  Brent:    ${brent_price:.2f}" if brent_price else "  Brent:    unavailable")
+    print(f"  S&P 500:  {sp500_price:,.0f}" if sp500_price else "  S&P 500:  unavailable")
+    print(f"  USD/CAD:  {usdcad_price:.4f}" if usdcad_price else "  USD/CAD:  unavailable")
+    print(f"  Gold:     ${gold_price:,.0f}" if gold_price else "  Gold:     unavailable")
+    if hl_btc:
+        print(f"  HL BTC:   mark=${hl_btc['mark_price']:,.0f}  funding={hl_btc['funding_pct_hr']:+.4f}%/hr")
     print(f"  Pulse:    {pm_data['fetched_at'][:10]}" if pm_data else "  Pulse:    unavailable")
 
     iran_data = fetch_iran_strike_data()
@@ -457,7 +582,7 @@ def main():
     results = []
 
     for pred in predictions:
-        r = check_prediction(pred, btc_price, nvda_price, pm_data, iran_data, brent_price)
+        r = check_prediction(pred, btc_price, nvda_price, pm_data, iran_data, brent_price, extra_data)
         results.append(r)
         if r["status"] == "resolved":
             resolved_count += 1
@@ -518,6 +643,10 @@ def main():
             "btc_price": btc_price,
             "nvda_price": nvda_price,
             "brent_price": brent_price,
+            "sp500": sp500_price,
+            "usdcad": usdcad_price,
+            "gold": gold_price,
+            "hl_btc_funding": hl_btc,
             "pulse_date": pm_data["fetched_at"][:10] if pm_data else None,
         },
         "summary": {
@@ -526,7 +655,7 @@ def main():
             "correct": correct_count,
             "open": len(open_results),
         },
-        "results": results,
+        "results": [{k: v for k, v in r.items() if k != "extra_data"} for r in results],
     }
 
     with open("forecast/tracker.json", "w") as f:

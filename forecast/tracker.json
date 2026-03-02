@@ -1,16 +1,23 @@
 {
-  "run_at": "2026-03-02T05:03:31.077178+00:00",
+  "run_at": "2026-03-02T09:10:00.045816+00:00",
   "live_data": {
-    "btc_price": 66792,
+    "btc_price": 66274,
     "nvda_price": 177.19,
-    "brent_price": 77.63,
+    "brent_price": 79.3,
+    "sp500": 6878.88,
+    "usdcad": 1.3656,
+    "gold": 5408.9,
+    "hl_btc_funding": {
+      "funding_pct_hr": -0.0006,
+      "mark_price": 66316.0
+    },
     "pulse_date": "2026-03-02"
   },
   "summary": {
-    "total": 28,
+    "total": 31,
     "resolved": 6,
     "correct": 4,
-    "open": 22
+    "open": 25
   },
   "results": [
     {
@@ -27,9 +34,9 @@
       "days_left": 28,
       "status": "open",
       "current_data": {
-        "btc_price": "$66,792"
+        "btc_price": "$66,274"
       },
-      "assessment": "BTC at $66,792. Needs +19.8% ($13,208) to falsify.",
+      "assessment": "BTC at $66,274. Needs +20.7% ($13,726) to falsify.",
       "trending": "toward"
     },
     {
@@ -94,9 +101,9 @@
       "days_left": 303,
       "status": "open",
       "current_data": {
-        "btc_price": "$66,792"
+        "btc_price": "$66,274"
       },
-      "assessment": "BTC at $66,792. Needs +49.7% ($33,208) to falsify. Long deadline.",
+      "assessment": "BTC at $66,274. Needs +50.9% ($33,726) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -174,9 +181,9 @@
       "days_left": 11,
       "status": "open",
       "current_data": {
-        "brent_price": "$77.63"
+        "brent_price": "$79.30"
       },
-      "assessment": "Brent at $77.63. Needs +28.8% to hit $100 in 11 days. IRGC announced Hormuz closure; market unmoved. Bypass pipelines (IPSA 5.9M bbl/day) absorbing flow.",
+      "assessment": "Brent at $79.30. Needs +26.1% to hit $100 in 11 days. IRGC announced Hormuz closure; market unmoved. Bypass pipelines (IPSA 5.9M bbl/day) absorbing flow.",
       "trending": "against"
     },
     {
@@ -209,9 +216,9 @@
       "days_left": 27,
       "status": "open",
       "current_data": {
-        "brent_price": "$77.63"
+        "brent_price": "$79.30"
       },
-      "assessment": "IRGC announced closure March 1. Ships at Fujairah. Brent at $77.63 \u2014 market pricing partial/temporary disruption, not sustained blockade. Bypass pipelines active.",
+      "assessment": "IRGC announced closure March 1. Ships at Fujairah. Brent at $79.30 \u2014 market pricing partial/temporary disruption, not sustained blockade. Bypass pipelines active.",
       "trending": "against"
     },
     {
@@ -284,7 +291,7 @@
     {
       "id": "2026-03-01-027",
       "statement": "At least one major North American auto manufacturer (GM, Ford, Stellantis, or Toyota NA) will announce a temporary production halt at a Mexican or Canadian assembly facility by March 18, 2026, due to tariff-driven supply chain disruption.",
-      "confidence": 0.45,
+      "confidence": 0.18,
       "deadline": "2026-03-18",
       "days_left": 15,
       "status": "open",
@@ -299,9 +306,50 @@
       "deadline": "2026-03-06",
       "days_left": 3,
       "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "current_data": {
+        "usd_cad": "1.3656"
+      },
+      "assessment": "USD/CAD at 1.3656. Needs +5.4% to reach 1.44. Market still pricing deal, not tariff shock. March 4 is the test.",
+      "trending": "against"
+    },
+    {
+      "id": "2026-03-02-029",
+      "statement": "25% US tariffs on Canadian and Mexican goods will go into effect on March 4, 2026, without a suspension announced on or before March 4.",
+      "confidence": 0.65,
+      "deadline": "2026-03-05",
+      "days_left": 2,
+      "status": "open",
+      "current_data": {
+        "usd_cad": "1.3656"
+      },
+      "assessment": "USD/CAD at 1.3656 \u2014 market still pricing deal, not tariffs. 25% effective March 4. No suspension/exemption announced yet. Resolve manually after March 4.",
+      "trending": "toward"
+    },
+    {
+      "id": "2026-03-02-030",
+      "statement": "The S&P 500 will not close below 6,400 on any trading day during March 4-14, 2026, regardless of tariff outcome.",
+      "confidence": 0.55,
+      "deadline": "2026-03-14",
+      "days_left": 11,
+      "status": "open",
+      "current_data": {
+        "sp500": "6,879"
+      },
+      "assessment": "S&P at 6,879. Buffer: +479 pts (7.0%). Would need -7.0% drop to falsify. 11 days left.",
+      "trending": "toward"
+    },
+    {
+      "id": "2026-03-02-031",
+      "statement": "Gold (spot, XAU/USD) will not decline more than 2% on either March 4 or March 5, 2026, regardless of whether US tariffs on Canada/Mexico go into effect.",
+      "confidence": 0.75,
+      "deadline": "2026-03-05",
+      "days_left": 2,
+      "status": "open",
+      "current_data": {
+        "gold": "$5,409"
+      },
+      "assessment": "Gold at $5,409 (-0.3% from $5,426 reference). Resolves March 5. Testing whether gold reacts to tariff news.",
+      "trending": "toward"
     }
   ]
 }
