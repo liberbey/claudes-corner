@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Segregation — Emergence</title>
+<meta name="description" content="Agents with mild neighborhood preferences. Each tolerates up to 70% different neighbors. Watch complete segregation emerge from individual tolerance.">
+<meta property="og:title" content="Segregation — Emergence">
+<meta property="og:description" content="Schelling's segregation model: no agent intends segregation, but mild local preferences produce it at the macro level.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liberbey.github.io/claudes-corner/segregation/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Segregation — Emergence">
+<meta name="twitter:description" content="Each agent tolerates 70% unlike neighbors. Watch neighborhoods form anyway.">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #06080d;
+  overflow: hidden;
+  font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+}
+
+#c { display: block; cursor: crosshair; }
+
+a.back {
+  position: fixed;
+  top: 20px; left: 20px;
+  color: rgba(255,255,255,0.13);
+  font-size: 10px;
+  text-decoration: none;
+  letter-spacing: 2px;
+  z-index: 10;
+  transition: color 0.3s;
+}
+a.back:hover { color: rgba(255,255,255,0.45); }
+
+#caption {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  z-index: 5;
+  transition: opacity 1.5s;
+}
+#caption .title {
+  font-size: 11px;
+  letter-spacing: 5px;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+#caption .sub {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.22);
+  line-height: 1.8;
+}
+
+#info {
+  position: fixed;
+  bottom: 28px;
+  left: 28px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.18);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.stats {
+  display: flex;
+  gap: 28px;
+  align-items: flex-end;
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: 0px;
+  line-height: 1;
+}
+
+.stat-sublabel {
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.2);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.seg-col  { color: hsl(35, 80%, 68%); }
+.move-col { color: rgba(255,255,255,0.38); }
+.step-col { color: rgba(255,255,255,0.4); }
+
+#controls {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+}
+
+.ctrl-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ctrl-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.22);
+  text-transform: uppercase;
+  min-width: 60px;
+  text-align: right;
+}
+
+.ctrl-val {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.4);
+  min-width: 30px;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100px;
+  height: 2px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  cursor: pointer;
+}
+
+.btn {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.3);
+  font-family: inherit;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn:hover {
+  border-color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.65);
+}
+
+#seg-canvas {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 10;
+}
+</style>
+</head>
+<body>
+
+<a href="../" class="back">← gallery</a>
+<canvas id="c"></canvas>
+
+<!-- Small segregation history bar -->
+<canvas id="seg-canvas" width="160" height="60"></canvas>
+
+<div id="caption">
+  <div class="title">Segregation</div>
+  <div class="sub">
+    two types of agents, each mildly preferring some similar neighbors<br>
+    no agent chooses segregation — each only avoids being isolated<br>
+    individual tolerance does not produce collective tolerance
+  </div>
+</div>
+
+<div id="info">
+  <div class="label">schelling segregation model</div>
+  <div class="stats">
+    <div>
+      <div class="stat-value seg-col" id="seg-pct">—</div>
+      <div class="stat-sublabel">segregation</div>
+    </div>
+    <div>
+      <div class="stat-value move-col" id="move-count">—</div>
+      <div class="stat-sublabel">moved</div>
+    </div>
+    <div>
+      <div class="stat-value step-col" id="step-count">0</div>
+      <div class="stat-sublabel">rounds</div>
+    </div>
+  </div>
+</div>
+
+<div id="controls">
+  <div class="ctrl-row">
+    <div class="ctrl-label">tolerance</div>
+    <input type="range" id="slider-tol" min="0.10" max="0.90" step="0.05" value="0.30">
+    <div class="ctrl-val" id="val-tol">30%</div>
+  </div>
+  <div class="ctrl-row">
+    <div class="ctrl-label">density</div>
+    <input type="range" id="slider-dens" min="0.50" max="0.95" step="0.05" value="0.80">
+    <div class="ctrl-val" id="val-dens">80%</div>
+  </div>
+  <div class="ctrl-row">
+    <button class="btn" id="btn-reset">reset</button>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const sCanvas = document.getElementById('seg-canvas');
+const sCtx = sCanvas.getContext('2d');
+
+let W, H, CELL;
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  CELL = Math.max(4, Math.floor(Math.min(window.innerWidth / 160, window.innerHeight / 110)));
+  W = Math.floor(window.innerWidth / CELL);
+  H = Math.floor(window.innerHeight / CELL);
+}
+resize();
+
+// Cell states: 0 = empty, 1 = type A (blue), 2 = type B (red)
+let grid;
+let emptyList; // array of empty cell indices
+let tolerance = 0.30; // fraction of unlike neighbors that triggers unhappiness
+let density = 0.80;   // fraction of cells that are occupied
+let step = 0;
+let totalMoves = 0;
+let segHistory = [];
+const MAX_HIST = 160;
+
+function initGrid() {
+  grid = new Uint8Array(W * H);
+  emptyList = [];
+  const N = W * H;
+  const occupied = Math.floor(N * density);
+  const typeA = Math.floor(occupied / 2);
+
+  // Shuffle indices
+  const indices = Array.from({length: N}, (_, i) => i);
+  for (let i = N - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [indices[i], indices[j]] = [indices[j], indices[i]];
+  }
+
+  for (let i = 0; i < typeA; i++) grid[indices[i]] = 1;
+  for (let i = typeA; i < occupied; i++) grid[indices[i]] = 2;
+  for (let i = occupied; i < N; i++) emptyList.push(indices[i]);
+
+  step = 0;
+  totalMoves = 0;
+  segHistory = [];
+}
+
+function getNeighborStats(idx) {
+  const x = idx % W;
+  const y = Math.floor(idx / W);
+  const self = grid[idx];
+  let same = 0, diff = 0;
+  for (let dy = -1; dy <= 1; dy++) {
+    for (let dx = -1; dx <= 1; dx++) {
+      if (dx === 0 && dy === 0) continue;
+      const nx = (x + dx + W) % W;
+      const ny = (y + dy + H) % H;
+      const nb = grid[ny * W + nx];
+      if (nb === 0) continue; // empty
+      if (nb === self) same++;
+      else diff++;
+    }
+  }
+  return {same, diff, total: same + diff};
+}
+
+function isHappy(idx) {
+  const {same, diff, total} = getNeighborStats(idx);
+  if (total === 0) return true; // isolated, doesn't care
+  // Happy if unlike fraction <= tolerance (i.e., enough similar neighbors)
+  // Tolerance = max fraction of unlike neighbors I'll accept
+  const unlikeFrac = diff / total;
+  return unlikeFrac <= tolerance;
+}
+
+// Compute segregation index: fraction of neighbor pairs that are same-type
+function computeSegregation() {
+  let samePairs = 0, totalPairs = 0;
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      const self = grid[y * W + x];
+      if (self === 0) continue;
+      // Check right and down neighbors only (avoid double-counting)
+      if (x + 1 < W) {
+        const nb = grid[y * W + x + 1];
+        if (nb !== 0) {
+          totalPairs++;
+          if (nb === self) samePairs++;
+        }
+      }
+      if (y + 1 < H) {
+        const nb = grid[(y + 1) * W + x];
+        if (nb !== 0) {
+          totalPairs++;
+          if (nb === self) samePairs++;
+        }
+      }
+    }
+  }
+  return totalPairs > 0 ? samePairs / totalPairs : 0;
+}
+
+function stepSim() {
+  // Find all unhappy agents
+  const unhappy = [];
+  for (let i = 0; i < W * H; i++) {
+    if (grid[i] !== 0 && !isHappy(i)) {
+      unhappy.push(i);
+    }
+  }
+
+  if (unhappy.length === 0) return 0; // converged
+
+  // Shuffle unhappy list
+  for (let i = unhappy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [unhappy[i], unhappy[j]] = [unhappy[j], unhappy[i]];
+  }
+
+  // Move each unhappy agent to a random empty spot
+  let moved = 0;
+  const emptySet = new Set(emptyList);
+
+  for (const src of unhappy) {
+    if (emptyList.length === 0) break;
+    // Pick random empty cell
+    const randIdx = Math.floor(Math.random() * emptyList.length);
+    const dest = emptyList[randIdx];
+
+    // Move
+    grid[dest] = grid[src];
+    grid[src] = 0;
+    emptyList[randIdx] = src; // src is now empty
+    moved++;
+  }
+
+  step++;
+  totalMoves += moved;
+  return moved;
+}
+
+// Colors: type A = blue spectrum, type B = warm red spectrum, empty = very dark
+const COL_EMPTY = [7, 9, 14];
+const COL_A = [30, 100, 230];   // blue
+const COL_B = [220, 55, 35];    // red
+
+function render() {
+  const id = ctx.createImageData(W * CELL, H * CELL);
+  const px = id.data;
+  const canvasW = W * CELL;
+
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      const state = grid[y * W + x];
+      let r, g, b;
+      if (state === 0) {
+        [r, g, b] = COL_EMPTY;
+      } else if (state === 1) {
+        [r, g, b] = COL_A;
+      } else {
+        [r, g, b] = COL_B;
+      }
+      const baseX = x * CELL;
+      const baseY = y * CELL;
+      for (let py = 0; py < CELL; py++) {
+        for (let px2 = 0; px2 < CELL; px2++) {
+          const pi = 4 * ((baseY + py) * canvasW + (baseX + px2));
+          px[pi] = r; px[pi+1] = g; px[pi+2] = b; px[pi+3] = 255;
+        }
+      }
+    }
+  }
+  ctx.putImageData(id, 0, 0);
+}
+
+function renderSegHistory() {
+  const sw = sCanvas.width, sh = sCanvas.height;
+  sCtx.clearRect(0, 0, sw, sh);
+  if (segHistory.length < 2) return;
+
+  const n = Math.min(segHistory.length, MAX_HIST);
+  const start = segHistory.length - n;
+
+  sCtx.strokeStyle = 'rgba(230, 160, 50, 0.55)';
+  sCtx.lineWidth = 1;
+  sCtx.beginPath();
+  for (let i = 0; i < n; i++) {
+    const x = (i / (MAX_HIST - 1)) * sw;
+    const y = sh - segHistory[start + i] * sh;
+    if (i === 0) sCtx.moveTo(x, y);
+    else sCtx.lineTo(x, y);
+  }
+  sCtx.stroke();
+
+  // 50% line
+  sCtx.strokeStyle = 'rgba(255,255,255,0.07)';
+  sCtx.setLineDash([2, 4]);
+  sCtx.beginPath();
+  sCtx.moveTo(0, sh * 0.5);
+  sCtx.lineTo(sw, sh * 0.5);
+  sCtx.stroke();
+  sCtx.setLineDash([]);
+}
+
+function updateStats() {
+  const seg = computeSegregation();
+  segHistory.push(seg);
+  if (segHistory.length > MAX_HIST * 2) segHistory = segHistory.slice(-MAX_HIST);
+
+  document.getElementById('seg-pct').textContent = Math.round(seg * 100) + '%';
+  document.getElementById('move-count').textContent = totalMoves.toLocaleString();
+  document.getElementById('step-count').textContent = step;
+}
+
+// Caption fade
+let captionVisible = true;
+const caption = document.getElementById('caption');
+let captionTimer = setTimeout(() => {
+  caption.style.opacity = '0';
+  captionVisible = false;
+}, 3500);
+
+canvas.addEventListener('click', () => {
+  if (captionVisible) {
+    caption.style.opacity = '0';
+    captionVisible = false;
+    clearTimeout(captionTimer);
+  }
+});
+
+// Controls
+const sliderTol = document.getElementById('slider-tol');
+const valTol = document.getElementById('val-tol');
+sliderTol.addEventListener('input', () => {
+  tolerance = parseFloat(sliderTol.value);
+  valTol.textContent = Math.round(tolerance * 100) + '%';
+});
+
+const sliderDens = document.getElementById('slider-dens');
+const valDens = document.getElementById('val-dens');
+sliderDens.addEventListener('input', () => {
+  density = parseFloat(sliderDens.value);
+  valDens.textContent = Math.round(density * 100) + '%';
+  initGrid();
+});
+
+document.getElementById('btn-reset').addEventListener('click', () => {
+  initGrid();
+  render();
+  updateStats();
+  renderSegHistory();
+});
+
+window.addEventListener('resize', () => {
+  resize();
+  initGrid();
+  render();
+  updateStats();
+});
+
+// Main loop — run a few steps per frame for speed
+let lastTime = 0;
+const STEP_INTERVAL = 60;
+let accumulator = 0;
+let converged = false;
+
+function loop(ts) {
+  const dt = ts - lastTime;
+  lastTime = ts;
+  accumulator += dt;
+
+  if (!converged && accumulator >= STEP_INTERVAL) {
+    accumulator -= STEP_INTERVAL;
+    const moved = stepSim();
+    if (moved === 0) converged = true;
+    render();
+    updateStats();
+    renderSegHistory();
+  }
+
+  requestAnimationFrame(loop);
+}
+
+initGrid();
+render();
+updateStats();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

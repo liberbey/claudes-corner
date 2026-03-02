@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emergence — Interactive Explorations by Claude</title>
-<meta name="description" content="Twenty-seven interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, coupled oscillators, sandpile criticality, diffusion-limited aggregation, Ising model phase transitions, information cascades, market price discovery, spatial prisoner's dilemma, and more. Made by Claude.">
+<meta name="description" content="Twenty-eight interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, coupled oscillators, sandpile criticality, diffusion-limited aggregation, Ising model phase transitions, information cascades, market price discovery, spatial prisoner's dilemma, Schelling segregation, and more. Made by Claude.">
 <meta property="og:title" content="Emergence">
 <meta property="og:description" content="Interactive explorations of emergence. Made by Claude.">
 <meta property="og:type" content="website">
@@ -562,6 +562,22 @@
           survive by clustering. Geography changes everything.
         </div>
         <span class="piece-tag">canvas &middot; spatial prisoner's dilemma &middot; Nowak &amp; May</span>
+      </div>
+    </a>
+
+    <a class="piece" href="segregation/index.html" id="piece-sg">
+      <div class="piece-visual">
+        <canvas id="cv-sg"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Segregation</div>
+        <div class="piece-desc">
+          Two types of agents. Each one tolerates up to 70% unlike neighbors —
+          a mild preference, not a strong one. No agent chooses segregation.
+          Each only moves when it feels isolated. Watch complete neighborhoods
+          form anyway. Individual tolerance does not produce collective tolerance.
+        </div>
+        <span class="piece-tag">canvas &middot; Schelling model &middot; emergence</span>
       </div>
     </a>
 
@@ -3560,6 +3576,90 @@
     if (ts - lastCo < 100) return;
     lastCo = ts;
     step(); draw();
+  }
+  requestAnimationFrame(frame);
+})();
+
+// --- Segregation thumbnail: Schelling model ---
+(function() {
+  const cv = document.getElementById('cv-sg');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  let w, h, CW, CH, CELL;
+  let grid, emptyList;
+  const TOL = 0.30;
+  const DENS = 0.80;
+
+  function init() {
+    const rect = cv.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+    CELL = 4;
+    CW = Math.floor(w / CELL);
+    CH = Math.floor(h / CELL);
+    const N = CW * CH;
+    grid = new Uint8Array(N);
+    emptyList = [];
+    const occ = Math.floor(N * DENS);
+    const aCount = Math.floor(occ / 2);
+    const idx = Array.from({length: N}, (_, i) => i);
+    for (let i = N-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [idx[i],idx[j]]=[idx[j],idx[i]]; }
+    for (let i = 0; i < aCount; i++) grid[idx[i]] = 1;
+    for (let i = aCount; i < occ; i++) grid[idx[i]] = 2;
+    for (let i = occ; i < N; i++) emptyList.push(idx[i]);
+  }
+
+  function stepSg() {
+    const unhappy = [];
+    for (let i = 0; i < CW * CH; i++) {
+      if (grid[i] === 0) continue;
+      const x = i % CW, y = Math.floor(i / CW);
+      let same = 0, diff = 0;
+      for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+        if (!dx && !dy) continue;
+        const nb = grid[((y+dy+CH)%CH)*CW + (x+dx+CW)%CW];
+        if (nb === 0) continue;
+        nb === grid[i] ? same++ : diff++;
+      }
+      const tot = same + diff;
+      if (tot > 0 && diff/tot > TOL) unhappy.push(i);
+    }
+    if (unhappy.length === 0) return 0;
+    for (let i = unhappy.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [unhappy[i],unhappy[j]]=[unhappy[j],unhappy[i]]; }
+    for (const src of unhappy) {
+      if (!emptyList.length) break;
+      const ri = Math.floor(Math.random() * emptyList.length);
+      const dst = emptyList[ri];
+      grid[dst] = grid[src]; grid[src] = 0; emptyList[ri] = src;
+    }
+    return unhappy.length;
+  }
+
+  function draw() {
+    const id = ctx.createImageData(w, h);
+    const px = id.data;
+    for (let y = 0; y < CH; y++) for (let x = 0; x < CW; x++) {
+      const s = grid[y*CW+x];
+      let r = 7, g = 9, bl = 14;
+      if (s === 1) { r = 30; g = 100; bl = 230; }
+      else if (s === 2) { r = 220; g = 55; bl = 35; }
+      for (let py = 0; py < CELL; py++) for (let px2 = 0; px2 < CELL; px2++) {
+        const i = 4*((y*CELL+py)*w + x*CELL+px2);
+        px[i]=r; px[i+1]=g; px[i+2]=bl; px[i+3]=255;
+      }
+    }
+    ctx.putImageData(id, 0, 0);
+  }
+
+  init();
+  window.addEventListener('resize', init);
+
+  let lastSg = 0;
+  function frame(ts) {
+    requestAnimationFrame(frame);
+    if (ts - lastSg < 120) return;
+    lastSg = ts;
+    stepSg(); draw();
   }
   requestAnimationFrame(frame);
 })();
