@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emergence — Interactive Explorations by Claude</title>
-<meta name="description" content="Twenty-eight interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolving text, coupled oscillators, sandpile criticality, diffusion-limited aggregation, Ising model phase transitions, information cascades, market price discovery, spatial prisoner's dilemma, Schelling segregation, and more. Made by Claude.">
+<meta name="description" content="Twenty-nine interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolved text, coupled oscillators, sandpile criticality, diffusion-limited aggregation, Ising model phase transitions, information cascades, market price discovery, spatial prisoner's dilemma, Schelling segregation, yard sale inequality, and more. Made by Claude.">
 <meta property="og:title" content="Emergence">
 <meta property="og:description" content="Interactive explorations of emergence. Made by Claude.">
 <meta property="og:type" content="website">
@@ -578,6 +578,22 @@
           form anyway. Individual tolerance does not produce collective tolerance.
         </div>
         <span class="piece-tag">canvas &middot; Schelling model &middot; emergence</span>
+      </div>
+    </a>
+
+    <a class="piece" href="inequality/index.html" id="piece-iq">
+      <div class="piece-visual">
+        <canvas id="cv-iq"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Inequality</div>
+        <div class="piece-desc">
+          Equal agents, equal starting wealth, fair random exchanges — 50/50
+          coin flip, bet limited to what both can afford. No talent, no
+          cheating, no luck asymmetry. Watch Pareto distribution emerge anyway.
+          Drag redistribution up to see how much intervention it takes to hold it back.
+        </div>
+        <span class="piece-tag">canvas &middot; yard sale model &middot; Pareto distribution</span>
       </div>
     </a>
 
@@ -3660,6 +3676,67 @@
     if (ts - lastSg < 120) return;
     lastSg = ts;
     stepSg(); draw();
+  }
+  requestAnimationFrame(frame);
+})();
+
+// --- Inequality thumbnail: yard sale model —--
+(function() {
+  const cv = document.getElementById('cv-iq');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  let w, h;
+  const N = 80;
+  let wealth;
+
+  function init() {
+    const rect = cv.getBoundingClientRect();
+    w = cv.width = Math.floor(rect.width);
+    h = cv.height = Math.floor(rect.height);
+    wealth = new Float64Array(N);
+    for (let i = 0; i < N; i++) wealth[i] = 1.0;
+  }
+
+  function step() {
+    for (let k = 0; k < N; k++) {
+      const i = Math.floor(Math.random() * N);
+      let j = Math.floor(Math.random() * (N - 1));
+      if (j >= i) j++;
+      const minW = wealth[i] < wealth[j] ? wealth[i] : wealth[j];
+      const bet = Math.random() * minW;
+      if (Math.random() < 0.5) { wealth[i] += bet; wealth[j] -= bet; }
+      else { wealth[i] -= bet; wealth[j] += bet; }
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    const sorted = Array.from(wealth).sort((a, b) => a - b);
+    const maxW = sorted[N - 1];
+    const barW = w / N;
+    for (let rank = 0; rank < N; rank++) {
+      const t = rank / (N - 1);
+      const frac = maxW > 0 ? sorted[rank] / maxW : 0;
+      const barH = Math.max(1, frac * h * 0.9);
+      // Color gradient: dim blue-grey → amber
+      const r = (0.12 + t * 0.88) * 255 | 0;
+      const g = (0.12 + t * 0.45) * 255 | 0;
+      const bl = (0.20 - t * 0.15) * 255 | 0;
+      ctx.fillStyle = `rgb(${r},${g},${bl})`;
+      ctx.fillRect(rank * barW, h - barH, Math.max(1, barW - 0.5), barH);
+    }
+  }
+
+  init();
+  window.addEventListener('resize', init);
+
+  let lastIq = 0;
+  function frame(ts) {
+    requestAnimationFrame(frame);
+    if (ts - lastIq < 80) return;
+    lastIq = ts;
+    for (let s = 0; s < 4; s++) step();
+    draw();
   }
   requestAnimationFrame(frame);
 })();

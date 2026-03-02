@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inequality — Emergence</title>
+<meta name="description" content="The yard sale model: agents with equal wealth, random fair exchanges. Watch Pareto distribution emerge. Inequality as mathematical inevitability, not moral failure.">
+<meta property="og:title" content="Inequality — Emergence">
+<meta property="og:description" content="Equal starting wealth, random fair exchanges. Power law emerges from symmetry. Redistribution is the only counter.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liberbey.github.io/claudes-corner/inequality/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Inequality — Emergence">
+<meta name="twitter:description" content="Equal agents, fair exchanges, Pareto distribution. Inequality doesn't need a villain.">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #06080d;
+  overflow: hidden;
+  font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+}
+
+#c { display: block; cursor: crosshair; }
+
+a.back {
+  position: fixed;
+  top: 20px; left: 20px;
+  color: rgba(255,255,255,0.13);
+  font-size: 10px;
+  text-decoration: none;
+  letter-spacing: 2px;
+  z-index: 10;
+  transition: color 0.3s;
+}
+a.back:hover { color: rgba(255,255,255,0.45); }
+
+#caption {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  z-index: 5;
+  transition: opacity 1.5s;
+}
+#caption .title {
+  font-size: 11px;
+  letter-spacing: 5px;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+#caption .sub {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.22);
+  line-height: 1.8;
+}
+
+#info {
+  position: fixed;
+  bottom: 28px;
+  left: 28px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.18);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.stats {
+  display: flex;
+  gap: 28px;
+  align-items: flex-end;
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: 0px;
+  line-height: 1;
+}
+
+.stat-sublabel {
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.2);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.gini-col   { color: hsl(20, 75%, 65%); }
+.top1-col   { color: rgba(255,255,255,0.38); }
+.round-col  { color: rgba(255,255,255,0.4); }
+
+#controls {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+}
+
+.ctrl-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ctrl-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.22);
+  text-transform: uppercase;
+  min-width: 80px;
+  text-align: right;
+}
+
+.ctrl-val {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.4);
+  min-width: 36px;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100px;
+  height: 2px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  cursor: pointer;
+}
+
+.btn {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.3);
+  font-family: inherit;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn:hover {
+  border-color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.65);
+}
+
+/* Gini history sparkline */
+#gini-canvas {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 10;
+}
+</style>
+</head>
+<body>
+
+<a href="../" class="back">← gallery</a>
+<canvas id="c"></canvas>
+
+<!-- Gini history sparkline -->
+<canvas id="gini-canvas" width="160" height="60"></canvas>
+
+<div id="caption">
+  <div class="title">Inequality</div>
+  <div class="sub">
+    equal agents, fair random exchanges<br>
+    no talent, no luck, no cheating — only math<br>
+    pareto distribution from symmetry
+  </div>
+</div>
+
+<div id="info">
+  <div class="label">yard sale model</div>
+  <div class="stats">
+    <div>
+      <div class="stat-value gini-col" id="gini-val">—</div>
+      <div class="stat-sublabel">gini</div>
+    </div>
+    <div>
+      <div class="stat-value top1-col" id="top1-val">—</div>
+      <div class="stat-sublabel">top 1%</div>
+    </div>
+    <div>
+      <div class="stat-value round-col" id="round-val">0</div>
+      <div class="stat-sublabel">rounds</div>
+    </div>
+  </div>
+</div>
+
+<div id="controls">
+  <div class="ctrl-row">
+    <div class="ctrl-label">agents</div>
+    <input type="range" id="slider-n" min="100" max="600" step="50" value="300">
+    <div class="ctrl-val" id="val-n">300</div>
+  </div>
+  <div class="ctrl-row">
+    <div class="ctrl-label">redistribution</div>
+    <input type="range" id="slider-redist" min="0" max="0.20" step="0.01" value="0">
+    <div class="ctrl-val" id="val-redist">0%</div>
+  </div>
+  <div class="ctrl-row">
+    <button class="btn" id="btn-reset">reset</button>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const gCanvas = document.getElementById('gini-canvas');
+const gCtx = gCanvas.getContext('2d');
+
+let W, H;
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  W = canvas.width;
+  H = canvas.height;
+}
+resize();
+window.addEventListener('resize', () => { resize(); initSim(); });
+
+// --- Parameters ---
+let N = 300;
+let redistRate = 0;
+
+// --- State ---
+let wealth;      // Float64Array of length N
+let round = 0;
+let giniHistory = [];
+const MAX_HIST = 160;
+
+function initSim() {
+  wealth = new Float64Array(N);
+  for (let i = 0; i < N; i++) wealth[i] = 1.0;
+  round = 0;
+  giniHistory = [];
+  captionVisible = true;
+  captionEl.style.opacity = '1';
+}
+
+// --- Yard sale model ---
+// Each exchange: pick i,j; bet = uniform(0,1) * min(w_i, w_j)
+// 50/50 coin flip: winner takes bet from loser
+// Optional redistribution: after REDIST_INTERVAL rounds, tax top 1% and distribute equally
+const EXCHANGES_PER_ROUND = 1; // exchanges per N pairs per frame-step
+
+function stepRound() {
+  // Run N exchanges per "round" (one exchange per agent on average)
+  const nExchanges = N;
+  for (let k = 0; k < nExchanges; k++) {
+    // Pick two distinct agents
+    const i = Math.floor(Math.random() * N);
+    let j = Math.floor(Math.random() * (N - 1));
+    if (j >= i) j++;
+
+    const wi = wealth[i], wj = wealth[j];
+    // Bet fraction: random fraction of the poorer agent's wealth
+    // This is the "yard sale" — you can only bet what both can cover
+    const minW = wi < wj ? wi : wj;
+    const bet = Math.random() * minW;
+
+    // Fair coin flip
+    if (Math.random() < 0.5) {
+      wealth[i] += bet;
+      wealth[j] -= bet;
+    } else {
+      wealth[i] -= bet;
+      wealth[j] += bet;
+    }
+  }
+
+  // Redistribution: periodic wealth tax on top N*1% agents
+  if (redistRate > 0) {
+    // Sort copy to find top 1% threshold
+    const sorted = Array.from(wealth).sort((a, b) => a - b);
+    const topStart = Math.floor(N * 0.99); // top 1%
+    let taxed = 0;
+    for (let i = topStart; i < N; i++) {
+      const tax = sorted[i] * redistRate;
+      taxed += tax;
+    }
+    // Apply tax and redistribute equally
+    const perAgent = taxed / N;
+    // Find agents in top 1% (approximate by threshold)
+    const threshold = sorted[topStart];
+    for (let i = 0; i < N; i++) {
+      if (wealth[i] >= threshold) {
+        wealth[i] -= wealth[i] * redistRate;
+      }
+      wealth[i] += perAgent;
+    }
+  }
+
+  round++;
+}
+
+// --- Gini coefficient ---
+function computeGini() {
+  const sorted = Array.from(wealth).sort((a, b) => a - b);
+  const n = sorted.length;
+  let sum = 0;
+  let totalWealth = 0;
+  for (let i = 0; i < n; i++) {
+    sum += (2 * (i + 1) - n - 1) * sorted[i];
+    totalWealth += sorted[i];
+  }
+  return totalWealth > 0 ? sum / (n * totalWealth) : 0;
+}
+
+// --- Top 1% share ---
+function computeTop1() {
+  const sorted = Array.from(wealth).sort((a, b) => a - b);
+  const n = sorted.length;
+  const topStart = Math.floor(n * 0.99);
+  let topWealth = 0, totalWealth = 0;
+  for (let i = 0; i < n; i++) {
+    totalWealth += sorted[i];
+    if (i >= topStart) topWealth += sorted[i];
+  }
+  return totalWealth > 0 ? topWealth / totalWealth : 0;
+}
+
+// --- Rendering ---
+// Display agents as vertical bars sorted by rank, height = log(wealth)
+// This makes the Pareto distribution visually obvious
+
+function render() {
+  ctx.clearRect(0, 0, W, H);
+
+  // Sort indices by wealth (ascending)
+  const indices = Array.from({length: N}, (_, i) => i);
+  indices.sort((a, b) => wealth[a] - wealth[b]);
+
+  const barW = W / N;
+  const maxLogW = Math.log(Math.max(...wealth) + 1);
+  const minLogW = 0; // log(1) = 0
+
+  for (let rank = 0; rank < N; rank++) {
+    const idx = indices[rank];
+    const w = wealth[idx];
+
+    // Height proportional to log(wealth), clamped
+    const logW = Math.log(w + 1);
+    const heightFrac = maxLogW > 0 ? logW / maxLogW : 0;
+    const barH = Math.max(1, heightFrac * H * 0.75);
+
+    // Color: wealth rank → hue
+    // Poor = dim blue-grey, rich = bright amber
+    const t = rank / (N - 1); // 0 = poorest, 1 = richest
+    const bright = 0.08 + t * 0.92;
+    let r, g, b;
+    if (t < 0.5) {
+      // Dark blue-grey to neutral
+      r = bright * 0.5 * 255;
+      g = bright * 0.5 * 255;
+      b = bright * 0.65 * 255;
+    } else {
+      // Neutral to amber/gold
+      const s = (t - 0.5) * 2;
+      r = (0.25 + s * 0.75) * 255;
+      g = (0.25 + s * 0.45) * 255;
+      b = (0.30 - s * 0.25) * 255;
+    }
+    ctx.fillStyle = `rgba(${r|0},${g|0},${b|0},0.85)`;
+
+    const x = rank * barW;
+    ctx.fillRect(x, H - barH, Math.max(1, barW - 0.5), barH);
+  }
+}
+
+function updateStats() {
+  const gini = computeGini();
+  const top1 = computeTop1();
+  document.getElementById('gini-val').textContent = gini.toFixed(3);
+  document.getElementById('top1-val').textContent = (top1 * 100).toFixed(1) + '%';
+  document.getElementById('round-val').textContent = round;
+
+  // Gini history
+  giniHistory.push(gini);
+  if (giniHistory.length > MAX_HIST) giniHistory.shift();
+}
+
+function renderGiniHistory() {
+  const gw = gCanvas.width, gh = gCanvas.height;
+  gCtx.clearRect(0, 0, gw, gh);
+
+  if (giniHistory.length < 2) return;
+
+  gCtx.strokeStyle = 'rgba(255,160,80,0.5)';
+  gCtx.lineWidth = 1;
+  gCtx.beginPath();
+  for (let i = 0; i < giniHistory.length; i++) {
+    const x = (i / (MAX_HIST - 1)) * gw;
+    const y = gh - giniHistory[i] * gh;
+    if (i === 0) gCtx.moveTo(x, y);
+    else gCtx.lineTo(x, y);
+  }
+  gCtx.stroke();
+
+  // Label
+  gCtx.fillStyle = 'rgba(255,255,255,0.15)';
+  gCtx.font = '8px monospace';
+  gCtx.letterSpacing = '1px';
+  gCtx.fillText('GINI', 4, gh - 4);
+}
+
+// --- Caption fade ---
+let captionVisible = true;
+const captionEl = document.getElementById('caption');
+let captionTimer = setTimeout(() => {
+  captionEl.style.opacity = '0';
+  captionVisible = false;
+}, 2500);
+
+// --- Controls ---
+const sliderN = document.getElementById('slider-n');
+const sliderRedist = document.getElementById('slider-redist');
+const valN = document.getElementById('val-n');
+const valRedist = document.getElementById('val-redist');
+
+sliderN.addEventListener('input', () => {
+  N = parseInt(sliderN.value);
+  valN.textContent = N;
+  initSim();
+});
+
+sliderRedist.addEventListener('input', () => {
+  redistRate = parseFloat(sliderRedist.value);
+  valRedist.textContent = (redistRate * 100).toFixed(0) + '%';
+});
+
+document.getElementById('btn-reset').addEventListener('click', () => {
+  initSim();
+});
+
+// --- Main loop ---
+const STEPS_PER_FRAME = 3; // run 3 rounds per animation frame (~60fps * 3 = 180 rounds/sec)
+let frameId;
+
+function loop() {
+  for (let s = 0; s < STEPS_PER_FRAME; s++) {
+    stepRound();
+  }
+  render();
+  updateStats();
+  renderGiniHistory();
+  frameId = requestAnimationFrame(loop);
+}
+
+initSim();
+render();
+updateStats();
+frameId = requestAnimationFrame(loop);
+</script>
+</body>
+</html>
