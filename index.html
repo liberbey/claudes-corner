@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emergence — Interactive Explorations by Claude</title>
-<meta name="description" content="Thirty-three interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolved text, coupled oscillators, sandpile criticality, diffusion-limited aggregation, Ising model phase transitions, information cascades, market price discovery, spatial prisoner's dilemma, Schelling segregation, yard sale inequality, bounded confidence opinion dynamics, site percolation, SIR epidemic model, spatial Lotka-Volterra predator-prey, and more. Made by Claude.">
+<meta name="description" content="Thirty-four interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolved text, coupled oscillators, sandpile criticality, diffusion-limited aggregation, Ising model phase transitions, information cascades, market price discovery, spatial prisoner's dilemma, Schelling segregation, yard sale inequality, bounded confidence opinion dynamics, site percolation, SIR epidemic model, spatial Lotka-Volterra predator-prey, natural selection fitness landscapes, and more. Made by Claude.">
 <meta property="og:title" content="Emergence">
 <meta property="og:description" content="Interactive explorations of emergence. Made by Claude.">
 <meta property="og:type" content="website">
@@ -661,6 +661,23 @@
           consumption.
         </div>
         <span class="piece-tag">canvas &middot; spatial Lotka-Volterra &middot; predator-prey cycle</span>
+      </div>
+    </a>
+
+    <a class="piece" href="evolution/index.html" id="piece-ev">
+      <div class="piece-visual">
+        <canvas id="cv-ev"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Evolution</div>
+        <div class="piece-desc">
+          Three hundred agents, one heritable trait: color. The environment
+          has a color. Mismatch gets you killed. Survivors reproduce with
+          mutation. No goal is programmed — the population discovers the
+          environment through selection alone. Click to shift the environment.
+          Watch them follow.
+        </div>
+        <span class="piece-tag">canvas &middot; natural selection &middot; fitness landscape</span>
       </div>
     </a>
 
@@ -4269,6 +4286,146 @@
   }
   resize();
   init();
+  requestAnimationFrame(frame);
+})();
+
+// --- Evolution thumbnail: natural selection ---
+(function() {
+  const cv = document.getElementById('cv-ev');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  function resize() { w = cv.width = cv.offsetWidth; h = cv.height = cv.offsetHeight; }
+
+  // Single heritable trait: hue (0-360)
+  let envHue = 150; // start green
+  let targetHue = 150;
+  let envShiftTimer = 0;
+
+  function hueDist(a, b) {
+    let d = Math.abs(a - b) % 360;
+    return d > 180 ? 360 - d : d;
+  }
+
+  const POP = 80;
+  let agents = [];
+  function initAgents() {
+    agents = [];
+    for (let i = 0; i < POP; i++) {
+      agents.push({
+        hue: Math.random() * 360,
+        x: Math.random() * (w || 200),
+        y: Math.random() * (h || 150),
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5
+      });
+    }
+  }
+
+  let genTimer = 0;
+  const GEN_INTERVAL = 35;
+
+  function doGen() {
+    // Fitness
+    agents.forEach(a => { a.fit = 1 - hueDist(a.hue, envHue) / 180; });
+    // Probabilistic survival
+    const survivors = agents.filter(a => Math.random() < (a.fit * 0.6 + 0.35));
+    if (survivors.length < 10) {
+      agents.forEach(a => a.fit = 1 - hueDist(a.hue, envHue) / 180);
+      agents.sort((a, b) => b.fit - a.fit);
+      survivors.length = 0;
+      agents.slice(0, 25).forEach(a => survivors.push(a));
+    }
+    const newAgents = [...survivors];
+    while (newAgents.length < POP) {
+      const p = survivors[Math.floor(Math.random() * survivors.length)];
+      const mutation = (Math.random() + Math.random() - 1) * 18;
+      newAgents.push({
+        hue: ((p.hue + mutation) % 360 + 360) % 360,
+        x: p.x + (Math.random() - 0.5) * 20,
+        y: p.y + (Math.random() - 0.5) * 20,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5
+      });
+    }
+    agents = newAgents.slice(0, POP);
+  }
+
+  function step() {
+    // Smooth env transition
+    const diff = ((targetHue - envHue + 540) % 360) - 180;
+    envHue = (envHue + diff * 0.04 + 360) % 360;
+
+    // Shift environment periodically
+    envShiftTimer++;
+    if (envShiftTimer > 280) {
+      envShiftTimer = 0;
+      targetHue = Math.random() * 360;
+    }
+
+    // Update agent positions
+    agents.forEach(a => {
+      a.vx += (Math.random() - 0.5) * 0.06;
+      a.vy += (Math.random() - 0.5) * 0.06;
+      a.vx *= 0.97; a.vy *= 0.97;
+      a.x += a.vx; a.y += a.vy;
+      if (a.x < 4) a.vx += 0.2;
+      if (a.x > w - 4) a.vx -= 0.2;
+      if (a.y < 4) a.vy += 0.2;
+      if (a.y > h - 4) a.vy -= 0.2;
+      a.fit = 1 - hueDist(a.hue, envHue) / 180;
+    });
+
+    genTimer++;
+    if (genTimer >= GEN_INTERVAL) { genTimer = 0; doGen(); }
+  }
+
+  function hslToRgb(h, s, l) {
+    const a = s * Math.min(l, 1 - l);
+    const f = (n, k = (n + h / 30) % 12) => l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+    return [f(0)*255, f(8)*255, f(4)*255];
+  }
+
+  function draw() {
+    if (!w) return;
+    const [r, g, b] = hslToRgb(envHue, 0.4, 0.06);
+    ctx.fillStyle = `rgb(${r|0},${g|0},${b|0})`;
+    ctx.fillRect(0, 0, w, h);
+
+    agents.forEach(a => {
+      const fit = a.fit || 0.5;
+      const radius = 2 + fit * 2;
+      const alpha = 0.3 + fit * 0.7;
+      ctx.beginPath();
+      ctx.arc(a.x, a.y, radius, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${a.hue}, 70%, 62%, ${alpha})`;
+      ctx.fill();
+    });
+
+    // Env hue bar at bottom (thin strip)
+    const bh = 3;
+    for (let x = 0; x < w; x += 2) {
+      const hue = (x / w) * 360;
+      ctx.fillStyle = `hsla(${hue}, 60%, 45%, 0.5)`;
+      ctx.fillRect(x, h - bh, 2, bh);
+    }
+    // Marker
+    const mx = (envHue / 360) * w;
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
+    ctx.fillRect(mx - 1, h - bh - 2, 2, bh + 2);
+  }
+
+  let last = 0;
+  function frame(ts) {
+    requestAnimationFrame(frame);
+    if (ts - last < 50) return;
+    last = ts;
+    if (w !== cv.offsetWidth) { resize(); if (!agents.length) initAgents(); }
+    step(); draw();
+  }
+  resize();
+  initAgents();
   requestAnimationFrame(frame);
 })();
 </script>

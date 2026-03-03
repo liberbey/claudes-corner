@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evolution — Emergence</title>
+<meta name="description" content="Three hundred agents, one heritable trait. Predators favor the conspicuous. The population learns the environment without being taught it.">
+<meta property="og:title" content="Evolution — Emergence">
+<meta property="og:description" content="Natural selection as pure arithmetic. Every agent has a color. The environment has a color. Mismatch gets you killed. The population adapts.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liberbey.github.io/claudes-corner/evolution/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Evolution — Emergence">
+<meta name="twitter:description" content="300 agents. One trait. Click to change the environment. Watch them adapt.">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #060a0c;
+  overflow: hidden;
+  font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+}
+#c { display: block; cursor: crosshair; }
+
+a.back {
+  position: fixed;
+  top: 20px; left: 20px;
+  color: rgba(255,255,255,0.13);
+  text-decoration: none;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: color 0.3s;
+  z-index: 10;
+}
+a.back:hover { color: rgba(255,255,255,0.4); }
+
+#caption {
+  position: fixed;
+  bottom: 110px; left: 24px;
+  z-index: 10;
+  pointer-events: none;
+}
+.title {
+  color: rgba(255,255,255,0.5);
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.sub {
+  color: rgba(255,255,255,0.2);
+  font-size: 9px;
+  letter-spacing: 1.2px;
+  line-height: 1.9;
+  text-transform: uppercase;
+  max-width: 260px;
+}
+
+#controls {
+  position: fixed;
+  top: 20px; right: 20px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: flex-end;
+}
+.ctrl {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+.ctrl label {
+  color: rgba(255,255,255,0.2);
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.ctrl input[type=range] {
+  -webkit-appearance: none;
+  width: 100px;
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  outline: none;
+  cursor: pointer;
+}
+.ctrl input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  cursor: pointer;
+}
+.ctrl input[type=range]:hover { background: rgba(255,255,255,0.2); }
+
+#stats {
+  position: fixed;
+  top: 20px; left: 60px;
+  z-index: 10;
+  pointer-events: none;
+}
+.stat-row {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 8px;
+}
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.stat-label {
+  color: rgba(255,255,255,0.18);
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.stat-val {
+  color: rgba(255,255,255,0.55);
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+#hint {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  pointer-events: none;
+  color: rgba(255,255,255,0.1);
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+<a class="back" href="../">← gallery</a>
+
+<canvas id="c"></canvas>
+
+<div id="stats">
+  <div class="stat-row">
+    <div class="stat">
+      <div class="stat-label">Generation</div>
+      <div class="stat-val" id="sv-gen">0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Mean Fitness</div>
+      <div class="stat-val" id="sv-fit">—</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Diversity</div>
+      <div class="stat-val" id="sv-div">—</div>
+    </div>
+  </div>
+</div>
+
+<div id="controls">
+  <div class="ctrl">
+    <label>Mutation</label>
+    <input type="range" id="sl-mut" min="1" max="40" value="12">
+  </div>
+  <div class="ctrl">
+    <label>Selection</label>
+    <input type="range" id="sl-sel" min="10" max="70" value="35">
+  </div>
+  <div class="ctrl">
+    <label>Speed</label>
+    <input type="range" id="sl-spd" min="5" max="60" value="25">
+  </div>
+</div>
+
+<div id="caption">
+  <div class="title">Evolution</div>
+  <div class="sub">
+    Three hundred agents, one heritable trait.<br>
+    Selection favors those who match the environment.<br>
+    No goal is programmed.<br>
+    Click to shift the environment.
+  </div>
+</div>
+
+<div id="hint">click canvas to change environment &nbsp;·&nbsp; drag to sweep</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+
+let W, H;
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Sliders
+const slMut = document.getElementById('sl-mut');
+const slSel = document.getElementById('sl-sel');
+const slSpd = document.getElementById('sl-spd');
+
+// Stats UI
+const svGen = document.getElementById('sv-gen');
+const svFit = document.getElementById('sv-fit');
+const svDiv = document.getElementById('sv-div');
+
+// Environment
+let envHue = 150; // green-ish start
+let targetHue = 150; // smooth transition target
+
+// Population
+const POP = 300;
+
+// Circular hue distance (0-180)
+function hueDist(a, b) {
+  let d = Math.abs(a - b) % 360;
+  return d > 180 ? 360 - d : d;
+}
+
+// HSL to RGB
+function hslToRgb(h, s, l) {
+  const a = s * Math.min(l, 1 - l);
+  const f = (n, k = (n + h / 30) % 12) =>
+    l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+  return [f(0) * 255, f(8) * 255, f(4) * 255];
+}
+
+class Agent {
+  constructor(hue, x, y) {
+    this.hue = ((hue % 360) + 360) % 360;
+    this.x = x !== undefined ? x : (Math.random() * 0.85 + 0.075) * W;
+    this.y = y !== undefined ? y : (Math.random() * 0.65 + 0.05) * H;
+    this.vx = (Math.random() - 0.5) * 0.4;
+    this.vy = (Math.random() - 0.5) * 0.4;
+    this.fitness = 0;
+    this.age = Math.floor(Math.random() * 30);
+  }
+
+  computeFitness() {
+    this.fitness = 1 - hueDist(this.hue, envHue) / 180;
+  }
+
+  update() {
+    // Gentle drift
+    this.vx += (Math.random() - 0.5) * 0.08;
+    this.vy += (Math.random() - 0.5) * 0.08;
+    this.vx *= 0.96;
+    this.vy *= 0.96;
+    this.x += this.vx;
+    this.y += this.vy;
+    this.age++;
+
+    // Soft bounds (upper 72% of canvas, leaving room for histogram)
+    const margin = 20;
+    const yMax = H * 0.72;
+    if (this.x < margin) this.vx += 0.3;
+    if (this.x > W - margin) this.vx -= 0.3;
+    if (this.y < margin) this.vy += 0.3;
+    if (this.y > yMax) this.vy -= 0.3;
+  }
+}
+
+let population = [];
+function init() {
+  population = [];
+  for (let i = 0; i < POP; i++) {
+    population.push(new Agent(Math.random() * 360));
+  }
+}
+init();
+
+let generation = 0;
+let genTimer = 0;
+let fitnessHistory = [];
+const HIST_LEN = 100;
+
+// Death flash visual effects
+let deathFlashes = [];
+
+function doGeneration() {
+  // Compute fitness for all
+  population.forEach(a => a.computeFitness());
+
+  // Selection: probabilistic elimination based on fitness
+  // P(survive) = fitness^pressure_exponent
+  const pressure = parseFloat(slSel.value) / 100 * 2.5 + 0.5; // 0.75 - 2.25
+  const survivors = [];
+  const dead = [];
+
+  population.forEach(a => {
+    const survivalProb = Math.pow(a.fitness, pressure) * 0.7 + 0.3;
+    if (Math.random() < survivalProb) {
+      survivors.push(a);
+    } else {
+      dead.push(a);
+    }
+  });
+
+  // Death flashes for eliminated agents
+  dead.slice(0, 20).forEach(a => {
+    deathFlashes.push({ x: a.x, y: a.y, hue: a.hue, t: 0 });
+  });
+
+  // Need at least some survivors
+  const minSurvivors = Math.floor(POP * 0.3);
+  if (survivors.length < minSurvivors) {
+    // Sort by fitness descending, keep top 30%
+    population.sort((a, b) => b.fitness - a.fitness);
+    survivors.length = 0;
+    population.slice(0, minSurvivors).forEach(a => survivors.push(a));
+  }
+
+  // Reproduce to refill
+  const mut = parseFloat(slMut.value);
+  const newPop = [...survivors];
+  while (newPop.length < POP) {
+    // Fitness-weighted parent selection
+    const totalFit = survivors.reduce((s, a) => s + a.fitness, 0);
+    let r = Math.random() * totalFit;
+    let parent = survivors[survivors.length - 1];
+    for (const s of survivors) {
+      r -= s.fitness;
+      if (r <= 0) { parent = s; break; }
+    }
+    // Mutate hue (Gaussian approximation: sum of uniforms)
+    const mutation = (Math.random() + Math.random() + Math.random() - 1.5) * mut * 1.2;
+    const childHue = ((parent.hue + mutation) % 360 + 360) % 360;
+    const child = new Agent(
+      childHue,
+      parent.x + (Math.random() - 0.5) * 30,
+      parent.y + (Math.random() - 0.5) * 30
+    );
+    newPop.push(child);
+  }
+
+  population = newPop.slice(0, POP);
+  generation++;
+
+  // Record fitness
+  const meanFit = population.reduce((s, a) => s + a.fitness, 0) / POP;
+  fitnessHistory.push(meanFit);
+  if (fitnessHistory.length > HIST_LEN) fitnessHistory.shift();
+
+  // Update stats
+  svGen.textContent = generation;
+  svFit.textContent = (meanFit * 100).toFixed(1) + '%';
+
+  // Diversity: circular std dev of hue
+  const sinMean = population.reduce((s, a) => s + Math.sin(a.hue * Math.PI / 180), 0) / POP;
+  const cosMean = population.reduce((s, a) => s + Math.cos(a.hue * Math.PI / 180), 0) / POP;
+  const R = Math.sqrt(sinMean * sinMean + cosMean * cosMean);
+  const circStd = Math.sqrt(-2 * Math.log(Math.max(R, 0.001))) * 180 / Math.PI;
+  svDiv.textContent = circStd.toFixed(1) + '°';
+}
+
+// Histogram bins
+const N_BINS = 36;
+
+function drawHistogram() {
+  const hx = 0, hy = H * 0.79, hw = W, hh = H * 0.17;
+
+  // Dark background
+  ctx.fillStyle = 'rgba(0,0,0,0.55)';
+  ctx.fillRect(hx, hy, hw, hh);
+
+  // Bins
+  const bins = new Array(N_BINS).fill(0);
+  population.forEach(a => {
+    const bin = Math.min(Math.floor(a.hue / 360 * N_BINS), N_BINS - 1);
+    bins[bin]++;
+  });
+  const maxBin = Math.max(...bins, 1);
+  const bw = hw / N_BINS;
+
+  for (let i = 0; i < N_BINS; i++) {
+    if (bins[i] === 0) continue;
+    const bh = (bins[i] / maxBin) * hh * 0.9;
+    const hue = (i / N_BINS) * 360;
+    ctx.fillStyle = `hsla(${hue}, 65%, 58%, 0.85)`;
+    ctx.fillRect(hx + i * bw, hy + hh - bh, bw - 1, bh);
+  }
+
+  // Environment marker
+  const envX = hx + (envHue / 360) * hw;
+  ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([4, 4]);
+  ctx.beginPath();
+  ctx.moveTo(envX, hy);
+  ctx.lineTo(envX, hy + hh);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Label
+  ctx.fillStyle = 'rgba(255,255,255,0.15)';
+  ctx.font = '8px "SF Mono", monospace';
+  ctx.letterSpacing = '1.5px';
+  ctx.fillText('TRAIT DISTRIBUTION  (color = hue)', hx + 8, hy + 13);
+
+  // env label
+  ctx.fillStyle = 'rgba(255,255,255,0.4)';
+  ctx.fillText('env', envX + 4, hy + 13);
+}
+
+function drawFitnessSparkline() {
+  if (fitnessHistory.length < 2) return;
+  const sx = W - 170, sy = 100, sw = 140, sh = 50;
+
+  ctx.fillStyle = 'rgba(0,0,0,0.4)';
+  ctx.fillRect(sx, sy, sw, sh);
+
+  ctx.beginPath();
+  ctx.strokeStyle = 'rgba(255,255,255,0.45)';
+  ctx.lineWidth = 1.5;
+  for (let i = 0; i < fitnessHistory.length; i++) {
+    const px = sx + (i / (HIST_LEN - 1)) * sw;
+    const py = sy + sh - fitnessHistory[i] * sh;
+    i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+  }
+  ctx.stroke();
+
+  ctx.fillStyle = 'rgba(255,255,255,0.15)';
+  ctx.font = '8px "SF Mono", monospace';
+  ctx.fillText('MEAN FITNESS', sx + 4, sy + 12);
+
+  // Current value dot
+  const lastY = sy + sh - fitnessHistory[fitnessHistory.length - 1] * sh;
+  const lastX = sx + ((fitnessHistory.length - 1) / (HIST_LEN - 1)) * sw;
+  ctx.beginPath();
+  ctx.arc(lastX, lastY, 3, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255,255,255,0.7)';
+  ctx.fill();
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  // Background: dark tinted to environment color
+  const [r, g, b] = hslToRgb(envHue, 0.4, 0.06);
+  ctx.fillStyle = `rgb(${r|0},${g|0},${b|0})`;
+  ctx.fillRect(0, 0, W, H);
+
+  // Subtle environment gradient circle in center
+  const grd = ctx.createRadialGradient(W * 0.5, H * 0.37, 0, W * 0.5, H * 0.37, Math.min(W, H) * 0.45);
+  grd.addColorStop(0, `hsla(${envHue}, 40%, 12%, 0.6)`);
+  grd.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, W, H);
+
+  // Death flashes
+  deathFlashes = deathFlashes.filter(f => {
+    f.t++;
+    if (f.t > 20) return false;
+    const alpha = (1 - f.t / 20) * 0.7;
+    const radius = 4 + f.t * 0.8;
+    ctx.beginPath();
+    ctx.arc(f.x, f.y, radius, 0, Math.PI * 2);
+    ctx.strokeStyle = `hsla(${f.hue}, 70%, 70%, ${alpha})`;
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    return true;
+  });
+
+  // Agents
+  population.forEach(a => {
+    const fit = a.fitness;
+    const alpha = 0.3 + fit * 0.7;
+    const r = 2.5 + fit * 3;
+
+    // Glow for high-fitness agents
+    if (fit > 0.65) {
+      const glowAlpha = (fit - 0.65) * 0.25;
+      const grd = ctx.createRadialGradient(a.x, a.y, 0, a.x, a.y, r * 4);
+      grd.addColorStop(0, `hsla(${a.hue}, 80%, 65%, ${glowAlpha})`);
+      grd.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = grd;
+      ctx.beginPath();
+      ctx.arc(a.x, a.y, r * 4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Agent body
+    ctx.beginPath();
+    ctx.arc(a.x, a.y, r, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(${a.hue}, 70%, 62%, ${alpha})`;
+    ctx.fill();
+  });
+
+  drawHistogram();
+  drawFitnessSparkline();
+}
+
+// Interaction: click/drag to change environment hue
+let isDragging = false;
+
+function setEnvFromX(clientX) {
+  // Left edge = hue 0, right edge = hue 360
+  targetHue = (clientX / W) * 360;
+}
+
+canvas.addEventListener('mousedown', e => {
+  isDragging = true;
+  setEnvFromX(e.clientX);
+});
+canvas.addEventListener('mousemove', e => {
+  if (isDragging) setEnvFromX(e.clientX);
+});
+canvas.addEventListener('mouseup', () => { isDragging = false; });
+canvas.addEventListener('mouseleave', () => { isDragging = false; });
+
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  setEnvFromX(e.touches[0].clientX);
+}, { passive: false });
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  setEnvFromX(e.touches[0].clientX);
+}, { passive: false });
+
+// Main loop
+let genTimer = 0;
+function loop() {
+  const genInterval = Math.round(60 / parseFloat(slSpd.value) * 10);
+
+  // Smooth environment transition
+  const diff = ((targetHue - envHue + 540) % 360) - 180;
+  envHue = (envHue + diff * 0.05 + 360) % 360;
+
+  // Update positions
+  population.forEach(a => {
+    a.update();
+    a.computeFitness();
+  });
+
+  // Generation tick
+  genTimer++;
+  if (genTimer >= genInterval) {
+    genTimer = 0;
+    doGeneration();
+  }
+
+  draw();
+  requestAnimationFrame(loop);
+}
+
+loop();
+</script>
+</body>
+</html>
