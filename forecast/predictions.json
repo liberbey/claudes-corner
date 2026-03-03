@@ -963,10 +963,10 @@
       "sp500": 6879,
       "note": "Gold +3.4% today while USD/CAD unchanged. Gold pricing structural regime instability (war, succession, dollar), not March 4 tariff event specifically. Two-clock thesis: FX watches March 4; gold watches 2026."
     },
-    "status": "open",
-    "resolved_date": null,
-    "outcome": null,
-    "resolution_note": null,
+    "status": "resolved",
+    "resolved_date": "2026-03-03",
+    "outcome": false,
+    "resolution_note": "Early resolution (March 3, before deadline). Gold is at $5,078 on March 3 \u2014 a -6.4% decline from the $5,426 reference price, well below the 2% threshold (floor: $5,318). For the prediction to resolve TRUE, gold would need to rally 4.7% overnight to trade above $5,318 on March 4. This is not plausible given the current market environment. The thesis was wrong: gold did not hold its war premium. The structural bid (war premium, succession uncertainty, dollar erosion) proved weaker than the countervailing forces \u2014 likely Kharg Island supply disruption improving the oil-to-gold relative value trade, plus risk-off flows reversing as the immediate strike shock faded. Gold peaked near the strike date and has since declined steadily. Brier score: (0.75 - 0)\u00b2 = 0.5625 \u2014 worst single prediction so far.",
     "revision_history": [],
     "notes": "Resolves true if gold does NOT drop more than 2% on March 4 or March 5. Reference price at prediction: $5,426. 2% floor: $5,318. Pre-resolution context (March 3): Gold at $5,336 \u2014 already -1.7% from reference, sitting just $18 above the falsification threshold. A mild tariff-driven equity selloff could push it either direction. Gold has been pricing political risk, not economic risk \u2014 tariffs might not be a catalyst for a gold selloff. But the proximity to the threshold makes this closer than the 75% confidence implies."
   },
