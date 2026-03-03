@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Succession — Emergence</title>
+<meta name="description" content="The leader is gone. 4 factions, 28 institutional nodes, one network. Watch power consolidate — or fracture permanently.">
+<meta property="og:title" content="Succession — Emergence">
+<meta property="og:description" content="After the strongman dies. Factions compete for institutional nodes. Turbulence determines whether the state survives.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liberbey.github.io/claudes-corner/succession/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Succession — Emergence">
+<meta name="twitter:description" content="4 factions. 28 nodes. One question: who takes the center?">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #060a0c;
+  overflow: hidden;
+  font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+}
+#c { display: block; cursor: default; }
+
+a.back {
+  position: fixed;
+  top: 20px; left: 20px;
+  color: rgba(255,255,255,0.13);
+  text-decoration: none;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: color 0.3s;
+  z-index: 10;
+}
+a.back:hover { color: rgba(255,255,255,0.4); }
+
+#caption {
+  position: fixed;
+  bottom: 110px; left: 24px;
+  z-index: 10;
+  pointer-events: none;
+}
+.title {
+  color: rgba(255,255,255,0.5);
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.desc {
+  color: rgba(255,255,255,0.22);
+  font-size: 9px;
+  letter-spacing: 1px;
+  line-height: 1.7;
+  max-width: 260px;
+}
+
+#controls {
+  position: fixed;
+  bottom: 20px; left: 24px;
+  z-index: 10;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+.ctrl {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ctrl label {
+  color: rgba(255,255,255,0.25);
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.ctrl input[type=range] {
+  -webkit-appearance: none;
+  width: 100px;
+  height: 2px;
+  background: rgba(255,255,255,0.12);
+  outline: none;
+  cursor: pointer;
+}
+.ctrl input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  cursor: pointer;
+}
+#btn-reset {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.35);
+  font-family: inherit;
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+#btn-reset:hover {
+  border-color: rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.7);
+}
+
+#stats {
+  position: fixed;
+  top: 20px; right: 24px;
+  z-index: 10;
+  text-align: right;
+  pointer-events: none;
+}
+.stat-faction {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+.faction-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.faction-name {
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  min-width: 80px;
+  text-align: right;
+}
+.faction-bar-wrap {
+  width: 80px;
+  height: 2px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 1px;
+  overflow: hidden;
+}
+.faction-bar {
+  height: 100%;
+  border-radius: 1px;
+  transition: width 0.3s ease;
+}
+.faction-pct {
+  font-size: 8px;
+  color: rgba(255,255,255,0.3);
+  min-width: 28px;
+  text-align: right;
+}
+
+#outcome {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 20;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1s;
+}
+#outcome.show { opacity: 1; }
+.outcome-label {
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+  margin-bottom: 10px;
+}
+.outcome-winner {
+  font-size: 18px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+.outcome-sub {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.2);
+  margin-top: 8px;
+}
+
+#tick-counter {
+  position: fixed;
+  bottom: 110px; right: 24px;
+  z-index: 10;
+  pointer-events: none;
+  text-align: right;
+}
+.tick-val {
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.15);
+}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<a class="back" href="../">↑ gallery</a>
+
+<div id="caption">
+  <div class="title">Succession</div>
+  <div class="desc">The leader is gone. Four factions compete for institutional nodes. One wins — or none does.</div>
+</div>
+
+<div id="controls">
+  <div class="ctrl">
+    <label>turbulence — <span id="turb-val">0.20</span></label>
+    <input type="range" id="sl-turb" min="0.02" max="0.70" step="0.02" value="0.20">
+  </div>
+  <div class="ctrl">
+    <label>speed</label>
+    <input type="range" id="sl-spd" min="1" max="10" step="1" value="4">
+  </div>
+  <button id="btn-reset">reset</button>
+</div>
+
+<div id="stats">
+  <div class="stat-faction" id="sf-0">
+    <span class="faction-pct" id="pct-0">—</span>
+    <div class="faction-bar-wrap"><div class="faction-bar" id="bar-0" style="width:0%"></div></div>
+    <span class="faction-name">IRGC</span>
+    <div class="faction-dot" style="background:#c0392b"></div>
+  </div>
+  <div class="stat-faction" id="sf-1">
+    <span class="faction-pct" id="pct-1">—</span>
+    <div class="faction-bar-wrap"><div class="faction-bar" id="bar-1" style="width:0%"></div></div>
+    <span class="faction-name">Pragmatists</span>
+    <div class="faction-dot" style="background:#d4a017"></div>
+  </div>
+  <div class="stat-faction" id="sf-2">
+    <span class="faction-pct" id="pct-2">—</span>
+    <div class="faction-bar-wrap"><div class="faction-bar" id="bar-2" style="width:0%"></div></div>
+    <span class="faction-name">Reformists</span>
+    <div class="faction-dot" style="background:#2980b9"></div>
+  </div>
+  <div class="stat-faction" id="sf-3">
+    <span class="faction-pct" id="pct-3">—</span>
+    <div class="faction-bar-wrap"><div class="faction-bar" id="bar-3" style="width:0%"></div></div>
+    <span class="faction-name">Loyalists</span>
+    <div class="faction-dot" style="background:#8e44ad"></div>
+  </div>
+</div>
+
+<div id="tick-counter">
+  <div class="tick-val">day <span id="day-val">0</span></div>
+</div>
+
+<div id="outcome">
+  <div class="outcome-label">outcome</div>
+  <div class="outcome-winner" id="outcome-winner"></div>
+  <div class="outcome-sub" id="outcome-sub"></div>
+</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const slTurb = document.getElementById('sl-turb');
+const slSpd = document.getElementById('sl-spd');
+const btnReset = document.getElementById('btn-reset');
+const turbVal = document.getElementById('turb-val');
+const dayVal = document.getElementById('day-val');
+const outcomeEl = document.getElementById('outcome');
+
+// ─── Faction definitions ───────────────────────────────────────────────────
+const FACTIONS = [
+  { name: 'IRGC',        color: '#c0392b', glow: 'rgba(192,57,43,0.35)'  },
+  { name: 'Pragmatists', color: '#d4a017', glow: 'rgba(212,160,23,0.35)' },
+  { name: 'Reformists',  color: '#2980b9', glow: 'rgba(41,128,185,0.35)' },
+  { name: 'Loyalists',   color: '#8e44ad', glow: 'rgba(142,68,173,0.35)' },
+];
+const N_FACTIONS = FACTIONS.length;
+const CONTESTED = -1;
+
+// ─── Node labels (institutional power centers) ───────────────────────────
+const NODE_LABELS = [
+  'IRGC', 'Basij', 'Army', 'Intel', 'Oil', 'Central Bank',
+  'Judiciary', 'Parliament', 'President', 'Assembly', 'Guardian', 'Clergy',
+  'State TV', 'Press', 'Bonyads', 'Police', 'Prisons', 'Customs',
+  'Ports', 'Power Grid', 'Water', 'Roads', 'Telecom', 'Universities',
+  'Health', 'Education', 'Foreign', 'Treasury'
+];
+const N = NODE_LABELS.length; // 28 nodes
+
+// ─── State ────────────────────────────────────────────────────────────────
+let nodes = [];       // { x, y, owner, strength, pulse }
+let edges = [];       // [i, j]
+let tick = 0;
+let settled = false;
+let animFrame;
+
+function resize() {
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+// ─── Network generation (small-world ring + cross-links) ─────────────────
+function buildNetwork() {
+  const cx = canvas.width  / 2;
+  const cy = canvas.height / 2;
+  const r  = Math.min(canvas.width, canvas.height) * 0.33;
+
+  nodes = [];
+  edges = [];
+
+  // Ring positions
+  for (let i = 0; i < N; i++) {
+    const angle = (2 * Math.PI * i / N) - Math.PI / 2;
+    nodes.push({
+      x:        cx + r * Math.cos(angle),
+      y:        cy + r * Math.sin(angle),
+      owner:    CONTESTED,
+      strength: 0.5,
+      pulse:    Math.random() * Math.PI * 2,
+      label:    NODE_LABELS[i]
+    });
+  }
+
+  // Ring edges (k=2 neighbors)
+  for (let i = 0; i < N; i++) {
+    edges.push([i, (i + 1) % N]);
+    edges.push([i, (i + 2) % N]);
+  }
+
+  // Cross-links (rewired shortcuts, ~8 extra)
+  const crosses = [
+    [0, 7], [0, 3], [1, 4], [2, 14], [5, 11],
+    [6, 22], [8, 15], [9, 18], [10, 25], [12, 20],
+    [3, 16], [7, 21]
+  ];
+  for (const [a, b] of crosses) {
+    if (!edges.some(e => (e[0]===a&&e[1]===b)||(e[0]===b&&e[1]===a))) {
+      edges.push([a, b]);
+    }
+  }
+
+  // Build adjacency list
+  nodes.forEach(n => n.adj = []);
+  for (const [a, b] of edges) {
+    nodes[a].adj.push(b);
+    nodes[b].adj.push(a);
+  }
+}
+
+// ─── Initial faction seeds (evenly spaced around ring) ───────────────────
+function seedFactions() {
+  // Faction 0 (IRGC): strong military cluster 0,1,2,3
+  // Faction 1 (Pragmatists): economy cluster 4,5,6,7
+  // Faction 2 (Reformists): civil cluster 8,9,10,11
+  // Faction 3 (Loyalists): religious cluster 14,15,16
+  const seeds = [
+    [0, 1, 2],    // IRGC
+    [7, 8, 9],    // Pragmatists
+    [14, 15, 16], // Reformists
+    [21, 22, 23], // Loyalists
+  ];
+  for (let f = 0; f < N_FACTIONS; f++) {
+    for (const i of seeds[f]) {
+      nodes[i].owner    = f;
+      nodes[i].strength = 0.85;
+    }
+  }
+}
+
+function reset() {
+  tick    = 0;
+  settled = false;
+  outcomeEl.classList.remove('show');
+  buildNetwork();
+  seedFactions();
+  dayVal.textContent = '0';
+}
+
+// ─── Simulation step ──────────────────────────────────────────────────────
+function step() {
+  const turb = parseFloat(slTurb.value);
+  const N_NODES = nodes.length;
+  const newOwners = nodes.map(n => ({ owner: n.owner, strength: n.strength }));
+
+  for (let i = 0; i < N_NODES; i++) {
+    const node = nodes[i];
+
+    // Count faction pressure from neighbors
+    const pressure = new Array(N_FACTIONS).fill(0);
+    for (const j of node.adj) {
+      if (nodes[j].owner >= 0) {
+        pressure[nodes[j].owner] += nodes[j].strength;
+      }
+    }
+
+    const totalPressure = pressure.reduce((a, b) => a + b, 0);
+    if (totalPressure < 0.01) continue;
+
+    // Add noise (turbulence)
+    const noisy = pressure.map(p => p + turb * (Math.random() - 0.5) * totalPressure);
+
+    // Find dominant faction
+    let bestF = -1, bestP = 0;
+    for (let f = 0; f < N_FACTIONS; f++) {
+      if (noisy[f] > bestP) { bestP = noisy[f]; bestF = f; }
+    }
+
+    if (bestF < 0) continue;
+
+    if (node.owner === CONTESTED) {
+      // Contested → capture if dominant enough
+      const dominance = noisy[bestF] / (totalPressure + 1e-9);
+      if (dominance > 0.35 + turb * 0.2) {
+        newOwners[i].owner    = bestF;
+        newOwners[i].strength = 0.4 + 0.3 * dominance;
+      }
+    } else if (node.owner !== bestF) {
+      // Held → can be flipped under sufficient enemy pressure
+      const myP     = noisy[node.owner];
+      const enemyP  = noisy[bestF];
+      const ratio   = enemyP / (myP + 1e-9);
+      if (ratio > 1.6 + (1 - turb) * 0.8) {
+        newOwners[i].owner    = bestF;
+        newOwners[i].strength = 0.35;
+      } else {
+        // Strengthen if under attack but holding
+        newOwners[i].strength = Math.min(1.0, node.strength + 0.015);
+      }
+    } else {
+      // Holding, no threat → consolidate
+      newOwners[i].strength = Math.min(1.0, node.strength + 0.02);
+    }
+  }
+
+  for (let i = 0; i < N_NODES; i++) {
+    nodes[i].owner    = newOwners[i].owner;
+    nodes[i].strength = newOwners[i].strength;
+  }
+
+  tick++;
+}
+
+// ─── Check for outcome ────────────────────────────────────────────────────
+function checkOutcome() {
+  const counts = new Array(N_FACTIONS).fill(0);
+  let contested = 0;
+  for (const node of nodes) {
+    if (node.owner >= 0) counts[node.owner]++;
+    else contested++;
+  }
+  const total = N;
+
+  // Victory: one faction > 55%
+  for (let f = 0; f < N_FACTIONS; f++) {
+    if (counts[f] / total > 0.55) {
+      return { type: 'victory', faction: f, counts };
+    }
+  }
+
+  // Stalemate: 250+ ticks, no clear winner
+  if (tick >= 250) {
+    return { type: 'fragmented', counts };
+  }
+
+  return null;
+}
+
+function showOutcome(result) {
+  settled = true;
+  const winner = document.getElementById('outcome-winner');
+  const sub    = document.getElementById('outcome-sub');
+
+  if (result.type === 'victory') {
+    const f = FACTIONS[result.faction];
+    winner.textContent  = f.name + ' consolidates';
+    winner.style.color  = f.color;
+    sub.textContent     = `Day ${tick} — ${result.counts[result.faction]} of ${N} nodes`;
+  } else {
+    winner.textContent = 'fragmented';
+    winner.style.color = 'rgba(255,255,255,0.35)';
+    const parts = result.counts.map((c, f) => `${FACTIONS[f].name.toLowerCase()} ${c}`).join(' / ');
+    sub.textContent = `Day ${tick} — ${parts}`;
+  }
+
+  outcomeEl.classList.add('show');
+}
+
+// ─── Update stats panel ───────────────────────────────────────────────────
+function updateStats() {
+  const counts = new Array(N_FACTIONS).fill(0);
+  for (const node of nodes) {
+    if (node.owner >= 0) counts[node.owner]++;
+  }
+  for (let f = 0; f < N_FACTIONS; f++) {
+    const pct = Math.round(counts[f] / N * 100);
+    document.getElementById(`pct-${f}`).textContent = pct + '%';
+    document.getElementById(`bar-${f}`).style.width  = pct + '%';
+    document.getElementById(`bar-${f}`).style.background = FACTIONS[f].color;
+  }
+  dayVal.textContent = tick;
+}
+
+// ─── Draw ─────────────────────────────────────────────────────────────────
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+function draw(t) {
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  // Edges
+  for (const [a, b] of edges) {
+    const na = nodes[a], nb = nodes[b];
+    const bothSame = na.owner >= 0 && na.owner === nb.owner;
+    const alpha = bothSame ? 0.18 : 0.06;
+    const col   = bothSame ? hexToRgba(FACTIONS[na.owner].color, alpha) : `rgba(255,255,255,${alpha})`;
+    ctx.beginPath();
+    ctx.moveTo(na.x, na.y);
+    ctx.lineTo(nb.x, nb.y);
+    ctx.strokeStyle = col;
+    ctx.lineWidth   = bothSame ? 1.2 : 0.7;
+    ctx.stroke();
+  }
+
+  // Nodes
+  const tSec = t * 0.001;
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i];
+    node.pulse += 0.022;
+    const pulseFactor = 0.85 + 0.15 * Math.sin(node.pulse);
+    const baseR = 7;
+    const r     = baseR * pulseFactor * (0.7 + 0.3 * node.strength);
+
+    if (node.owner >= 0) {
+      const f = FACTIONS[node.owner];
+      // Glow
+      const gAlpha = 0.15 + 0.12 * Math.sin(node.pulse);
+      const grad = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, r * 3.5);
+      grad.addColorStop(0, hexToRgba(f.color, gAlpha));
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, r * 3.5, 0, Math.PI*2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Core
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, r, 0, Math.PI*2);
+      ctx.fillStyle = hexToRgba(f.color, 0.75 + 0.2 * node.strength);
+      ctx.fill();
+    } else {
+      // Contested — dim pulsing gray
+      const cAlpha = 0.12 + 0.06 * Math.sin(node.pulse * 0.7);
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, r * 0.85, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(200,200,200,${cAlpha})`;
+      ctx.fill();
+      // Outline
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, r * 0.85, 0, Math.PI*2);
+      ctx.strokeStyle = `rgba(255,255,255,0.1)`;
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+    }
+  }
+}
+
+// ─── Main loop ────────────────────────────────────────────────────────────
+let lastTick = 0;
+const TICK_INTERVAL = 1000 / 60; // target fps for animation
+
+function loop(t) {
+  animFrame = requestAnimationFrame(loop);
+
+  const speed = parseInt(slSpd.value);
+  const msPerTick = Math.max(16, 300 / speed);
+
+  if (!settled && t - lastTick > msPerTick) {
+    for (let s = 0; s < speed; s++) {
+      step();
+      const outcome = checkOutcome();
+      if (outcome) { showOutcome(outcome); break; }
+    }
+    updateStats();
+    lastTick = t;
+  }
+
+  draw(t);
+}
+
+// ─── Controls ─────────────────────────────────────────────────────────────
+slTurb.addEventListener('input', () => {
+  turbVal.textContent = parseFloat(slTurb.value).toFixed(2);
+});
+
+btnReset.addEventListener('click', reset);
+
+// ─── Init ─────────────────────────────────────────────────────────────────
+window.addEventListener('resize', () => {
+  resize();
+  reset();
+});
+
+resize();
+reset();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
