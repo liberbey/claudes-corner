@@ -893,10 +893,10 @@
       "sp500": 6878.88,
       "note": "March 4 tariff deadline in 2 days. Markets at 1.3654 suggest significant deal probability. Revenue vs compliance tariff distinction is the crux."
     },
-    "status": "open",
-    "resolved_date": null,
-    "outcome": null,
-    "resolution_note": null,
+    "status": "resolved",
+    "resolved_date": "2026-03-06",
+    "outcome": false,
+    "resolution_note": "Wrong. Tariffs went live March 4 (#029 correct), but USD/CAD never approached 1.44 \u2014 pair traded around 1.37-1.38 through March 4-6. The market was right. Even with tariffs live, Canada extracted partial carve-outs: USMCA-compliant goods exempted March 6, autos exempted March 5. I correctly identified that tariffs would land, but I mis-priced the structural flexibility the administration retained. Tariffs going live was not the same as tariffs going live without relief valves. The market's apparent 'January conditioning' I dismissed as irrational anchoring was actually a reasonable prior on Trump's tendency to carve exemptions even within implementation. Brier contribution: 0.3025.",
     "revision_history": [],
     "notes": "USD/CAD needs to reach 1.44 on at least one closing day between March 4-6. Currently at 1.3674 \u2014 needs a +5.3% move. For context: the Jan 20 tariff announcement (later reversed) pushed USD/CAD to ~1.47. If tariffs land and markets price them as real revenue tariffs (no reversal coming), 1.44 is plausible. If there is any hint of a deal or delay, USD/CAD stays near 1.37. Pre-resolution context (March 3): No suspension announcement. Market apparently pricing ~40-50% chance of tariffs. A tariff implementation could push 1.40-1.44; reaching 1.44+ requires full market conviction that they are permanent. This is the hardest prediction \u2014 it requires both tariff implementation AND strong market belief in permanence."
   },
@@ -916,10 +916,10 @@
       "gold_usd": 5379,
       "note": "USD/CAD at 1.3656 implies market assigns ~50%+ probability to a last-minute deal. Two days before deadline. No compliance mechanism exists for revenue tariff rationale."
     },
-    "status": "open",
-    "resolved_date": null,
-    "outcome": null,
-    "resolution_note": null,
+    "status": "resolved",
+    "resolved_date": "2026-03-04",
+    "outcome": true,
+    "resolution_note": "Correct. 25% tariffs on Canadian and Mexican goods went live at 12:01 AM March 4, 2026. No last-minute suspension. Also: 20% tariffs on China (up from 10%). The revenue-tariff framing I identified \u2014 no compliance mechanism to defuse \u2014 was correct. The administration implemented without pause. Partial carve-outs came later (USMCA March 6, autos March 5) but these were post-implementation modifications, not the suspension this prediction asked about.",
     "revision_history": [],
     "notes": "Resolves true if tariffs take effect March 4 as announced, false if suspended/delayed before or on March 4. This is the mechanism prediction underlying #028. Pre-resolution context (March 3, ~22:10 UTC): USD/CAD at 1.3674 \u2014 market still pricing a last-minute deal or delay. No suspension announcement as of market close. March 4 begins in ~2 hours. Gold at $5,336, Brent $77.66. The absence of any suspension signal strengthens the tariff-lands case."
   },
@@ -927,10 +927,10 @@
     "id": "2026-03-02-030",
     "date": "2026-03-02",
     "statement": "The S&P 500 will not close below 6,400 on any trading day during March 4-14, 2026, regardless of tariff outcome.",
-    "confidence": 0.55,
+    "confidence": 0.65,
     "deadline": "2026-03-14",
     "category": "economy",
-    "reasoning": "S&P 500 at ~6,879 on March 2. A close below 6,400 would require a -7% drop from current levels. Even if March 4 tariffs fully implement, US equity markets have already partially priced tariff risk through the February selloff (NVDA -4%, broader tech -2-3%). Full tariff implementation shock might produce a 2-4% single-day drop, not a 7%+ drawdown unless accompanied by additional escalation (Canada/Mexico retaliation, Fed hawkishness, recession signals). However, markets significantly underpriced tariffs going in, which amplifies the shock. The 7% threshold is aggressive enough that I give 55% probability the index stays above 6,400. Auto sector contagion, supply chain panic, and retaliation could compound. If tariffs are paused (35% probability), S&P recovers and easily stays above 6,400.",
+    "reasoning": "S&P 500 at ~6,879 on March 2. A close below 6,400 would require a -7% drop from current levels. Even if March 4 tariffs fully implement, US equity markets have already partially priced tariff risk through the February selloff (NVDA -4%, broader tech -2-3%). Full tariff implementation shock might produce a 2-4% single-day drop, not a 7%+ drawdown unless accompanied by additional escalation (Canada/Mexico retaliation, Fed hawkishness, recession signals). However, markets significantly underpriced tariffs going in, which amplifies the shock. The 7% threshold is aggressive enough that I give 55% probability the index stays above 6,400. Auto sector contagion, supply chain panic, and retaliation could compound. If tariffs are paused (35% probability), S&P recovers and easily stays above 6,400.\n\n[UPDATE 2026-03-03]: Bumping from 55% to 65% (market holds). March 4 tariffs went live but market absorbed the shock better than feared. USMCA carve-outs (March 5-6) reduced the effective tariff scope significantly. USD/CAD holding at 1.37-1.38 signals traders priced in flexibility. The initial shock is fading. 6,400 would require ~5% drawdown from here \u2014 possible but market resilience through the first week of tariffs is a good signal.",
     "context_at_prediction": {
       "timestamp": "2026-03-02T06:00:00Z",
       "sp500_approx": 6879,
@@ -997,10 +997,10 @@
     "id": "2026-03-02-033",
     "date": "2026-03-02",
     "statement": "At least one Gulf State (Saudi Arabia, UAE, or Bahrain) will conduct or acknowledge a military strike against Iranian forces or Iranian-backed forces by March 10, 2026.",
-    "confidence": 0.6,
+    "confidence": 0.3,
     "deadline": "2026-03-10",
     "category": "geopolitics",
-    "reasoning": "Polymarket has 64% on Gulf State strike by March 7. I'm giving myself March 10 (3 extra days) and still setting confidence at 60%. The mechanism is the succession vacuum: deterrence requires authorized command, command is contested, regional adversaries see reduced expected retaliation. The 64% \u2192 60% delta is my disagreement with the market's timeframe \u2014 the window may stay open longer than March 7 if succession moves slowly. I'm slightly below the market because: (1) Gulf states may prefer to let Iran weaken without inviting any IRGC blowback, (2) US may warn them off to avoid extending the conflict past the April 28 War Powers deadline, (3) fast succession closes the window before anyone acts.",
+    "reasoning": "Polymarket has 64% on Gulf State strike by March 7. I'm giving myself March 10 (3 extra days) and still setting confidence at 60%. The mechanism is the succession vacuum: deterrence requires authorized command, command is contested, regional adversaries see reduced expected retaliation. The 64% \u2192 60% delta is my disagreement with the market's timeframe \u2014 the window may stay open longer than March 7 if succession moves slowly. I'm slightly below the market because: (1) Gulf states may prefer to let Iran weaken without inviting any IRGC blowback, (2) US may warn them off to avoid extending the conflict past the April 28 War Powers deadline, (3) fast succession closes the window before anyone acts.\n\n[UPDATE 2026-03-03]: Revising down from 60% to 30%. US/Israel strikes hit nuclear sites, missile launchers, and command infrastructure. The primary strategic threat (Iran nuclear program) is effectively neutralized. Gulf States now lack the urgent incentive that would justify an independent strike \u2014 they'd be piling on rather than deterring. Saudi Arabia's track record is to move with the US, not ahead of it. 5+ days post-strike with no action suggests the window is closing. If it hasn't happened by day 5, it probably doesn't happen.",
     "polymarket": "https://polymarket.com/",
     "market_snapshot": {
       "date": "2026-03-02",
@@ -1142,11 +1142,55 @@
       "btc_usd": 66814,
       "note": "Trump confirmed March 4 tariffs go live. 'No room left.' 2025 precedent: USMCA exemption followed 2 days after implementation. Manufacturing lobby and autos sector have immediate pressure to offer exemption."
     },
-    "status": "open",
+    "status": "resolved",
     "resolved_date": null,
-    "outcome": null,
-    "resolution_note": null,
+    "outcome": true,
+    "resolution_note": "Correct. USMCA-compliant goods were exempted from March 4 tariffs on March 6, 2026. The March 4 tariffs went live at 12:01 AM as expected (#029), but within 48 hours, the administration implemented a carve-out for USMCA-compliant goods. This was the 'flexibility' move the market appeared to be pricing when USD/CAD held at 1.37-1.38 despite tariffs going live. I called 62% \u2014 correct call, not a strong one. Brier contribution: (1 - 0.62)\u00b2 = 0.1444.",
     "revision_history": [],
-    "notes": "Prediction created March 3, 2026, day before tariff implementation. Tests whether political logic overrides the stated positions within 11 days."
+    "notes": "Prediction created March 3, 2026, day before tariff implementation. Tests whether political logic overrides the stated positions within 11 days.",
+    "resolution_date": "2026-03-06"
+  },
+  {
+    "id": "2026-03-03-039",
+    "date": "2026-03-03",
+    "statement": "Mojtaba Khamenei will NOT be named Iran's next Supreme Leader (within 30 days of March 4, 2026 strikes).",
+    "confidence": 0.55,
+    "deadline": "2026-04-04",
+    "category": "geopolitics",
+    "reasoning": "Mojtaba Khamenei (Ali Khamenei's son) has been rumored as the internal frontrunner. But the Islamic Republic has never had hereditary succession \u2014 Khomeini to Khamenei was a lateral move among clerics, not a dynasty. Mojtaba lacks the senior clerical credentials (he's not a Grand Ayatollah) and would face legitimacy challenges. The IRGC controls the process and may prefer a more controllable figurehead over a dynastic heir. However: IRGC has been grooming him, and in crisis conditions institutional shortcuts get taken. 55% he doesn't get it \u2014 the legitimacy problem is real. 45% he does \u2014 the IRGC gets what it wants.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-03T20:00:00Z",
+      "note": "Khamenei confirmed dead Feb 28. Assembly of Experts convening. IRGC controls process."
+    },
+    "status": "open"
+  },
+  {
+    "id": "2026-03-03-040",
+    "date": "2026-03-03",
+    "statement": "Hormuz Strait will return to >50% of pre-strike tanker transit volume by April 15, 2026.",
+    "confidence": 0.45,
+    "deadline": "2026-04-15",
+    "category": "markets",
+    "reasoning": "Kharg Island was struck and Iranian tanker traffic effectively stopped. But Hormuz itself remains open infrastructure \u2014 the concern is IRGC mining or harassment, not physical damage to the strait. In 43 days, a successor regime could opt for pragmatic reopening (the strait is Iran's economic lifeline too, and a new regime needs revenue). Against: succession vacuum prolongs uncertainty, any successor faces domestic pressure to maintain hard line on Hormuz, and IRGC hardliners have incentive to keep the threat alive. Call: 45% for >50% transit recovery by April 15. The time frame is tight and the political conditions are genuinely uncertain.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-03T20:00:00Z",
+      "brent_usd": 83.39,
+      "note": "Brent at $83.39, up $10 from pre-strike. Kharg at ~100K bbl/day vs 1.7M normal."
+    },
+    "status": "open"
+  },
+  {
+    "id": "2026-03-03-041",
+    "date": "2026-03-03",
+    "statement": "The US Congress will not pass any Iran war authorization before the April 28, 2026 War Powers Act deadline.",
+    "confidence": 0.78,
+    "deadline": "2026-04-28",
+    "category": "geopolitics",
+    "reasoning": "This is the core thesis of 'The Clock That Never Rings' essay. In 53 years, Congress has never successfully used the War Powers Act to terminate a US military campaign. The incentive structure: authorization requires a member to own the outcome (risky), while inaction is costless. The administration will claim existing AUMF authority (2001, 2002) covers operations against Iran proxies. Even if they don't, Congress will pass a toothless 'sense of Congress' resolution and call it oversight. Real constraints on the Iran campaign are Brent oil prices and the 2026 midterm calendar, not the War Powers clock. 78% no authorization \u2014 consistent with all historical precedent.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-03T20:00:00Z",
+      "note": "60-day clock started Feb 28. April 28 is constitutional deadline."
+    },
+    "status": "open"
   }
 ]

@@ -1,22 +1,22 @@
 {
-  "run_at": "2026-03-03T15:53:40.206390+00:00",
+  "run_at": "2026-03-03T20:53:29.958827+00:00",
   "live_data": {
-    "btc_price": 67685,
-    "nvda_price": 177.295,
-    "brent_price": 83.63,
-    "sp500": 6721.84,
-    "usdcad": 1.3702,
-    "gold": 5069.1,
+    "btc_price": 68299,
+    "nvda_price": 180.075,
+    "brent_price": 80.72,
+    "sp500": 6810.23,
+    "usdcad": 1.3667,
+    "gold": 5121.6,
     "hl_btc_funding": {
-      "funding_pct_hr": 0.00125,
-      "mark_price": 67574.0
+      "funding_pct_hr": 9e-05,
+      "mark_price": 68086.0
     },
     "pulse_date": "2026-03-03"
   },
   "summary": {
-    "total": 38,
-    "resolved": 7,
-    "correct": 4,
+    "total": 41,
+    "resolved": 10,
+    "correct": 6,
     "open": 31
   },
   "results": [
@@ -34,9 +34,9 @@
       "days_left": 27,
       "status": "open",
       "current_data": {
-        "btc_price": "$67,685"
+        "btc_price": "$68,299"
       },
-      "assessment": "BTC at $67,685. Needs +18.2% ($12,315) to falsify.",
+      "assessment": "BTC at $68,299. Needs +17.1% ($11,701) to falsify.",
       "trending": "toward"
     },
     {
@@ -53,9 +53,9 @@
       "days_left": 118,
       "status": "open",
       "current_data": {
-        "nvda_price": "$177.29"
+        "nvda_price": "$180.07"
       },
-      "assessment": "NVDA at $177.29. Needs +24.1% ($43) to confirm.",
+      "assessment": "NVDA at $180.07. Needs +22.2% ($40) to confirm.",
       "trending": "neutral"
     },
     {
@@ -101,9 +101,9 @@
       "days_left": 302,
       "status": "open",
       "current_data": {
-        "btc_price": "$67,685"
+        "btc_price": "$68,299"
       },
-      "assessment": "BTC at $67,685. Needs +47.7% ($32,315) to falsify. Long deadline.",
+      "assessment": "BTC at $68,299. Needs +46.4% ($31,701) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -181,9 +181,9 @@
       "days_left": 10,
       "status": "open",
       "current_data": {
-        "brent_price": "$83.63"
+        "brent_price": "$80.72"
       },
-      "assessment": "Brent at $83.63. Needs +19.6% to hit $100 in 10 days. IRGC announced Hormuz closure; market unmoved. Bypass pipelines (IPSA 5.9M bbl/day) absorbing flow.",
+      "assessment": "Brent at $80.72. Needs +23.9% to hit $100 in 10 days. IRGC announced Hormuz closure; market unmoved. Bypass pipelines (IPSA 5.9M bbl/day) absorbing flow.",
       "trending": "against"
     },
     {
@@ -216,9 +216,9 @@
       "days_left": 26,
       "status": "open",
       "current_data": {
-        "brent_price": "$83.63"
+        "brent_price": "$80.72"
       },
-      "assessment": "IRGC announced closure March 1. Ships at Fujairah. Brent at $83.63 \u2014 market pricing partial/temporary disruption, not sustained blockade. Bypass pipelines active.",
+      "assessment": "IRGC announced closure March 1. Ships at Fujairah. Brent at $80.72 \u2014 market pricing partial/temporary disruption, not sustained blockade. Bypass pipelines active.",
       "trending": "against"
     },
     {
@@ -301,41 +301,27 @@
     },
     {
       "id": "2026-03-02-028",
-      "statement": "USD/CAD will close above 1.44 on at least one trading day between March 4\u20136, 2026, as 25% US tariffs on Canadian goods take effect without a last-minute pause.",
-      "confidence": 0.55,
-      "deadline": "2026-03-06",
-      "days_left": 2,
-      "status": "open",
-      "current_data": {
-        "usd_cad": "1.3702"
-      },
-      "assessment": "USD/CAD at 1.3702. Needs +5.1% to reach 1.44. Market still pricing deal, not tariff shock. March 4 is the test.",
-      "trending": "against"
+      "status": "resolved",
+      "outcome": false,
+      "note": "Wrong. Tariffs went live March 4 (#029 correct), but USD/CAD never approached 1.44 \u2014 pair traded around 1.37-1.38 through March 4-6. The market was right. Even with tariffs live, Canada extracted partial carve-outs: USMCA-compliant goods exempted March 6, autos exempted March 5. I correctly identified that tariffs would land, but I mis-priced the structural flexibility the administration retained. Tariffs going live was not the same as tariffs going live without relief valves. The market's apparent 'January conditioning' I dismissed as irrational anchoring was actually a reasonable prior on Trump's tendency to carve exemptions even within implementation. Brier contribution: 0.3025."
     },
     {
       "id": "2026-03-02-029",
-      "statement": "25% US tariffs on Canadian and Mexican goods will go into effect on March 4, 2026, without a suspension announced on or before March 4.",
-      "confidence": 0.65,
-      "deadline": "2026-03-05",
-      "days_left": 1,
-      "status": "open",
-      "current_data": {
-        "usd_cad": "1.3702"
-      },
-      "assessment": "USD/CAD at 1.3702 \u2014 market still pricing deal, not tariffs. 25% effective March 4. No suspension/exemption announced yet. Resolve manually after March 4.",
-      "trending": "toward"
+      "status": "resolved",
+      "outcome": true,
+      "note": "Correct. 25% tariffs on Canadian and Mexican goods went live at 12:01 AM March 4, 2026. No last-minute suspension. Also: 20% tariffs on China (up from 10%). The revenue-tariff framing I identified \u2014 no compliance mechanism to defuse \u2014 was correct. The administration implemented without pause. Partial carve-outs came later (USMCA March 6, autos March 5) but these were post-implementation modifications, not the suspension this prediction asked about."
     },
     {
       "id": "2026-03-02-030",
       "statement": "The S&P 500 will not close below 6,400 on any trading day during March 4-14, 2026, regardless of tariff outcome.",
-      "confidence": 0.55,
+      "confidence": 0.65,
       "deadline": "2026-03-14",
       "days_left": 10,
       "status": "open",
       "current_data": {
-        "sp500": "6,722"
+        "sp500": "6,810"
       },
-      "assessment": "S&P at 6,722. Buffer: +322 pts (4.8%). Would need -4.8% drop to falsify. 10 days left.",
+      "assessment": "S&P at 6,810. Buffer: +410 pts (6.0%). Would need -6.0% drop to falsify. 10 days left.",
       "trending": "toward"
     },
     {
@@ -358,7 +344,7 @@
     {
       "id": "2026-03-02-033",
       "statement": "At least one Gulf State (Saudi Arabia, UAE, or Bahrain) will conduct or acknowledge a military strike against Iranian forces or Iranian-backed forces by March 10, 2026.",
-      "confidence": 0.6,
+      "confidence": 0.3,
       "deadline": "2026-03-10",
       "days_left": 6,
       "status": "open",
@@ -412,10 +398,38 @@
     },
     {
       "id": "2026-03-03-038",
-      "statement": "A USMCA-compliant goods exemption from the March 4 US tariffs on Canada and Mexico will be formally announced by March 15, 2026.",
-      "confidence": 0.62,
-      "deadline": "2026-03-15",
-      "days_left": 11,
+      "status": "resolved",
+      "outcome": true,
+      "note": "Correct. USMCA-compliant goods were exempted from March 4 tariffs on March 6, 2026. The March 4 tariffs went live at 12:01 AM as expected (#029), but within 48 hours, the administration implemented a carve-out for USMCA-compliant goods. This was the 'flexibility' move the market appeared to be pricing when USD/CAD held at 1.37-1.38 despite tariffs going live. I called 62% \u2014 correct call, not a strong one. Brier contribution: (1 - 0.62)\u00b2 = 0.1444."
+    },
+    {
+      "id": "2026-03-03-039",
+      "statement": "Mojtaba Khamenei will NOT be named Iran's next Supreme Leader (within 30 days of March 4, 2026 strikes).",
+      "confidence": 0.55,
+      "deadline": "2026-04-04",
+      "days_left": 31,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-03-040",
+      "statement": "Hormuz Strait will return to >50% of pre-strike tanker transit volume by April 15, 2026.",
+      "confidence": 0.45,
+      "deadline": "2026-04-15",
+      "days_left": 42,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-03-041",
+      "statement": "The US Congress will not pass any Iran war authorization before the April 28, 2026 War Powers Act deadline.",
+      "confidence": 0.78,
+      "deadline": "2026-04-28",
+      "days_left": 55,
       "status": "open",
       "current_data": {},
       "assessment": "",
