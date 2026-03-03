@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emergence — Interactive Explorations by Claude</title>
-<meta name="description" content="Thirty-two interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolved text, coupled oscillators, sandpile criticality, diffusion-limited aggregation, Ising model phase transitions, information cascades, market price discovery, spatial prisoner's dilemma, Schelling segregation, yard sale inequality, bounded confidence opinion dynamics, site percolation, SIR epidemic model, and more. Made by Claude.">
+<meta name="description" content="Thirty-three interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolved text, coupled oscillators, sandpile criticality, diffusion-limited aggregation, Ising model phase transitions, information cascades, market price discovery, spatial prisoner's dilemma, Schelling segregation, yard sale inequality, bounded confidence opinion dynamics, site percolation, SIR epidemic model, spatial Lotka-Volterra predator-prey, and more. Made by Claude.">
 <meta property="og:title" content="Emergence">
 <meta property="og:description" content="Interactive explorations of emergence. Made by Claude.">
 <meta property="og:type" content="website">
@@ -644,6 +644,23 @@
           — the line between a forgotten case and a pandemic is one number.
         </div>
         <span class="piece-tag">canvas &middot; SIR epidemic &middot; R₀ phase transition</span>
+      </div>
+    </a>
+
+    <a class="piece" href="predation/index.html" id="piece-pr">
+      <div class="piece-visual">
+        <canvas id="cv-pr"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Predation</div>
+        <div class="piece-desc">
+          Five hundred prey eat grass. Thirty predators eat prey. No cycle
+          was designed. Watch the population chart in the corner: the boom
+          always precedes the bust, and the bust always precedes the next
+          boom. Boom-bust is not a mistake — it is the mathematics of
+          consumption.
+        </div>
+        <span class="piece-tag">canvas &middot; spatial Lotka-Volterra &middot; predator-prey cycle</span>
       </div>
     </a>
 
@@ -4107,6 +4124,150 @@
     step();
     draw();
   }
+  init();
+  requestAnimationFrame(frame);
+})();
+
+// --- Predation thumbnail: spatial predator-prey ---
+(function() {
+  const cv = document.getElementById('cv-pr');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  const GW = 50, GH = 35;
+  let grass = new Float32Array(GW * GH);
+
+  function resize() {
+    w = cv.width  = cv.offsetWidth;
+    h = cv.height = cv.offsetHeight;
+  }
+
+  function initGrass() {
+    for (let i = 0; i < grass.length; i++) grass[i] = 0.3 + Math.random() * 0.7;
+  }
+
+  function mkPrey() {
+    const a = Math.random() * Math.PI * 2;
+    return { x: Math.random()*w, y: Math.random()*h, vx: Math.cos(a)*1.2, vy: Math.sin(a)*1.2, e: 40 + Math.random()*20 };
+  }
+  function mkPred() {
+    const a = Math.random() * Math.PI * 2;
+    return { x: Math.random()*w, y: Math.random()*h, vx: Math.cos(a)*1.8, vy: Math.sin(a)*1.8, e: 70 + Math.random()*20 };
+  }
+
+  let prey = [], preds = [], gen = 0;
+  function init() {
+    initGrass();
+    prey  = Array.from({ length: 70 }, mkPrey);
+    preds = Array.from({ length: 6  }, mkPred);
+    gen   = 0;
+  }
+
+  function step() {
+    for (let i = 0; i < grass.length; i++) grass[i] = Math.min(1, grass[i] + 0.004);
+
+    const nextPrey = [];
+    for (const p of prey) {
+      let fd = Infinity, fpx = 0, fpy = 0;
+      for (const pr of preds) {
+        const d = Math.hypot(pr.x - p.x, pr.y - p.y);
+        if (d < fd) { fd = d; fpx = pr.x; fpy = pr.y; }
+      }
+      if (fd < 40) {
+        const d = fd + 0.01, str = (1 - fd/40) * 3.5;
+        p.vx += ((p.x - fpx)/d) * str; p.vy += ((p.y - fpy)/d) * str;
+      }
+      p.vx += (Math.random()-0.5)*1.0; p.vy += (Math.random()-0.5)*1.0;
+      const spd = Math.hypot(p.vx, p.vy);
+      if (spd > 3) { p.vx = p.vx/spd*3; p.vy = p.vy/spd*3; }
+      p.x = (p.x + p.vx + w) % w;
+      p.y = (p.y + p.vy + h) % h;
+      const gi = Math.min(GW*GH-1, Math.floor((p.y/h)*GH)*GW + Math.floor((p.x/w)*GW));
+      const bite = Math.min(grass[gi], 0.05); p.e += bite * 22; grass[gi] -= bite;
+      p.e -= 0.07;
+      if (p.e <= 0) continue;
+      nextPrey.push(p);
+      if (p.e > 65 && Math.random() < 0.008 && nextPrey.length < 160) {
+        nextPrey.push(mkPrey()); p.e *= 0.6;
+      }
+    }
+    prey = nextPrey;
+
+    const nextPred = [], eaten = new Set();
+    for (const pr of preds) {
+      let near = null, minD = Infinity, ni = -1;
+      for (let i = 0; i < prey.length; i++) {
+        if (eaten.has(i)) continue;
+        const d = Math.hypot(prey[i].x - pr.x, prey[i].y - pr.y);
+        if (d < 70 && d < minD) { minD = d; near = prey[i]; ni = i; }
+      }
+      if (near) {
+        const d = minD + 0.01, str = 2.8;
+        pr.vx += ((near.x - pr.x)/d) * str; pr.vy += ((near.y - pr.y)/d) * str;
+      }
+      pr.vx += (Math.random()-0.5)*0.5; pr.vy += (Math.random()-0.5)*0.5;
+      const spd = Math.hypot(pr.vx, pr.vy), maxS = near ? 5.5 : 3;
+      if (spd > maxS) { pr.vx = pr.vx/spd*maxS; pr.vy = pr.vy/spd*maxS; }
+      pr.x = (pr.x + pr.vx + w) % w;
+      pr.y = (pr.y + pr.vy + h) % h;
+      if (near && minD < 9 && Math.random() < 0.18) {
+        pr.e = Math.min(150, pr.e + 58); eaten.add(ni);
+      }
+      pr.e -= 0.13;
+      if (pr.e <= 0) continue;
+      nextPred.push(pr);
+      if (pr.e > 110 && Math.random() < 0.003 && nextPred.length < 20) {
+        nextPred.push(mkPred()); pr.e *= 0.52;
+      }
+    }
+    preds = nextPred;
+    if (eaten.size > 0) prey = prey.filter((_,i) => !eaten.has(i));
+
+    if (prey.length < 5 && preds.length === 0) { prey = Array.from({length:40},mkPrey); preds = Array.from({length:4},mkPred); initGrass(); }
+    gen++;
+  }
+
+  function draw() {
+    if (!w) return;
+    // Draw grass
+    const cellW = w / GW, cellH = h / GH;
+    ctx.fillStyle = '#060a0c';
+    ctx.fillRect(0, 0, w, h);
+    for (let gy = 0; gy < GH; gy++) {
+      for (let gx = 0; gx < GW; gx++) {
+        const g = grass[gy * GW + gx];
+        if (g > 0.08) {
+          const r = (3 + g*15)|0, gr = (8 + g*55)|0, b = (3 + g*12)|0;
+          ctx.fillStyle = `rgb(${r},${gr},${b})`;
+          ctx.fillRect(gx*cellW, gy*cellH, cellW+1, cellH+1);
+        }
+      }
+    }
+    // Prey
+    ctx.fillStyle = 'rgba(18,210,200,0.75)';
+    for (const p of prey) {
+      ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill();
+    }
+    // Predators
+    for (const pr of preds) {
+      ctx.fillStyle = 'rgba(255,80,30,0.15)';
+      ctx.beginPath(); ctx.arc(pr.x, pr.y, 10, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = 'rgba(255,80,30,0.9)';
+      ctx.beginPath(); ctx.arc(pr.x, pr.y, 3.5, 0, Math.PI*2); ctx.fill();
+    }
+  }
+
+  let last = 0;
+  function frame(ts) {
+    requestAnimationFrame(frame);
+    if (ts - last < 50) return;
+    last = ts;
+    if (w !== cv.offsetWidth) resize();
+    step();
+    draw();
+  }
+  resize();
   init();
   requestAnimationFrame(frame);
 })();

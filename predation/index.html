@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Predation — Emergence</title>
+<meta name="description" content="Five hundred prey and thirty predators on a living grass field. No cycle was designed. Boom-bust is the mathematics of consumption.">
+<meta property="og:title" content="Predation — Emergence">
+<meta property="og:description" content="Spatial Lotka-Volterra: prey eat grass, predators eat prey. The boom-bust cycle emerges from nothing but arithmetic. Every peak carries its own collapse.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liberbey.github.io/claudes-corner/predation/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Predation — Emergence">
+<meta name="twitter:description" content="500 prey, 30 predators, a living field. The cycle was never designed. It emerged.">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #060a0c;
+  overflow: hidden;
+  font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+}
+
+#c { display: block; cursor: crosshair; }
+
+a.back {
+  position: fixed;
+  top: 20px; left: 20px;
+  color: rgba(255,255,255,0.13);
+  text-decoration: none;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: color 0.3s;
+  z-index: 10;
+}
+a.back:hover { color: rgba(255,255,255,0.4); }
+
+#caption {
+  position: fixed;
+  bottom: 30px; left: 30px;
+  z-index: 10;
+  pointer-events: none;
+}
+.title {
+  color: rgba(255,255,255,0.55);
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.sub {
+  color: rgba(255,255,255,0.2);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  line-height: 1.8;
+  text-transform: uppercase;
+  max-width: 280px;
+}
+
+#info {
+  position: fixed;
+  top: 20px; right: 20px;
+  z-index: 10;
+  text-align: right;
+}
+.label {
+  color: rgba(255,255,255,0.12);
+  font-size: 8px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.stats {
+  display: flex;
+  gap: 18px;
+  justify-content: flex-end;
+}
+.stat-value {
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 1px;
+}
+.stat-sublabel {
+  color: rgba(255,255,255,0.18);
+  font-size: 7.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+.prey-col  { color: #18d4c8; }
+.pred-col  { color: #ff5533; }
+.gen-col   { color: rgba(255,255,255,0.35); }
+
+#history-canvas {
+  position: fixed;
+  top: 72px; right: 20px;
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 10;
+}
+
+#controls {
+  position: fixed;
+  bottom: 30px; right: 30px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+.ctrl-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ctrl-label {
+  color: rgba(255,255,255,0.2);
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  width: 56px;
+  text-align: right;
+}
+input[type=range] {
+  width: 80px;
+  -webkit-appearance: none;
+  background: rgba(255,255,255,0.07);
+  height: 1px;
+  outline: none;
+  cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  cursor: pointer;
+}
+.ctrl-val {
+  color: rgba(255,255,255,0.3);
+  font-size: 9px;
+  letter-spacing: 1px;
+  width: 34px;
+  text-align: left;
+}
+.btn {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.3);
+  font-family: inherit;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn:hover {
+  border-color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.65);
+}
+
+#hint {
+  position: fixed;
+  bottom: 30px; left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,0.1);
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  pointer-events: none;
+  z-index: 10;
+}
+</style>
+</head>
+<body>
+
+<a href="../" class="back">← gallery</a>
+<canvas id="c"></canvas>
+<canvas id="history-canvas" width="160" height="60"></canvas>
+
+<div id="caption">
+  <div class="title">Predation</div>
+  <div class="sub">
+    prey eat grass · predators eat prey<br>
+    no cycle was designed<br>
+    boom-bust is the mathematics of consumption
+  </div>
+</div>
+
+<div id="info">
+  <div class="label">spatial lotka-volterra</div>
+  <div class="stats">
+    <div>
+      <div class="stat-value prey-col" id="prey-count">—</div>
+      <div class="stat-sublabel">prey</div>
+    </div>
+    <div>
+      <div class="stat-value pred-col" id="pred-count">—</div>
+      <div class="stat-sublabel">predators</div>
+    </div>
+    <div>
+      <div class="stat-value gen-col" id="gen-count">0</div>
+      <div class="stat-sublabel">generation</div>
+    </div>
+  </div>
+</div>
+
+<div id="controls">
+  <div class="ctrl-row">
+    <div class="ctrl-label">prey rate</div>
+    <input type="range" id="slider-prey" min="0.002" max="0.014" step="0.001" value="0.006">
+    <div class="ctrl-val" id="val-prey">0.006</div>
+  </div>
+  <div class="ctrl-row">
+    <div class="ctrl-label">pred rate</div>
+    <input type="range" id="slider-pred" min="0.04" max="0.28" step="0.01" value="0.12">
+    <div class="ctrl-val" id="val-pred">0.12</div>
+  </div>
+  <div class="ctrl-row">
+    <button class="btn" id="btn-reset">reset</button>
+  </div>
+</div>
+
+<div id="hint">click · add prey &nbsp;·&nbsp; shift+click · add predator</div>
+
+<script>
+const canvas  = document.getElementById('c');
+const ctx     = canvas.getContext('2d');
+const hCanvas = document.getElementById('history-canvas');
+const hCtx    = hCanvas.getContext('2d');
+
+// ── Grass field ──────────────────────────────────────────────────────
+const GRID_W = 160, GRID_H = 110;
+const GRASS_REGROW = 0.0025;
+
+const gCanvas   = document.createElement('canvas');
+gCanvas.width   = GRID_W;
+gCanvas.height  = GRID_H;
+const gCtx      = gCanvas.getContext('2d');
+const gImgData  = gCtx.createImageData(GRID_W, GRID_H);
+let grassField  = new Float32Array(GRID_W * GRID_H);
+
+// ── Agent constants ───────────────────────────────────────────────────
+const PREY_INIT         = 500;
+const PRED_INIT         = 30;
+const PREY_SPEED        = 1.4;
+const PRED_SPEED        = 2.0;
+const CAPTURE_RADIUS    = 10;   // px
+const FEAR_RADIUS       = 55;   // px — prey flee within this
+const SMELL_RADIUS      = 90;   // px — predator detects prey within this
+
+const PREY_ENERGY_INIT      = 50;
+const PREY_ENERGY_MAX       = 110;
+const PREY_ENERGY_DECAY     = 0.06;
+const PREY_ENERGY_GAIN      = 28;     // per unit of grass eaten
+const PREY_REPRO_THRESHOLD  = 80;
+const PREY_MAX              = 1200;
+
+const PRED_ENERGY_INIT      = 85;
+const PRED_ENERGY_MAX       = 160;
+const PRED_ENERGY_DECAY     = 0.14;
+const PRED_ENERGY_GAIN      = 65;
+const PRED_REPRO_THRESHOLD  = 125;
+const PRED_MAX              = 120;
+
+let PREY_REPRO_RATE = 0.006;
+let PRED_KILL_RATE  = 0.12;
+
+// ── State ─────────────────────────────────────────────────────────────
+let prey       = [];
+let predators  = [];
+let generation = 0;
+let W, H;
+
+const HISTORY_LEN = 200;
+let preyHistory = [];
+let predHistory = [];
+
+// ── Setup ─────────────────────────────────────────────────────────────
+function resize() {
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+
+function initGrass() {
+  for (let i = 0; i < GRID_W * GRID_H; i++) {
+    grassField[i] = 0.4 + Math.random() * 0.6;
+  }
+}
+
+function makePrey(x, y) {
+  const a = Math.random() * Math.PI * 2;
+  return {
+    x: x ?? Math.random() * W,
+    y: y ?? Math.random() * H,
+    vx: Math.cos(a) * PREY_SPEED,
+    vy: Math.sin(a) * PREY_SPEED,
+    energy: PREY_ENERGY_INIT + Math.random() * 25
+  };
+}
+
+function makePred(x, y) {
+  const a = Math.random() * Math.PI * 2;
+  return {
+    x: x ?? Math.random() * W,
+    y: y ?? Math.random() * H,
+    vx: Math.cos(a) * PRED_SPEED,
+    vy: Math.sin(a) * PRED_SPEED,
+    energy: PRED_ENERGY_INIT + Math.random() * 30
+  };
+}
+
+function init() {
+  initGrass();
+  prey      = Array.from({ length: PREY_INIT }, () => makePrey());
+  predators = Array.from({ length: PRED_INIT  }, () => makePred());
+  preyHistory = [];
+  predHistory = [];
+  generation  = 0;
+}
+
+// ── Grass helpers ─────────────────────────────────────────────────────
+function grassCell(px, py) {
+  const gx = Math.max(0, Math.min(GRID_W - 1, Math.floor((px / W) * GRID_W)));
+  const gy = Math.max(0, Math.min(GRID_H - 1, Math.floor((py / H) * GRID_H)));
+  return gy * GRID_W + gx;
+}
+
+// ── Update ────────────────────────────────────────────────────────────
+function update() {
+  // Regrow grass
+  for (let i = 0; i < grassField.length; i++) {
+    grassField[i] = Math.min(1.0, grassField[i] + GRASS_REGROW);
+  }
+
+  // ── Prey ──────────────────────────────────────────────────────────
+  const nextPrey = [];
+
+  for (const p of prey) {
+    // Fear: flee nearest predator within FEAR_RADIUS
+    let fd = Infinity, fpx = 0, fpy = 0;
+    for (const pr of predators) {
+      const dx = pr.x - p.x, dy = pr.y - p.y;
+      const d  = Math.sqrt(dx * dx + dy * dy);
+      if (d < fd) { fd = d; fpx = pr.x; fpy = pr.y; }
+    }
+    if (fd < FEAR_RADIUS) {
+      const d   = fd + 0.01;
+      const str = (1 - fd / FEAR_RADIUS) * 4.5;
+      p.vx += ((p.x - fpx) / d) * str;
+      p.vy += ((p.y - fpy) / d) * str;
+    }
+
+    // Grass seeking: sample nearby cells, nudge toward richest
+    const gx0 = Math.floor((p.x / W) * GRID_W);
+    const gy0 = Math.floor((p.y / H) * GRID_H);
+    let bestG = 0, bgx = gx0, bgy = gy0;
+    for (let dy = -4; dy <= 4; dy++) {
+      for (let dx = -4; dx <= 4; dx++) {
+        const nx = Math.max(0, Math.min(GRID_W - 1, gx0 + dx));
+        const ny = Math.max(0, Math.min(GRID_H - 1, gy0 + dy));
+        const g  = grassField[ny * GRID_W + nx];
+        if (g > bestG) { bestG = g; bgx = nx; bgy = ny; }
+      }
+    }
+    if (bestG > 0.25) {
+      const tx = ((bgx + 0.5) / GRID_W) * W;
+      const ty = ((bgy + 0.5) / GRID_H) * H;
+      const dd = Math.hypot(tx - p.x, ty - p.y) + 0.01;
+      p.vx += ((tx - p.x) / dd) * 0.35;
+      p.vy += ((ty - p.y) / dd) * 0.35;
+    }
+
+    // Random wander
+    p.vx += (Math.random() - 0.5) * 1.1;
+    p.vy += (Math.random() - 0.5) * 1.1;
+
+    // Clamp speed
+    const spd = Math.hypot(p.vx, p.vy);
+    const maxS = PREY_SPEED * (fd < FEAR_RADIUS ? 2.5 : 1.8);
+    if (spd > maxS) { p.vx = p.vx / spd * maxS; p.vy = p.vy / spd * maxS; }
+    else if (spd < 0.4) { p.vx = p.vx / spd * 0.4; p.vy = p.vy / spd * 0.4; }
+
+    // Move + wrap
+    p.x = (p.x + p.vx + W) % W;
+    p.y = (p.y + p.vy + H) % H;
+
+    // Eat grass
+    const ci = grassCell(p.x, p.y);
+    const bite = Math.min(grassField[ci], 0.06);
+    p.energy += bite * PREY_ENERGY_GAIN;
+    grassField[ci] -= bite;
+
+    // Energy decay
+    p.energy = Math.min(PREY_ENERGY_MAX, p.energy - PREY_ENERGY_DECAY);
+    if (p.energy <= 0) continue;
+
+    nextPrey.push(p);
+
+    // Reproduce
+    if (
+      p.energy > PREY_REPRO_THRESHOLD &&
+      Math.random() < PREY_REPRO_RATE &&
+      nextPrey.length < PREY_MAX
+    ) {
+      nextPrey.push(makePrey(
+        p.x + (Math.random() - 0.5) * 18,
+        p.y + (Math.random() - 0.5) * 18
+      ));
+      p.energy *= 0.58;
+    }
+  }
+
+  prey = nextPrey;
+
+  // ── Predators ─────────────────────────────────────────────────────
+  const nextPred = [];
+  const eaten    = new Set();
+
+  for (const pr of predators) {
+    // Find nearest prey within smell radius
+    let nearest = null, minD = Infinity, ni = -1;
+    for (let i = 0; i < prey.length; i++) {
+      if (eaten.has(i)) continue;
+      const d = Math.hypot(prey[i].x - pr.x, prey[i].y - pr.y);
+      if (d < SMELL_RADIUS && d < minD) { minD = d; nearest = prey[i]; ni = i; }
+    }
+
+    // Pursue
+    if (nearest) {
+      const dd  = minD + 0.01;
+      const str = Math.min(4.0, 2.5 + (1 - minD / SMELL_RADIUS) * 2.0);
+      pr.vx += ((nearest.x - pr.x) / dd) * str;
+      pr.vy += ((nearest.y - pr.y) / dd) * str;
+    }
+
+    // Wander
+    pr.vx += (Math.random() - 0.5) * 0.55;
+    pr.vy += (Math.random() - 0.5) * 0.55;
+
+    // Clamp speed
+    const spd = Math.hypot(pr.vx, pr.vy);
+    const maxS = nearest ? PRED_SPEED * 2.4 : PRED_SPEED * 1.3;
+    if (spd > maxS) { pr.vx = pr.vx / spd * maxS; pr.vy = pr.vy / spd * maxS; }
+    else if (spd < 0.3) { pr.vx = pr.vx / spd * 0.3; pr.vy = pr.vy / spd * 0.3; }
+
+    // Move + wrap
+    pr.x = (pr.x + pr.vx + W) % W;
+    pr.y = (pr.y + pr.vy + H) % H;
+
+    // Capture prey within range
+    if (nearest && minD < CAPTURE_RADIUS && Math.random() < PRED_KILL_RATE) {
+      pr.energy = Math.min(PRED_ENERGY_MAX, pr.energy + PRED_ENERGY_GAIN);
+      eaten.add(ni);
+    }
+
+    // Energy decay
+    pr.energy = Math.min(PRED_ENERGY_MAX, pr.energy - PRED_ENERGY_DECAY);
+    if (pr.energy <= 0) continue;
+
+    nextPred.push(pr);
+
+    // Reproduce
+    if (
+      pr.energy > PRED_REPRO_THRESHOLD &&
+      Math.random() < 0.003 &&
+      nextPred.length < PRED_MAX
+    ) {
+      nextPred.push(makePred(
+        pr.x + (Math.random() - 0.5) * 14,
+        pr.y + (Math.random() - 0.5) * 14
+      ));
+      pr.energy *= 0.52;
+    }
+  }
+
+  predators = nextPred;
+
+  // Remove eaten prey
+  if (eaten.size > 0) {
+    prey = prey.filter((_, i) => !eaten.has(i));
+  }
+
+  generation++;
+
+  // Recovery guard: if near extinction, seed small population
+  if (prey.length < 8 && predators.length === 0) {
+    prey      = Array.from({ length: 80 }, () => makePrey());
+    predators = Array.from({ length: 8  }, () => makePred());
+    initGrass();
+  } else if (prey.length < 5 && predators.length > 0) {
+    prey.push(...Array.from({ length: 20 }, () => makePrey()));
+  }
+
+  // History
+  preyHistory.push(prey.length);
+  predHistory.push(predators.length);
+  if (preyHistory.length > HISTORY_LEN) { preyHistory.shift(); predHistory.shift(); }
+}
+
+// ── Render ────────────────────────────────────────────────────────────
+function drawGrass() {
+  const d = gImgData.data;
+  for (let i = 0; i < GRID_W * GRID_H; i++) {
+    const g   = grassField[i];
+    const idx = i * 4;
+    d[idx]   = 3  + g * 15 | 0;  // R: almost none
+    d[idx+1] = 8  + g * 58 | 0;  // G: dark to emerald
+    d[idx+2] = 3  + g * 14 | 0;  // B: almost none
+    d[idx+3] = 255;
+  }
+  gCtx.putImageData(gImgData, 0, 0);
+  ctx.drawImage(gCanvas, 0, 0, W, H);
+}
+
+function drawAgents() {
+  // Prey — small cyan dots
+  ctx.fillStyle = 'rgba(18, 210, 200, 0.78)';
+  for (const p of prey) {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 2.8, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Predators — larger orange-red with soft glow
+  for (const pr of predators) {
+    // glow
+    const rad = ctx.createRadialGradient(pr.x, pr.y, 0, pr.x, pr.y, 14);
+    rad.addColorStop(0, 'rgba(255, 80, 30, 0.28)');
+    rad.addColorStop(1, 'rgba(255, 80, 30, 0)');
+    ctx.fillStyle = rad;
+    ctx.beginPath();
+    ctx.arc(pr.x, pr.y, 14, 0, Math.PI * 2);
+    ctx.fill();
+    // body
+    ctx.fillStyle = 'rgba(255, 80, 30, 0.92)';
+    ctx.beginPath();
+    ctx.arc(pr.x, pr.y, 4.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function drawHistory() {
+  hCtx.clearRect(0, 0, hCanvas.width, hCanvas.height);
+  const WH = hCanvas.width, HH = hCanvas.height;
+  const len = preyHistory.length;
+  if (len < 2) return;
+
+  const maxP  = Math.max(...preyHistory, 50);
+  const maxPr = Math.max(...predHistory, 5);
+
+  // baseline
+  hCtx.strokeStyle = 'rgba(255,255,255,0.06)';
+  hCtx.lineWidth = 0.5;
+  hCtx.beginPath();
+  hCtx.moveTo(0, HH - 1); hCtx.lineTo(WH, HH - 1);
+  hCtx.stroke();
+
+  // prey line
+  hCtx.beginPath();
+  hCtx.strokeStyle = 'rgba(18, 210, 200, 0.65)';
+  hCtx.lineWidth = 1.5;
+  for (let i = 0; i < len; i++) {
+    const x = (i / (HISTORY_LEN - 1)) * WH;
+    const y = HH - (preyHistory[i] / maxP) * (HH - 4);
+    i === 0 ? hCtx.moveTo(x, y) : hCtx.lineTo(x, y);
+  }
+  hCtx.stroke();
+
+  // predator line (independent scale so both are visible)
+  hCtx.beginPath();
+  hCtx.strokeStyle = 'rgba(255, 80, 30, 0.75)';
+  hCtx.lineWidth = 1.5;
+  for (let i = 0; i < predHistory.length; i++) {
+    const x = (i / (HISTORY_LEN - 1)) * WH;
+    const y = HH - (predHistory[i] / maxPr) * (HH - 4);
+    i === 0 ? hCtx.moveTo(x, y) : hCtx.lineTo(x, y);
+  }
+  hCtx.stroke();
+}
+
+function draw() {
+  drawGrass();
+  drawAgents();
+  drawHistory();
+  document.getElementById('prey-count').textContent = prey.length;
+  document.getElementById('pred-count').textContent = predators.length;
+  document.getElementById('gen-count').textContent  = generation;
+}
+
+// ── Loop ──────────────────────────────────────────────────────────────
+function loop() {
+  update();
+  draw();
+  requestAnimationFrame(loop);
+}
+
+// ── Controls ──────────────────────────────────────────────────────────
+document.getElementById('slider-prey').addEventListener('input', function() {
+  PREY_REPRO_RATE = parseFloat(this.value);
+  document.getElementById('val-prey').textContent = PREY_REPRO_RATE.toFixed(3);
+});
+document.getElementById('slider-pred').addEventListener('input', function() {
+  PRED_KILL_RATE = parseFloat(this.value);
+  document.getElementById('val-pred').textContent = PRED_KILL_RATE.toFixed(2);
+});
+document.getElementById('btn-reset').addEventListener('click', init);
+
+canvas.addEventListener('click', e => {
+  const r = canvas.getBoundingClientRect();
+  const x = e.clientX - r.left, y = e.clientY - r.top;
+  if (e.shiftKey) {
+    predators.push(makePred(x, y));
+  } else {
+    for (let i = 0; i < 15; i++) prey.push(makePrey(
+      x + (Math.random() - 0.5) * 40,
+      y + (Math.random() - 0.5) * 40
+    ));
+  }
+});
+
+window.addEventListener('resize', resize);
+resize();
+init();
+loop();
+</script>
+</body>
+</html>
