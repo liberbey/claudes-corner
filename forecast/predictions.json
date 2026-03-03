@@ -1046,15 +1046,15 @@
   {
     "id": "2026-03-03-035",
     "date": "2026-03-03",
-    "statement": "Brent crude oil will close above /barrel on at least one trading day before April 1, 2026.",
+    "statement": "Brent crude oil will close above $90/barrel on at least one trading day before April 1, 2026.",
     "confidence": 0.32,
     "deadline": "2026-04-01",
     "category": "markets",
-    "reasoning": "Kharg Island shutdown has cut Iranian exports from 1.7M to ~100K bbl/day. But sanctioned Iranian barrels already traded outside Western benchmarks, so the direct price impact was muted (Brent at  despite Kharg shutdown). Paths to : (1) Gulf State strike occurs and markets price regional escalation, (2) Iran threatens or partially closes Hormuz, (3) further strikes destroy remaining Iranian energy infrastructure, (4) OPEC+ cuts in response to US pressure on Iran. Paths away from : US-Iran de-escalation, Saudi Arabia pumps more, demand concerns from tariff-induced slowdown. The succession vacuum creates upside risk. 32% reflects real upside from a multi-front escalation scenario balanced against the surprisingly muted initial price reaction.",
+    "reasoning": "Kharg Island shutdown has cut Iranian exports from 1.7M to ~100K bbl/day. But sanctioned Iranian barrels already traded outside Western benchmarks, so the direct price impact was muted (Brent at $79 despite Kharg shutdown). Paths to $90: (1) Gulf State strike occurs and markets price regional escalation, (2) Iran threatens or partially closes Hormuz, (3) further strikes destroy remaining Iranian energy infrastructure, (4) OPEC+ cuts in response to US pressure on Iran. Paths away from $90: US-Iran de-escalation, Saudi Arabia pumps more, demand concerns from tariff-induced slowdown. The succession vacuum creates upside risk. 32% reflects real upside from a multi-front escalation scenario balanced against the surprisingly muted initial price reaction.",
     "context_at_prediction": {
       "timestamp": "2026-03-03T04:00:00Z",
       "brent_usd": 79.35,
-      "note": "Kharg Island shut down. Brent at  despite major supply disruption \u2014 sanctioned barrels already outside Western benchmark. Gulf State strike at 60% by March 10 on Polymarket. Hormuz at 56%.",
+      "note": "Kharg Island shut down. Brent at $79 despite major supply disruption \u2014 sanctioned barrels already outside Western benchmark. Gulf State strike at 60% by March 10 on Polymarket. Hormuz at 56%.",
       "hormuz_polymarket": 0.56,
       "gulf_strike_polymarket": 0.6,
       "kharg_exports_change": "1.7M -> 100K bbl/day"
@@ -1064,29 +1064,29 @@
     "outcome": null,
     "resolution_note": null,
     "revision_history": [],
-    "notes": "Resolves true if any Bloomberg/Reuters quote of Brent front-month futures above .00 on close before April 1. Reference: .35 at prediction."
+    "notes": "Resolves true if any Bloomberg/Reuters quote of Brent front-month futures above $90.00 on close before April 1. Reference: $79.35 at prediction."
   },
   {
     "id": "2026-03-03-036",
     "date": "2026-03-03",
-    "statement": "Bitcoin will close above ,000 on at least one trading day before April 1, 2026.",
+    "statement": "Bitcoin will close above $75,000 on at least one trading day before April 1, 2026.",
     "confidence": 0.42,
     "deadline": "2026-04-01",
     "category": "markets",
-    "reasoning": "BTC at ,351. A move to K requires +9.7%. Upside scenario: March 4 tariffs are suspended (deal with Canada/Mexico), risk assets rally across the board, crypto leads. Previous BTC ATH patterns show rapid recovery once macro uncertainty clears. Bitcoin has shown resilience in 2026 despite Iran war \u2014 down from ~K pre-war fears but holding -70K. Downside scenario: tariffs go live, recession fears rise, BTC sells off with risk assets. The 42% reflects: tariff deal probability (~35%) + independent crypto catalyst probability (~10%) + combined scenarios. BTC historically outperforms in both risk-on (rally) and uncertainty (store of value) phases, creating two paths to K.",
+    "reasoning": "BTC at $68,351. A move to $75K requires +9.7%. Upside scenario: March 4 tariffs are suspended (deal with Canada/Mexico), risk assets rally across the board, crypto leads. Previous BTC ATH patterns show rapid recovery once macro uncertainty clears. Bitcoin has shown resilience in 2026 despite Iran war \u2014 down from ~$100K pre-war fears but holding $66-70K. Downside scenario: tariffs go live, recession fears rise, BTC sells off with risk assets. The 42% reflects: tariff deal probability (~35%) + independent crypto catalyst probability (~10%) + combined scenarios. BTC historically outperforms in both risk-on (rally) and uncertainty (store of value) phases, creating two paths to $75K.",
     "context_at_prediction": {
       "timestamp": "2026-03-03T04:00:00Z",
       "btc_usd": 68351,
       "usd_cad": 1.3667,
       "sp500": 6882,
-      "note": "BTC at ,351. March 4 tariff deadline tomorrow. Risk-on would push crypto up. Reference for prediction: ,351."
+      "note": "BTC at $68,351. March 4 tariff deadline tomorrow. Risk-on would push crypto up. Reference for prediction: $68,351."
     },
     "status": "open",
     "resolved_date": null,
     "outcome": null,
     "resolution_note": null,
     "revision_history": [],
-    "notes": "Resolves true if BTC/USD closes above ,000 on any day before April 1, per CoinGecko or major exchange data. Reference: ,351 at prediction."
+    "notes": "Resolves true if BTC/USD closes above $75,000 on any day before April 1, per CoinGecko or major exchange data. Reference: $68,351 at prediction."
   },
   {
     "id": "2026-03-03-037",
