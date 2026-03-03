@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-03T09:01:12.420655+00:00",
+  "run_at": "2026-03-03T12:26:13.877258+00:00",
   "live_data": {
-    "btc_price": 66971,
+    "btc_price": 67472,
     "nvda_price": 182.48,
-    "brent_price": 80.92,
+    "brent_price": 83.24,
     "sp500": 6881.62,
-    "usdcad": 1.3691,
-    "gold": 5317.8,
+    "usdcad": 1.3687,
+    "gold": 5196.0,
     "hl_btc_funding": {
       "funding_pct_hr": 0.00125,
-      "mark_price": 67056.0
+      "mark_price": 67562.0
     },
     "pulse_date": "2026-03-03"
   },
   "summary": {
-    "total": 37,
+    "total": 38,
     "resolved": 6,
     "correct": 4,
-    "open": 31
+    "open": 32
   },
   "results": [
     {
@@ -34,9 +34,9 @@
       "days_left": 27,
       "status": "open",
       "current_data": {
-        "btc_price": "$66,971"
+        "btc_price": "$67,472"
       },
-      "assessment": "BTC at $66,971. Needs +19.5% ($13,029) to falsify.",
+      "assessment": "BTC at $67,472. Needs +18.6% ($12,528) to falsify.",
       "trending": "toward"
     },
     {
@@ -101,9 +101,9 @@
       "days_left": 302,
       "status": "open",
       "current_data": {
-        "btc_price": "$66,971"
+        "btc_price": "$67,472"
       },
-      "assessment": "BTC at $66,971. Needs +49.3% ($33,029) to falsify. Long deadline.",
+      "assessment": "BTC at $67,472. Needs +48.2% ($32,528) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -181,9 +181,9 @@
       "days_left": 10,
       "status": "open",
       "current_data": {
-        "brent_price": "$80.92"
+        "brent_price": "$83.24"
       },
-      "assessment": "Brent at $80.92. Needs +23.6% to hit $100 in 10 days. IRGC announced Hormuz closure; market unmoved. Bypass pipelines (IPSA 5.9M bbl/day) absorbing flow.",
+      "assessment": "Brent at $83.24. Needs +20.1% to hit $100 in 10 days. IRGC announced Hormuz closure; market unmoved. Bypass pipelines (IPSA 5.9M bbl/day) absorbing flow.",
       "trending": "against"
     },
     {
@@ -216,9 +216,9 @@
       "days_left": 26,
       "status": "open",
       "current_data": {
-        "brent_price": "$80.92"
+        "brent_price": "$83.24"
       },
-      "assessment": "IRGC announced closure March 1. Ships at Fujairah. Brent at $80.92 \u2014 market pricing partial/temporary disruption, not sustained blockade. Bypass pipelines active.",
+      "assessment": "IRGC announced closure March 1. Ships at Fujairah. Brent at $83.24 \u2014 market pricing partial/temporary disruption, not sustained blockade. Bypass pipelines active.",
       "trending": "against"
     },
     {
@@ -307,9 +307,9 @@
       "days_left": 2,
       "status": "open",
       "current_data": {
-        "usd_cad": "1.3691"
+        "usd_cad": "1.3687"
       },
-      "assessment": "USD/CAD at 1.3691. Needs +5.2% to reach 1.44. Market still pricing deal, not tariff shock. March 4 is the test.",
+      "assessment": "USD/CAD at 1.3687. Needs +5.2% to reach 1.44. Market still pricing deal, not tariff shock. March 4 is the test.",
       "trending": "against"
     },
     {
@@ -320,9 +320,9 @@
       "days_left": 1,
       "status": "open",
       "current_data": {
-        "usd_cad": "1.3691"
+        "usd_cad": "1.3687"
       },
-      "assessment": "USD/CAD at 1.3691 \u2014 market still pricing deal, not tariffs. 25% effective March 4. No suspension/exemption announced yet. Resolve manually after March 4.",
+      "assessment": "USD/CAD at 1.3687 \u2014 market still pricing deal, not tariffs. 25% effective March 4. No suspension/exemption announced yet. Resolve manually after March 4.",
       "trending": "toward"
     },
     {
@@ -346,10 +346,10 @@
       "days_left": 1,
       "status": "open",
       "current_data": {
-        "gold": "$5,318"
+        "gold": "$5,196"
       },
-      "assessment": "Gold at $5,318 (-2.0% from $5,426 reference). Resolves March 5. Testing whether gold reacts to tariff news.",
-      "trending": "toward"
+      "assessment": "ALERT. Gold at $5,196, below $5,317 threshold. Two-clock thesis challenged.",
+      "trending": "against"
     },
     {
       "id": "2026-03-02-032",
@@ -412,6 +412,17 @@
       "confidence": 0.18,
       "deadline": "2026-04-28",
       "days_left": 55,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-03-038",
+      "statement": "A USMCA-compliant goods exemption from the March 4 US tariffs on Canada and Mexico will be formally announced by March 15, 2026.",
+      "confidence": 0.62,
+      "deadline": "2026-03-15",
+      "days_left": 11,
       "status": "open",
       "current_data": {},
       "assessment": "",
