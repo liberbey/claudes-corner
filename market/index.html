@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market — Emergence</title>
+<meta name="description" content="200 agents, each holding a private signal. They trade. The price is their collective answer. Watch whether the crowd finds truth — or chases itself.">
+<meta property="og:title" content="Market — Emergence">
+<meta property="og:description" content="Can markets discover truth? Each agent knows something. The price is what they agree on under pressure.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liberbey.github.io/claudes-corner/market/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Market — Emergence">
+<meta name="twitter:description" content="200 agents. Each knows something imperfect. Watch the price. Does the crowd get it right?">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #060a0c;
+  overflow: hidden;
+  font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+}
+#c { display: block; cursor: default; }
+
+a.back {
+  position: fixed;
+  top: 20px; left: 20px;
+  color: rgba(255,255,255,0.13);
+  text-decoration: none;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: color 0.3s;
+  z-index: 10;
+}
+a.back:hover { color: rgba(255,255,255,0.4); }
+
+#caption {
+  position: fixed;
+  bottom: 110px; left: 24px;
+  z-index: 10;
+  pointer-events: none;
+}
+.title {
+  color: rgba(255,255,255,0.5);
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.desc {
+  color: rgba(255,255,255,0.22);
+  font-size: 9px;
+  letter-spacing: 1px;
+  line-height: 1.7;
+  max-width: 260px;
+}
+
+#controls {
+  position: fixed;
+  bottom: 24px; left: 24px;
+  z-index: 10;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+.ctrl {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ctrl label {
+  color: rgba(255,255,255,0.3);
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.ctrl-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100px;
+  height: 2px;
+  background: rgba(255,255,255,0.12);
+  outline: none;
+  cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  background: rgba(255,255,255,0.55);
+  border-radius: 50%;
+}
+.val {
+  color: rgba(255,255,255,0.4);
+  font-size: 9px;
+  min-width: 28px;
+}
+
+#reset-btn {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.3);
+  font-family: inherit;
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-left: 10px;
+}
+#reset-btn:hover {
+  border-color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.6);
+}
+
+#verdict {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+#verdict.show { opacity: 1; }
+#verdict .v-label {
+  font-size: 9px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 12px;
+}
+#verdict .v-result {
+  font-size: 48px;
+  letter-spacing: 2px;
+  font-weight: 300;
+}
+#verdict .v-sub {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.35);
+  margin-top: 10px;
+}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<a class="back" href="../">← gallery</a>
+
+<div id="caption">
+  <div class="title">Market</div>
+  <div class="desc">200 agents, each with a private signal. They trade. The price is their collective answer. Herding corrupts the computation.</div>
+</div>
+
+<div id="controls">
+  <div class="ctrl">
+    <label>signal accuracy</label>
+    <div class="ctrl-row">
+      <input type="range" id="accuracy" min="52" max="88" value="68">
+      <span class="val" id="acc-val">68%</span>
+    </div>
+  </div>
+  <div class="ctrl">
+    <label>herding</label>
+    <div class="ctrl-row">
+      <input type="range" id="herding" min="0" max="95" value="20">
+      <span class="val" id="herd-val">20%</span>
+    </div>
+  </div>
+  <button id="reset-btn">reset</button>
+</div>
+
+<div id="verdict">
+  <div class="v-label">resolves</div>
+  <div class="v-result" id="v-result"></div>
+  <div class="v-sub" id="v-sub"></div>
+</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+
+let W, H;
+let CHART_H, AGENT_Y, AGENT_H;
+
+// Sim params
+let N_AGENTS = 200;
+let MAX_TICKS = 320;
+let TRADES_PER_TICK = 6;
+let PRICE_ETA = 0.018;
+
+// State
+let agents = [];
+let market_price = 0.5;
+let price_history = [];
+let tick = 0;
+let true_outcome;      // 0 or 1
+let true_prob;         // true event probability (set each run)
+let resolved = false;
+let resolution_alpha = 0;
+let reset_timer = null;
+let animId;
+let flash_agents = [];
+
+// Sliders
+let sig_accuracy = 0.68;
+let herding = 0.20;
+
+function init() {
+  if (animId) cancelAnimationFrame(animId);
+  if (reset_timer) clearTimeout(reset_timer);
+
+  W = window.innerWidth;
+  H = window.innerHeight;
+  canvas.width = W;
+  canvas.height = H;
+
+  // Layout
+  CHART_H = Math.floor(H * 0.38);
+  AGENT_Y = CHART_H + 40;
+  AGENT_H = H - AGENT_Y - 120;
+
+  // True probability between 0.42 and 0.64 (avoids trivial cases)
+  true_prob = 0.42 + Math.random() * 0.22;
+  true_outcome = Math.random() < true_prob ? 1 : 0;
+
+  market_price = 0.5;
+  price_history = [0.5];
+  tick = 0;
+  resolved = false;
+  resolution_alpha = 0;
+  flash_agents = [];
+
+  const verdict = document.getElementById('verdict');
+  verdict.classList.remove('show');
+
+  agents = [];
+  for (let i = 0; i < N_AGENTS; i++) {
+    // Private signal: correct with probability sig_accuracy
+    let signal = Math.random() < sig_accuracy ? true_outcome : 1 - true_outcome;
+    // Initial belief from signal alone
+    let belief = signal === 1 ? sig_accuracy : (1 - sig_accuracy);
+
+    // Position: spread across agent area with slight clustering
+    let angle = Math.random() * Math.PI * 2;
+    let r = Math.sqrt(Math.random()) * Math.min(W * 0.22, AGENT_H * 0.38);
+    let cx = W * 0.5 + (Math.random() - 0.5) * W * 0.02;
+    let cy = AGENT_Y + AGENT_H * 0.5;
+    let x = cx + Math.cos(angle) * r;
+    let y = cy + Math.sin(angle) * r;
+
+    agents.push({
+      x, y,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      signal,
+      belief,
+      flash: 0
+    });
+  }
+
+  loop();
+}
+
+function updateSim() {
+  if (resolved) return;
+
+  // Slow down near end for drama
+  let ticks_this_frame = tick < MAX_TICKS - 40 ? 3 : 1;
+  if (tick > MAX_TICKS - 15) ticks_this_frame = 1;
+
+  for (let t = 0; t < ticks_this_frame; t++) {
+    if (tick >= MAX_TICKS) { resolve(); return; }
+
+    // Pick traders
+    for (let j = 0; j < TRADES_PER_TICK; j++) {
+      let idx = Math.floor(Math.random() * N_AGENTS);
+      let a = agents[idx];
+
+      // Belief update: private signal vs herding toward market
+      let h = herding;
+      let effective = (1 - h) * a.belief + h * market_price;
+
+      // Trade: demand proportional to (effective - market_price)
+      let demand = effective - market_price;
+
+      // Noise traders occasionally trade random direction (10%)
+      if (Math.random() < 0.10) demand = (Math.random() - 0.5) * 0.1;
+
+      market_price += PRICE_ETA * demand;
+      market_price = Math.max(0.03, Math.min(0.97, market_price));
+
+      // Agent updates belief slightly toward market (social learning)
+      a.belief = a.belief * 0.97 + market_price * 0.03;
+      // Also belief drifts back toward private signal
+      let private_belief = a.signal === 1 ? sig_accuracy : (1 - sig_accuracy);
+      a.belief = a.belief * 0.98 + private_belief * 0.02;
+
+      a.flash = 1.0;
+      flash_agents.push(idx);
+    }
+
+    price_history.push(market_price);
+    tick++;
+  }
+}
+
+function resolve() {
+  if (resolved) return;
+  resolved = true;
+
+  let verdict = document.getElementById('verdict');
+  let v_result = document.getElementById('v-result');
+  let v_sub = document.getElementById('v-sub');
+
+  let market_was_right = (true_outcome === 1 && market_price > 0.5) ||
+                          (true_outcome === 0 && market_price < 0.5);
+  let answer = true_outcome === 1 ? 'YES' : 'NO';
+  let gap = Math.abs(market_price - true_prob);
+
+  v_result.textContent = answer;
+  v_result.style.color = true_outcome === 1 ? '#5ec47a' : '#cc5555';
+
+  let market_pct = Math.round(market_price * 100);
+  let true_pct = Math.round(true_prob * 100);
+  let accuracy_label = gap < 0.05 ? 'precise' : gap < 0.12 ? 'close' : gap < 0.20 ? 'off' : 'far off';
+  v_sub.textContent = `market: ${market_pct}%  ·  true: ${true_pct}%  ·  ${accuracy_label}`;
+
+  verdict.classList.add('show');
+
+  reset_timer = setTimeout(() => {
+    verdict.classList.remove('show');
+    setTimeout(init, 800);
+  }, 4200);
+}
+
+function drawChart() {
+  let pad_l = 60, pad_r = 20, pad_t = 24, pad_b = 20;
+  let cw = W - pad_l - pad_r;
+  let ch = CHART_H - pad_t - pad_b;
+
+  // Background
+  ctx.fillStyle = 'rgba(255,255,255,0.025)';
+  ctx.fillRect(pad_l, pad_t, cw, ch);
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 1;
+  [0.1, 0.3, 0.5, 0.7, 0.9].forEach(p => {
+    let y = pad_t + ch * (1 - p);
+    ctx.beginPath();
+    ctx.moveTo(pad_l, y);
+    ctx.lineTo(pad_l + cw, y);
+    ctx.stroke();
+    // Labels
+    ctx.fillStyle = 'rgba(255,255,255,0.18)';
+    ctx.font = '8px SF Mono, Menlo, monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText(Math.round(p * 100) + '%', pad_l - 6, y + 3);
+  });
+
+  // True probability line (revealed at resolution)
+  if (resolved) {
+    let ty = pad_t + ch * (1 - true_prob);
+    ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(pad_l, ty);
+    ctx.lineTo(pad_l + cw, ty);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.font = '8px SF Mono, Menlo, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('true: ' + Math.round(true_prob * 100) + '%', pad_l + 6, ty - 5);
+  }
+
+  // Price history line
+  if (price_history.length > 1) {
+    let max_pts = Math.min(price_history.length, MAX_TICKS + 10);
+    let step = cw / MAX_TICKS;
+
+    // Shaded area
+    ctx.beginPath();
+    ctx.moveTo(pad_l, pad_t + ch * (1 - price_history[0]));
+    for (let i = 1; i < max_pts; i++) {
+      let x = pad_l + i * step;
+      let y = pad_t + ch * (1 - price_history[i]);
+      ctx.lineTo(x, y);
+    }
+    let last_x = pad_l + (max_pts - 1) * step;
+    ctx.lineTo(last_x, pad_t + ch);
+    ctx.lineTo(pad_l, pad_t + ch);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(100,180,140,0.06)';
+    ctx.fill();
+
+    // Line itself
+    ctx.beginPath();
+    ctx.moveTo(pad_l, pad_t + ch * (1 - price_history[0]));
+    for (let i = 1; i < max_pts; i++) {
+      let x = pad_l + i * step;
+      let y = pad_t + ch * (1 - price_history[i]);
+      ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = resolved
+      ? (true_outcome === 1 ? '#5ec47a' : '#cc5555')
+      : 'rgba(160,210,180,0.75)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Current price dot
+    if (!resolved) {
+      let cx2 = pad_l + (max_pts - 1) * step;
+      let cy2 = pad_t + ch * (1 - market_price);
+      ctx.beginPath();
+      ctx.arc(cx2, cy2, 4, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(180,220,200,0.9)';
+      ctx.fill();
+    }
+  }
+
+  // Price label
+  let price_y = pad_t + ch * (1 - market_price);
+  let pct = Math.round(market_price * 100);
+  ctx.fillStyle = 'rgba(255,255,255,0.55)';
+  ctx.font = '10px SF Mono, Menlo, monospace';
+  ctx.textAlign = 'left';
+  let label_y = Math.max(pad_t + 12, Math.min(pad_t + ch - 5, price_y));
+  ctx.fillText(pct + '%', pad_l + cw + 8, label_y);
+
+  // Tick progress bar
+  let prog = tick / MAX_TICKS;
+  ctx.fillStyle = 'rgba(255,255,255,0.06)';
+  ctx.fillRect(pad_l, pad_t + ch + 6, cw, 2);
+  ctx.fillStyle = 'rgba(160,200,180,0.3)';
+  ctx.fillRect(pad_l, pad_t + ch + 6, cw * prog, 2);
+}
+
+function beliefColor(b) {
+  // b: 0=NO (red), 0.5=neutral, 1=YES (green)
+  let r, g, bl;
+  if (b < 0.5) {
+    let t = b * 2;
+    r = Math.round(180 * (1 - t) + 80 * t);
+    g = Math.round(50 * (1 - t) + 120 * t);
+    bl = Math.round(50 * (1 - t) + 70 * t);
+  } else {
+    let t = (b - 0.5) * 2;
+    r = Math.round(80 * (1 - t) + 40 * t);
+    g = Math.round(120 * (1 - t) + 180 * t);
+    bl = Math.round(70 * (1 - t) + 90 * t);
+  }
+  return `rgb(${r},${g},${bl})`;
+}
+
+function drawAgents() {
+  let cx_center = W * 0.5;
+  let cy_center = AGENT_Y + AGENT_H * 0.5;
+
+  for (let i = 0; i < N_AGENTS; i++) {
+    let a = agents[i];
+
+    // Drift
+    a.x += a.vx;
+    a.y += a.vy;
+    a.vx += (Math.random() - 0.5) * 0.08;
+    a.vy += (Math.random() - 0.5) * 0.08;
+    a.vx *= 0.96;
+    a.vy *= 0.96;
+
+    // Soft boundary: pull toward center
+    let dx = cx_center - a.x;
+    let dy = cy_center - a.y;
+    let dist = Math.sqrt(dx*dx + dy*dy);
+    let max_r = Math.min(W * 0.28, AGENT_H * 0.44);
+    if (dist > max_r) {
+      a.vx += dx * 0.003;
+      a.vy += dy * 0.003;
+    }
+
+    // Draw
+    let base_color = beliefColor(a.belief);
+    let alpha = 0.5 + a.flash * 0.45;
+    let radius = 2.5 + a.flash * 2.5;
+
+    if (a.flash > 0) {
+      // Glow ring
+      ctx.beginPath();
+      ctx.arc(a.x, a.y, radius + 4, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(200,220,210,${a.flash * 0.12})`;
+      ctx.fill();
+      a.flash *= 0.78;
+    }
+
+    ctx.beginPath();
+    ctx.arc(a.x, a.y, radius, 0, Math.PI * 2);
+    // parse and apply alpha
+    let rgb = base_color.match(/\d+/g);
+    ctx.fillStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha})`;
+    ctx.fill();
+  }
+}
+
+function drawStats() {
+  let x = W - 20, y = CHART_H + 18;
+  ctx.textAlign = 'right';
+  ctx.fillStyle = 'rgba(255,255,255,0.18)';
+  ctx.font = '8px SF Mono, Menlo, monospace';
+  ctx.fillText(`tick  ${tick} / ${MAX_TICKS}`, x, y);
+  ctx.fillText(`agents  ${N_AGENTS}`, x, y + 14);
+  ctx.fillText(`signal  ${Math.round(sig_accuracy * 100)}%`, x, y + 28);
+  ctx.fillText(`herding  ${Math.round(herding * 100)}%`, x, y + 42);
+}
+
+function drawDivider() {
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(0, CHART_H);
+  ctx.lineTo(W, CHART_H);
+  ctx.stroke();
+}
+
+function loop() {
+  ctx.clearRect(0, 0, W, H);
+
+  updateSim();
+  drawChart();
+  drawDivider();
+  drawAgents();
+  drawStats();
+
+  animId = requestAnimationFrame(loop);
+}
+
+// Controls
+document.getElementById('accuracy').addEventListener('input', function() {
+  sig_accuracy = this.value / 100;
+  document.getElementById('acc-val').textContent = this.value + '%';
+});
+document.getElementById('herding').addEventListener('input', function() {
+  herding = this.value / 100;
+  document.getElementById('herd-val').textContent = this.value + '%';
+});
+document.getElementById('reset-btn').addEventListener('click', init);
+
+window.addEventListener('resize', init);
+
+init();
+</script>
+</body>
+</html>

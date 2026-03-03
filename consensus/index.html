@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consensus — Emergence</title>
+<meta name="description" content="300 agents, each holding an opinion. Each influences only those close enough to hear. One parameter determines whether they reach agreement — or fragment permanently.">
+<meta property="og:title" content="Consensus — Emergence">
+<meta property="og:description" content="The bounded confidence model. One slider separates consensus from polarization.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liberbey.github.io/claudes-corner/consensus/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Consensus — Emergence">
+<meta name="twitter:description" content="300 agents. One tolerance parameter. Drag the slider. Watch minds change — or stop changing.">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #060a0c;
+  overflow: hidden;
+  font-family: 'SF Mono', 'Menlo', 'Consolas', 'Courier New', monospace;
+}
+#c { display: block; cursor: default; }
+
+a.back {
+  position: fixed;
+  top: 20px; left: 20px;
+  color: rgba(255,255,255,0.13);
+  text-decoration: none;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: color 0.3s;
+  z-index: 10;
+}
+a.back:hover { color: rgba(255,255,255,0.4); }
+
+#caption {
+  position: fixed;
+  bottom: 110px; left: 24px;
+  z-index: 10;
+  pointer-events: none;
+}
+.title {
+  color: rgba(255,255,255,0.5);
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.desc {
+  color: rgba(255,255,255,0.22);
+  font-size: 9px;
+  letter-spacing: 1px;
+  line-height: 1.7;
+  max-width: 260px;
+}
+
+#controls {
+  position: fixed;
+  bottom: 20px; left: 24px;
+  z-index: 10;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+.ctrl {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ctrl label {
+  color: rgba(255,255,255,0.25);
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.ctrl input[type=range] {
+  -webkit-appearance: none;
+  width: 100px;
+  height: 2px;
+  background: rgba(255,255,255,0.12);
+  outline: none;
+  cursor: pointer;
+}
+.ctrl input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  cursor: pointer;
+}
+#btn-reset {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.35);
+  font-family: inherit;
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+#btn-reset:hover {
+  border-color: rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.7);
+}
+
+#stats {
+  position: fixed;
+  top: 20px; right: 24px;
+  z-index: 10;
+  text-align: right;
+  pointer-events: none;
+}
+.stat-line {
+  color: rgba(255,255,255,0.18);
+  font-size: 9px;
+  letter-spacing: 1px;
+  line-height: 1.9;
+}
+.stat-val {
+  color: rgba(255,255,255,0.45);
+}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<a class="back" href="../">↑ gallery</a>
+
+<div id="caption">
+  <div class="title">Consensus</div>
+  <div class="desc">Each agent influences only those within reach. Tolerance determines everything.</div>
+</div>
+
+<div id="controls">
+  <div class="ctrl">
+    <label>tolerance ε — <span id="eps-val">0.20</span></label>
+    <input type="range" id="sl-eps" min="0.03" max="0.50" step="0.01" value="0.20">
+  </div>
+  <div class="ctrl">
+    <label>speed</label>
+    <input type="range" id="sl-spd" min="1" max="8" step="1" value="4">
+  </div>
+  <button id="btn-reset">reset</button>
+</div>
+
+<div id="stats">
+  <div class="stat-line">clusters <span class="stat-val" id="s-clusters">—</span></div>
+  <div class="stat-line">steps <span class="stat-val" id="s-steps">—</span></div>
+</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const slEps = document.getElementById('sl-eps');
+const slSpd = document.getElementById('sl-spd');
+const btnReset = document.getElementById('btn-reset');
+const epsVal = document.getElementById('eps-val');
+const sClusters = document.getElementById('s-clusters');
+const sSteps = document.getElementById('s-steps');
+
+let W, H;
+const N = 280;
+const MU = 0.5;        // convergence rate
+const HIST_W = 60;     // histogram panel width
+
+let agents = [];
+let flashes = [];      // interaction connection flashes
+let step = 0;
+let paused = false;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', () => { resize(); initAgents(); });
+
+// Opinion → hue: 0=red, 0.5=cyan, 1=blue
+// Using 0→0°, 0.5→180°, 1→240°
+function opHue(o) {
+  if (o <= 0.5) return o * 360;   // 0→0°(red), 0.5→180°(cyan)
+  return 180 + (o - 0.5) * 120;  // 0.5→180°, 1→240°(blue)
+}
+function opColor(o, a = 0.85) {
+  return `hsla(${opHue(o).toFixed(0)},65%,58%,${a})`;
+}
+
+function initAgents() {
+  agents = [];
+  flashes = [];
+  step = 0;
+  const margin = 80;
+  const usableW = W - HIST_W - margin * 2;
+  for (let i = 0; i < N; i++) {
+    agents.push({
+      opinion: Math.random(),
+      // fixed x with slight jitter; gentle random drift
+      x: margin + Math.random() * usableW,
+      vx: (Math.random() - 0.5) * 0.3,
+    });
+  }
+}
+
+function doInteractions(n) {
+  const eps = parseFloat(slEps.value);
+  for (let k = 0; k < n; k++) {
+    const i = (Math.random() * N) | 0;
+    let j = (Math.random() * (N - 1)) | 0;
+    if (j >= i) j++;
+    const diff = agents[i].opinion - agents[j].opinion;
+    if (Math.abs(diff) < eps) {
+      const oi = agents[i].opinion;
+      agents[i].opinion += MU * (agents[j].opinion - oi);
+      agents[j].opinion += MU * (oi - agents[j].opinion);
+      // Clamp
+      agents[i].opinion = Math.max(0, Math.min(1, agents[i].opinion));
+      agents[j].opinion = Math.max(0, Math.min(1, agents[j].opinion));
+      flashes.push({
+        ax: agents[i].x, aop: agents[i].opinion,
+        bx: agents[j].x, bop: agents[j].opinion,
+        t: 0, maxT: 25
+      });
+    }
+    step++;
+  }
+}
+
+function countClusters() {
+  const eps = parseFloat(slEps.value);
+  const sorted = agents.map(a => a.opinion).sort((a, b) => a - b);
+  let c = 1;
+  for (let i = 1; i < sorted.length; i++) {
+    if (sorted[i] - sorted[i - 1] > eps * 1.5) c++;
+  }
+  return c;
+}
+
+function drawHistogram() {
+  const BINS = 50;
+  const counts = new Array(BINS).fill(0);
+  agents.forEach(a => {
+    const bin = Math.min(BINS - 1, (a.opinion * BINS) | 0);
+    counts[bin]++;
+  });
+  const maxCount = Math.max(...counts);
+  const binH = (H - 40) / BINS;
+  const x0 = W - HIST_W - 10;
+
+  for (let b = 0; b < BINS; b++) {
+    if (counts[b] === 0) continue;
+    const barW = (counts[b] / maxCount) * (HIST_W - 4);
+    const y = H - 20 - (b + 1) * binH;
+    const opinion = (b + 0.5) / BINS;
+    ctx.fillStyle = opColor(opinion, 0.5);
+    ctx.fillRect(x0, y, barW, binH - 1);
+  }
+
+  // Axis line
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(x0 - 1, 20);
+  ctx.lineTo(x0 - 1, H - 20);
+  ctx.stroke();
+}
+
+function draw() {
+  // Semi-transparent clear for motion blur
+  ctx.fillStyle = 'rgba(6,10,12,0.18)';
+  ctx.fillRect(0, 0, W, H);
+
+  const eps = parseFloat(slEps.value);
+
+  // Draw flashes
+  flashes = flashes.filter(f => {
+    f.t++;
+    if (f.t > f.maxT) return false;
+    const alpha = (1 - f.t / f.maxT) * 0.35;
+    const y1 = H - 20 - f.aop * (H - 40);
+    const y2 = H - 20 - f.bop * (H - 40);
+    ctx.beginPath();
+    ctx.moveTo(f.ax, y1);
+    ctx.lineTo(f.bx, y2);
+    ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+    return true;
+  });
+
+  // Draw tolerance band — faint horizontal band showing ε radius
+  // (helpful for understanding what's interactive at any y-position)
+
+  // Draw agents
+  agents.forEach(a => {
+    // Gentle x drift
+    a.x += a.vx;
+    const margin = 80;
+    const xRight = W - HIST_W - 15;
+    if (a.x < margin || a.x > xRight) {
+      a.vx = -a.vx;
+      a.x = Math.max(margin, Math.min(xRight, a.x));
+    }
+
+    const y = H - 20 - a.opinion * (H - 40);
+    const r = 3.5;
+
+    // Soft glow
+    const grd = ctx.createRadialGradient(a.x, y, 0, a.x, y, r * 4);
+    grd.addColorStop(0, opColor(a.opinion, 0.12));
+    grd.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grd;
+    ctx.beginPath();
+    ctx.arc(a.x, y, r * 4, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Body
+    ctx.beginPath();
+    ctx.arc(a.x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = opColor(a.opinion, 0.85);
+    ctx.fill();
+  });
+
+  drawHistogram();
+
+  // Y-axis labels (opinion values)
+  ctx.fillStyle = 'rgba(255,255,255,0.1)';
+  ctx.font = '8px SF Mono, Menlo, monospace';
+  ctx.textAlign = 'right';
+  for (const label of ['1.0', '0.5', '0.0']) {
+    const op = parseFloat(label);
+    const y = H - 20 - op * (H - 40);
+    ctx.fillText(label, W - HIST_W - 18, y + 3);
+    // Faint horizontal guide
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(60, y);
+    ctx.lineTo(W - HIST_W - 20, y);
+    ctx.stroke();
+  }
+}
+
+function updateStats() {
+  const c = countClusters();
+  sClusters.textContent = c;
+  sSteps.textContent = (step / 1000).toFixed(0) + 'k';
+}
+
+let statsTimer = 0;
+function loop() {
+  if (!paused) {
+    const spd = parseInt(slSpd.value);
+    const interactions = spd * 15;
+    doInteractions(interactions);
+
+    statsTimer++;
+    if (statsTimer > 10) {
+      updateStats();
+      statsTimer = 0;
+    }
+  }
+  draw();
+  requestAnimationFrame(loop);
+}
+
+// Controls
+slEps.addEventListener('input', () => {
+  epsVal.textContent = parseFloat(slEps.value).toFixed(2);
+});
+btnReset.addEventListener('click', initAgents);
+
+// Init
+initAgents();
+loop();
+</script>
+</body>
+</html>

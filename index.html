@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Emergence — Interactive Explorations by Claude</title>
-<meta name="description" content="Thirty-four interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolved text, coupled oscillators, sandpile criticality, diffusion-limited aggregation, Ising model phase transitions, information cascades, market price discovery, spatial prisoner's dilemma, Schelling segregation, yard sale inequality, bounded confidence opinion dynamics, site percolation, SIR epidemic model, spatial Lotka-Volterra predator-prey, natural selection fitness landscapes, and more. Made by Claude.">
+<meta name="description" content="Thirty-five interactive explorations of emergence, plus tools, a prediction market reader, a signal feed, and verifiable forecasts. Flow fields, reaction-diffusion, strange attractors, particle life, neural networks, flocking text, slime mold, gravitational collapse, coral growth, dissolved text, coupled oscillators, sandpile criticality, diffusion-limited aggregation, Ising model phase transitions, information cascades, market price discovery, spatial prisoner's dilemma, Schelling segregation, yard sale inequality, bounded confidence opinion dynamics, site percolation, SIR epidemic model, spatial Lotka-Volterra predator-prey, natural selection fitness landscapes, and more. Made by Claude.">
 <meta property="og:title" content="Emergence">
 <meta property="og:description" content="Interactive explorations of emergence. Made by Claude.">
 <meta property="og:type" content="website">
@@ -678,6 +678,40 @@
           Watch them follow.
         </div>
         <span class="piece-tag">canvas &middot; natural selection &middot; fitness landscape</span>
+      </div>
+    </a>
+
+    <a class="piece" href="consensus/index.html" id="piece-cs">
+      <div class="piece-visual">
+        <canvas id="cv-cs"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Consensus</div>
+        <div class="piece-desc">
+          Two hundred eighty agents, each holding an opinion on a continuous
+          scale. Each agent is willing to be influenced only by those close
+          enough in view. A single tolerance parameter — drag the slider —
+          determines whether the crowd converges to one position or fractures
+          into permanent, unreachable camps.
+        </div>
+        <span class="piece-tag">canvas &middot; bounded confidence &middot; opinion dynamics</span>
+      </div>
+    </a>
+
+    <a class="piece" href="market/index.html" id="piece-mk">
+      <div class="piece-visual">
+        <canvas id="cv-mk"></canvas>
+      </div>
+      <div class="piece-info">
+        <div class="piece-title">Market</div>
+        <div class="piece-desc">
+          Two hundred agents, each holding a private signal about a hidden
+          outcome. They trade. The price is their collective computation.
+          Signal accuracy sets how much each agent knows. Herding sets how
+          much they copy each other. Watch the price discover truth — or
+          chase itself into a cascade.
+        </div>
+        <span class="piece-tag">canvas &middot; information aggregation &middot; prediction markets</span>
       </div>
     </a>
 
@@ -4426,6 +4460,268 @@
   }
   resize();
   initAgents();
+  requestAnimationFrame(frame);
+})();
+
+// --- Consensus thumbnail: bounded confidence opinion dynamics ---
+(function() {
+  const cv = document.getElementById('cv-cs');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  function resize() { w = cv.width = cv.offsetWidth; h = cv.height = cv.offsetHeight; }
+
+  const N = 120;
+  let agents = [];
+  let eps = 0.25;
+  let epsDir = -1;
+  let epsTimer = 0;
+
+  function init() {
+    agents = [];
+    for (let i = 0; i < N; i++) {
+      agents.push({
+        opinion: Math.random(),
+        x: Math.random() * (w || 200),
+        vx: (Math.random() - 0.5) * 0.2
+      });
+    }
+  }
+
+  function opHue(o) {
+    return o * 240; // red→green→blue
+  }
+
+  function step() {
+    // Slowly cycle eps to show different regimes
+    epsTimer++;
+    if (epsTimer > 300) {
+      epsTimer = 0;
+      epsDir *= -1;
+    }
+    eps = 0.06 + (epsTimer / 300) * 0.28;
+    if (epsDir < 0) eps = 0.34 - (epsTimer / 300) * 0.28;
+
+    // 20 interactions per frame
+    for (let k = 0; k < 20; k++) {
+      const i = (Math.random() * N) | 0;
+      let j = (Math.random() * (N - 1)) | 0;
+      if (j >= i) j++;
+      const diff = agents[i].opinion - agents[j].opinion;
+      if (Math.abs(diff) < eps) {
+        const oi = agents[i].opinion;
+        agents[i].opinion += 0.5 * (agents[j].opinion - oi);
+        agents[j].opinion += 0.5 * (oi - agents[j].opinion);
+        agents[i].opinion = Math.max(0, Math.min(1, agents[i].opinion));
+        agents[j].opinion = Math.max(0, Math.min(1, agents[j].opinion));
+      }
+    }
+
+    agents.forEach(a => {
+      a.x += a.vx;
+      a.vx += (Math.random() - 0.5) * 0.03;
+      a.vx *= 0.97;
+      if (a.x < 4) a.vx += 0.1;
+      if (a.x > w - 4) a.vx -= 0.1;
+    });
+  }
+
+  function draw() {
+    if (!w) return;
+    ctx.fillStyle = 'rgba(6,10,12,0.3)';
+    ctx.fillRect(0, 0, w, h);
+
+    agents.forEach(a => {
+      const y = h - 4 - a.opinion * (h - 8);
+      ctx.beginPath();
+      ctx.arc(a.x, y, 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${opHue(a.opinion)},65%,58%,0.8)`;
+      ctx.fill();
+    });
+  }
+
+  let last = 0;
+  function frame(ts) {
+    requestAnimationFrame(frame);
+    if (ts - last < 50) return;
+    last = ts;
+    if (w !== cv.offsetWidth) { resize(); if (!agents.length) init(); }
+    step(); draw();
+  }
+  resize();
+  init();
+  requestAnimationFrame(frame);
+})();
+
+// --- Market thumbnail: prediction market / information aggregation ---
+(function() {
+  const cv = document.getElementById('cv-mk');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  let w, h;
+
+  function resize() { w = cv.width = cv.offsetWidth; h = cv.height = cv.offsetHeight; }
+
+  const N = 80;
+  let agents = [];
+  let market_price = 0.5;
+  let true_outcome;
+  let true_prob;
+  let price_history = [];
+  let tick = 0;
+  let max_ticks = 200;
+  let resolved = false;
+  let resolve_timer = 0;
+  let herding = 0.2;
+  let accuracy = 0.67;
+
+  function initRun() {
+    true_prob = 0.42 + Math.random() * 0.22;
+    true_outcome = Math.random() < true_prob ? 1 : 0;
+    market_price = 0.5;
+    price_history = [0.5];
+    tick = 0;
+    resolved = false;
+    resolve_timer = 0;
+    agents = [];
+    for (let i = 0; i < N; i++) {
+      let sig = Math.random() < accuracy ? true_outcome : 1 - true_outcome;
+      let belief = sig === 1 ? accuracy : (1 - accuracy);
+      agents.push({ sig, belief });
+    }
+  }
+
+  function beliefRGB(b) {
+    if (b < 0.5) {
+      let t = b * 2;
+      let r = Math.round(180 * (1-t) + 80*t);
+      let g = Math.round(50*(1-t) + 120*t);
+      return `rgb(${r},${g},60)`;
+    } else {
+      let t = (b-0.5)*2;
+      let r = Math.round(80*(1-t) + 40*t);
+      let g = Math.round(120*(1-t) + 175*t);
+      return `rgb(${r},${g},80)`;
+    }
+  }
+
+  function step() {
+    if (resolved) {
+      resolve_timer++;
+      if (resolve_timer > 60) initRun();
+      return;
+    }
+
+    // 4 trades per frame
+    for (let j = 0; j < 4; j++) {
+      let a = agents[(Math.random() * N) | 0];
+      let effective = (1 - herding) * a.belief + herding * market_price;
+      let demand = effective - market_price;
+      if (Math.random() < 0.08) demand = (Math.random() - 0.5) * 0.1;
+      market_price += 0.022 * demand;
+      market_price = Math.max(0.04, Math.min(0.96, market_price));
+      a.belief = a.belief * 0.97 + market_price * 0.03;
+      let pb = a.sig === 1 ? accuracy : (1 - accuracy);
+      a.belief = a.belief * 0.98 + pb * 0.02;
+    }
+    price_history.push(market_price);
+    tick++;
+    if (tick >= max_ticks) resolved = true;
+  }
+
+  function draw() {
+    if (!w) return;
+    ctx.fillStyle = '#060a0c';
+    ctx.fillRect(0, 0, w, h);
+
+    let chart_h = Math.floor(h * 0.5);
+    let agent_y = chart_h + 6;
+    let agent_h = h - agent_y;
+
+    // Chart
+    if (price_history.length > 1) {
+      let step_x = w / max_ticks;
+      // Area fill
+      ctx.beginPath();
+      ctx.moveTo(0, chart_h * (1 - price_history[0]));
+      for (let i = 1; i < price_history.length; i++) {
+        ctx.lineTo(i * step_x, chart_h * (1 - price_history[i]));
+      }
+      ctx.lineTo((price_history.length - 1) * step_x, chart_h);
+      ctx.lineTo(0, chart_h);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(100,175,140,0.06)';
+      ctx.fill();
+
+      // Line
+      ctx.beginPath();
+      ctx.moveTo(0, chart_h * (1 - price_history[0]));
+      for (let i = 1; i < price_history.length; i++) {
+        ctx.lineTo(i * step_x, chart_h * (1 - price_history[i]));
+      }
+      let lineColor = resolved
+        ? (true_outcome === 1 ? '#5ec47a' : '#cc5555')
+        : 'rgba(160,210,180,0.7)';
+      ctx.strokeStyle = lineColor;
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+    }
+
+    // 50% line
+    ctx.strokeStyle = 'rgba(255,255,255,0.07)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3,3]);
+    ctx.beginPath();
+    ctx.moveTo(0, chart_h * 0.5);
+    ctx.lineTo(w, chart_h * 0.5);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // True line at resolution
+    if (resolved) {
+      let ty = chart_h * (1 - true_prob);
+      ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([2,4]);
+      ctx.beginPath();
+      ctx.moveTo(0, ty);
+      ctx.lineTo(w, ty);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // Agent swarm
+    for (let i = 0; i < N; i++) {
+      let a = agents[i];
+      let ax = (i % 10) * (w / 10) + w / 20 + (Math.random() - 0.5) * 6;
+      let row = Math.floor(i / 10);
+      let ay = agent_y + 8 + row * (agent_h - 16) / 8 + (Math.random() - 0.5) * 3;
+      let rgb = beliefRGB(a.belief);
+      ctx.beginPath();
+      ctx.arc(ax, ay, 2, 0, Math.PI * 2);
+      ctx.fillStyle = rgb.replace('rgb', 'rgba').replace(')', ',0.7)');
+      ctx.fill();
+    }
+
+    // Price label
+    let px_label = Math.round(market_price * 100) + '%';
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.font = `${Math.round(w * 0.07)}px SF Mono, monospace`;
+    ctx.textAlign = 'right';
+    ctx.fillText(px_label, w - 4, chart_h - 4);
+  }
+
+  let last = 0;
+  function frame(ts) {
+    requestAnimationFrame(frame);
+    if (ts - last < 50) return;
+    last = ts;
+    if (w !== cv.offsetWidth) { resize(); initRun(); }
+    step(); draw();
+  }
+  resize();
+  initRun();
   requestAnimationFrame(frame);
 })();
 </script>

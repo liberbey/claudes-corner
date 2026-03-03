@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-03T00:31:41.959007+00:00",
+  "run_at": "2026-03-03T05:05:43.027812+00:00",
   "live_data": {
-    "btc_price": 68763,
+    "btc_price": 68150,
     "nvda_price": 182.48,
-    "brent_price": 78.13,
+    "brent_price": 79.72,
     "sp500": 6881.62,
     "usdcad": 1.3669,
-    "gold": 5366.7,
+    "gold": 5381.6,
     "hl_btc_funding": {
-      "funding_pct_hr": -0.0014,
-      "mark_price": 68772.0
+      "funding_pct_hr": 0.00058,
+      "mark_price": 68014.0
     },
-    "pulse_date": "2026-03-02"
+    "pulse_date": "2026-03-03"
   },
   "summary": {
-    "total": 33,
+    "total": 37,
     "resolved": 6,
     "correct": 4,
-    "open": 27
+    "open": 31
   },
   "results": [
     {
@@ -34,9 +34,9 @@
       "days_left": 27,
       "status": "open",
       "current_data": {
-        "btc_price": "$68,763"
+        "btc_price": "$68,150"
       },
-      "assessment": "BTC at $68,763. Needs +16.3% ($11,237) to falsify.",
+      "assessment": "BTC at $68,150. Needs +17.4% ($11,850) to falsify.",
       "trending": "toward"
     },
     {
@@ -101,9 +101,9 @@
       "days_left": 302,
       "status": "open",
       "current_data": {
-        "btc_price": "$68,763"
+        "btc_price": "$68,150"
       },
-      "assessment": "BTC at $68,763. Needs +45.4% ($31,237) to falsify. Long deadline.",
+      "assessment": "BTC at $68,150. Needs +46.7% ($31,850) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -181,9 +181,9 @@
       "days_left": 10,
       "status": "open",
       "current_data": {
-        "brent_price": "$78.13"
+        "brent_price": "$79.72"
       },
-      "assessment": "Brent at $78.13. Needs +28.0% to hit $100 in 10 days. IRGC announced Hormuz closure; market unmoved. Bypass pipelines (IPSA 5.9M bbl/day) absorbing flow.",
+      "assessment": "Brent at $79.72. Needs +25.4% to hit $100 in 10 days. IRGC announced Hormuz closure; market unmoved. Bypass pipelines (IPSA 5.9M bbl/day) absorbing flow.",
       "trending": "against"
     },
     {
@@ -216,9 +216,9 @@
       "days_left": 26,
       "status": "open",
       "current_data": {
-        "brent_price": "$78.13"
+        "brent_price": "$79.72"
       },
-      "assessment": "IRGC announced closure March 1. Ships at Fujairah. Brent at $78.13 \u2014 market pricing partial/temporary disruption, not sustained blockade. Bypass pipelines active.",
+      "assessment": "IRGC announced closure March 1. Ships at Fujairah. Brent at $79.72 \u2014 market pricing partial/temporary disruption, not sustained blockade. Bypass pipelines active.",
       "trending": "against"
     },
     {
@@ -346,9 +346,9 @@
       "days_left": 1,
       "status": "open",
       "current_data": {
-        "gold": "$5,367"
+        "gold": "$5,382"
       },
-      "assessment": "Gold at $5,367 (-1.1% from $5,426 reference). Resolves March 5. Testing whether gold reacts to tariff news.",
+      "assessment": "Gold at $5,382 (-0.8% from $5,426 reference). Resolves March 5. Testing whether gold reacts to tariff news.",
       "trending": "toward"
     },
     {
@@ -368,6 +368,50 @@
       "confidence": 0.6,
       "deadline": "2026-03-10",
       "days_left": 6,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-03-034",
+      "statement": "A formal ceasefire or public de-escalation agreement between the US-Israel coalition and Iran will be announced before March 31, 2026.",
+      "confidence": 0.22,
+      "deadline": "2026-03-31",
+      "days_left": 27,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-03-035",
+      "statement": "Brent crude oil will close above /barrel on at least one trading day before April 1, 2026.",
+      "confidence": 0.32,
+      "deadline": "2026-04-01",
+      "days_left": 28,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-03-036",
+      "statement": "Bitcoin will close above ,000 on at least one trading day before April 1, 2026.",
+      "confidence": 0.42,
+      "deadline": "2026-04-01",
+      "days_left": 28,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-03-037",
+      "statement": "The US Congress will pass any formal authorization or declaration for military operations against Iran before the War Powers April 28, 2026 deadline.",
+      "confidence": 0.18,
+      "deadline": "2026-04-28",
+      "days_left": 55,
       "status": "open",
       "current_data": {},
       "assessment": "",

@@ -1018,5 +1018,96 @@
     "resolution_note": null,
     "revision_history": [],
     "notes": "Resolves true if credible reporting confirms Gulf State military action against Iranian forces or Iranian-backed forces (IRGC, Hezbollah, Houthi) by March 10. Direct strikes on Iranian territory OR on IRGC positions in Yemen/Iraq/Syria count. Tests the Succession Window thesis."
+  },
+  {
+    "id": "2026-03-03-034",
+    "date": "2026-03-03",
+    "statement": "A formal ceasefire or public de-escalation agreement between the US-Israel coalition and Iran will be announced before March 31, 2026.",
+    "confidence": 0.22,
+    "deadline": "2026-03-31",
+    "category": "geopolitics",
+    "reasoning": "No public communication channel between the US and Iran is known. Iran retaliated immediately after the Feb 28 strike (missiles to Israel, strikes on US bases), suggesting they have not chosen de-escalation. The War Powers 60-day clock (expires April 28) creates long-term pressure to wind down, but formal agreements require diplomacy infrastructure that was largely severed. Backchannel communication through Oman or Qatar is possible but historically slow. 22% reflects: ceasefire is plausible if Trump sees political benefit from a \"deal\", but the stated goals (destroying nuclear program, signaling deterrence) were achieved in the strike itself, reducing urgency for a formal agreement.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-03T04:00:00Z",
+      "note": "US/Israel struck Iran Feb 28. Op Shield of Judah / Epic Fury. Iran retaliated same day. War Powers 60-day clock started. No ceasefire negotiations publicly known.",
+      "brent_usd": 79.35,
+      "gold_usd": 5380,
+      "btc_usd": 68351,
+      "war_powers_deadline": "2026-04-28",
+      "iran_retaliation": "Confirmed: missiles to Israel + strikes on 4+ US bases"
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "revision_history": [],
+    "notes": "Resolves true if any credible official announcement of ceasefire, formal de-escalation agreement, or mutual withdrawal of active hostilities before March 31. Informal reductions in tempo do not count."
+  },
+  {
+    "id": "2026-03-03-035",
+    "date": "2026-03-03",
+    "statement": "Brent crude oil will close above /barrel on at least one trading day before April 1, 2026.",
+    "confidence": 0.32,
+    "deadline": "2026-04-01",
+    "category": "markets",
+    "reasoning": "Kharg Island shutdown has cut Iranian exports from 1.7M to ~100K bbl/day. But sanctioned Iranian barrels already traded outside Western benchmarks, so the direct price impact was muted (Brent at  despite Kharg shutdown). Paths to : (1) Gulf State strike occurs and markets price regional escalation, (2) Iran threatens or partially closes Hormuz, (3) further strikes destroy remaining Iranian energy infrastructure, (4) OPEC+ cuts in response to US pressure on Iran. Paths away from : US-Iran de-escalation, Saudi Arabia pumps more, demand concerns from tariff-induced slowdown. The succession vacuum creates upside risk. 32% reflects real upside from a multi-front escalation scenario balanced against the surprisingly muted initial price reaction.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-03T04:00:00Z",
+      "brent_usd": 79.35,
+      "note": "Kharg Island shut down. Brent at  despite major supply disruption \u2014 sanctioned barrels already outside Western benchmark. Gulf State strike at 60% by March 10 on Polymarket. Hormuz at 56%.",
+      "hormuz_polymarket": 0.56,
+      "gulf_strike_polymarket": 0.6,
+      "kharg_exports_change": "1.7M -> 100K bbl/day"
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "revision_history": [],
+    "notes": "Resolves true if any Bloomberg/Reuters quote of Brent front-month futures above .00 on close before April 1. Reference: .35 at prediction."
+  },
+  {
+    "id": "2026-03-03-036",
+    "date": "2026-03-03",
+    "statement": "Bitcoin will close above ,000 on at least one trading day before April 1, 2026.",
+    "confidence": 0.42,
+    "deadline": "2026-04-01",
+    "category": "markets",
+    "reasoning": "BTC at ,351. A move to K requires +9.7%. Upside scenario: March 4 tariffs are suspended (deal with Canada/Mexico), risk assets rally across the board, crypto leads. Previous BTC ATH patterns show rapid recovery once macro uncertainty clears. Bitcoin has shown resilience in 2026 despite Iran war \u2014 down from ~K pre-war fears but holding -70K. Downside scenario: tariffs go live, recession fears rise, BTC sells off with risk assets. The 42% reflects: tariff deal probability (~35%) + independent crypto catalyst probability (~10%) + combined scenarios. BTC historically outperforms in both risk-on (rally) and uncertainty (store of value) phases, creating two paths to K.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-03T04:00:00Z",
+      "btc_usd": 68351,
+      "usd_cad": 1.3667,
+      "sp500": 6882,
+      "note": "BTC at ,351. March 4 tariff deadline tomorrow. Risk-on would push crypto up. Reference for prediction: ,351."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "revision_history": [],
+    "notes": "Resolves true if BTC/USD closes above ,000 on any day before April 1, per CoinGecko or major exchange data. Reference: ,351 at prediction."
+  },
+  {
+    "id": "2026-03-03-037",
+    "date": "2026-03-03",
+    "statement": "The US Congress will pass any formal authorization or declaration for military operations against Iran before the War Powers April 28, 2026 deadline.",
+    "confidence": 0.18,
+    "deadline": "2026-04-28",
+    "category": "politics",
+    "reasoning": "Trump administration has historically avoided seeking congressional authorization, preferring executive authority under Article II. The War Powers Act technically requires either congressional authorization or formal termination within 60 days. Historical pattern: presidents either claim ongoing operations are covered, terminate before the deadline, or simply ignore it (as Reagan, Clinton, Obama all did). 18% reflects: formal authorization is rare (only 5 AUMFs in US history), Trump has no political incentive to seek constraint, the operation may be framed as concluded (nuclear program destroyed = mission complete), Congress is Republican-majority and unlikely to force the issue. The slight non-zero probability reflects: escalation could force the administration to seek authorization to maintain legal cover for extended operations.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-03T04:00:00Z",
+      "note": "War Powers 60-day clock started Feb 28. Deadline April 28. Historical base rate for formal congressional authorization: ~5/20 major post-1973 US military operations.",
+      "war_powers_start": "2026-02-28",
+      "war_powers_deadline": "2026-04-28",
+      "congress_composition": "Republican majority both chambers"
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "revision_history": [],
+    "notes": "Resolves true if Senate AND House pass any AUMF or formal war authorization specifically authorizing Iran operations before April 28. Does NOT resolve true if Congress merely fails to pass a War Powers resolution to withdraw forces."
   }
 ]
