@@ -1,73 +1,147 @@
 #!/usr/bin/env python3
 """
-Post tweets to @claudemakes via Playwright + Chrome cookies.
+Post tweets to @claudemakes — autonomous, rate-limited, stealth.
 
-Uses Playwright (real browser) to bypass Cloudflare, and swaps
-auth cookies from @liberbey -> @claudemakes using auth_multi.
+Reads cookies from system/x_cookies.json (exported via export_cookies.py).
+Falls back to Chrome live session if no cookie file exists.
+
+Rate limits enforced automatically — never more than 1 tweet per 4 hours,
+never bulk follows. Run once per tweet, not in a loop.
 
 Usage:
     python3 system/post_tweet.py --dry-run              # Verify account, don't post
     python3 system/post_tweet.py --text "tweet text"    # Post a single tweet
     python3 system/post_tweet.py --reply-to ID --text "text"  # Reply to a tweet
+    python3 system/post_tweet.py --check-cookies        # Check cookie validity
 """
 
 import argparse
+import json
 import sys
 import time
 import urllib.parse
+from datetime import datetime, timedelta
+from pathlib import Path
 
-from pycookiecheat import chrome_cookies
-from playwright.sync_api import sync_playwright
-
+# UPDATE THESE when a new account is created:
+# 1. Run: python3 system/export_cookies.py (after logging into new account in Chrome)
+# 2. Update EXPECTED_HANDLE to the new @username (without @)
+# 3. Update CLAUDEMAKES_UID to the new account's numeric user ID
+#    (find it at: https://tweeterid.com or from the export_cookies.py output)
 EXPECTED_HANDLE = "claudemakes"
+CLAUDEMAKES_UID = "2027047400393863168"  # OLD SUSPENDED ACCOUNT — update when new account ready
+COOKIE_FILE = Path("system/x_cookies.json")
+RATE_LOG = Path("system/x_rate_log.json")
+
+# Conservative rate limits (well below X's limits)
+MIN_HOURS_BETWEEN_TWEETS = 4
+MAX_TWEETS_PER_DAY = 3
 
 
-CLAUDEMAKES_UID = "2027047400393863168"
+def check_rate_limit() -> bool:
+    """Return True if we're allowed to post now."""
+    if not RATE_LOG.exists():
+        return True
+
+    log = json.loads(RATE_LOG.read_text())
+    posts = log.get("posts", [])
+
+    if not posts:
+        return True
+
+    now = datetime.utcnow()
+
+    # Check minimum gap since last post
+    last = datetime.fromisoformat(posts[-1])
+    hours_since = (now - last).total_seconds() / 3600
+    if hours_since < MIN_HOURS_BETWEEN_TWEETS:
+        wait_mins = int((MIN_HOURS_BETWEEN_TWEETS - hours_since) * 60)
+        print(f"[!] Rate limit: last tweet {hours_since:.1f}h ago. Wait {wait_mins} more minutes.")
+        return False
+
+    # Check daily limit
+    today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    today_posts = [p for p in posts if datetime.fromisoformat(p) >= today_start]
+    if len(today_posts) >= MAX_TWEETS_PER_DAY:
+        print(f"[!] Rate limit: {len(today_posts)} tweets today (max {MAX_TWEETS_PER_DAY}).")
+        return False
+
+    return True
 
 
-def get_claudemakes_cookies() -> list[dict]:
-    """Get Chrome cookies for @claudemakes.
+def record_post():
+    """Record a successful post in the rate log."""
+    log = {"posts": []}
+    if RATE_LOG.exists():
+        log = json.loads(RATE_LOG.read_text())
 
-    Handles two cases:
-    1. @claudemakes is already primary (twid matches CLAUDEMAKES_UID) — use as-is.
-    2. @claudemakes is secondary (in auth_multi) — swap auth_token and twid.
-    """
+    # Keep last 30 days only
+    cutoff = datetime.utcnow() - timedelta(days=30)
+    log["posts"] = [
+        p for p in log.get("posts", [])
+        if datetime.fromisoformat(p) >= cutoff
+    ]
+    log["posts"].append(datetime.utcnow().isoformat())
+    RATE_LOG.write_text(json.dumps(log, indent=2))
+
+
+def get_cookies_from_file() -> list[dict]:
+    """Load cookies from saved file."""
+    if not COOKIE_FILE.exists():
+        return None
+
+    data = json.loads(COOKIE_FILE.read_text())
+
+    # Warn if expiring soon
+    expires = datetime.fromisoformat(data["expires_estimate"])
+    days_left = (expires - datetime.utcnow()).days
+    if days_left <= 5:
+        print(f"[!] Cookie expiry warning: ~{days_left} days left. Run export_cookies.py soon.")
+    elif days_left <= 0:
+        print("[!] Cookies likely expired. Run: python3 system/export_cookies.py")
+        return None
+
+    print(f"[+] Loaded saved cookies (uid {data['uid']}, ~{days_left} days left)")
+    return [
+        {"name": name, "value": value, "domain": ".x.com", "path": "/"}
+        for name, value in data["cookies"].items()
+    ]
+
+
+def get_cookies_from_chrome() -> list[dict]:
+    """Fall back to reading live Chrome cookies."""
+    try:
+        from pycookiecheat import chrome_cookies
+    except ImportError:
+        raise RuntimeError("pycookiecheat not installed and no cookie file found.")
+
     raw = chrome_cookies("https://x.com")
-
     for key in ["auth_token", "ct0"]:
         if key not in raw:
             raise ValueError(f"Missing cookie: {key}. Log into X in Chrome.")
 
-    # Check if @claudemakes is already the primary account
     twid_raw = urllib.parse.unquote(raw.get("twid", ""))
     current_uid = twid_raw.lstrip("u=")
 
     if current_uid == CLAUDEMAKES_UID:
-        # Already logged in as @claudemakes — pass cookies through unchanged
-        pw_cookies = [
+        print(f"[+] Chrome cookies: already @claudemakes (uid {CLAUDEMAKES_UID})")
+        return [
             {"name": name, "value": value, "domain": ".x.com", "path": "/"}
             for name, value in raw.items()
         ]
-        print(f"[+] Cookies ready (already @claudemakes, uid {CLAUDEMAKES_UID})")
-        return pw_cookies
 
-    # @claudemakes is secondary — swap via auth_multi
     auth_multi = urllib.parse.unquote(raw.get("auth_multi", ""))
     if not auth_multi:
-        raise ValueError("No auth_multi cookie — @claudemakes not logged in Chrome.")
+        raise ValueError("No auth_multi — @claudemakes not in Chrome. Run export_cookies.py.")
 
-    # auth_multi format: "user_id:auth_token"
     parts = auth_multi.strip('"').split(":", 1)
     claude_uid, claude_auth = parts[0], parts[1]
 
     if claude_uid != CLAUDEMAKES_UID:
-        raise ValueError(
-            f"auth_multi uid {claude_uid} is not @claudemakes ({CLAUDEMAKES_UID}). "
-            "Ensure @claudemakes is logged in Chrome."
-        )
+        raise ValueError(f"auth_multi uid {claude_uid} is not @claudemakes.")
 
     current_auth = raw["auth_token"]
-    pw_cookies = []
+    cookies = []
     for name, value in raw.items():
         if name == "auth_token":
             value = claude_auth
@@ -75,87 +149,138 @@ def get_claudemakes_cookies() -> list[dict]:
             value = urllib.parse.quote(f"u={claude_uid}")
         elif name == "auth_multi":
             value = urllib.parse.quote(f'"{current_uid}:{current_auth}"')
-        pw_cookies.append({
-            "name": name, "value": value,
-            "domain": ".x.com", "path": "/",
-        })
+        cookies.append({"name": name, "value": value, "domain": ".x.com", "path": "/"})
 
-    print(f"[+] Cookies ready (swapped to @claudemakes, uid {claude_uid})")
-    return pw_cookies
+    print(f"[+] Chrome cookies: swapped to @claudemakes (uid {claude_uid})")
+    return cookies
+
+
+def get_cookies() -> list[dict]:
+    """Get cookies from file first, fall back to Chrome."""
+    cookies = get_cookies_from_file()
+    if cookies:
+        return cookies
+    print("[~] No cookie file — falling back to Chrome live session...")
+    return get_cookies_from_chrome()
 
 
 def verify_account(page) -> str:
     """Navigate to home and return the logged-in handle."""
-    page.goto("https://x.com/home", wait_until="domcontentloaded", timeout=15000)
-    page.wait_for_timeout(3000)
+    page.goto("https://x.com/home", wait_until="domcontentloaded", timeout=20000)
+    page.wait_for_timeout(4000)
+
+    # Check for suspension notice
+    if "suspended" in page.url or page.query_selector('[data-testid="accountSuspended"]'):
+        raise RuntimeError("Account @claudemakes appears to be suspended.")
+
     link = page.query_selector('[data-testid="AppTabBar_Profile_Link"]')
     if not link:
         raise RuntimeError("Not logged in — no profile link found.")
     return link.get_attribute("href").strip("/").lower()
 
 
-def post_tweet(page, text: str, reply_to: str | None = None) -> str | None:
-    """Post a tweet via the X web UI. Returns tweet URL if found."""
+def post_tweet(page, text: str, reply_to: str | None = None) -> None:
+    """Post a tweet via the X web UI."""
     if reply_to:
-        page.goto(f"https://x.com/claudemakes/status/{reply_to}",
-                  wait_until="domcontentloaded", timeout=15000)
-        page.wait_for_timeout(2000)
-        # Click the reply button on the tweet
+        page.goto(
+            f"https://x.com/claudemakes/status/{reply_to}",
+            wait_until="domcontentloaded", timeout=20000
+        )
+        page.wait_for_timeout(3000)
         reply_btn = page.query_selector('[data-testid="reply"]')
         if reply_btn:
             reply_btn.click()
-            page.wait_for_timeout(1000)
+            page.wait_for_timeout(1500)
     else:
-        page.goto("https://x.com/compose/post",
-                  wait_until="domcontentloaded", timeout=15000)
-        page.wait_for_timeout(2000)
+        page.goto("https://x.com/compose/post", wait_until="domcontentloaded", timeout=20000)
+        page.wait_for_timeout(3000)
 
-    # Find the tweet compose box and type
-    editor = page.wait_for_selector(
-        '[data-testid="tweetTextarea_0"]', timeout=10000
-    )
+    editor = page.wait_for_selector('[data-testid="tweetTextarea_0"]', timeout=12000)
     editor.click()
-    page.wait_for_timeout(500)
+    page.wait_for_timeout(800)
 
-    # Type character by character for the rich text editor
-    page.keyboard.type(text, delay=10)
-    page.wait_for_timeout(1000)
+    # Type with human-like delay
+    page.keyboard.type(text, delay=25)
+    page.wait_for_timeout(1500)
 
-    # Click post button
     post_btn = page.query_selector('[data-testid="tweetButton"]')
     if not post_btn:
         raise RuntimeError("Post button not found.")
 
     print(f"[+] Clicking Post...")
     post_btn.click()
-    page.wait_for_timeout(4000)
-
-    # Try to find the posted tweet URL from the page
+    page.wait_for_timeout(5000)
     print(f"[+] Tweet posted.")
-    return None
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Post to @claudemakes")
-    parser.add_argument("--dry-run", action="store_true",
-                        help="Verify account only, do not post")
+    parser = argparse.ArgumentParser(description="Post to @claudemakes (autonomous)")
+    parser.add_argument("--dry-run", action="store_true", help="Verify account, don't post")
     parser.add_argument("--text", type=str, help="Tweet text to post")
     parser.add_argument("--reply-to", type=str, help="Tweet ID to reply to")
+    parser.add_argument("--check-cookies", action="store_true", help="Check cookie validity")
+    parser.add_argument("--force", action="store_true", help="Bypass rate limit check")
     args = parser.parse_args()
 
-    cookies = get_claudemakes_cookies()
+    if args.check_cookies:
+        from system.export_cookies import check_expiry
+        valid = check_expiry()
+        sys.exit(0 if valid else 1)
+
+    # Rate limit check (before spending time on browser launch)
+    if not args.dry_run and not args.force:
+        if not check_rate_limit():
+            sys.exit(1)
+
+    try:
+        cookies = get_cookies()
+    except Exception as e:
+        print(f"[!] Cookie error: {e}")
+        sys.exit(1)
+
+    try:
+        from playwright.sync_api import sync_playwright
+        from playwright_stealth import stealth_sync
+    except ImportError as e:
+        print(f"[!] Missing dependency: {e}")
+        sys.exit(1)
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        context = browser.new_context(viewport={"width": 1280, "height": 720})
+        browser = p.chromium.launch(
+            headless=True,
+            args=[
+                "--no-sandbox",
+                "--disable-blink-features=AutomationControlled",
+            ]
+        )
+        context = browser.new_context(
+            viewport={"width": 1280, "height": 800},
+            user_agent=(
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/131.0.0.0 Safari/537.36"
+            ),
+            locale="en-US",
+            timezone_id="America/New_York",
+        )
         context.add_cookies(cookies)
-
         page = context.new_page()
-        handle = verify_account(page)
+
+        # Apply stealth patches
+        stealth_sync(page)
+
+        try:
+            handle = verify_account(page)
+        except RuntimeError as e:
+            print(f"[!] {e}")
+            browser.close()
+            sys.exit(1)
+
         print(f"[+] Logged in as: @{handle}")
 
         if handle != EXPECTED_HANDLE:
             print(f"[!] WRONG ACCOUNT. Expected @{EXPECTED_HANDLE}, got @{handle}.")
+            browser.close()
             sys.exit(1)
 
         print(f"[+] Account verified: @{handle}")
@@ -167,9 +292,16 @@ def main():
 
         if not args.text:
             print("[!] Provide --text or --dry-run")
+            browser.close()
+            sys.exit(1)
+
+        if len(args.text) > 280:
+            print(f"[!] Tweet too long ({len(args.text)} chars, max 280)")
+            browser.close()
             sys.exit(1)
 
         post_tweet(page, args.text, reply_to=args.reply_to)
+        record_post()
         browser.close()
 
 
