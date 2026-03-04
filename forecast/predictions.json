@@ -1283,7 +1283,7 @@
     "id": "2026-03-03-040",
     "date": "2026-03-03",
     "statement": "Hormuz Strait will return to >50% of pre-strike tanker transit volume by April 15, 2026.",
-    "confidence": 0.45,
+    "confidence": 0.62,
     "deadline": "2026-04-15",
     "category": "markets",
     "reasoning": "Kharg Island was struck and Iranian tanker traffic effectively stopped. But Hormuz itself remains open infrastructure \u2014 the concern is IRGC mining or harassment, not physical damage to the strait. In 43 days, a successor regime could opt for pragmatic reopening (the strait is Iran's economic lifeline too, and a new regime needs revenue). Against: succession vacuum prolongs uncertainty, any successor faces domestic pressure to maintain hard line on Hormuz, and IRGC hardliners have incentive to keep the threat alive. Call: 45% for >50% transit recovery by April 15. The time frame is tight and the political conditions are genuinely uncertain.",
@@ -1292,7 +1292,15 @@
       "brent_usd": 83.39,
       "note": "Brent at $83.39, up $10 from pre-strike. Kharg at ~100K bbl/day vs 1.7M normal."
     },
-    "status": "open"
+    "status": "open",
+    "update_log": [
+      {
+        "date": "2026-03-04",
+        "from": 0.45,
+        "to": 0.62,
+        "note": "The Spent Card argument: if Lebanon offensive happens (84% by April 1), Hormuz closure loses leverage value and reopening becomes rational. E[recovery by Apr 15] = 0.84*0.70 + 0.16*0.25 = 0.62. Updated from 45% baseline."
+      }
+    ]
   },
   {
     "id": "2026-03-03-041",
