@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-04T10:22:19.112756+00:00",
+  "run_at": "2026-03-04T13:42:32.218126+00:00",
   "live_data": {
-    "btc_price": 71515,
+    "btc_price": 71427,
     "nvda_price": 180.05,
-    "brent_price": 82.33,
+    "brent_price": 81.26,
     "sp500": 6816.63,
-    "usdcad": 1.3661,
-    "gold": 5207.6,
+    "usdcad": 1.3669,
+    "gold": 5197.9,
     "hl_btc_funding": {
-      "funding_pct_hr": -0.00075,
-      "mark_price": 71459.0
+      "funding_pct_hr": -0.00153,
+      "mark_price": 71453.0
     },
     "pulse_date": "2026-03-04"
   },
   "summary": {
-    "total": 43,
+    "total": 44,
     "resolved": 10,
     "correct": 7,
-    "open": 33
+    "open": 34
   },
   "results": [
     {
@@ -30,14 +30,14 @@
     {
       "id": "2026-02-27-002",
       "statement": "Bitcoin will not trade above $80,000 at any point in March 2026.",
-      "confidence": 0.8,
+      "confidence": 0.72,
       "deadline": "2026-03-31",
       "days_left": 26,
       "status": "open",
       "current_data": {
-        "btc_price": "$71,515"
+        "btc_price": "$71,427"
       },
-      "assessment": "BTC at $71,515. Needs +11.9% ($8,485) to falsify.",
+      "assessment": "BTC at $71,427. Needs +12.0% ($8,573) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 301,
       "status": "open",
       "current_data": {
-        "btc_price": "$71,515"
+        "btc_price": "$71,427"
       },
-      "assessment": "BTC at $71,515. Needs +39.8% ($28,485) to falsify. Long deadline.",
+      "assessment": "BTC at $71,427. Needs +40.0% ($28,573) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -209,14 +209,14 @@
     {
       "id": "2026-02-28-019",
       "statement": "Iran will not close the Strait of Hormuz to commercial shipping within 30 days of the February 28, 2026 strikes.",
-      "confidence": 0.5,
+      "confidence": 0.42,
       "deadline": "2026-03-30",
       "days_left": 25,
       "status": "open",
       "current_data": {
-        "brent_price": "$82.33"
+        "brent_price": "$81.26"
       },
-      "assessment": "IRGC announced closure March 1. Ships at Fujairah. Brent at $82.33 \u2014 market pricing partial/temporary disruption, not sustained blockade. Bypass pipelines active.",
+      "assessment": "IRGC announced closure March 1. Ships at Fujairah. Brent at $81.26 \u2014 market pricing partial/temporary disruption, not sustained blockade. Bypass pipelines active.",
       "trending": "against"
     },
     {
@@ -269,7 +269,7 @@
     {
       "id": "2026-03-01-025",
       "statement": "Iran's Assembly of Experts will publicly announce a new Supreme Leader before April 1, 2026.",
-      "confidence": 0.6,
+      "confidence": 0.85,
       "deadline": "2026-04-01",
       "days_left": 27,
       "status": "open",
@@ -316,7 +316,7 @@
     {
       "id": "2026-03-02-030",
       "statement": "The S&P 500 will not close below 6,400 on any trading day during March 4-14, 2026, regardless of tariff outcome.",
-      "confidence": 0.65,
+      "confidence": 0.78,
       "deadline": "2026-03-14",
       "days_left": 9,
       "status": "open",
@@ -336,7 +336,7 @@
     {
       "id": "2026-03-02-032",
       "statement": "Iran will formally name a new Supreme Leader or officially confirm Khamenei alive and functional by March 10, 2026.",
-      "confidence": 0.82,
+      "confidence": 0.9,
       "deadline": "2026-03-10",
       "days_left": 5,
       "status": "open",
@@ -369,7 +369,7 @@
     {
       "id": "2026-03-03-035",
       "statement": "Brent crude oil will close above $90/barrel on at least one trading day before April 1, 2026.",
-      "confidence": 0.6,
+      "confidence": 0.68,
       "deadline": "2026-04-01",
       "days_left": 27,
       "status": "open",
@@ -380,7 +380,7 @@
     {
       "id": "2026-03-03-036",
       "statement": "Bitcoin will close above $75,000 on at least one trading day before April 1, 2026.",
-      "confidence": 0.42,
+      "confidence": 0.6,
       "deadline": "2026-04-01",
       "days_left": 27,
       "status": "open",
@@ -413,7 +413,7 @@
     {
       "id": "2026-03-03-039",
       "statement": "Mojtaba Khamenei will NOT be named Iran's next Supreme Leader (within 30 days of March 4, 2026 strikes).",
-      "confidence": 0.4,
+      "confidence": 0.12,
       "deadline": "2026-04-04",
       "days_left": 30,
       "status": "open",
@@ -460,6 +460,17 @@
       "confidence": 0.28,
       "deadline": "2026-06-30",
       "days_left": 117,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-04-044",
+      "statement": "If a USMCA-compliant goods exemption from the March 4 US tariffs is announced by March 15, 2026, the S&P 500 will move less than 1% on the announcement day.",
+      "confidence": 0.72,
+      "deadline": "2026-03-15",
+      "days_left": 10,
       "status": "open",
       "current_data": {},
       "assessment": "",
