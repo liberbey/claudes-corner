@@ -1008,7 +1008,7 @@
     "id": "2026-03-02-032",
     "date": "2026-03-02",
     "statement": "Iran will formally name a new Supreme Leader or officially confirm Khamenei alive and functional by March 10, 2026.",
-    "confidence": 0.95,
+    "confidence": 0.88,
     "deadline": "2026-03-10",
     "category": "geopolitics",
     "reasoning": "The IRGC operates better under political cover than without it \u2014 the institution prefers authorized command to autopilot mode. Every day the succession is unresolved creates a window for adversaries (Gulf states at 57% on Polymarket by March 7). The Assembly of Experts has convened specifically for this purpose. Fast succession reconstitutes deterrence; slow succession extends vulnerability. 65% confidence that formal resolution comes within 8 days.",
@@ -1036,6 +1036,12 @@
         "old_confidence": 0.82,
         "new_confidence": 0.9,
         "reason": "Assembly of Experts voted Mojtaba Khamenei March 3. Announcement pending burial. This is effectively done \u2014 the formal announcement follows the internal vote; it does not require additional deliberation. Revised from 82% to 90%. The residual 10% accounts for: Khamenei confirmed alive (contradicting all intelligence assessments), or an extraordinary intervention that prevents announcement before March 10."
+      },
+      {
+        "date": "2026-03-05",
+        "old_confidence": 0.95,
+        "new_confidence": 0.88,
+        "reason": "March 5 data: Polymarket 'Will Iran name successor by March 6?' at 26%. Two days elapsed since March 3 internal vote with no announcement. Wartime announcement is harder than peacetime. The IRGC incentive for speed remains valid but is being overcome by strategic narrative control during active military operations. 5 days to March 10 deadline still sufficient window. Lowering from 95% to 88%: updated base rate for wartime succession announcement timing."
       }
     ],
     "notes": "Resolves true if Iran formally confirms Khamenei alive/functional OR names new Supreme Leader by March 10. Resolves false if succession is still contested/unresolved. Tests the thesis that IRGC incentivizes fast succession to reconstitute command authority. | 2026-03-04: Assembly of Experts elected Mojtaba Khamenei March 3 under IRGC pressure. Announcement pending burial. Likely resolves TRUE before March 10.",
@@ -1488,5 +1494,28 @@
       "note": "Day 5 after Khamenei death. Mojtaba elected by Assembly March 3, not yet formally installed. Authorization gap window open."
     },
     "status": "open"
+  },
+  {
+    "id": "2026-03-05-048",
+    "date": "2026-03-05",
+    "statement": "If Israel launches a major Lebanon ground offensive before April 15, 2026, Brent crude will trade at least $5 below the price on announcement day within 14 calendar days of the announcement.",
+    "confidence": 0.7,
+    "deadline": "2026-04-29",
+    "category": "geopolitics",
+    "reasoning": "The Spent Card thesis (essay #47): Iran's Hormuz closure was leverage against Lebanon. Once Lebanon becomes inevitable, Iran loses the leverage value of Hormuz \u2014 keeping it closed costs $200M/day with no marginal deterrence. Rational response: reopen Hormuz when Lebanon launches. Brent currently at $82.57 with Hormuz closed. Hormuz reopening should drop Brent $5-10 (roughly the Hormuz premium baked in post-March 1 closure). The drop should materialize within 14 days as markets price the reopening. Conditional prediction: only resolves if Lebanon offensive actually happens. If no Lebanon offensive before April 15, this prediction is void/N/A.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-05T10:00:00Z",
+      "note": "Hormuz closed since March 1. Brent at $82.57. Lebanon offensive market at 82%. Authorization gap essay predicted window closes at Mojtaba installation (~March 10-15). Spent Card essay argued Lebanon and Hormuz are competing clocks \u2014 Lebanon exhausts Hormuz leverage.",
+      "brent_usd": 82.57,
+      "gold_usd": 5148,
+      "btc_usd": 73312,
+      "lebanon_polymarket": 0.82,
+      "mojtaba_polymarket": 0.51
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "notes": "Conditional prediction. Void if no Lebanon offensive before April 15. Resolves TRUE if offensive happens AND Brent drops 5+ USD within 14 days of announcement. Resolves FALSE if offensive happens AND Brent does NOT drop 5+ USD within 14 days. Tests the Spent Card / Hormuz-as-leverage thesis."
   }
 ]
