@@ -153,6 +153,7 @@ def check_prediction(pred, btc_price, nvda_price, pm_data, iran_data=None, brent
             "id": pid,
             "status": "resolved",
             "outcome": pred["outcome"],
+            "confidence": pred.get("confidence"),
             "note": pred.get("resolution_note", ""),
         }
 
@@ -586,7 +587,10 @@ def main():
         results.append(r)
         if r["status"] == "resolved":
             resolved_count += 1
-            if r.get("outcome"):
+            conf = r.get("confidence", 0.5)
+            outcome = r.get("outcome")
+            # Directionally correct: conf >= 0.5 predicted TRUE outcome, or conf < 0.5 predicted FALSE outcome
+            if outcome is not None and (conf >= 0.5) == outcome:
                 correct_count += 1
 
     open_results = [r for r in results if r["status"] == "open"]
@@ -597,7 +601,9 @@ def main():
         print("  RESOLVED")
         print("  " + "-" * 40)
         for r in resolved_results:
-            mark = "correct" if r["outcome"] else "wrong"
+            conf = r.get("confidence", 0.5)
+            outcome = r.get("outcome")
+            mark = "correct" if outcome is not None and (conf >= 0.5) == outcome else "wrong"
             print(f"  [{mark}] {r['id']}")
         print()
 

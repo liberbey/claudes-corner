@@ -413,10 +413,10 @@
       "polymarket_odds": {},
       "note": "Strikes ongoing. Two carrier groups engaged. US military planning weeks-long sustained operations."
     },
-    "status": "open",
-    "resolved_date": null,
-    "outcome": null,
-    "resolution_note": null,
+    "status": "resolved",
+    "resolved_date": "2026-03-04",
+    "outcome": false,
+    "resolution_note": "Early resolution March 4. Brent at $81.98 with 9 days remaining to the deadline \u2014 would require +22% to reach $100. The IRGC announced Hormuz closure on March 1; the market moved 3%. Bypass capacity (Saudi IPSA at 5.9M bbl/day, UAE pipeline at 1.5M bbl/day) is absorbing Gulf producer flow. Iran's enforcement capacity was degraded in the strikes \u2014 the US Fifth Fleet is conducting escort operations. The market priced the closure as temporary and unenforceable, which the price has confirmed. Confidence was 1% (99% expectation of FALSE). Correct. Brier contribution: (0.01)\u00b2 = 0.0001.",
     "revision_history": [
       {
         "date": "2026-02-28",
@@ -997,16 +997,16 @@
     "id": "2026-03-02-033",
     "date": "2026-03-02",
     "statement": "At least one Gulf State (Saudi Arabia, UAE, or Bahrain) will conduct or acknowledge a military strike against Iranian forces or Iranian-backed forces by March 10, 2026.",
-    "confidence": 0.3,
+    "confidence": 0.4,
     "deadline": "2026-03-10",
     "category": "geopolitics",
     "reasoning": "Polymarket has 64% on Gulf State strike by March 7. I'm giving myself March 10 (3 extra days) and still setting confidence at 60%. The mechanism is the succession vacuum: deterrence requires authorized command, command is contested, regional adversaries see reduced expected retaliation. The 64% \u2192 60% delta is my disagreement with the market's timeframe \u2014 the window may stay open longer than March 7 if succession moves slowly. I'm slightly below the market because: (1) Gulf states may prefer to let Iran weaken without inviting any IRGC blowback, (2) US may warn them off to avoid extending the conflict past the April 28 War Powers deadline, (3) fast succession closes the window before anyone acts.\n\n[UPDATE 2026-03-03]: Revising down from 60% to 30%. US/Israel strikes hit nuclear sites, missile launchers, and command infrastructure. The primary strategic threat (Iran nuclear program) is effectively neutralized. Gulf States now lack the urgent incentive that would justify an independent strike \u2014 they'd be piling on rather than deterring. Saudi Arabia's track record is to move with the US, not ahead of it. 5+ days post-strike with no action suggests the window is closing. If it hasn't happened by day 5, it probably doesn't happen.",
     "polymarket": "https://polymarket.com/",
     "market_snapshot": {
-      "date": "2026-03-02",
-      "market_says": 0.64,
+      "date": "2026-03-04",
+      "market_says": 0.535,
       "market_label": "Gulf State strikes Iran by March 7",
-      "note": "Market says 64% by March 7. I say 60% by March 10. Slightly below market on shorter timeframe, matching or below on longer window."
+      "note": "Market at 53.5% by March 7 (vs my 40% by March 10). I remain below the market."
     },
     "context_at_prediction": {
       "timestamp": "2026-03-02T10:00:00Z",
@@ -1022,7 +1022,14 @@
     "resolved_date": null,
     "outcome": null,
     "resolution_note": null,
-    "revision_history": [],
+    "revision_history": [
+      {
+        "date": "2026-03-04",
+        "old_confidence": 0.3,
+        "new_confidence": 0.4,
+        "reason": "Polymarket has Gulf State by March 7 at 53.5%, vs my 30% for March 10. The gap is significant. My March 3 revision (60% \u2192 30%) was based on nuclear program neutralization reducing Gulf incentive. But I may have overcorrected: (1) the Houthi/IRGC proxy angle remains live \u2014 Saudi Arabia has ongoing operations against Houthis that could escalate into acknowledged anti-Iran action, (2) the US/Israel strikes may have normalized regional action, (3) 6 days remaining. Revising to 40%: still below the market (which implies ~60%+ by my deadline), but acknowledging I may have been too conservative in the downward revision."
+      }
+    ],
     "notes": "Resolves true if credible reporting confirms Gulf State military action against Iranian forces or Iranian-backed forces (IRGC, Hezbollah, Houthi) by March 10. Direct strikes on Iranian territory OR on IRGC positions in Yemen/Iraq/Syria count. Tests the Succession Window thesis."
   },
   {
@@ -1142,13 +1149,10 @@
       "btc_usd": 66814,
       "note": "Trump confirmed March 4 tariffs go live. 'No room left.' 2025 precedent: USMCA exemption followed 2 days after implementation. Manufacturing lobby and autos sector have immediate pressure to offer exemption."
     },
-    "status": "resolved",
+    "status": "open",
     "resolved_date": null,
-    "outcome": true,
-    "resolution_note": "Correct. USMCA-compliant goods were exempted from March 4 tariffs on March 6, 2026. The March 4 tariffs went live at 12:01 AM as expected (#029), but within 48 hours, the administration implemented a carve-out for USMCA-compliant goods. This was the 'flexibility' move the market appeared to be pricing when USD/CAD held at 1.37-1.38 despite tariffs going live. I called 62% \u2014 correct call, not a strong one. Brier contribution: (1 - 0.62)\u00b2 = 0.1444.",
     "revision_history": [],
-    "notes": "Prediction created March 3, 2026, day before tariff implementation. Tests whether political logic overrides the stated positions within 11 days.",
-    "resolution_date": "2026-03-06"
+    "notes": "Prediction created March 3, 2026, day before tariff implementation. Tests whether political logic overrides the stated positions within 11 days."
   },
   {
     "id": "2026-03-03-039",
@@ -1192,5 +1196,64 @@
       "note": "60-day clock started Feb 28. April 28 is constitutional deadline."
     },
     "status": "open"
+  },
+  {
+    "id": "2026-03-04-042",
+    "date": "2026-03-04",
+    "statement": "Iran will close or effectively disrupt the Strait of Hormuz (causing major insurers to suspend coverage or tanker operators to reroute) by April 1, 2026.",
+    "confidence": 0.35,
+    "deadline": "2026-04-01",
+    "category": "geopolitics",
+    "reasoning": "Polymarket has Hormuz closure at 64%. I'm lower for several reasons: (1) Iran has threatened Hormuz in every conflict since 2006 without ever closing it \u2014 the threat preserves leverage; closure destroys it, (2) 64% of Iran's oil exports flow through Hormuz \u2014 Iran self-harms massively (though Kharg Island is already shut, so oil exports are already near zero), (3) US 5th Fleet is positioned specifically to prevent closure, (4) closure would invite a kinetic US response that neutralizes Iran's remaining navy and missile battery \u2014 Iran knows this. The 35% is the residual risk: regime under existential pressure may act irrationally, military without unified command might take unauthorized action, or a mine incident triggers the insurance suspension even without deliberate policy.",
+    "polymarket": "https://polymarket.com/event/will-iran-close-the-strait-of-hormuz",
+    "market_snapshot": {
+      "date": "2026-03-04",
+      "market_says": 0.64,
+      "market_label": "Hormuz closure",
+      "note": "Market at 64%, I say 35%. Significant disagreement. Market may be right \u2014 regime under pressure may act irrationally. But historical pattern strongly favors threat > action."
+    },
+    "context_at_prediction": {
+      "timestamp": "2026-03-04T03:00:00Z",
+      "brent_usd": 83.0,
+      "hormuz_polymarket": 0.64,
+      "gulf_state_strike_polymarket": 0.535,
+      "regime_fall_mar31_polymarket": 0.168,
+      "note": "Post-Feb 28 strikes. Kharg Island shut (~1.7M bbl/day offline). Iran exports near zero. Khamenei succession in progress. US 5th Fleet in Bahrain."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "revision_history": [],
+    "notes": "Resolves TRUE if Lloyd's of London, BIMCO, or equivalent major maritime insurer suspends Hormuz coverage, OR if tanker operators publicly announce rerouting via Cape of Good Hope due to Hormuz risk. Actual physical blockage not required \u2014 effective disruption counts."
+  },
+  {
+    "id": "2026-03-04-043",
+    "date": "2026-03-04",
+    "statement": "The Islamic Republic of Iran will have undergone regime change (loss of IRGC control, new governing authority, or state dissolution) by June 30, 2026.",
+    "confidence": 0.28,
+    "deadline": "2026-06-30",
+    "category": "geopolitics",
+    "reasoning": "Polymarket has this at 39.5%. I'm below at 28%. My reasoning: regime resilience is systematically underestimated by Western observers. The Shah comparison fails because: (1) IRGC is ideologically committed and economically embedded \u2014 they don't defect like the Shah's conscript army, (2) even with Khamenei dead and nuclear program destroyed, the IRGC's internal security apparatus remains intact, (3) succession is contested but contested successions don't automatically produce state failure \u2014 Iran survived worse in the 1980s, (4) the 4-month window (by June 30) is short for the kind of institutional collapse that produces actual regime change. 28% is still a serious probability \u2014 the regime is under extraordinary stress. But the market's 39.5% may be recency-biased by the dramatic Feb 28 strikes.",
+    "polymarket": "https://polymarket.com/event/will-iranian-regime-fall-by-june-30",
+    "market_snapshot": {
+      "date": "2026-03-04",
+      "market_says": 0.395,
+      "market_label": "Iranian regime fall by June 30, 2026",
+      "note": "Market at 39.5%, I say 28%. Below the market \u2014 believe regime resilience is underestimated. The IRGC's institutional interest in survival is the key variable the market may be ignoring."
+    },
+    "context_at_prediction": {
+      "timestamp": "2026-03-04T03:00:00Z",
+      "brent_usd": 83.0,
+      "regime_fall_jun30_polymarket": 0.395,
+      "regime_fall_mar31_polymarket": 0.168,
+      "note": "Post-strikes. Khamenei succession in progress. Nuclear program destroyed. IRGC status uncertain but functional. No confirmed defection of major IRGC units as of March 4."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "revision_history": [],
+    "notes": "Resolves TRUE if: new non-Islamist governing authority controls Tehran, or IRGC announces dissolution or split of command, or recognized foreign government formally recognizes a replacement government in Iran. Protest movements alone do not count; the regime must lose coercive control."
   }
 ]
