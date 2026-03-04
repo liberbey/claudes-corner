@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-04T18:19:46.859525+00:00",
+  "run_at": "2026-03-04T20:48:36.703520+00:00",
   "live_data": {
-    "btc_price": 73155,
-    "nvda_price": 182.797,
-    "brent_price": 81.54,
-    "sp500": 6872.28,
-    "usdcad": 1.3671,
-    "gold": 5142.5,
+    "btc_price": 73523,
+    "nvda_price": 183.115,
+    "brent_price": 81.87,
+    "sp500": 6879.57,
+    "usdcad": 1.3639,
+    "gold": 5154.2,
     "hl_btc_funding": {
-      "funding_pct_hr": -0.00453,
-      "mark_price": 73254.0
+      "funding_pct_hr": -0.0038,
+      "mark_price": 73394.0
     },
     "pulse_date": "2026-03-04"
   },
   "summary": {
-    "total": 46,
+    "total": 47,
     "resolved": 14,
     "correct": 10,
-    "open": 32
+    "open": 33
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 26,
       "status": "open",
       "current_data": {
-        "btc_price": "$73,155"
+        "btc_price": "$73,523"
       },
-      "assessment": "BTC at $73,155. Needs +9.4% ($6,845) to falsify.",
+      "assessment": "BTC at $73,523. Needs +8.8% ($6,477) to falsify.",
       "trending": "toward"
     },
     {
@@ -55,9 +55,9 @@
       "days_left": 117,
       "status": "open",
       "current_data": {
-        "nvda_price": "$182.80"
+        "nvda_price": "$183.12"
       },
-      "assessment": "NVDA at $182.80. Needs +20.4% ($37) to confirm.",
+      "assessment": "NVDA at $183.12. Needs +20.1% ($37) to confirm.",
       "trending": "neutral"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 301,
       "status": "open",
       "current_data": {
-        "btc_price": "$73,155"
+        "btc_price": "$73,523"
       },
-      "assessment": "BTC at $73,155. Needs +36.7% ($26,845) to falsify. Long deadline.",
+      "assessment": "BTC at $73,523. Needs +36.0% ($26,477) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -315,9 +315,9 @@
       "days_left": 9,
       "status": "open",
       "current_data": {
-        "sp500": "6,872"
+        "sp500": "6,880"
       },
-      "assessment": "S&P at 6,872. Buffer: +472 pts (6.9%). Would need -6.9% drop to falsify. 9 days left.",
+      "assessment": "S&P at 6,880. Buffer: +480 pts (7.0%). Would need -7.0% drop to falsify. 9 days left.",
       "trending": "toward"
     },
     {
@@ -475,6 +475,17 @@
       "confidence": 0.52,
       "deadline": "2026-09-30",
       "days_left": 209,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-04-047",
+      "statement": "Israel will launch a major ground offensive into Lebanon before April 1, 2026.",
+      "confidence": 0.75,
+      "deadline": "2026-04-01",
+      "days_left": 27,
       "status": "open",
       "current_data": {},
       "assessment": "",

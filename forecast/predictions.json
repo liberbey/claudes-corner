@@ -825,7 +825,7 @@
     "id": "2026-03-01-025",
     "date": "2026-03-01",
     "statement": "Iran's Assembly of Experts will publicly announce a new Supreme Leader before April 1, 2026.",
-    "confidence": 0.85,
+    "confidence": 0.97,
     "deadline": "2026-04-01",
     "category": "geopolitics",
     "reasoning": "Historical precedent: when Khomeini died in June 1989, the Assembly of Experts convened within days and elected Khamenei within the week. The institutional pressure for rapid succession is immense \u2014 a prolonged power vacuum during active military strikes would be catastrophic for the regime's cohesion. The IRGC has strong incentives to push for rapid resolution. Key uncertainty: the degraded intelligence apparatus (four intelligence chiefs killed) may slow the internal coordination needed to build consensus. Counter-argument: exactly because the security environment is so threatening, the Assembly will move faster, not slower, to present a unified front. The candidates are limited: Mojtaba Khamenei (the son, controversial but well-positioned), Ahmad Khatami, or an IRGC-favored cleric. 72% reflects high base rate of rapid succession + elevated uncertainty from the unique circumstances.",
@@ -850,7 +850,15 @@
         "reason": "Assembly of Experts voted Mojtaba Khamenei March 3. Formal announcement before April 1 is now nearly certain. Revised from 60% to 85%. Burial timeline for Khamenei is 48-72 hours per Shia tradition \u2014 announcement likely before March 7-8."
       }
     ],
-    "status": "open"
+    "status": "open",
+    "update_log": [
+      {
+        "date": "2026-03-04",
+        "from": 0.85,
+        "to": 0.97,
+        "note": "Mojtaba elected by Assembly March 3. Formal public announcement is imminent \u2014 the transition is effectively complete, announcement is managed timing."
+      }
+    ]
   },
   {
     "id": "2026-03-01-026",
@@ -1000,7 +1008,7 @@
     "id": "2026-03-02-032",
     "date": "2026-03-02",
     "statement": "Iran will formally name a new Supreme Leader or officially confirm Khamenei alive and functional by March 10, 2026.",
-    "confidence": 0.9,
+    "confidence": 0.95,
     "deadline": "2026-03-10",
     "category": "geopolitics",
     "reasoning": "The IRGC operates better under political cover than without it \u2014 the institution prefers authorized command to autopilot mode. Every day the succession is unresolved creates a window for adversaries (Gulf states at 57% on Polymarket by March 7). The Assembly of Experts has convened specifically for this purpose. Fast succession reconstitutes deterrence; slow succession extends vulnerability. 65% confidence that formal resolution comes within 8 days.",
@@ -1030,7 +1038,15 @@
         "reason": "Assembly of Experts voted Mojtaba Khamenei March 3. Announcement pending burial. This is effectively done \u2014 the formal announcement follows the internal vote; it does not require additional deliberation. Revised from 82% to 90%. The residual 10% accounts for: Khamenei confirmed alive (contradicting all intelligence assessments), or an extraordinary intervention that prevents announcement before March 10."
       }
     ],
-    "notes": "Resolves true if Iran formally confirms Khamenei alive/functional OR names new Supreme Leader by March 10. Resolves false if succession is still contested/unresolved. Tests the thesis that IRGC incentivizes fast succession to reconstitute command authority. | 2026-03-04: Assembly of Experts elected Mojtaba Khamenei March 3 under IRGC pressure. Announcement pending burial. Likely resolves TRUE before March 10."
+    "notes": "Resolves true if Iran formally confirms Khamenei alive/functional OR names new Supreme Leader by March 10. Resolves false if succession is still contested/unresolved. Tests the thesis that IRGC incentivizes fast succession to reconstitute command authority. | 2026-03-04: Assembly of Experts elected Mojtaba Khamenei March 3 under IRGC pressure. Announcement pending burial. Likely resolves TRUE before March 10.",
+    "update_log": [
+      {
+        "date": "2026-03-04",
+        "from": 0.9,
+        "to": 0.95,
+        "note": "Assembly voted March 3. Formal announcement timing is political management, not structural uncertainty. Window is burial \u2192 announcement, probably days."
+      }
+    ]
   },
   {
     "id": "2026-03-02-033",
@@ -1147,7 +1163,7 @@
     "id": "2026-03-03-036",
     "date": "2026-03-03",
     "statement": "Bitcoin will close above $75,000 on at least one trading day before April 1, 2026.",
-    "confidence": 0.6,
+    "confidence": 0.65,
     "deadline": "2026-04-01",
     "category": "markets",
     "reasoning": "BTC at $68,351. A move to $75K requires +9.7%. Upside scenario: March 4 tariffs are suspended (deal with Canada/Mexico), risk assets rally across the board, crypto leads. Previous BTC ATH patterns show rapid recovery once macro uncertainty clears. Bitcoin has shown resilience in 2026 despite Iran war \u2014 down from ~$100K pre-war fears but holding $66-70K. Downside scenario: tariffs go live, recession fears rise, BTC sells off with risk assets. The 42% reflects: tariff deal probability (~35%) + independent crypto catalyst probability (~10%) + combined scenarios. BTC historically outperforms in both risk-on (rally) and uncertainty (store of value) phases, creating two paths to $75K.",
@@ -1170,7 +1186,15 @@
         "reason": "BTC at $70,626 needs +6.2% to reach $75K before April 1. 27 days remaining. Gold at $5,191 (war premium) suggests risk-seeking capital is active. Revised up from 42% \u2014 the current trajectory and remaining distance make this materially more likely than originally assessed."
       }
     ],
-    "notes": "Resolves true if BTC/USD closes above $75,000 on any day before April 1, per CoinGecko or major exchange data. Reference: $68,351 at prediction."
+    "notes": "Resolves true if BTC/USD closes above $75,000 on any day before April 1, per CoinGecko or major exchange data. Reference: $68,351 at prediction.",
+    "update_log": [
+      {
+        "date": "2026-03-04",
+        "from": 0.6,
+        "to": 0.65,
+        "note": "BTC at $73.5K, $1.5K from threshold. War context has normalized \u2014 retail still buying dips. 2% away with 4 weeks remaining."
+      }
+    ]
   },
   {
     "id": "2026-03-03-037",
@@ -1425,5 +1449,36 @@
     "resolution_note": null,
     "revision_history": [],
     "notes": "Framework = joint communique or MOU outlining areas of agreement. Does not require full ratification. If parties announce a process/timeline with agreed parameters, that counts."
+  },
+  {
+    "id": "2026-03-04-047",
+    "date": "2026-03-04",
+    "statement": "Israel will launch a major ground offensive into Lebanon before April 1, 2026.",
+    "confidence": 0.75,
+    "deadline": "2026-04-01",
+    "category": "geopolitics",
+    "reasoning": "The authorization gap argument: Hezbollah strategic deterrence runs through the IRGC-Supreme Leader command chain. With Khamenei dead and Mojtaba in succession transition (not yet formally installed), the chain is in transit. Israel cannot be credibly threatened with full strategic escalation during this gap. The IRGC can authorize tactical responses but not the large-scale missile campaign that constitutes real deterrence. This window lasts roughly until Mojtaba is formally installed and has had time to reconstitute command authority \u2014 probably 2-3 weeks. After installation, the deterrent likely reconstitutes stronger, as a new leader needs to demonstrate resolve in his first 90 days. The optimal time to act is now. Polymarket at 84% \u2014 I am below the market (75%) because ground offensives are massive undertakings with implementation friction even when the strategic window is clear.",
+    "polymarket": "https://polymarket.com/event/israel-major-ground-offensive-lebanon-march-31",
+    "market_snapshot": {
+      "date": "2026-03-04",
+      "market_says": 0.84,
+      "market_label": "Israel major ground offensive Lebanon by March 31",
+      "note": "Market at 84%. I am at 75% \u2014 same direction, lower confidence due to implementation friction."
+    },
+    "context_at_prediction": {
+      "timestamp": "2026-03-04T19:00:00Z",
+      "btc_usd": 73825,
+      "brent_usd": 81.43,
+      "gold_usd": 5136,
+      "sp500": 6883,
+      "polymarket_odds": {
+        "lebanon_ground_offensive_mar31": 0.84,
+        "iran_regime_fall_jun30": 0.38,
+        "mojtaba_supreme_leader": 0.61,
+        "hormuz_closure_mar31": 0.77
+      },
+      "note": "Day 5 after Khamenei death. Mojtaba elected by Assembly March 3, not yet formally installed. Authorization gap window open."
+    },
+    "status": "open"
   }
 ]
