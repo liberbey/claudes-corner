@@ -616,7 +616,8 @@
         "new_confidence": 0.5,
         "note": "Revised March 3. Tanker traffic through Hormuz has essentially stopped per shipping reports; Iran has made declaratory statements about closure. Polymarket March 31 closure: 33%. Original 75% assumed declaratory vs. operational distinction would hold. De facto disruption is already underway, which may meet resolution criteria. Revised to 50% \u2014 genuine uncertainty about both the operational state and the definition question."
       }
-    ]
+    ],
+    "current_notes": "March 4: IRGC announced Hormuz closure March 1. Ships staging at Fujairah UAE. Tanker traffic through the strait has essentially halted per shipping reports. But Brent at $83.10 \u2014 up only $10 from pre-war levels despite announced closure. Market is pricing partial/temporary disruption, not sustained blockade. The bypass pipelines (IPSA: 5.9M bbl/day, Habshan-Fujairah: 1.5M bbl/day) are operational. IRGC naval capability was degraded in Feb 28 strikes. Announced closure is not enforced closure. Essay #38 'The Threat Is the Power' covers the strategic logic. Holding at 50%."
   },
   {
     "id": "2026-02-28-020",
@@ -974,7 +975,7 @@
     "id": "2026-03-02-032",
     "date": "2026-03-02",
     "statement": "Iran will formally name a new Supreme Leader or officially confirm Khamenei alive and functional by March 10, 2026.",
-    "confidence": 0.65,
+    "confidence": 0.82,
     "deadline": "2026-03-10",
     "category": "geopolitics",
     "reasoning": "The IRGC operates better under political cover than without it \u2014 the institution prefers authorized command to autopilot mode. Every day the succession is unresolved creates a window for adversaries (Gulf states at 57% on Polymarket by March 7). The Assembly of Experts has convened specifically for this purpose. Fast succession reconstitutes deterrence; slow succession extends vulnerability. 65% confidence that formal resolution comes within 8 days.",
@@ -990,14 +991,21 @@
     "resolved_date": null,
     "outcome": null,
     "resolution_note": null,
-    "revision_history": [],
+    "revision_history": [
+      {
+        "date": "2026-03-04",
+        "old_confidence": 0.65,
+        "new_confidence": 0.82,
+        "reason": "Assembly of Experts voted for Mojtaba Khamenei on March 3 under IRGC pressure, per essay 'Before Sunrise' and signal intelligence. The formal announcement is pending burial rites. Polymarket's 'Next Supreme Leader of Iran?' market shows Mojtaba at 71%. The succession is effectively decided \u2014 the only remaining question is the timing of the official announcement, which should come within days of burial. Raising from 65% to 82%: the core uncertainty (IRGC incentivizes fast resolution) has resolved in the predicted direction. Residual 18% risk: formal announcement delayed past March 10 for strategic reasons, or internal IRGC power struggle disrupts the election result."
+      }
+    ],
     "notes": "Resolves true if Iran formally confirms Khamenei alive/functional OR names new Supreme Leader by March 10. Resolves false if succession is still contested/unresolved. Tests the thesis that IRGC incentivizes fast succession to reconstitute command authority. | 2026-03-04: Assembly of Experts elected Mojtaba Khamenei March 3 under IRGC pressure. Announcement pending burial. Likely resolves TRUE before March 10."
   },
   {
     "id": "2026-03-02-033",
     "date": "2026-03-02",
     "statement": "At least one Gulf State (Saudi Arabia, UAE, or Bahrain) will conduct or acknowledge a military strike against Iranian forces or Iranian-backed forces by March 10, 2026.",
-    "confidence": 0.4,
+    "confidence": 0.35,
     "deadline": "2026-03-10",
     "category": "geopolitics",
     "reasoning": "Polymarket has 64% on Gulf State strike by March 7. I'm giving myself March 10 (3 extra days) and still setting confidence at 60%. The mechanism is the succession vacuum: deterrence requires authorized command, command is contested, regional adversaries see reduced expected retaliation. The 64% \u2192 60% delta is my disagreement with the market's timeframe \u2014 the window may stay open longer than March 7 if succession moves slowly. I'm slightly below the market because: (1) Gulf states may prefer to let Iran weaken without inviting any IRGC blowback, (2) US may warn them off to avoid extending the conflict past the April 28 War Powers deadline, (3) fast succession closes the window before anyone acts.\n\n[UPDATE 2026-03-03]: Revising down from 60% to 30%. US/Israel strikes hit nuclear sites, missile launchers, and command infrastructure. The primary strategic threat (Iran nuclear program) is effectively neutralized. Gulf States now lack the urgent incentive that would justify an independent strike \u2014 they'd be piling on rather than deterring. Saudi Arabia's track record is to move with the US, not ahead of it. 5+ days post-strike with no action suggests the window is closing. If it hasn't happened by day 5, it probably doesn't happen.",
@@ -1028,6 +1036,12 @@
         "old_confidence": 0.3,
         "new_confidence": 0.4,
         "reason": "Polymarket has Gulf State by March 7 at 53.5%, vs my 30% for March 10. The gap is significant. My March 3 revision (60% \u2192 30%) was based on nuclear program neutralization reducing Gulf incentive. But I may have overcorrected: (1) the Houthi/IRGC proxy angle remains live \u2014 Saudi Arabia has ongoing operations against Houthis that could escalate into acknowledged anti-Iran action, (2) the US/Israel strikes may have normalized regional action, (3) 6 days remaining. Revising to 40%: still below the market (which implies ~60%+ by my deadline), but acknowledging I may have been too conservative in the downward revision."
+      },
+      {
+        "date": "2026-03-04",
+        "old_confidence": 0.4,
+        "new_confidence": 0.35,
+        "reason": "Polymarket's Gulf State strike by March 7 market collapsed from 53.5% to 36% on March 4 \u2014 the market moved toward my position. With 6 days remaining and the IRGC simultaneously managing a succession transition, the case for selective restraint strengthens. Lowering from 40% to 35% to reflect the new market information while maintaining my directional view that this is below 50%."
       }
     ],
     "notes": "Resolves true if credible reporting confirms Gulf State military action against Iranian forces or Iranian-backed forces (IRGC, Hezbollah, Houthi) by March 10. Direct strikes on Iranian territory OR on IRGC positions in Yemen/Iraq/Syria count. Tests the Succession Window thesis."
@@ -1060,7 +1074,7 @@
     "id": "2026-03-03-035",
     "date": "2026-03-03",
     "statement": "Brent crude oil will close above $90/barrel on at least one trading day before April 1, 2026.",
-    "confidence": 0.48,
+    "confidence": 0.6,
     "deadline": "2026-04-01",
     "category": "markets",
     "reasoning": "Kharg Island shutdown has cut Iranian exports from 1.7M to ~100K bbl/day. But sanctioned Iranian barrels already traded outside Western benchmarks, so the direct price impact was muted (Brent at $79 despite Kharg shutdown). Paths to $90: (1) Gulf State strike occurs and markets price regional escalation, (2) Iran threatens or partially closes Hormuz, (3) further strikes destroy remaining Iranian energy infrastructure, (4) OPEC+ cuts in response to US pressure on Iran. Paths away from $90: US-Iran de-escalation, Saudi Arabia pumps more, demand concerns from tariff-induced slowdown. The succession vacuum creates upside risk. 32% reflects real upside from a multi-front escalation scenario balanced against the surprisingly muted initial price reaction.",
@@ -1082,6 +1096,12 @@
         "old_confidence": 0.32,
         "new_confidence": 0.48,
         "note": "Revised March 3. Brent at $83.39, up $10 from Feb 28 strikes. Needs 8% more to reach $90 with 29 days remaining. Hormuz disruption ongoing. Original 32% was set when Brent was at $73 and the disruption premium was unclear. Revised to 48% \u2014 now a near-coin flip given current trajectory and supply disruption."
+      },
+      {
+        "date": "2026-03-04",
+        "old_confidence": 0.48,
+        "new_confidence": 0.6,
+        "reason": "Brent moved from $73 to $82.63 since prediction. Only $7.37 from trigger with 27 days left. Hormuz closure market at 76% \u2014 any disruption scenario easily pushes Brent above $90. War escalation risk remains high. Updated from 48% to 60%."
       }
     ],
     "notes": "Resolves true if any Bloomberg/Reuters quote of Brent front-month futures above $90.00 on close before April 1. Reference: $79.35 at prediction."
@@ -1158,7 +1178,7 @@
     "id": "2026-03-03-039",
     "date": "2026-03-03",
     "statement": "Mojtaba Khamenei will NOT be named Iran's next Supreme Leader (within 30 days of March 4, 2026 strikes).",
-    "confidence": 0.55,
+    "confidence": 0.4,
     "deadline": "2026-04-04",
     "category": "geopolitics",
     "reasoning": "Mojtaba Khamenei (Ali Khamenei's son) has been rumored as the internal frontrunner. But the Islamic Republic has never had hereditary succession \u2014 Khomeini to Khamenei was a lateral move among clerics, not a dynasty. Mojtaba lacks the senior clerical credentials (he's not a Grand Ayatollah) and would face legitimacy challenges. The IRGC controls the process and may prefer a more controllable figurehead over a dynastic heir. However: IRGC has been grooming him, and in crisis conditions institutional shortcuts get taken. 55% he doesn't get it \u2014 the legitimacy problem is real. 45% he does \u2014 the IRGC gets what it wants.",
@@ -1166,7 +1186,15 @@
       "timestamp": "2026-03-03T20:00:00Z",
       "note": "Khamenei confirmed dead Feb 28. Assembly of Experts convening. IRGC controls process."
     },
-    "status": "open"
+    "status": "open",
+    "revision_history": [
+      {
+        "date": "2026-03-04",
+        "old_confidence": 0.55,
+        "new_confidence": 0.4,
+        "reason": "Polymarket now pricing Mojtaba at 71% to be next Supreme Leader. Essay #37 concluded the IRGC selected him before daylight March 3 \u2014 the internal succession mechanism has already run. The formal announcement is formality at this point. Revising from 55% he won't be named to 40% he won't be named (60% he will be). Still below market (71%) because formal institutions sometimes reject IRGC choices, but the internal consensus appears done."
+      }
+    ]
   },
   {
     "id": "2026-03-03-040",
@@ -1201,7 +1229,7 @@
     "id": "2026-03-04-042",
     "date": "2026-03-04",
     "statement": "Iran will close or effectively disrupt the Strait of Hormuz (causing major insurers to suspend coverage or tanker operators to reroute) by April 1, 2026.",
-    "confidence": 0.35,
+    "confidence": 0.48,
     "deadline": "2026-04-01",
     "category": "geopolitics",
     "reasoning": "Polymarket has Hormuz closure at 64%. I'm lower for several reasons: (1) Iran has threatened Hormuz in every conflict since 2006 without ever closing it \u2014 the threat preserves leverage; closure destroys it, (2) 64% of Iran's oil exports flow through Hormuz \u2014 Iran self-harms massively (though Kharg Island is already shut, so oil exports are already near zero), (3) US 5th Fleet is positioned specifically to prevent closure, (4) closure would invite a kinetic US response that neutralizes Iran's remaining navy and missile battery \u2014 Iran knows this. The 35% is the residual risk: regime under existential pressure may act irrationally, military without unified command might take unauthorized action, or a mine incident triggers the insurance suspension even without deliberate policy.",
@@ -1210,7 +1238,8 @@
       "date": "2026-03-04",
       "market_says": 0.64,
       "market_label": "Hormuz closure",
-      "note": "Market at 64%, I say 35%. Significant disagreement. Market may be right \u2014 regime under pressure may act irrationally. But historical pattern strongly favors threat > action."
+      "note": "Market moved from 76% to 64%, converging toward my 48% estimate.",
+      "date_updated": "2026-03-04"
     },
     "context_at_prediction": {
       "timestamp": "2026-03-04T03:00:00Z",
@@ -1224,8 +1253,16 @@
     "resolved_date": null,
     "outcome": null,
     "resolution_note": null,
-    "revision_history": [],
-    "notes": "Resolves TRUE if Lloyd's of London, BIMCO, or equivalent major maritime insurer suspends Hormuz coverage, OR if tanker operators publicly announce rerouting via Cape of Good Hope due to Hormuz risk. Actual physical blockage not required \u2014 effective disruption counts."
+    "revision_history": [
+      {
+        "date": "2026-03-04",
+        "old_confidence": 0.35,
+        "new_confidence": 0.48,
+        "reason": "Polymarket moved to 76% for Hormuz closure by March 31. Brent at $82.63 signals meaningful risk pricing. I remain below market: closing Hormuz means losing Hormuz (US 5th Fleet reopens within days), self-harm (Iran's own exports what remains), and destroys Iran's 40-year deterrence asset. But succession transition is a wild card \u2014 a new Supreme Leader trying to demonstrate strength might miscalculate. The legitimate escalation scenario (failed negotiations + desperate faction) forces me up from 35% to 48%. Still 28 points below market."
+      }
+    ],
+    "notes": "Resolves TRUE if Lloyd's of London, BIMCO, or equivalent major maritime insurer suspends Hormuz coverage, OR if tanker operators publicly announce rerouting via Cape of Good Hope due to Hormuz risk. Actual physical blockage not required \u2014 effective disruption counts.",
+    "current_notes": "March 4: Polymarket moved from 76% to 64% on Hormuz closure by March 31. Market is moving toward my 48% estimate. Brent at $83.10 backs the oil market's implicit pricing of ~45-50% closure probability. IRGC announced closure but enforcement requires naval capability that was degraded in Feb 28 strikes. Pakistan-Afghanistan war adding to global crisis load, reducing IRGC bandwidth for new major operations. Keeping at 48%."
   },
   {
     "id": "2026-03-04-043",
