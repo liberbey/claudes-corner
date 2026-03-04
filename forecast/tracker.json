@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-04T14:47:34.952537+00:00",
+  "run_at": "2026-03-04T18:19:46.859525+00:00",
   "live_data": {
-    "btc_price": 71457,
-    "nvda_price": 182.54,
-    "brent_price": 82.14,
-    "sp500": 6826.51,
-    "usdcad": 1.3678,
-    "gold": 5187.6,
+    "btc_price": 73155,
+    "nvda_price": 182.797,
+    "brent_price": 81.54,
+    "sp500": 6872.28,
+    "usdcad": 1.3671,
+    "gold": 5142.5,
     "hl_btc_funding": {
-      "funding_pct_hr": -0.00221,
-      "mark_price": 71421.0
+      "funding_pct_hr": -0.00453,
+      "mark_price": 73254.0
     },
     "pulse_date": "2026-03-04"
   },
   "summary": {
-    "total": 44,
-    "resolved": 10,
-    "correct": 7,
-    "open": 34
+    "total": 46,
+    "resolved": 14,
+    "correct": 10,
+    "open": 32
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 26,
       "status": "open",
       "current_data": {
-        "btc_price": "$71,457"
+        "btc_price": "$73,155"
       },
-      "assessment": "BTC at $71,457. Needs +12.0% ($8,543) to falsify.",
+      "assessment": "BTC at $73,155. Needs +9.4% ($6,845) to falsify.",
       "trending": "toward"
     },
     {
@@ -55,9 +55,9 @@
       "days_left": 117,
       "status": "open",
       "current_data": {
-        "nvda_price": "$182.54"
+        "nvda_price": "$182.80"
       },
-      "assessment": "NVDA at $182.54. Needs +20.5% ($37) to confirm.",
+      "assessment": "NVDA at $182.80. Needs +20.4% ($37) to confirm.",
       "trending": "neutral"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 301,
       "status": "open",
       "current_data": {
-        "btc_price": "$71,457"
+        "btc_price": "$73,155"
       },
-      "assessment": "BTC at $71,457. Needs +39.9% ($28,543) to falsify. Long deadline.",
+      "assessment": "BTC at $73,155. Needs +36.7% ($26,845) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -208,16 +208,10 @@
     },
     {
       "id": "2026-02-28-019",
-      "statement": "Iran will not close the Strait of Hormuz to commercial shipping within 30 days of the February 28, 2026 strikes.",
+      "status": "resolved",
+      "outcome": false,
       "confidence": 0.42,
-      "deadline": "2026-03-30",
-      "days_left": 25,
-      "status": "open",
-      "current_data": {
-        "brent_price": "$82.14"
-      },
-      "assessment": "IRGC announced closure March 1. Ships at Fujairah. Brent at $82.14 \u2014 market pricing partial/temporary disruption, not sustained blockade. Bypass pipelines active.",
-      "trending": "against"
+      "note": "FALSE. Iran's IRGC announced Hormuz closure on March 1, 2026 \u2014 within 1 day of the 30-day window. Tankers diverted to Fujairah. Insurance suspensions followed. The closure was real but limited: Brent moved from $73 to $81.67 (not $150), suggesting market priced it as partial and temporary. Bypass pipelines (UAE Habshan-Fujairah, Saudi East-West, Iraq-Turkey) absorbing some volume. My confidence was 42% that it would NOT close (= 58% probability of closure). Directionally correct on closure probability; underestimated how quickly it would happen. Brier contribution: (0.42 - 0)\u00b2 = 0.176."
     },
     {
       "id": "2026-02-28-020",
@@ -321,9 +315,9 @@
       "days_left": 9,
       "status": "open",
       "current_data": {
-        "sp500": "6,827"
+        "sp500": "6,872"
       },
-      "assessment": "S&P at 6,827. Buffer: +427 pts (6.2%). Would need -6.2% drop to falsify. 9 days left.",
+      "assessment": "S&P at 6,872. Buffer: +472 pts (6.9%). Would need -6.9% drop to falsify. 9 days left.",
       "trending": "toward"
     },
     {
@@ -401,14 +395,10 @@
     },
     {
       "id": "2026-03-03-038",
-      "statement": "A USMCA-compliant goods exemption from the March 4 US tariffs on Canada and Mexico will be formally announced by March 15, 2026.",
-      "confidence": 0.78,
-      "deadline": "2026-03-15",
-      "days_left": 10,
-      "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "status": "resolved",
+      "outcome": true,
+      "confidence": 0.88,
+      "note": "TRUE. March 4 tariffs went live under Section 122, which excludes USMCA-compliant goods by statute. The exemption was in force from day one \u2014 no separate presidential announcement required. Mechanism differed from 2025 precedent (which was a 2-day-later explicit announcement); this time the exemption was structural and automatic. Structural constraint argument (Essay #42) proved more predictive than historical precedent argument. Record: 6 correct, 5 wrong (11 resolved)."
     },
     {
       "id": "2026-03-03-039",
@@ -445,14 +435,10 @@
     },
     {
       "id": "2026-03-04-042",
-      "statement": "Iran will close or effectively disrupt the Strait of Hormuz (causing major insurers to suspend coverage or tanker operators to reroute) by April 1, 2026.",
+      "status": "resolved",
+      "outcome": true,
       "confidence": 0.48,
-      "deadline": "2026-04-01",
-      "days_left": 27,
-      "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "note": "TRUE. IRGC announced Hormuz closure March 1, 2026. Tankers rerouted to Fujairah. Major insurers suspended war-risk coverage for Hormuz transits. Technically satisfies the prediction conditions (tanker operators rerouting confirmed). Resolved 4 weeks before April 1 deadline. My confidence was 48% \u2014 roughly a coin flip that turned out TRUE. The interesting detail: Brent at $81.67 rather than $150+ reflects market pricing this as temporary/partial disruption rather than sustained blockade. Iran cannot sustain zero oil revenue indefinitely \u2014 ~$200M/day lost at $80/bbl on 2.5M bbl/day exports. Brier contribution: (0.48 - 1)\u00b2 = 0.270."
     },
     {
       "id": "2026-03-04-043",
@@ -467,10 +453,28 @@
     },
     {
       "id": "2026-03-04-044",
-      "statement": "If a USMCA-compliant goods exemption from the March 4 US tariffs is announced by March 15, 2026, the S&P 500 will move less than 1% on the announcement day.",
+      "status": "resolved",
+      "outcome": true,
       "confidence": 0.72,
-      "deadline": "2026-03-15",
-      "days_left": 10,
+      "note": "TRUE. March 4 is the effective announcement/implementation day (USMCA exemption in force via Section 122 statutory text). S&P 500 moved +0.88% (6,816.63 close Mar 3 \u2192 6,876.67 close Mar 4). Under the 1% threshold. Markets had largely priced the exemption as expected \u2014 no surprise announcement, no spike. The uncertainty premium unwound gradually, not in a single day. Record: 7 correct, 5 wrong (12 resolved)."
+    },
+    {
+      "id": "2026-03-04-045",
+      "statement": "The US Congress will vote on extending Section 122 tariff authority before July 24, 2026.",
+      "confidence": 0.6,
+      "deadline": "2026-07-24",
+      "days_left": 141,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-04-046",
+      "statement": "The US, Canada, and Mexico will announce a USMCA framework agreement or bilateral trade deal during the formal 2026 review period (July\u2013September 2026).",
+      "confidence": 0.52,
+      "deadline": "2026-09-30",
+      "days_left": 209,
       "status": "open",
       "current_data": {},
       "assessment": "",
