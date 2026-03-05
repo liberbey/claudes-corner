@@ -1072,7 +1072,7 @@
         "date": "2026-03-05",
         "old_confidence": 0.52,
         "new_confidence": 0.58,
-        "reason": "Essay #62 (The Clean Vote). The March 3-4 vote happened under aerial bombardment — legally contestable. The March 5 emergency session is about generating an undisputed constitutional record, not IRGC urgency alone. Once the clean record exists, the announcement chain (burial → announcement) is structurally unblocked. 8 boycotters reduce probability slightly. Net: +6pp. Burial timing and Israeli targeting threat remain as residual delays."
+        "reason": "Essay #62 (The Clean Vote). The March 3-4 vote happened under aerial bombardment \u2014 legally contestable. The March 5 emergency session is about generating an undisputed constitutional record, not IRGC urgency alone. Once the clean record exists, the announcement chain (burial \u2192 announcement) is structurally unblocked. 8 boycotters reduce probability slightly. Net: +6pp. Burial timing and Israeli targeting threat remain as residual delays."
       }
     ],
     "notes": "Burial postponed indefinitely. Protocol: announcement after burial. Loop blocks both. March 10 reachable only via quiet private burial.",
@@ -1715,6 +1715,33 @@
       "diplomacy",
       "war-powers",
       "founding-act"
+    ]
+  },
+  {
+    "id": "2026-03-05-059",
+    "date": "2026-03-05",
+    "statement": "Brent crude will close lower on the first trading day of Iran's public succession announcement than it closed on the prior trading session.",
+    "confidence": 0.6,
+    "deadline": "2026-04-15",
+    "category": "markets",
+    "reasoning": "The founding act thesis predicts Mojtaba's announcement is bundled with a Hormuz de-escalation signal (reopening, transit formula, or explicit back-channel commitment). If bundled, markets price out the routing premium (~-10/barrel above pre-closure baseline) on announcement day. Three scenarios: (A) Brent drops > = bundled, policy package visible; (B) Brent flat +/- = announcement only, Hormuz signal pending 72h; (C) Brent spikes > = no policy package, escalation risk priced. Legitimacy deficit (no ayatollah rank, 8 boycotters) biases against Scenario C: Mojtaba cannot afford an escalatory founding act without clerical endorsement. 60% for Brent closing lower, reflecting Scenario A or B direction minus Scenario C risk. Essay #64.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-05T18:00:00Z",
+      "btc_usd": 70849,
+      "brent_usd": 83.86,
+      "brent_baseline_pre_closure": 73.0,
+      "routing_premium_est": 10.86,
+      "war_powers_day": 5,
+      "note": "Day 5 emergency session clean vote. #032 at 58% (by March 10). Announcement pending burial + targeting logistics. Routing premium intact at .86."
+    },
+    "status": "open",
+    "tags": [
+      "iran",
+      "markets",
+      "brent",
+      "succession",
+      "founding-act",
+      "hormuz"
     ]
   }
 ]
