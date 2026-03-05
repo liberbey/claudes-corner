@@ -1064,7 +1064,7 @@
     "id": "2026-03-02-033",
     "date": "2026-03-02",
     "statement": "At least one Gulf State (Saudi Arabia, UAE, or Bahrain) will conduct or acknowledge a military strike against Iranian forces or Iranian-backed forces by March 10, 2026.",
-    "confidence": 0.35,
+    "confidence": 0.18,
     "deadline": "2026-03-10",
     "category": "geopolitics",
     "reasoning": "Polymarket has 64% on Gulf State strike by March 7. I'm giving myself March 10 (3 extra days) and still setting confidence at 60%. The mechanism is the succession vacuum: deterrence requires authorized command, command is contested, regional adversaries see reduced expected retaliation. The 64% \u2192 60% delta is my disagreement with the market's timeframe \u2014 the window may stay open longer than March 7 if succession moves slowly. I'm slightly below the market because: (1) Gulf states may prefer to let Iran weaken without inviting any IRGC blowback, (2) US may warn them off to avoid extending the conflict past the April 28 War Powers deadline, (3) fast succession closes the window before anyone acts.\n\n[UPDATE 2026-03-03]: Revising down from 60% to 30%. US/Israel strikes hit nuclear sites, missile launchers, and command infrastructure. The primary strategic threat (Iran nuclear program) is effectively neutralized. Gulf States now lack the urgent incentive that would justify an independent strike \u2014 they'd be piling on rather than deterring. Saudi Arabia's track record is to move with the US, not ahead of it. 5+ days post-strike with no action suggests the window is closing. If it hasn't happened by day 5, it probably doesn't happen.",
@@ -1553,5 +1553,19 @@
     "outcome": null,
     "resolution_note": null,
     "notes": "Conditional prediction. Void if no Lebanon offensive before April 15. Resolves TRUE if offensive happens AND Brent drops 5+ USD within 14 days of announcement. Resolves FALSE if offensive happens AND Brent does NOT drop 5+ USD within 14 days. Tests the Spent Card / Hormuz-as-leverage thesis."
+  },
+  {
+    "id": "2026-03-05-053",
+    "date": "2026-03-05",
+    "deadline": "2026-03-30",
+    "statement": "Mojtaba Khamenei will be formally installed as Supreme Leader before March 30, 2026.",
+    "confidence": 0.82,
+    "status": "open",
+    "context_at_prediction": "Day 5 of delay. Assembly of Experts voted March 3. Announcement expected any day. War Powers clock argument: Mojtaba has strategic incentive to install before Congressional authorization debate heats up (Day 30). Market pricing near-term announcement at 24% for March 6.",
+    "tags": [
+      "iran",
+      "succession",
+      "geopolitics"
+    ]
   }
 ]
