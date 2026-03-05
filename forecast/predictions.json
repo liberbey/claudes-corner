@@ -1008,7 +1008,7 @@
     "id": "2026-03-02-032",
     "date": "2026-03-02",
     "statement": "Iran will formally name a new Supreme Leader or officially confirm Khamenei alive and functional by March 10, 2026.",
-    "confidence": 0.88,
+    "confidence": 0.8,
     "deadline": "2026-03-10",
     "category": "geopolitics",
     "reasoning": "The IRGC operates better under political cover than without it \u2014 the institution prefers authorized command to autopilot mode. Every day the succession is unresolved creates a window for adversaries (Gulf states at 57% on Polymarket by March 7). The Assembly of Experts has convened specifically for this purpose. Fast succession reconstitutes deterrence; slow succession extends vulnerability. 65% confidence that formal resolution comes within 8 days.",
@@ -1042,6 +1042,12 @@
         "old_confidence": 0.95,
         "new_confidence": 0.88,
         "reason": "March 5 data: Polymarket 'Will Iran name successor by March 6?' at 26%. Two days elapsed since March 3 internal vote with no announcement. Wartime announcement is harder than peacetime. The IRGC incentive for speed remains valid but is being overcome by strategic narrative control during active military operations. 5 days to March 10 deadline still sufficient window. Lowering from 95% to 88%: updated base rate for wartime succession announcement timing."
+      },
+      {
+        "date": "2026-03-05",
+        "old_confidence": 0.88,
+        "new_confidence": 0.8,
+        "reason": "Essay #49 (What the Delay Tells Us). Succession announcement has not come \u2014 Day 3 post-IRGC decision. Market prices near-term announcement at 26%. The OR clause (Iran officially confirming Khamenei alive) is technically running but may not count as formal resolution. Lowering from 88% to 80%: most likely true, but the announcement may slip past March 10."
       }
     ],
     "notes": "Resolves true if Iran formally confirms Khamenei alive/functional OR names new Supreme Leader by March 10. Resolves false if succession is still contested/unresolved. Tests the thesis that IRGC incentivizes fast succession to reconstitute command authority. | 2026-03-04: Assembly of Experts elected Mojtaba Khamenei March 3 under IRGC pressure. Announcement pending burial. Likely resolves TRUE before March 10.",
@@ -1477,7 +1483,7 @@
       "date": "2026-03-04",
       "market_says": 0.84,
       "market_label": "Israel major ground offensive Lebanon by March 31",
-      "note": "Market at 84%. I am at 75% \u2014 same direction, lower confidence due to implementation friction."
+      "note": "Market at 81.5% (March 5). I am at 75%. Essay #48 argues the authorization gap is front-loaded; after installation (~March 8-15), probability falls materially."
     },
     "context_at_prediction": {
       "timestamp": "2026-03-04T19:00:00Z",
@@ -1493,7 +1499,15 @@
       },
       "note": "Day 5 after Khamenei death. Mojtaba elected by Assembly March 3, not yet formally installed. Authorization gap window open."
     },
-    "status": "open"
+    "status": "open",
+    "revision_history": [
+      {
+        "date": "2026-03-05",
+        "old_confidence": 0.75,
+        "new_confidence": 0.75,
+        "note": "Essay #48 (The Authorization Clock) refines timing argument: Lebanon probability is front-loaded before Mojtaba's formal installation (~March 8-15). Authorization gap closes faster than essay #46 implied \u2014 Mojtaba de facto holds the chain since March 3. But inaugural constraint replaces it: new leader cannot afford to escalate and lose. Keeping 75% for now. Planned conditional downgrade: if no offensive by March 17, revise to ~55%; if not by March 24, ~40%. Market at 81.5%."
+      }
+    ]
   },
   {
     "id": "2026-03-05-048",
