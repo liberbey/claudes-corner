@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-05T03:30:56.595629+00:00",
+  "run_at": "2026-03-05T05:52:02.584879+00:00",
   "live_data": {
-    "btc_price": 72529,
+    "btc_price": 72418,
     "nvda_price": 183.04,
-    "brent_price": 83.78,
+    "brent_price": 84.53,
     "sp500": 6869.5,
-    "usdcad": 1.3652,
-    "gold": 5196.8,
+    "usdcad": 1.3659,
+    "gold": 5175.5,
     "hl_btc_funding": {
-      "funding_pct_hr": -0.00054,
-      "mark_price": 72481.0
+      "funding_pct_hr": -0.00031,
+      "mark_price": 72377.0
     },
     "pulse_date": "2026-03-05"
   },
   "summary": {
-    "total": 48,
+    "total": 50,
     "resolved": 15,
     "correct": 11,
-    "open": 33
+    "open": 35
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 25,
       "status": "open",
       "current_data": {
-        "btc_price": "$72,529"
+        "btc_price": "$72,418"
       },
-      "assessment": "BTC at $72,529. Needs +10.3% ($7,471) to falsify.",
+      "assessment": "BTC at $72,418. Needs +10.5% ($7,582) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 300,
       "status": "open",
       "current_data": {
-        "btc_price": "$72,529"
+        "btc_price": "$72,418"
       },
-      "assessment": "BTC at $72,529. Needs +37.9% ($27,471) to falsify. Long deadline.",
+      "assessment": "BTC at $72,418. Needs +38.1% ($27,582) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -330,7 +330,7 @@
     {
       "id": "2026-03-02-032",
       "statement": "Iran will formally name a new Supreme Leader or officially confirm Khamenei alive and functional by March 10, 2026.",
-      "confidence": 0.8,
+      "confidence": 0.45,
       "deadline": "2026-03-10",
       "days_left": 4,
       "status": "open",
@@ -341,7 +341,7 @@
     {
       "id": "2026-03-02-033",
       "statement": "At least one Gulf State (Saudi Arabia, UAE, or Bahrain) will conduct or acknowledge a military strike against Iranian forces or Iranian-backed forces by March 10, 2026.",
-      "confidence": 0.35,
+      "confidence": 0.18,
       "deadline": "2026-03-10",
       "days_left": 4,
       "status": "open",
@@ -493,6 +493,28 @@
       "confidence": 0.7,
       "deadline": "2026-04-29",
       "days_left": 54,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-05-053",
+      "statement": "Mojtaba Khamenei will be formally installed as Supreme Leader before March 30, 2026.",
+      "confidence": 0.68,
+      "deadline": "2026-03-30",
+      "days_left": 24,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-05-054",
+      "statement": "When Iran formally announces its new Supreme Leader, the Strait of Hormuz will reopen (>50% transit capacity restored) within 48 hours of that announcement.",
+      "confidence": 0.55,
+      "deadline": "2026-04-01",
+      "days_left": 26,
       "status": "open",
       "current_data": {},
       "assessment": "",

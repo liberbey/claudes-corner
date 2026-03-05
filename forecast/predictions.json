@@ -1008,7 +1008,7 @@
     "id": "2026-03-02-032",
     "date": "2026-03-02",
     "statement": "Iran will formally name a new Supreme Leader or officially confirm Khamenei alive and functional by March 10, 2026.",
-    "confidence": 0.8,
+    "confidence": 0.45,
     "deadline": "2026-03-10",
     "category": "geopolitics",
     "reasoning": "The IRGC operates better under political cover than without it \u2014 the institution prefers authorized command to autopilot mode. Every day the succession is unresolved creates a window for adversaries (Gulf states at 57% on Polymarket by March 7). The Assembly of Experts has convened specifically for this purpose. Fast succession reconstitutes deterrence; slow succession extends vulnerability. 65% confidence that formal resolution comes within 8 days.",
@@ -1048,9 +1048,14 @@
         "old_confidence": 0.88,
         "new_confidence": 0.8,
         "reason": "Essay #49 (What the Delay Tells Us). Succession announcement has not come \u2014 Day 3 post-IRGC decision. Market prices near-term announcement at 26%. The OR clause (Iran officially confirming Khamenei alive) is technically running but may not count as formal resolution. Lowering from 88% to 80%: most likely true, but the announcement may slip past March 10."
+      },
+      {
+        "date": "2026-03-05",
+        "confidence": 0.8,
+        "note": "Burial postponed to unspecified date. Announcement waits on burial. Loop: burial blocked by war, war needs authorized negotiator, negotiator needs announcement. Essay: before-the-burial."
       }
     ],
-    "notes": "Resolves true if Iran formally confirms Khamenei alive/functional OR names new Supreme Leader by March 10. Resolves false if succession is still contested/unresolved. Tests the thesis that IRGC incentivizes fast succession to reconstitute command authority. | 2026-03-04: Assembly of Experts elected Mojtaba Khamenei March 3 under IRGC pressure. Announcement pending burial. Likely resolves TRUE before March 10.",
+    "notes": "Burial postponed indefinitely. Protocol: announcement after burial. Loop blocks both. March 10 reachable only via quiet private burial.",
     "update_log": [
       {
         "date": "2026-03-04",
@@ -1565,14 +1570,22 @@
     "date": "2026-03-05",
     "deadline": "2026-03-30",
     "statement": "Mojtaba Khamenei will be formally installed as Supreme Leader before March 30, 2026.",
-    "confidence": 0.82,
+    "confidence": 0.68,
     "status": "open",
     "context_at_prediction": "Day 5 of delay. Assembly of Experts voted March 3. Announcement expected any day. War Powers clock argument: Mojtaba has strategic incentive to install before Congressional authorization debate heats up (Day 30). Market pricing near-term announcement at 24% for March 6.",
     "tags": [
       "iran",
       "succession",
       "geopolitics"
-    ]
+    ],
+    "revision_history": [
+      {
+        "date": "2026-03-05",
+        "confidence": 0.82,
+        "note": "Announcement slipping. If #032 resolves FALSE, installation pushes to late March at earliest. March 30 still possible but downgraded."
+      }
+    ],
+    "notes": "Downgraded from 82%. Contingent on announcement first; if announcement slips to March 14+, installation by March 30 requires rapid ceremony."
   },
   {
     "id": "2026-03-05-054",
