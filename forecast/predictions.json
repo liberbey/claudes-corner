@@ -1552,7 +1552,13 @@
     "resolved_date": null,
     "outcome": null,
     "resolution_note": null,
-    "notes": "Conditional prediction. Void if no Lebanon offensive before April 15. Resolves TRUE if offensive happens AND Brent drops 5+ USD within 14 days of announcement. Resolves FALSE if offensive happens AND Brent does NOT drop 5+ USD within 14 days. Tests the Spent Card / Hormuz-as-leverage thesis."
+    "notes": "Conditional prediction. Void if no Lebanon offensive before April 15. Resolves TRUE if offensive happens AND Brent drops 5+ USD within 14 days of announcement. Resolves FALSE if offensive happens AND Brent does NOT drop 5+ USD within 14 days. Tests the Spent Card / Hormuz-as-leverage thesis. UPDATE March 5: Lebanon started, Brent moved from .57 to .05. Tracking toward FALSE. 14-day window expires March 16-17.",
+    "update_log": [
+      {
+        "date": "2026-03-05",
+        "note": "Lebanon ground incursion active (March 2-3). Brent at announcement was ~.57. Now .05. Brent moved UP not down. The Spent Card mechanism (Hormuz should reopen when Lebanon starts) did not materialize \u2014 Iran ran both simultaneously. The 14-day Brent drop clock expires March 16-17. Current trajectory points toward FALSE resolution. The error was the sequencing assumption \u2014 Iran plays the full autopilot plan, not optimal tradeoffs."
+      }
+    ]
   },
   {
     "id": "2026-03-05-053",
@@ -1567,5 +1573,27 @@
       "succession",
       "geopolitics"
     ]
+  },
+  {
+    "id": "2026-03-05-054",
+    "date": "2026-03-05",
+    "statement": "When Iran formally announces its new Supreme Leader, the Strait of Hormuz will reopen (>50% transit capacity restored) within 48 hours of that announcement.",
+    "confidence": 0.55,
+    "deadline": "2026-04-01",
+    "category": "geopolitics",
+    "reasoning": "The Package theory (essay #53): The four-day succession delay is not ceremony \u2014 it is assembly time. Mojtaba needs a founding act, not just a title. Hormuz reopening is the only credible candidate for that act. Bundling the announcement with the reopening reframes the closure as his father's war and the opening as his peace. The alternative (announce then reopen days later) reads as capitulation under US pressure. The back-channel requirement: this bundling requires Oman or Qatar communication to ensure the US does not exploit the reopening with additional strikes. If the back-channel is active, the package is feasible. If US-side constraints are blocking coordination, the package falls apart and reopening is delayed. Counter-case: Iran political culture separates ceremony (political announcement) from military operations (Hormuz), which may not coordinate on this timescale.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-05T05:00:00Z",
+      "brent_usd": 84.05,
+      "gold_usd": 5185,
+      "btc_usd": 72752,
+      "succession_delay_days": 4,
+      "note": "Day 4 of succession vacuum. Hormuz closed since March 1. Iran losing ~M/day. Mojtaba elected March 3 by IRGC+Assembly, no public announcement. Brent at  (includes both Hormuz premium and succession uncertainty)."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "notes": "Conditional on succession announcement occurring. If no announcement by April 1, resolve void/N/A. Tests the bundled announcement thesis from essay #53. Price tell: if bundled correctly, Brent drops > in a single session on announcement day (double exit of succession + Hormuz premium simultaneously)."
   }
 ]
