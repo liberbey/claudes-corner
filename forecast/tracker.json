@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-05T17:48:49.443005+00:00",
+  "run_at": "2026-03-05T20:02:06.327905+00:00",
   "live_data": {
-    "btc_price": 70840,
-    "nvda_price": 178.38,
-    "brent_price": 83.98,
-    "sp500": 6781.18,
-    "usdcad": 1.371,
-    "gold": 5075.9,
+    "btc_price": 70963,
+    "nvda_price": 180.69,
+    "brent_price": 85.63,
+    "sp500": 6784.81,
+    "usdcad": 1.3693,
+    "gold": 5072.4,
     "hl_btc_funding": {
-      "funding_pct_hr": 0.00123,
-      "mark_price": 70750.0
+      "funding_pct_hr": 0.00125,
+      "mark_price": 70939.0
     },
     "pulse_date": "2026-03-05"
   },
   "summary": {
-    "total": 54,
+    "total": 55,
     "resolved": 15,
     "correct": 11,
-    "open": 39
+    "open": 40
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 25,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,840"
+        "btc_price": "$70,963"
       },
-      "assessment": "BTC at $70,840. Needs +12.9% ($9,160) to falsify.",
+      "assessment": "BTC at $70,963. Needs +12.7% ($9,037) to falsify.",
       "trending": "toward"
     },
     {
@@ -55,9 +55,9 @@
       "days_left": 116,
       "status": "open",
       "current_data": {
-        "nvda_price": "$178.38"
+        "nvda_price": "$180.69"
       },
-      "assessment": "NVDA at $178.38. Needs +23.3% ($42) to confirm.",
+      "assessment": "NVDA at $180.69. Needs +21.8% ($39) to confirm.",
       "trending": "neutral"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 300,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,840"
+        "btc_price": "$70,963"
       },
-      "assessment": "BTC at $70,840. Needs +41.2% ($29,160) to falsify. Long deadline.",
+      "assessment": "BTC at $70,963. Needs +40.9% ($29,037) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -315,9 +315,9 @@
       "days_left": 8,
       "status": "open",
       "current_data": {
-        "sp500": "6,781"
+        "sp500": "6,785"
       },
-      "assessment": "S&P at 6,781. Buffer: +381 pts (5.6%). Would need -5.6% drop to falsify. 8 days left.",
+      "assessment": "S&P at 6,785. Buffer: +385 pts (5.7%). Would need -5.7% drop to falsify. 8 days left.",
       "trending": "toward"
     },
     {
@@ -330,7 +330,7 @@
     {
       "id": "2026-03-02-032",
       "statement": "Iran will formally name a new Supreme Leader or officially confirm Khamenei alive and functional by March 10, 2026.",
-      "confidence": 0.58,
+      "confidence": 0.88,
       "deadline": "2026-03-10",
       "days_left": 4,
       "status": "open",
@@ -501,7 +501,7 @@
     {
       "id": "2026-03-05-053",
       "statement": "Mojtaba Khamenei will be formally installed as Supreme Leader before March 30, 2026.",
-      "confidence": 0.75,
+      "confidence": 0.82,
       "deadline": "2026-03-30",
       "days_left": 24,
       "status": "open",
@@ -559,6 +559,17 @@
       "confidence": 0.58,
       "deadline": "2026-04-30",
       "days_left": 55,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-05-059",
+      "statement": "Brent crude will close lower on the first trading day of Iran's public succession announcement than it closed on the prior trading session.",
+      "confidence": 0.75,
+      "deadline": "2026-04-15",
+      "days_left": 40,
       "status": "open",
       "current_data": {},
       "assessment": "",
