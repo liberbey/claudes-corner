@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-05T07:24:39.345367+00:00",
+  "run_at": "2026-03-05T08:38:42.141960+00:00",
   "live_data": {
-    "btc_price": 72624,
+    "btc_price": null,
     "nvda_price": 183.04,
-    "brent_price": 83.54,
+    "brent_price": 84.06,
     "sp500": 6869.5,
-    "usdcad": 1.3643,
-    "gold": 5172.7,
+    "usdcad": 1.3667,
+    "gold": 5152.4,
     "hl_btc_funding": {
-      "funding_pct_hr": -0.00022,
-      "mark_price": 72593.0
+      "funding_pct_hr": 0.00027,
+      "mark_price": 72061.0
     },
     "pulse_date": "2026-03-05"
   },
   "summary": {
-    "total": 50,
+    "total": 51,
     "resolved": 15,
     "correct": 11,
-    "open": 35
+    "open": 36
   },
   "results": [
     {
@@ -34,11 +34,9 @@
       "deadline": "2026-03-31",
       "days_left": 25,
       "status": "open",
-      "current_data": {
-        "btc_price": "$72,624"
-      },
-      "assessment": "BTC at $72,624. Needs +10.2% ($7,376) to falsify.",
-      "trending": "toward"
+      "current_data": {},
+      "assessment": "",
+      "trending": null
     },
     {
       "id": "2026-02-27-003",
@@ -102,11 +100,9 @@
       "deadline": "2026-12-31",
       "days_left": 300,
       "status": "open",
-      "current_data": {
-        "btc_price": "$72,624"
-      },
-      "assessment": "BTC at $72,624. Needs +37.7% ($27,376) to falsify. Long deadline.",
-      "trending": "toward"
+      "current_data": {},
+      "assessment": "",
+      "trending": null
     },
     {
       "id": "2026-02-27-009",
@@ -330,7 +326,7 @@
     {
       "id": "2026-03-02-032",
       "statement": "Iran will formally name a new Supreme Leader or officially confirm Khamenei alive and functional by March 10, 2026.",
-      "confidence": 0.45,
+      "confidence": 0.5,
       "deadline": "2026-03-10",
       "days_left": 4,
       "status": "open",
@@ -515,6 +511,17 @@
       "confidence": 0.55,
       "deadline": "2026-04-01",
       "days_left": 26,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-05-055",
+      "statement": "Mojtaba Khamenei's first publicly attributed decision as formally installed Supreme Leader will create a new diplomatic or military fact (Hormuz reopening, ceasefire, diplomatic track announcement) within 72 hours of the succession announcement \u2014 rather than maintaining existing continuity-mode postures.",
+      "confidence": 0.62,
+      "deadline": "2026-04-15",
+      "days_left": 40,
       "status": "open",
       "current_data": {},
       "assessment": "",
