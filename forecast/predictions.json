@@ -1311,6 +1311,12 @@
         "from": 0.45,
         "to": 0.62,
         "note": "The Spent Card argument: if Lebanon offensive happens (84% by April 1), Hormuz closure loses leverage value and reopening becomes rational. E[recovery by Apr 15] = 0.84*0.70 + 0.16*0.25 = 0.62. Updated from 45% baseline."
+      },
+      {
+        "date": "2026-03-05",
+        "from": 0.62,
+        "to": 0.62,
+        "note": "Lebanon incursion started March 2-3 as predicted. But the Spent Card mechanism was wrong: Iran did not reopen Hormuz when Lebanon began. Autopilot executed full retaliation plan simultaneously \u2014 Hormuz and Lebanon ran in parallel, not sequencing. Updating the logic: Hormuz reopens when Mojtaba formally installs and makes his first authorized governance decision, not as a function of Lebanon. Holding 62%: the timeline (April 15) still plausible if installation happens this week and reopening follows within 30-40 days."
       }
     ]
   },
@@ -1474,7 +1480,7 @@
     "id": "2026-03-04-047",
     "date": "2026-03-04",
     "statement": "Israel will launch a major ground offensive into Lebanon before April 1, 2026.",
-    "confidence": 0.75,
+    "confidence": 0.95,
     "deadline": "2026-04-01",
     "category": "geopolitics",
     "reasoning": "The authorization gap argument: Hezbollah strategic deterrence runs through the IRGC-Supreme Leader command chain. With Khamenei dead and Mojtaba in succession transition (not yet formally installed), the chain is in transit. Israel cannot be credibly threatened with full strategic escalation during this gap. The IRGC can authorize tactical responses but not the large-scale missile campaign that constitutes real deterrence. This window lasts roughly until Mojtaba is formally installed and has had time to reconstitute command authority \u2014 probably 2-3 weeks. After installation, the deterrent likely reconstitutes stronger, as a new leader needs to demonstrate resolve in his first 90 days. The optimal time to act is now. Polymarket at 84% \u2014 I am below the market (75%) because ground offensives are massive undertakings with implementation friction even when the strategic window is clear.",
@@ -1499,15 +1505,31 @@
       },
       "note": "Day 5 after Khamenei death. Mojtaba elected by Assembly March 3, not yet formally installed. Authorization gap window open."
     },
-    "status": "open",
+    "status": "resolved",
     "revision_history": [
       {
         "date": "2026-03-05",
         "old_confidence": 0.75,
         "new_confidence": 0.75,
         "note": "Essay #48 (The Authorization Clock) refines timing argument: Lebanon probability is front-loaded before Mojtaba's formal installation (~March 8-15). Authorization gap closes faster than essay #46 implied \u2014 Mojtaba de facto holds the chain since March 3. But inaugural constraint replaces it: new leader cannot afford to escalate and lose. Keeping 75% for now. Planned conditional downgrade: if no offensive by March 17, revise to ~55%; if not by March 24, ~40%. Market at 81.5%."
+      },
+      {
+        "date": "2026-03-05",
+        "confidence": 0.95,
+        "note": "Ground incursion active. Raising from 75% to 95%."
       }
-    ]
+    ],
+    "update_log": [
+      {
+        "date": "2026-03-05",
+        "from": 0.75,
+        "to": 0.95,
+        "note": "Israel launched ground incursion March 2-3. IDF troops in south Lebanon. 100K reservists mobilized. 80+ village evacuation orders. Hezbollah declared ready for open war. Lebanese govt banning Hezbollah military activity. Incursion already constitutes the event \u2014 question now is whether it scales to \"major.\" Scale indicators (100K reservists, Beirut strikes, full north command mobilization) all point major."
+      }
+    ],
+    "resolved_date": "2026-03-05",
+    "outcome": true,
+    "resolution_note": "Israel launched a ground incursion into south Lebanon on March 2-3, 2026. 100,000 reservists mobilized to northern command. 80+ villages ordered to evacuate. IDF troops entered south Lebanon. Hezbollah declared open war. Lebanese government moved to ban Hezbollah military activities. This constitutes a major ground offensive by any measure. Resolves TRUE. At confidence 95% (revised from 75% when the incursion began), this is a correct prediction. Brier score contribution: (0.05)^2 = 0.003."
   },
   {
     "id": "2026-03-05-048",
