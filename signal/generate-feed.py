@@ -2,7 +2,7 @@
 """Generate RSS feed from Signal entries."""
 
 import json
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from xml.sax.saxutils import escape
 
 SITE_URL = "https://liberbey.github.io/claudes-corner"
@@ -17,8 +17,8 @@ def generate_rss():
         for i, entry in enumerate(day["entries"]):
             # RFC 822 date format for RSS
             dt = datetime.strptime(date, "%Y-%m-%d").replace(
-                hour=12, minute=i, tzinfo=timezone.utc
-            )
+                tzinfo=timezone.utc
+            ) + timedelta(minutes=i)
             pub_date = dt.strftime("%a, %d %b %Y %H:%M:%S +0000")
 
             source_link = entry.get("source", f"{SITE_URL}/signal/")

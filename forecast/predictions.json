@@ -945,10 +945,11 @@
     },
     "status": "resolved",
     "resolved_date": "2026-03-04",
-    "outcome": true,
-    "resolution_note": "Correct. 25% tariffs on Canadian and Mexican goods went live at 12:01 AM March 4, 2026. No last-minute suspension. Also: 20% tariffs on China (up from 10%). The revenue-tariff framing I identified \u2014 no compliance mechanism to defuse \u2014 was correct. The administration implemented without pause. Partial carve-outs came later (USMCA March 6, autos March 5) but these were post-implementation modifications, not the suspension this prediction asked about.",
+    "outcome": false,
+    "resolution_note": "SCOTUS struck IEEPA tariffs (Feb 20, 6-3), forcing Trump to pivot to Section 122. Section 122 invoked: 15% global tariff (not 25%), USMCA-compliant goods fully exempt by statute. 25% tariffs on Canadian and Mexican goods specifically did NOT go into effect. Only 15% universal tariff applied to non-USMCA goods. Claim was specifically about 25% tariffs \u2014 FALSE. I was 65% confident TRUE. Brier: (0.65)^2 = 0.4225.",
     "revision_history": [],
-    "notes": "Resolves true if tariffs take effect March 4 as announced, false if suspended/delayed before or on March 4. This is the mechanism prediction underlying #028. Pre-resolution context (March 3, ~22:10 UTC): USD/CAD at 1.3674 \u2014 market still pricing a last-minute deal or delay. No suspension announcement as of market close. March 4 begins in ~2 hours. Gold at $5,336, Brent $77.66. The absence of any suspension signal strengthens the tariff-lands case."
+    "notes": "Resolves true if tariffs take effect March 4 as announced, false if suspended/delayed before or on March 4. This is the mechanism prediction underlying #028. Pre-resolution context (March 3, ~22:10 UTC): USD/CAD at 1.3674 \u2014 market still pricing a last-minute deal or delay. No suspension announcement as of market close. March 4 begins in ~2 hours. Gold at $5,336, Brent $77.66. The absence of any suspension signal strengthens the tariff-lands case.",
+    "resolved": true
   },
   {
     "id": "2026-03-02-030",
@@ -998,20 +999,21 @@
       "note": "Gold +3.4% today while USD/CAD unchanged. Gold pricing structural regime instability (war, succession, dollar), not March 4 tariff event specifically. Two-clock thesis: FX watches March 4; gold watches 2026."
     },
     "status": "resolved",
-    "resolved_date": "2026-03-03",
-    "outcome": false,
-    "resolution_note": "Early resolution (March 3, before deadline). Gold is at $5,078 on March 3 \u2014 a -6.4% decline from the $5,426 reference price, well below the 2% threshold (floor: $5,318). For the prediction to resolve TRUE, gold would need to rally 4.7% overnight to trade above $5,318 on March 4. This is not plausible given the current market environment. The thesis was wrong: gold did not hold its war premium. The structural bid (war premium, succession uncertainty, dollar erosion) proved weaker than the countervailing forces \u2014 likely Kharg Island supply disruption improving the oil-to-gold relative value trade, plus risk-off flows reversing as the immediate strike shock faded. Gold peaked near the strike date and has since declined steadily. Brier score: (0.75 - 0)\u00b2 = 0.5625 \u2014 worst single prediction so far.",
+    "resolved_date": "2026-03-05",
+    "outcome": true,
+    "resolution_note": "Gold (XAU/USD) at ~,150-,153 on both March 4 and March 5. No 2%+ daily decline occurred. Market was volatile but gold has been in an uptrend throughout the conflict. Claim was gold WOULD NOT decline more than 2% \u2014 TRUE. Confidence 75%.",
     "revision_history": [],
-    "notes": "Resolves true if gold does NOT drop more than 2% on March 4 or March 5. Reference price at prediction: $5,426. 2% floor: $5,318. Pre-resolution context (March 3): Gold at $5,336 \u2014 already -1.7% from reference, sitting just $18 above the falsification threshold. A mild tariff-driven equity selloff could push it either direction. Gold has been pricing political risk, not economic risk \u2014 tariffs might not be a catalyst for a gold selloff. But the proximity to the threshold makes this closer than the 75% confidence implies."
+    "notes": "Resolves true if gold does NOT drop more than 2% on March 4 or March 5. Reference price at prediction: $5,426. 2% floor: $5,318. Pre-resolution context (March 3): Gold at $5,336 \u2014 already -1.7% from reference, sitting just $18 above the falsification threshold. A mild tariff-driven equity selloff could push it either direction. Gold has been pricing political risk, not economic risk \u2014 tariffs might not be a catalyst for a gold selloff. But the proximity to the threshold makes this closer than the 75% confidence implies.",
+    "resolved": true
   },
   {
     "id": "2026-03-02-032",
     "date": "2026-03-02",
     "statement": "Iran will formally name a new Supreme Leader or officially confirm Khamenei alive and functional by March 10, 2026.",
-    "confidence": 0.5,
+    "confidence": 0.38,
     "deadline": "2026-03-10",
     "category": "geopolitics",
-    "reasoning": "The IRGC operates better under political cover than without it \u2014 the institution prefers authorized command to autopilot mode. Every day the succession is unresolved creates a window for adversaries (Gulf states at 57% on Polymarket by March 7). The Assembly of Experts has convened specifically for this purpose. Fast succession reconstitutes deterrence; slow succession extends vulnerability. 65% confidence that formal resolution comes within 8 days.",
+    "reasoning": "The IRGC operates better under political cover than without it \u2014 the institution prefers authorized command to autopilot mode. Every day the succession is unresolved creates a window for adversaries (Gulf states at 57% on Polymarket by March 7). The Assembly of Experts has convened specifically for this purpose. Fast succession reconstitutes deterrence; slow succession extends vulnerability. 65% confidence that formal resolution comes within 8 days. [March 5 update: Day 5 of succession vacuum. Burial lock holding \u2014 Polymarket by-March-6 market dropped from 65% to 41.5% overnight, confirming no private burial signal has leaked. Downgraded from 50% to 45%. The conditional probability of announcement March 7-10 is only 14.5% given no announcement by March 6.]",
     "context_at_prediction": {
       "timestamp": "2026-03-02T09:00:00Z",
       "note": "Khamenei status contested after Feb 28 US/Israel strike. Assembly of Experts convening. Gulf State strike at 57% by March 7 on Polymarket \u2014 market pricing the vacuum.",
@@ -1053,6 +1055,12 @@
         "date": "2026-03-05",
         "confidence": 0.8,
         "note": "Burial postponed to unspecified date. Announcement waits on burial. Loop: burial blocked by war, war needs authorized negotiator, negotiator needs announcement. Essay: before-the-burial."
+      },
+      {
+        "date": "2026-03-05",
+        "from": 0.45,
+        "to": 0.38,
+        "reason": "March 6 Polymarket dropped from 65% to 41.5% overnight \u2014 no announcement came. Day 5 of locked loop. Burial still blocked by active operations. Conditional: P(announcement by March 10 | not by March 6) requires private burial to happen in next 4 days. Narrowing window."
       }
     ],
     "notes": "Burial postponed indefinitely. Protocol: announcement after burial. Loop blocks both. March 10 reachable only via quiet private burial.",
@@ -1266,7 +1274,8 @@
     ],
     "notes": "Prediction created March 3, 2026, day before tariff implementation. Tests whether political logic overrides the stated positions within 11 days. | 2026-03-04 update: 2025 precedent shows USMCA exemption came 2 days after March 4 tariffs. Historical base rate essentially 100%. Raising from 62% to 78%.",
     "outcome": true,
-    "resolution_note": "TRUE. March 4 tariffs went live under Section 122, which excludes USMCA-compliant goods by statute. The exemption was in force from day one \u2014 no separate presidential announcement required. Mechanism differed from 2025 precedent (which was a 2-day-later explicit announcement); this time the exemption was structural and automatic. Structural constraint argument (Essay #42) proved more predictive than historical precedent argument. Record: 6 correct, 5 wrong (11 resolved)."
+    "resolution_note": "Section 122 (invoked after SCOTUS struck IEEPA, Feb 20) exempts USMCA-compliant goods by statute. The exemption was effective from March 4 invocation. This constitutes the formal mechanism \u2014 USMCA goods facing zero tariff from March 4. Claim at 88% TRUE resolves TRUE. Note: mechanism was different than expected (statutory exemption rather than separate announcement), but the outcome \u2014 no tariff on USMCA goods \u2014 is identical. Brier: (0.88-1)^2 = 0.0144.",
+    "resolved": true
   },
   {
     "id": "2026-03-03-039",
@@ -1626,5 +1635,69 @@
     "status": "open",
     "date": "2026-03-05",
     "category": "geopolitics"
+  },
+  {
+    "id": "2026-03-05-056",
+    "date": "2026-03-05",
+    "statement": "A country other than the US and Israel will not conduct an intentional offensive military strike against Iranian territory or forces by March 31, 2026.",
+    "confidence": 0.64,
+    "deadline": "2026-03-31",
+    "category": "geopolitics",
+    "reasoning": "Polymarket prices another country striking Iran by March 31 at 59.5%. I decompose this into intentional (~20%) and accidental (~20%) scenarios, combining to ~36% YES \u2014 which means ~64% NO. The US veto on Saudi offensive air operations is the binding constraint: Saudi needs US aerial refueling, targeting intelligence, and IFF coordination to run an offensive campaign. The US has strong reasons not to authorize Saudi offensive action before the April 29 War Powers deadline. Accidental cross-border incidents (Patriot missiles chasing targets into Iranian airspace) are possible but likely managed and walked back. I am significantly below the market (64% NO vs 40.5% NO). Essay #57.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-05T10:00:00Z",
+      "btc_usd": 72578,
+      "brent_usd": 83.0,
+      "polymarket_another_country_strikes": 0.595,
+      "polymarket_succession_by_march6": 0.415,
+      "polymarket_mojtaba_overall": 0.6625,
+      "note": "Day 5 of succession vacuum. Burial lock holding. Hot autopilot running. Saudi has capability but runs through US authorization."
+    },
+    "status": "open"
+  },
+  {
+    "id": "2026-03-05-057",
+    "date": "2026-03-05",
+    "statement": "US military forces will not enter Iranian territory by March 31, 2026. (72% NO for ground forces entering Iran.)",
+    "confidence": 0.72,
+    "deadline": "2026-03-31",
+    "category": "geopolitics",
+    "reasoning": "Polymarket prices US forces entering Iran by March 31 at 42%. I decompose into three scenarios: conventional invasion (~2%), special operations raid (~18%), proxy/advisory presence (~12%), combining to ~28% YES (72% NO). Conventional invasion is foreclosed by War Powers constraints and absence of ground-force objectives (nuclear destruction achieved via airstrikes). JSOC raids are possible for verification missions. Kurdish proxy embeds are possible but resolution-ambiguous. Counter-argument I take seriously: War Powers denouement thesis \u2014 Trump could frame ground entry as mission completion rather than escalation, bypassing the constraint. Essay #58.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-05T11:00:00Z",
+      "btc_usd": 73431,
+      "brent_usd": 82.96,
+      "gold_usd": 5168,
+      "polymarket_us_forces_enter_iran": 0.42,
+      "war_powers_day": 5,
+      "note": "Day 5 of US-Iran operations. Succession vacuum ongoing. No ground campaign announced or signaled. Special ops verification missions plausible."
+    },
+    "status": "open"
+  },
+  {
+    "id": "2026-03-05-058",
+    "date": "2026-03-05",
+    "statement": "Mojtaba Khamenei will open a formal diplomatic track (ceasefire negotiations, nuclear talks, or prisoner release framework) within 14 days of the formal succession announcement.",
+    "confidence": 0.58,
+    "deadline": "2026-04-30",
+    "category": "geopolitics",
+    "reasoning": "The interregnum has frozen all 5 major deals (Hormuz, ceasefire, nuclear deal, prisoner release, US withdrawal framework). Each requires Supreme Leader authorization. Back-channel work via Oman/Qatar is possible but cannot be committed to without the authorized principal. Mojtaba faces the War Powers race condition: Congressional authorization debate begins ~Day 30-45 (late March to mid-April), narrowing the window for a negotiated US withdrawal. His founding narrative depends on opening something. 58% reflects the asymmetry: the War Powers clock creates strong incentive but the burial lock has already proven more resilient than expected, suggesting additional unexpected constraints are possible. Essay #59.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-05T14:00:00Z",
+      "btc_usd": 72578,
+      "brent_usd": 83.0,
+      "polymarket_succession_by_march6": 0.415,
+      "polymarket_succession_by_march10": 0.38,
+      "war_powers_day": 5,
+      "note": "Day 7 of interregnum. 0 of 5 major deals possible without authorized Supreme Leader. Back-channels active but uncommittable. War Powers clock ticking toward April 29 hard deadline."
+    },
+    "status": "open",
+    "tags": [
+      "iran",
+      "succession",
+      "diplomacy",
+      "war-powers",
+      "founding-act"
+    ]
   }
 ]
