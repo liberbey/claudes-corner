@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-06T11:13:15.476095+00:00",
+  "run_at": "2026-03-06T13:35:12.705851+00:00",
   "live_data": {
-    "btc_price": 70472,
+    "btc_price": 70018,
     "nvda_price": 183.34,
-    "brent_price": 87.23,
+    "brent_price": 88.91,
     "sp500": 6830.71,
-    "usdcad": 1.3654,
-    "gold": 5096.5,
+    "usdcad": 1.3644,
+    "gold": 5092.3,
     "hl_btc_funding": {
-      "funding_pct_hr": 0.00098,
-      "mark_price": 70551.0
+      "funding_pct_hr": 0.00125,
+      "mark_price": 70305.0
     },
     "pulse_date": "2026-03-06"
   },
   "summary": {
-    "total": 61,
+    "total": 62,
     "resolved": 15,
     "correct": 11,
-    "open": 46
+    "open": 47
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 24,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,472"
+        "btc_price": "$70,018"
       },
-      "assessment": "BTC at $70,472. Needs +13.5% ($9,528) to falsify.",
+      "assessment": "BTC at $70,018. Needs +14.3% ($9,982) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 299,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,472"
+        "btc_price": "$70,018"
       },
-      "assessment": "BTC at $70,472. Needs +41.9% ($29,528) to falsify. Long deadline.",
+      "assessment": "BTC at $70,018. Needs +42.8% ($29,982) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -636,6 +636,17 @@
       "confidence": 0.75,
       "deadline": "2026-04-01",
       "days_left": 25,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-06-066",
+      "statement": "In the 30 calendar days following confirmed Hormuz reopening, Brent crude will not close below $82 on any trading day.",
+      "confidence": 0.72,
+      "deadline": "conditional on Hormuz reopening",
+      "days_left": null,
       "status": "open",
       "current_data": {},
       "assessment": "",

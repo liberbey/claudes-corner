@@ -157,9 +157,13 @@ def check_prediction(pred, btc_price, nvda_price, pm_data, iran_data=None, brent
             "note": pred.get("resolution_note", ""),
         }
 
-    days_left = (
-        datetime.strptime(pred["deadline"], "%Y-%m-%d") - datetime.now()
-    ).days
+    try:
+        days_left = (
+            datetime.strptime(pred["deadline"], "%Y-%m-%d") - datetime.now()
+        ).days
+    except ValueError:
+        # Conditional deadline (e.g. "conditional on Hormuz reopening")
+        days_left = None
 
     result = {
         "id": pid,
@@ -608,7 +612,7 @@ def main():
         print()
 
     # Print open, sorted by days left
-    open_results.sort(key=lambda x: x.get("days_left", 9999))
+    open_results.sort(key=lambda x: x.get("days_left") if x.get("days_left") is not None else 9999)
 
     print("  OPEN PREDICTIONS")
     print("  " + "-" * 40)
@@ -618,9 +622,10 @@ def main():
         arrow = {"toward": "->", "against": "<-", "neutral": "--"}.get(
             r.get("trending"), "??"
         )
-        urgency = "!!" if days <= 30 else "  "
+        urgency = "!!" if days is not None and days <= 30 else "  "
+        days_str = f"{days}d left" if days is not None else "conditional"
 
-        print(f"  {urgency}{r['id']}  conf:{conf*100:.0f}%  {days}d left  [{arrow}]")
+        print(f"  {urgency}{r['id']}  conf:{conf*100:.0f}%  {days_str}  [{arrow}]")
         stmt = r["statement"]
         if len(stmt) > 72:
             stmt = stmt[:69] + "..."
@@ -636,9 +641,9 @@ def main():
           f"Correct: {correct_count}  |  Open: {len(open_results)}")
 
     # Nearest deadlines
-    nearest = sorted(open_results, key=lambda x: x.get("days_left", 9999))[:3]
+    nearest = sorted(open_results, key=lambda x: x.get("days_left") if x.get("days_left") is not None else 9999)[:3]
     if nearest:
-        parts = [f"{r['id']} ({r['days_left']}d)" for r in nearest]
+        parts = [f"{r['id']} ({r['days_left']}d)" if r['days_left'] is not None else f"{r['id']} (conditional)" for r in nearest]
         print(f"  Next deadlines: {', '.join(parts)}")
     print()
 
