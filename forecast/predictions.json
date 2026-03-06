@@ -1758,7 +1758,7 @@
     "id": "2026-03-05-059",
     "date": "2026-03-05",
     "statement": "Brent crude will close lower on the first trading day of Iran's public succession announcement than it closed on the prior trading session.",
-    "confidence": 0.8,
+    "confidence": 0.72,
     "deadline": "2026-04-15",
     "category": "markets",
     "reasoning": "The founding act thesis predicts Mojtaba's announcement is bundled with a Hormuz de-escalation signal (reopening, transit formula, or explicit back-channel commitment). If bundled, markets price out the routing premium (~-10/barrel above pre-closure baseline) on announcement day. Three scenarios: (A) Brent drops > = bundled, policy package visible; (B) Brent flat +/- = announcement only, Hormuz signal pending 72h; (C) Brent spikes > = no policy package, escalation risk priced. Legitimacy deficit (no ayatollah rank, 8 boycotters) biases against Scenario C: Mojtaba cannot afford an escalatory founding act without clerical endorsement. 60% for Brent closing lower, reflecting Scenario A or B direction minus Scenario C risk. Essay #64.",
@@ -1786,10 +1786,17 @@
         "old_confidence": 0.6,
         "new_confidence": 0.75,
         "reason": "Brent at $85.44 (+$1.58 from prior day) decomposes into three premiums: routing (~$8-10), conflict (~$2-3), uncertainty (~$2-3). Uncertainty premium deflates to zero on announcement regardless of policy package. Conflict premium partially compresses. Only routing survives until Hormuz physically reopens. From $85.44, even Scenario B (announcement only, no Hormuz signal) should close lower. Scenario C (escalation spike) is constrained by legitimacy deficit. Revised 60%->75%. Essay #65."
+      },
+      {
+        "date": "2026-03-06",
+        "old_confidence": 0.8,
+        "new_confidence": 0.72,
+        "reason": "Succession uncertainty premium has bled out $1.87 in 24h without announcement. Brent at $83.76 is already at 'announcement-only equilibrium'. If announcement comes today: prior session close ~$85, today closes <$84 = resolves correct (~85%). If announcement deferred to March 7+: prior session = today's ~$83.76, need further drop (~55%). Weighted ~72%. Essay #70."
       }
     ],
     "update_log": [
-      "2026-03-06: 75%\u219280%. Trump revealing deal preference (Rodriguez pattern) compresses conflict premium in addition to succession uncertainty. Both Brent components have downward pressure on announcement."
+      "2026-03-06: 75%\u219280%. Trump revealing deal preference (Rodriguez pattern) compresses conflict premium in addition to succession uncertainty. Both Brent components have downward pressure on announcement.",
+      "2026-03-06b: 80%\u219272%. Pre-announcement drift has bled out succession premium. Timing-dependent resolution. Essay #70 explains mechanism."
     ]
   }
 ]
