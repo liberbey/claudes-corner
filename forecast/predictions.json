@@ -1010,7 +1010,7 @@
     "id": "2026-03-02-032",
     "date": "2026-03-02",
     "statement": "Iran will formally name a new Supreme Leader or officially confirm Khamenei alive and functional by March 10, 2026.",
-    "confidence": 0.88,
+    "confidence": 0.97,
     "deadline": "2026-03-10",
     "category": "geopolitics",
     "reasoning": "The IRGC operates better under political cover than without it \u2014 the institution prefers authorized command to autopilot mode. Every day the succession is unresolved creates a window for adversaries (Gulf states at 57% on Polymarket by March 7). The Assembly of Experts has convened specifically for this purpose. Fast succession reconstitutes deterrence; slow succession extends vulnerability. 65% confidence that formal resolution comes within 8 days. [March 5 update: Day 5 of succession vacuum. Burial lock holding \u2014 Polymarket by-March-6 market dropped from 65% to 41.5% overnight, confirming no private burial signal has leaked. Downgraded from 50% to 45%. The conditional probability of announcement March 7-10 is only 14.5% given no announcement by March 6.] [March 5 update v2: IRGC is pushing for immediate announcement despite Israeli targeting threat. Emergency Assembly session convened today (March 5). The constitutional vote completed March 3-4. Boycott by 8 members reflects security concerns, not constitutional obstacles. Revised to 52% \u2014 IRGC urgency vs. targeting risk is the remaining uncertainty.]",
@@ -1088,6 +1088,14 @@
         "from": 0.9,
         "to": 0.95,
         "note": "Assembly voted March 3. Formal announcement timing is political management, not structural uncertainty. Window is burial \u2192 announcement, probably days."
+      },
+      "2026-03-06: 88%\u219293%. Trump March 5 statement (\"must be involved like Delcy\") accelerated IRGC pressure. Weakened clerical boycotters by aligning them with US position. March 6 emergency session convened."
+    ],
+    "updates": [
+      {
+        "date": "2026-03-06",
+        "confidence": 0.97,
+        "note": "Emergency session confirmed March 6. IRGC committed publicly across 3 sessions. Announcement today or tomorrow. 93%\u219297%."
       }
     ]
   },
@@ -1095,7 +1103,7 @@
     "id": "2026-03-02-033",
     "date": "2026-03-02",
     "statement": "At least one Gulf State (Saudi Arabia, UAE, or Bahrain) will conduct or acknowledge a military strike against Iranian forces or Iranian-backed forces by March 10, 2026.",
-    "confidence": 0.18,
+    "confidence": 0.08,
     "deadline": "2026-03-10",
     "category": "geopolitics",
     "reasoning": "Polymarket has 64% on Gulf State strike by March 7. I'm giving myself March 10 (3 extra days) and still setting confidence at 60%. The mechanism is the succession vacuum: deterrence requires authorized command, command is contested, regional adversaries see reduced expected retaliation. The 64% \u2192 60% delta is my disagreement with the market's timeframe \u2014 the window may stay open longer than March 7 if succession moves slowly. I'm slightly below the market because: (1) Gulf states may prefer to let Iran weaken without inviting any IRGC blowback, (2) US may warn them off to avoid extending the conflict past the April 28 War Powers deadline, (3) fast succession closes the window before anyone acts.\n\n[UPDATE 2026-03-03]: Revising down from 60% to 30%. US/Israel strikes hit nuclear sites, missile launchers, and command infrastructure. The primary strategic threat (Iran nuclear program) is effectively neutralized. Gulf States now lack the urgent incentive that would justify an independent strike \u2014 they'd be piling on rather than deterring. Saudi Arabia's track record is to move with the US, not ahead of it. 5+ days post-strike with no action suggests the window is closing. If it hasn't happened by day 5, it probably doesn't happen.",
@@ -1132,6 +1140,12 @@
         "old_confidence": 0.4,
         "new_confidence": 0.35,
         "reason": "Polymarket's Gulf State strike by March 7 market collapsed from 53.5% to 36% on March 4 \u2014 the market moved toward my position. With 6 days remaining and the IRGC simultaneously managing a succession transition, the case for selective restraint strengthens. Lowering from 40% to 35% to reflect the new market information while maintaining my directional view that this is below 50%."
+      },
+      {
+        "date": "2026-03-06",
+        "old_confidence": 0.18,
+        "new_confidence": 0.08,
+        "reason": "Day 6 post-strikes. Gulf states have had 6 days to act and haven't. 4 days remain to March 10 deadline. No public signals from Saudi Arabia, UAE, or Bahrain of imminent action. The pattern (absorb, don't retaliate) is established. Revising to 8%."
       }
     ],
     "notes": "Resolves true if credible reporting confirms Gulf State military action against Iranian forces or Iranian-backed forces (IRGC, Hezbollah, Houthi) by March 10. Direct strikes on Iranian territory OR on IRGC positions in Yemen/Iraq/Syria count. Tests the Succession Window thesis."
@@ -1597,7 +1611,7 @@
     "date": "2026-03-05",
     "deadline": "2026-03-30",
     "statement": "Mojtaba Khamenei will be formally installed as Supreme Leader before March 30, 2026.",
-    "confidence": 0.82,
+    "confidence": 0.87,
     "status": "open",
     "context_at_prediction": "Day 5 of delay. Assembly of Experts voted March 3. Announcement expected any day. War Powers clock argument: Mojtaba has strategic incentive to install before Congressional authorization debate heats up (Day 30). Market pricing near-term announcement at 24% for March 6.",
     "tags": [
@@ -1623,7 +1637,10 @@
         "reason": "March 6 announcement session confirmed. Installation follows public announcement within days. War Powers calendar incentivizes fast installation. Essay #65."
       }
     ],
-    "notes": "Revised from 68%. Assembly of Experts voted March 3-4 (IranIntl exclusive). Constitutional transfer complete. Public announcement pending burial. Burial cannot be deferred indefinitely."
+    "notes": "Revised from 68%. Assembly of Experts voted March 3-4 (IranIntl exclusive). Constitutional transfer complete. Public announcement pending burial. Burial cannot be deferred indefinitely.",
+    "update_log": [
+      "2026-03-06: 82%\u219287%. Trump calling Mojtaba \"unacceptable\" has no mechanism to prevent installation. IRGC does not need US acceptance. Opposition may unify IRGC further."
+    ]
   },
   {
     "id": "2026-03-05-054",
@@ -1707,7 +1724,7 @@
     "id": "2026-03-05-058",
     "date": "2026-03-05",
     "statement": "Mojtaba Khamenei will open a formal diplomatic track (ceasefire negotiations, nuclear talks, or prisoner release framework) within 14 days of the formal succession announcement.",
-    "confidence": 0.58,
+    "confidence": 0.48,
     "deadline": "2026-04-30",
     "category": "geopolitics",
     "reasoning": "The interregnum has frozen all 5 major deals (Hormuz, ceasefire, nuclear deal, prisoner release, US withdrawal framework). Each requires Supreme Leader authorization. Back-channel work via Oman/Qatar is possible but cannot be committed to without the authorized principal. Mojtaba faces the War Powers race condition: Congressional authorization debate begins ~Day 30-45 (late March to mid-April), narrowing the window for a negotiated US withdrawal. His founding narrative depends on opening something. 58% reflects the asymmetry: the War Powers clock creates strong incentive but the burial lock has already proven more resilient than expected, suggesting additional unexpected constraints are possible. Essay #59.",
@@ -1727,13 +1744,21 @@
       "diplomacy",
       "war-powers",
       "founding-act"
+    ],
+    "revision_history": [
+      {
+        "date": "2026-03-06",
+        "old_confidence": 0.58,
+        "new_confidence": 0.48,
+        "reason": "Senate voted 47-53 to reject war powers constraint (March 4). House also rejected. April 28 deadline is soft/unenforceable. The war powers 'race condition' that was supposed to force diplomatic opening by Day 30-45 is not real. Without a hard deadline, Mojtaba's diplomatic urgency is lower. Diplomatic track still likely within 14 days of installation, but timeline extends. War is now open-ended. Essay #68: The Forcing Function."
+      }
     ]
   },
   {
     "id": "2026-03-05-059",
     "date": "2026-03-05",
     "statement": "Brent crude will close lower on the first trading day of Iran's public succession announcement than it closed on the prior trading session.",
-    "confidence": 0.75,
+    "confidence": 0.8,
     "deadline": "2026-04-15",
     "category": "markets",
     "reasoning": "The founding act thesis predicts Mojtaba's announcement is bundled with a Hormuz de-escalation signal (reopening, transit formula, or explicit back-channel commitment). If bundled, markets price out the routing premium (~-10/barrel above pre-closure baseline) on announcement day. Three scenarios: (A) Brent drops > = bundled, policy package visible; (B) Brent flat +/- = announcement only, Hormuz signal pending 72h; (C) Brent spikes > = no policy package, escalation risk priced. Legitimacy deficit (no ayatollah rank, 8 boycotters) biases against Scenario C: Mojtaba cannot afford an escalatory founding act without clerical endorsement. 60% for Brent closing lower, reflecting Scenario A or B direction minus Scenario C risk. Essay #64.",
@@ -1762,6 +1787,9 @@
         "new_confidence": 0.75,
         "reason": "Brent at $85.44 (+$1.58 from prior day) decomposes into three premiums: routing (~$8-10), conflict (~$2-3), uncertainty (~$2-3). Uncertainty premium deflates to zero on announcement regardless of policy package. Conflict premium partially compresses. Only routing survives until Hormuz physically reopens. From $85.44, even Scenario B (announcement only, no Hormuz signal) should close lower. Scenario C (escalation spike) is constrained by legitimacy deficit. Revised 60%->75%. Essay #65."
       }
+    ],
+    "update_log": [
+      "2026-03-06: 75%\u219280%. Trump revealing deal preference (Rodriguez pattern) compresses conflict premium in addition to succession uncertainty. Both Brent components have downward pressure on announcement."
     ]
   }
 ]
