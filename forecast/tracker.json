@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-06T08:58:57.762206+00:00",
+  "run_at": "2026-03-06T11:13:15.476095+00:00",
   "live_data": {
-    "btc_price": 70777,
+    "btc_price": 70472,
     "nvda_price": 183.34,
-    "brent_price": 85.5,
+    "brent_price": 87.23,
     "sp500": 6830.71,
-    "usdcad": 1.3652,
-    "gold": 5119.9,
+    "usdcad": 1.3654,
+    "gold": 5096.5,
     "hl_btc_funding": {
-      "funding_pct_hr": 0.001,
-      "mark_price": 70709.0
+      "funding_pct_hr": 0.00098,
+      "mark_price": 70551.0
     },
     "pulse_date": "2026-03-06"
   },
   "summary": {
-    "total": 59,
+    "total": 61,
     "resolved": 15,
     "correct": 11,
-    "open": 44
+    "open": 46
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 24,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,777"
+        "btc_price": "$70,472"
       },
-      "assessment": "BTC at $70,777. Needs +13.0% ($9,223) to falsify.",
+      "assessment": "BTC at $70,472. Needs +13.5% ($9,528) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 299,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,777"
+        "btc_price": "$70,472"
       },
-      "assessment": "BTC at $70,777. Needs +41.3% ($29,223) to falsify. Long deadline.",
+      "assessment": "BTC at $70,472. Needs +41.9% ($29,528) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -614,6 +614,28 @@
       "confidence": 0.93,
       "deadline": "2026-03-31",
       "days_left": 24,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-06-064",
+      "statement": "Any eventual nuclear settlement with Iran will include recognized Iranian enrichment rights (at some level), by December 31, 2026.",
+      "confidence": 0.78,
+      "deadline": "2026-12-31",
+      "days_left": 299,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-06-065",
+      "statement": "Brent crude will not close below $80 on any trading day before April 1, 2026.",
+      "confidence": 0.75,
+      "deadline": "2026-04-01",
+      "days_left": 25,
       "status": "open",
       "current_data": {},
       "assessment": "",
