@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-06T15:08:26.417728+00:00",
+  "run_at": "2026-03-06T16:13:13.235557+00:00",
   "live_data": {
-    "btc_price": 68573,
-    "nvda_price": 181.83,
-    "brent_price": 91.75,
-    "sp500": 6731.06,
-    "usdcad": 1.3635,
-    "gold": 5131.0,
+    "btc_price": 68323,
+    "nvda_price": 181.355,
+    "brent_price": 91.12,
+    "sp500": 6756.47,
+    "usdcad": 1.362,
+    "gold": 5155.5,
     "hl_btc_funding": {
       "funding_pct_hr": 0.00125,
-      "mark_price": 68399.0
+      "mark_price": 68346.0
     },
     "pulse_date": "2026-03-06"
   },
   "summary": {
-    "total": 62,
+    "total": 63,
     "resolved": 15,
     "correct": 11,
-    "open": 47
+    "open": 48
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 24,
       "status": "open",
       "current_data": {
-        "btc_price": "$68,573"
+        "btc_price": "$68,323"
       },
-      "assessment": "BTC at $68,573. Needs +16.7% ($11,427) to falsify.",
+      "assessment": "BTC at $68,323. Needs +17.1% ($11,677) to falsify.",
       "trending": "toward"
     },
     {
@@ -55,9 +55,9 @@
       "days_left": 115,
       "status": "open",
       "current_data": {
-        "nvda_price": "$181.83"
+        "nvda_price": "$181.35"
       },
-      "assessment": "NVDA at $181.83. Needs +21.0% ($38) to confirm.",
+      "assessment": "NVDA at $181.35. Needs +21.3% ($39) to confirm.",
       "trending": "neutral"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 299,
       "status": "open",
       "current_data": {
-        "btc_price": "$68,573"
+        "btc_price": "$68,323"
       },
-      "assessment": "BTC at $68,573. Needs +45.8% ($31,427) to falsify. Long deadline.",
+      "assessment": "BTC at $68,323. Needs +46.4% ($31,677) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -315,9 +315,9 @@
       "days_left": 7,
       "status": "open",
       "current_data": {
-        "sp500": "6,731"
+        "sp500": "6,756"
       },
-      "assessment": "S&P at 6,731. Buffer: +331 pts (4.9%). Would need -4.9% drop to falsify. 7 days left.",
+      "assessment": "S&P at 6,756. Buffer: +356 pts (5.3%). Would need -5.3% drop to falsify. 7 days left.",
       "trending": "toward"
     },
     {
@@ -645,6 +645,17 @@
       "id": "2026-03-06-066",
       "statement": "In the 30 calendar days following confirmed Hormuz reopening, Brent crude will not close below $82 on any trading day.",
       "confidence": 0.72,
+      "deadline": "conditional on Hormuz reopening",
+      "days_left": null,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-06-067",
+      "statement": "Hormuz transit volume will not return to above 70% of pre-war daily average within 14 calendar days of any formal reopening announcement.",
+      "confidence": 0.8,
       "deadline": "conditional on Hormuz reopening",
       "days_left": null,
       "status": "open",
