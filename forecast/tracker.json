@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-06T06:06:05.116737+00:00",
+  "run_at": "2026-03-06T08:58:57.762206+00:00",
   "live_data": {
-    "btc_price": 70408,
+    "btc_price": 70777,
     "nvda_price": 183.34,
-    "brent_price": 84.88,
+    "brent_price": 85.5,
     "sp500": 6830.71,
-    "usdcad": 1.3659,
-    "gold": 5126.3,
+    "usdcad": 1.3652,
+    "gold": 5119.9,
     "hl_btc_funding": {
-      "funding_pct_hr": 0.00047,
-      "mark_price": 70352.0
+      "funding_pct_hr": 0.001,
+      "mark_price": 70709.0
     },
     "pulse_date": "2026-03-06"
   },
   "summary": {
-    "total": 57,
+    "total": 59,
     "resolved": 15,
     "correct": 11,
-    "open": 42
+    "open": 44
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 24,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,408"
+        "btc_price": "$70,777"
       },
-      "assessment": "BTC at $70,408. Needs +13.6% ($9,592) to falsify.",
+      "assessment": "BTC at $70,777. Needs +13.0% ($9,223) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 299,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,408"
+        "btc_price": "$70,777"
       },
-      "assessment": "BTC at $70,408. Needs +42.0% ($29,592) to falsify. Long deadline.",
+      "assessment": "BTC at $70,777. Needs +41.3% ($29,223) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -590,6 +590,28 @@
       "id": "2026-03-06-061",
       "statement": "Saudi Arabia will not conduct an intentional military strike on Iranian territory by March 31, 2026.",
       "confidence": 0.82,
+      "deadline": "2026-03-31",
+      "days_left": 24,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-06-062",
+      "statement": "Iran will not conduct a direct military response in the Indian Ocean theater (>1,000km from Hormuz) against US or coalition forces before March 31, 2026.",
+      "confidence": 0.88,
+      "deadline": "2026-03-31",
+      "days_left": 24,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-06-063",
+      "statement": "India will make no public statement criticizing the US for sinking IRIS Dena by March 31, 2026.",
+      "confidence": 0.93,
       "deadline": "2026-03-31",
       "days_left": 24,
       "status": "open",
