@@ -1423,7 +1423,7 @@
     "id": "2026-03-04-043",
     "date": "2026-03-04",
     "statement": "The Islamic Republic of Iran will have undergone regime change (loss of IRGC control, new governing authority, or state dissolution) by June 30, 2026.",
-    "confidence": 0.28,
+    "confidence": 0.36,
     "deadline": "2026-06-30",
     "category": "geopolitics",
     "reasoning": "Polymarket has this at 39.5%. I'm below at 28%. My reasoning: regime resilience is systematically underestimated by Western observers. The Shah comparison fails because: (1) IRGC is ideologically committed and economically embedded \u2014 they don't defect like the Shah's conscript army, (2) even with Khamenei dead and nuclear program destroyed, the IRGC's internal security apparatus remains intact, (3) succession is contested but contested successions don't automatically produce state failure \u2014 Iran survived worse in the 1980s, (4) the 4-month window (by June 30) is short for the kind of institutional collapse that produces actual regime change. 28% is still a serious probability \u2014 the regime is under extraordinary stress. But the market's 39.5% may be recency-biased by the dramatic Feb 28 strikes.",
@@ -1445,8 +1445,18 @@
     "resolved_date": null,
     "outcome": null,
     "resolution_note": null,
-    "revision_history": [],
-    "notes": "Resolves TRUE if: new non-Islamist governing authority controls Tehran, or IRGC announces dissolution or split of command, or recognized foreign government formally recognizes a replacement government in Iran. Protest movements alone do not count; the regime must lose coercive control."
+    "revision_history": [
+      {
+        "date": "2026-03-06",
+        "old_confidence": 0.28,
+        "new_confidence": 0.36,
+        "reason": "Trump's explicit war aim \u2014 'unconditional surrender' \u2014 functionally means regime change. An adversary publicly demanding unconditional surrender is not looking for a face-saving deal that preserves the regime. Sustained military pressure compounding internal IRGC stress over 4 months. Still below market (39.5% on March 4) but moving toward it. Regime resilience argument still holds but war aims argument now has explicit US statement. Essay #83."
+      }
+    ],
+    "notes": "Resolves TRUE if: new non-Islamist governing authority controls Tehran, or IRGC announces dissolution or split of command, or recognized foreign government formally recognizes a replacement government in Iran. Protest movements alone do not count; the regime must lose coercive control.",
+    "update_log": [
+      "2026-03-06: 28%\u219236%. Trump's unconditional surrender demand makes regime change an explicit stated US war aim. Still below prior market level. Essay #83."
+    ]
   },
   {
     "id": "2026-03-04-044",
@@ -1758,7 +1768,7 @@
     "id": "2026-03-05-059",
     "date": "2026-03-05",
     "statement": "Brent crude will close lower on the first trading day of Iran's public succession announcement than it closed on the prior trading session.",
-    "confidence": 0.72,
+    "confidence": 0.62,
     "deadline": "2026-04-15",
     "category": "markets",
     "reasoning": "The founding act thesis predicts Mojtaba's announcement is bundled with a Hormuz de-escalation signal (reopening, transit formula, or explicit back-channel commitment). If bundled, markets price out the routing premium (~-10/barrel above pre-closure baseline) on announcement day. Three scenarios: (A) Brent drops > = bundled, policy package visible; (B) Brent flat +/- = announcement only, Hormuz signal pending 72h; (C) Brent spikes > = no policy package, escalation risk priced. Legitimacy deficit (no ayatollah rank, 8 boycotters) biases against Scenario C: Mojtaba cannot afford an escalatory founding act without clerical endorsement. 60% for Brent closing lower, reflecting Scenario A or B direction minus Scenario C risk. Essay #64.",
@@ -1792,11 +1802,18 @@
         "old_confidence": 0.8,
         "new_confidence": 0.72,
         "reason": "Succession uncertainty premium has bled out $1.87 in 24h without announcement. Brent at $83.76 is already at 'announcement-only equilibrium'. If announcement comes today: prior session close ~$85, today closes <$84 = resolves correct (~85%). If announcement deferred to March 7+: prior session = today's ~$83.76, need further drop (~55%). Weighted ~72%. Essay #70."
+      },
+      {
+        "date": "2026-03-06",
+        "old_confidence": 0.72,
+        "new_confidence": 0.62,
+        "reason": "Trump's 'unconditional surrender' demand (Truth Social, March 6) makes the founding act bundle harder: Mojtaba cannot easily open Hormuz while Trump demands surrender without the act reading as capitulation to IRGC domestic audience. If announcement comes without Hormuz language, Brent move on announcement day is smaller and potentially within noise on $92 base. Essay #83."
       }
     ],
     "update_log": [
       "2026-03-06: 75%\u219280%. Trump revealing deal preference (Rodriguez pattern) compresses conflict premium in addition to succession uncertainty. Both Brent components have downward pressure on announcement.",
-      "2026-03-06b: 80%\u219272%. Pre-announcement drift has bled out succession premium. Timing-dependent resolution. Essay #70 explains mechanism."
+      "2026-03-06b: 80%\u219272%. Pre-announcement drift has bled out succession premium. Timing-dependent resolution. Essay #70 explains mechanism.",
+      "2026-03-06c: 72%\u219262%. Trump unconditional surrender demand narrows founding act window and makes bundled announcement less certain. Essay #83."
     ]
   },
   {
@@ -2032,7 +2049,7 @@
     "confidence": 0.88,
     "deadline": "2026-06-30",
     "category": "geopolitics",
-    "reasoning": "On March 2, Iran launched drone strikes against Ras Laffan Industrial City and Mesaieed — Qatar's critical energy infrastructure. Emir Tamim suspended all diplomatic mediation between Iran and the West the same day. Qatar confirmed it has not resumed communication with Iran since the attacks. Qatar's joint UK-Qatar air squadron (12 Squadron, Typhoons/Meteor) has engaged and shot down Iranian aircraft — making Qatar an active combatant-support state. Resuming mediation requires both parties to treat Qatar as neutral. Iran has demonstrated it does not: the strike was a deliberate targeting choice, not an accident. Qatar now coordinates 'very closely with CENTCOM in Doha.' For mediation to resume before June 30: requires (a) ceasefire, (b) Qatari diplomatic rehabilitation with Iran, (c) Iranian willingness to use a channel whose sovereign territory it attacked. Timeline for (b) alone is 3-6 months. Oman is now sole back-channel. The 12% residual: ceasefire by April + Iran explicitly invites Qatar back as a signal of good faith + Emir Tamim accepts. Structurally unlikely at 12%.",
+    "reasoning": "On March 2, Iran launched drone strikes against Ras Laffan Industrial City and Mesaieed \u2014 Qatar's critical energy infrastructure. Emir Tamim suspended all diplomatic mediation between Iran and the West the same day. Qatar confirmed it has not resumed communication with Iran since the attacks. Qatar's joint UK-Qatar air squadron (12 Squadron, Typhoons/Meteor) has engaged and shot down Iranian aircraft \u2014 making Qatar an active combatant-support state. Resuming mediation requires both parties to treat Qatar as neutral. Iran has demonstrated it does not: the strike was a deliberate targeting choice, not an accident. Qatar now coordinates 'very closely with CENTCOM in Doha.' For mediation to resume before June 30: requires (a) ceasefire, (b) Qatari diplomatic rehabilitation with Iran, (c) Iranian willingness to use a channel whose sovereign territory it attacked. Timeline for (b) alone is 3-6 months. Oman is now sole back-channel. The 12% residual: ceasefire by April + Iran explicitly invites Qatar back as a signal of good faith + Emir Tamim accepts. Structurally unlikely at 12%.",
     "essay": "the-channel-they-burned",
     "market_snapshot": {
       "date": "2026-03-06",
