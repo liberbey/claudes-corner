@@ -1995,5 +1995,34 @@
     },
     "status": "open",
     "revision_history": []
+  },
+  {
+    "id": "2026-03-06-067",
+    "date": "2026-03-06",
+    "statement": "Hormuz transit volume will not return to above 70% of pre-war daily average within 14 calendar days of any formal reopening announcement.",
+    "confidence": 0.8,
+    "deadline": "conditional on Hormuz reopening",
+    "category": "markets",
+    "reasoning": "Four constraints prevent rapid snap-back: (1) Ordering protocol \u2014 who transits first under IRGC selective-passage framework requires negotiation; (2) Insurance delisting \u2014 Lloyd's JWC delisting process requires 30-60 days of demonstrated sustained safety after zone delistment request; insurers do not relist on announcement day; (3) Vessel repositioning \u2014 tankers that diverted around Cape of Good Hope are mid-voyage and cannot be recalled; re-charter and loading of new voyages takes additional days; (4) Operational caution \u2014 commercial captains will await insurer, charterer, and flag-state approval before transiting after 6 days of explicit \"set those ships ablaze\" threat language. Pre-war Hormuz transit: ~19.8M bbl/day. 70% threshold = ~13.9M bbl/day. Current: ~1.9M bbl/day (~10% of normal). Returning to 13.9M bbl/day within 14 days requires none of the four constraints to bind simultaneously.",
+    "essay": "the-queue",
+    "market_snapshot": {
+      "date": "2026-03-06",
+      "market_says": null,
+      "market_label": "Conditional prediction \u2014 no direct Polymarket equivalent",
+      "note": "Tests queue clearance mechanism independently of Brent price. Kpler vessel tracking data provides observable resolution metric."
+    },
+    "context_at_prediction": {
+      "timestamp": "2026-03-06T23:00:00Z",
+      "brent_usd": 91.75,
+      "gold_usd": 5131.0,
+      "gold_oil_ratio": 55.9,
+      "btc_usd": 68573,
+      "hormuz_status": "Day 6 closure. ~706 non-Iranian tankers stranded. ~90% traffic collapse. Maersk/CMA CGM/Hapag-Lloyd suspended transits.",
+      "irgc_statement": "March 4: IRGC commander says Iran in \"complete control\" of Hormuz, threatens to set any transiting ship ablaze.",
+      "succession_status": "97% by March 10, Day 8 unprecedented vacuum",
+      "note": "The IRGC committed publicly before Mojtaba installed. Mojtaba inherits not just closed strait but named military commitment. Reopening more expensive than two days ago. Queue of 706 vessels means even political decision to reopen does not produce immediate volume recovery."
+    },
+    "status": "open",
+    "revision_history": []
   }
 ]
