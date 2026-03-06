@@ -1966,5 +1966,34 @@
     },
     "status": "open",
     "revision_history": []
+  },
+  {
+    "id": "2026-03-06-066",
+    "date": "2026-03-06",
+    "statement": "In the 30 calendar days following confirmed Hormuz reopening, Brent crude will not close below $82 on any trading day.",
+    "confidence": 0.72,
+    "deadline": "conditional on Hormuz reopening",
+    "category": "markets",
+    "reasoning": "The Kharg premium is structural and distinct from the routing premium. Kharg Island Iranian export terminal went from 1.7M to ~100K bbl/day on Feb 28 strikes. This removed ~1.6M bbl/day from global supply (~1.6% of global consumption). At short-run demand elasticity of -0.10, this implies a ~16% price increase from the  baseline \u2014 approximately -10 Kharg premium. This premium does not resolve when Hormuz reopens: Kharg is a physical facility requiring physical reconstruction (6-18 months). Routing premium (-7) compresses post-Hormuz. Kharg premium (~) holds. Floor =  +  = . Below  requires either rapid Kharg reconstruction (implausible in 30 days) or simultaneous global demand shock.",
+    "essay": "after-the-strait",
+    "market_snapshot": {
+      "date": "2026-03-06",
+      "market_says": null,
+      "market_label": "Conditional prediction \u2014 no direct Polymarket equivalent",
+      "note": "Conditional on Hormuz reopening date. Tests Kharg supply shock as structural premium."
+    },
+    "context_at_prediction": {
+      "timestamp": "2026-03-06T22:00:00Z",
+      "brent_usd": 89.41,
+      "gold_usd": 5092,
+      "gold_oil_ratio": 56.95,
+      "btc_usd": 69935,
+      "succession_announcement": "still pending, day 7, 97% by March 10",
+      "kharg_capacity": "~100K bbl/day (down from 1.7M)",
+      "hormuz_status": "closed to Western commercial shipping since March 5",
+      "note": "Brent up .41 today to .41. Gold/oil ratio compressing to 56.95x from 63x peak. Kharg supply removal ( premium) identified as separate structural component from routing premium (). Total decomposes:  +  Kharg +  routing +  uncertainty = ~. Post-Hormuz floor = ~ (Kharg holds)."
+    },
+    "status": "open",
+    "revision_history": []
   }
 ]
