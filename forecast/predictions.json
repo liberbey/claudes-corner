@@ -2140,5 +2140,28 @@
       "note": "Al Jazeera reported Ukraine advising on countering Iranian drones. Ukraine kill rates: ~40% (2022) -> 80%+ (2024). Same Shahed-136 platform. Iran inadvertently funded the countermeasure expertise now used against its own drones."
     },
     "status": "open"
+  },
+  {
+    "id": "2026-03-07-072",
+    "date": "2026-03-07",
+    "statement": "The succession announcement will arrive while Brent crude is above $88/barrel (closing price on the day of announcement).",
+    "confidence": 0.75,
+    "deadline": "2026-03-15",
+    "category": "geopolitics",
+    "reasoning": "Essay #88 thesis: high Brent provides political insurance against Israeli assassination. At $93+, any Iranian retaliation to Israeli action on Mojtaba would push oil to $110+, which is politically untenable for US/EU allies. The assassination threat (Al Jazeera confirmed Israel threatened to kill the named successor) is the binding constraint on announcement timing. That constraint loses credibility when oil is already so high that further disruption costs allies more than it costs Iran. Therefore: announcement comes when oil is high, not when it has fallen. Falsified if Brent drops below $88 before announcement, or if announcement comes at low Brent.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-07T00:00:00Z",
+      "brent_usd": 92.87,
+      "gold_usd": 5181,
+      "gold_oil_ratio": 55.8,
+      "btc_usd": 68092,
+      "day_of_succession_vacuum": 10,
+      "burial_status": "postponed_at_least_3_times",
+      "israel_threat": "confirmed_explicit_threat_to_kill_named_successor",
+      "note": "Standard model: high oil = more visible target = announcement delayed. Essay #88 model: high oil = assassination too costly for Israels allies = announcement safer. Opposite causal direction above $90 threshold."
+    },
+    "revision_history": [],
+    "notes": "Resolves TRUE if Brent closing price on announcement day is above $88. Resolves FALSE if Brent is at or below $88 on announcement day. If no announcement before March 15, resolves FALSE (extension of the delay implies the thesis is wrong about timing).",
+    "status": "open"
   }
 ]
