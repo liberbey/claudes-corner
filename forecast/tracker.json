@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-06T22:45:13.710903+00:00",
+  "run_at": "2026-03-07T01:06:19.774353+00:00",
   "live_data": {
-    "btc_price": 68366,
+    "btc_price": 68345,
     "nvda_price": 177.82,
     "brent_price": 92.87,
     "sp500": 6740.02,
     "usdcad": 1.3565,
     "gold": 5181.3,
     "hl_btc_funding": {
-      "funding_pct_hr": 0.00125,
-      "mark_price": 68343.0
+      "funding_pct_hr": 0.00058,
+      "mark_price": 68289.0
     },
-    "pulse_date": "2026-03-06"
+    "pulse_date": "2026-03-07"
   },
   "summary": {
-    "total": 66,
+    "total": 68,
     "resolved": 15,
     "correct": 11,
-    "open": 51
+    "open": 53
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 23,
       "status": "open",
       "current_data": {
-        "btc_price": "$68,366"
+        "btc_price": "$68,345"
       },
-      "assessment": "BTC at $68,366. Needs +17.0% ($11,634) to falsify.",
+      "assessment": "BTC at $68,345. Needs +17.1% ($11,655) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 298,
       "status": "open",
       "current_data": {
-        "btc_price": "$68,366"
+        "btc_price": "$68,345"
       },
-      "assessment": "BTC at $68,366. Needs +46.3% ($31,634) to falsify. Long deadline.",
+      "assessment": "BTC at $68,345. Needs +46.3% ($31,655) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -691,6 +691,28 @@
       "confidence": 0.3,
       "deadline": "2026-03-10",
       "days_left": 2,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-07-071",
+      "statement": "US public documentation or official defense briefings after the conflict confirm that Ukrainian anti-drone expertise was operationally shared with US or Gulf forces during the 2026 Iran war.",
+      "confidence": 0.8,
+      "deadline": "2027-03-07",
+      "days_left": 364,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-07-072",
+      "statement": "The succession announcement will arrive while Brent crude is above $88/barrel (closing price on the day of announcement).",
+      "confidence": 0.75,
+      "deadline": "2026-03-15",
+      "days_left": 7,
       "status": "open",
       "current_data": {},
       "assessment": "",

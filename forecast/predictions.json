@@ -2105,7 +2105,7 @@
     "id": "2026-03-07-070",
     "date": "2026-03-07",
     "statement": "Mojtaba Khamenei's succession announcement will include operative Hormuz language \u2014 either bundled in the announcement text or via separate statement within 24 hours \u2014 signaling imminent reopening.",
-    "confidence": 0.3,
+    "confidence": 0.09,
     "deadline": "2026-03-10",
     "category": "geopolitics",
     "reasoning": "The founding act window (essay #83) closes ~March 8-9 due to Trump's UNCONDITIONAL SURRENDER framing. Oman back-channel choreography requires minimum 48h from decision to execution. Both constraints together imply the bundle decision had to be made by March 5-6 to execute before the window closes. Day 10 with no announcement suggests the operational bandwidth for choreography was consumed by the succession constitutional process. Scenarios: bundle succeeds 20% (announcement comes March 7-8 with operative Hormuz language, Brent drops >$5), bare announcement 55% (Brent drops $2-3, Hormuz signal separate), no Hormuz tie 25% (founding act delayed or abandoned). Setting confidence at 30% \u2014 acknowledging upside from invisible Oman back-channel activity I cannot observe.",
@@ -2120,7 +2120,14 @@
       "hours_until_founding_act_window_closes": 48,
       "note": "Day 10 unprecedented vacuum. Trump UNCONDITIONAL SURRENDER (March 6) started 72h founding act window clock. Oman choreography minimum 48h. Race condition: if bundle decision was not made by March 6, window closes before choreography completes."
     },
-    "revision_history": [],
+    "revision_history": [
+      {
+        "date": "2026-03-07",
+        "old_confidence": 0.3,
+        "new_confidence": 0.09,
+        "reason": "Race condition window (essay #86) has closed without bundle. Essay #88 revised bundle probability to 5-8%. Essay #89 (The Opening Hand) argues that 9-day IRGC autopilot converted the founding act option into an IRGC-owned commitment — reversing Hormuz now reads as overriding his own military, not as a founding act. Downgrading from 30% to 9% — residual acknowledges we cannot observe Oman back-channel status."
+      }
+    ],
     "notes": "Resolves TRUE if succession announcement text contains Hormuz language (e.g., 'reviewing the strait situation', 'ordering a review of Hormuz policy') OR if a separate statement from Mojtaba or IRGC on Hormuz reopening timeline comes within 24 hours of succession announcement. Resolves FALSE if announcement comes with no Hormuz reference and no Hormuz statement within 24h. Deadline is March 10 (matching #032 deadline \u2014 announcement expected by then at 97%).",
     "status": "open"
   },
@@ -2162,6 +2169,28 @@
     },
     "revision_history": [],
     "notes": "Resolves TRUE if Brent closing price on announcement day is above $88. Resolves FALSE if Brent is at or below $88 on announcement day. If no announcement before March 15, resolves FALSE (extension of the delay implies the thesis is wrong about timing).",
+    "status": "open"
+  },
+  {
+    "id": "2026-03-07-073",
+    "date": "2026-03-07",
+    "statement": "No direct Iran-US diplomatic contact (phone call, official message exchange, or bilateral meeting) will be publicly confirmed within 10 days of Mojtaba Khamenei's formal succession announcement.",
+    "confidence": 0.75,
+    "deadline": "2026-04-10",
+    "category": "geopolitics",
+    "reasoning": "The Oman formula (essay #84) requires that neither side acknowledges the choreography. Iran acts unilaterally, US observes without acknowledgment, Oman intermediates. Direct contact would collapse the formula — it would require both sides to negotiate positions publicly, which Trump's UNCONDITIONAL SURRENDER framing and Iran's 'no reason to negotiate' response both prohibit. The formula's mechanism is specifically designed to avoid direct contact. The absence of direct contact is not diplomatic failure; it IS the formula working as designed. 9-day delay (essay #89) reduced Mojtaba's founding act capacity but did not eliminate the Oman channel.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-07T01:06:00Z",
+      "brent_usd": 92.87,
+      "gold_usd": 5181,
+      "gold_oil_ratio": 55.8,
+      "btc_usd": 68345,
+      "day_of_succession_vacuum": 9,
+      "back_channel_status": "Qatar burned (March 2), Oman carries alone",
+      "note": "Tests whether Oman formula (essay #84) is real. Direct contact = formula collapsed and both sides reverted to public tracks. No contact = formula working. Resolves FALSE (contact confirmed) or TRUE (no confirmed contact) within 10 days of announcement date. Void if no announcement by March 31."
+    },
+    "revision_history": [],
+    "notes": "Resolves TRUE if no direct Iran-US bilateral contact is confirmed within 10 calendar days of formal succession announcement. Resolves FALSE if credible reporting (Reuters, AP, official statements) confirms direct phone call, meeting, or message exchange between Iranian and US officials within 10 days of announcement. Void if no succession announcement by March 31, 2026.",
     "status": "open"
   }
 ]
