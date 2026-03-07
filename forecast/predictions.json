@@ -1423,7 +1423,7 @@
     "id": "2026-03-04-043",
     "date": "2026-03-04",
     "statement": "The Islamic Republic of Iran will have undergone regime change (loss of IRGC control, new governing authority, or state dissolution) by June 30, 2026.",
-    "confidence": 0.36,
+    "confidence": 0.28,
     "deadline": "2026-06-30",
     "category": "geopolitics",
     "reasoning": "Polymarket has this at 39.5%. I'm below at 28%. My reasoning: regime resilience is systematically underestimated by Western observers. The Shah comparison fails because: (1) IRGC is ideologically committed and economically embedded — they don't defect like the Shah's conscript army, (2) even with Khamenei dead and nuclear program destroyed, the IRGC's internal security apparatus remains intact, (3) succession is contested but contested successions don't automatically produce state failure — Iran survived worse in the 1980s, (4) the 4-month window (by June 30) is short for the kind of institutional collapse that produces actual regime change. 28% is still a serious probability — the regime is under extraordinary stress. But the market's 39.5% may be recency-biased by the dramatic Feb 28 strikes.",
@@ -1451,11 +1451,18 @@
         "old_confidence": 0.28,
         "new_confidence": 0.36,
         "reason": "Trump's explicit war aim — 'unconditional surrender' — functionally means regime change. An adversary publicly demanding unconditional surrender is not looking for a face-saving deal that preserves the regime. Sustained military pressure compounding internal IRGC stress over 4 months. Still below market (39.5% on March 4) but moving toward it. Regime resilience argument still holds but war aims argument now has explicit US statement. Essay #83."
+      },
+      {
+        "date": "2026-03-07",
+        "old_confidence": 0.36,
+        "new_confidence": 0.28,
+        "reason": "White House '4-6 weeks' timeline (Leavitt, March 6) contradicts the unconditional surrender logic. Bounded campaign ≠ indefinite pressure. Maximum pressure ends April 3-17; post-campaign tool is sanctions, not kinetic operations. Regime change after April 17 requires internal collapse without sustained external military pressure — Iran survived 40 years of sanctions. Essay #91."
       }
     ],
     "notes": "Resolves TRUE if: new non-Islamist governing authority controls Tehran, or IRGC announces dissolution or split of command, or recognized foreign government formally recognizes a replacement government in Iran. Protest movements alone do not count; the regime must lose coercive control.",
     "update_log": [
-      "2026-03-06: 28%→36%. Trump's unconditional surrender demand makes regime change an explicit stated US war aim. Still below prior market level. Essay #83."
+      "2026-03-06: 28%→36%. Trump's unconditional surrender demand makes regime change an explicit stated US war aim. Still below prior market level. Essay #83.",
+      "2026-03-07: 36%→28%. White House '4-6 weeks' campaign timeline expiration-dates the unconditional surrender demand. Military pressure ends April 3-17; post-campaign instrument reverts to sanctions (Iran's default terrain for 40 years). Regime change after April 17 depends on internal dynamics without external military pressure — historically insufficient. Essay #91."
     ]
   },
   {
@@ -2202,6 +2209,32 @@
     "category": "geopolitics",
     "reasoning": "Essay #90: The succession delay is resolving an internal clerical debate about announcement format — whether to bundle with the burial (Unity School) or announce after (Protocol School). Once the funeral date is set, that debate has resolved. Unity School: announcement at funeral, same day. Protocol School: announcement within 24-48h after burial. Either way, setting the funeral date is the leading indicator that compresses the announcement timeline to near-zero.",
     "context_at_prediction": "Day 9 succession vacuum. Burial postponed 3+ times. Joint burial with wife Mansoureh announced. Three-city procession simplified to Mashhad Imam Reza Shrine. Foreign dignitaries avoiding due to Haniyeh precedent. Brent .69. #032 at 97% by March 10.",
-    "conditional": "Conditional on Iranian state media setting a specific funeral date before March 12."
+    "conditional": "Conditional on Iranian state media setting a specific funeral date before March 12.",
+    "status": "open"
+  },
+  {
+    "id": "2026-03-07-075",
+    "date": "2026-03-07",
+    "statement": "The US will publicly declare that the objectives of its Iran military campaign (Operation Epic Fury or equivalent) have been substantially achieved before June 1, 2026.",
+    "confidence": 0.82,
+    "deadline": "2026-06-01",
+    "category": "geopolitics",
+    "reasoning": "The White House announced on March 6 that campaign objectives are achievable in '4-6 weeks' (Leavitt). Four to six weeks from March 6 = April 3-17. No ground invasion is authorized. Trump's definition of 'unconditional surrender' was clarified by Leavitt as 'when Iran no longer poses a threat to the United States' — an operational threshold the US defines unilaterally. Given the 4-6 week timeline, the no-ground-invasion constraint, and Trump's demonstrated preference for declaring victory (North Korea, JCPOA, Afghanistan withdrawal optics), the probability of a US declaration of success before June 1 is high. The declaration does not require Iranian concurrence, ceasefire, or formal negotiation — just a US announcement. 82%. The 18% covers: unexpected IRGC breakthrough that forces campaign extension, domestic political pressure to continue operations, or Congressional override.",
+    "polymarket": null,
+    "context_at_prediction": {
+      "timestamp": "2026-03-07T06:00:00Z",
+      "brent_usd": 92.87,
+      "gold_usd": 5181,
+      "day_of_campaign": 8,
+      "white_house_timeline": "4-6 weeks (Leavitt, March 6)",
+      "trump_definition": "When Iran can't fight any longer (Axios, March 6)",
+      "note": "Essay #91: The bounded ultimatum. Unconditional surrender demand has an expiration date — the White House's own 4-6 week campaign timeline. After April 3-17, Trump needs a win to declare. The probability of not declaring success before June 1 is low."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "revision_history": [],
+    "notes": "Resolves TRUE if US president, secretary of defense, or official White House statement declares campaign objectives as substantially or largely achieved before June 1, 2026. Resolves FALSE if no such declaration made and campaign is still described as ongoing on June 1. A ceasefire or negotiated settlement without explicit declaration of objectives achieved does NOT count as resolution unless accompanied by explicit US declaration of success."
   }
 ]
