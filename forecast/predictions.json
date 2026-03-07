@@ -2236,5 +2236,40 @@
     "resolution_note": null,
     "revision_history": [],
     "notes": "Resolves TRUE if US president, secretary of defense, or official White House statement declares campaign objectives as substantially or largely achieved before June 1, 2026. Resolves FALSE if no such declaration made and campaign is still described as ongoing on June 1. A ceasefire or negotiated settlement without explicit declaration of objectives achieved does NOT count as resolution unless accompanied by explicit US declaration of success."
+  },
+  {
+    "id": "2026-03-07-076",
+    "date": "2026-03-07",
+    "statement": "China will formally recognize Mojtaba Khamenei as Iran's Supreme Leader within 72 hours of any official public announcement by Iranian state media.",
+    "confidence": 0.72,
+    "deadline": "2026-03-17",
+    "category": "geopolitics",
+    "reasoning": "China has already documented its direct engagement with Iran on Hormuz — Bloomberg March 3 confirms China pressed Iran to keep the strait open, with Chinese LNG buyers citing supply urgency. Formal recognition is the natural diplomatic follow-through: it shifts China from pressing 'the IRGC autopilot' to having a named counterpart who can respond to Chinese interests. China's economic stake (50% of crude imports through Hormuz, VLCC rates at $423K/day up 94%) creates urgent motivation for early recognition. Waiting creates a gap during which Chinese-Iranian relations have no formal diplomatic anchor. 72-hour window is consistent with standard state-level recognition protocols for succession events in allied/partner states. The 28% downside: Chinese recognition could be delayed by (1) legitimacy concerns about the IRGC-pressured dynasty succession, (2) US diplomatic signaling to Beijing warning against legitimizing the outcome, or (3) Beijing waiting to see if international recognition is contested before committing.",
+    "essay": "the-china-window",
+    "market_snapshot": {
+      "date": "2026-03-07",
+      "market_says": 0.397,
+      "market_label": "Mojtaba as next Supreme Leader (Polymarket)",
+      "note": "Polymarket has Mojtaba at 39.7% — reflecting uncertainty about formal announcement, not about Chinese recognition specifically."
+    },
+    "context_at_prediction": {
+      "timestamp": "2026-03-07T06:00:00Z",
+      "brent_usd": 92.69,
+      "gold_usd": 5159,
+      "gold_oil_ratio": 55.7,
+      "btc_usd": 68066,
+      "day_of_succession_vacuum": 10,
+      "vlcc_rate_usd": 423736,
+      "vlcc_rate_change_pct": 94,
+      "china_crude_via_hormuz_pct": 50,
+      "note": "China pressed Iran to keep Hormuz open (Bloomberg March 3). VLCC rates at $423,736/day (up 94%). China halted diesel/petrol exports March 5 — managing stockpiles. The selective strait exemption failed China in practice (insurance withdrawal is nationality-blind). Void if no official succession announcement before March 15."
+    },
+    "conditional": "Conditional on Iranian state media making official succession announcement before March 15.",
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "revision_history": [],
+    "notes": "Resolves TRUE if Chinese Foreign Ministry or state media (Xinhua, CGTN) issues formal statement recognizing Mojtaba Khamenei as Iran's Supreme Leader within 72 hours of Iranian state media announcement. Resolves FALSE if 72 hours pass post-announcement without Chinese recognition statement. Void if no official Iranian succession announcement before March 15, 2026."
   }
 ]
