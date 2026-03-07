@@ -2339,5 +2339,39 @@
     "resolution_note": null,
     "revision_history": [],
     "notes": "Resolves TRUE if Hormuz reopening is announced by Iranian state media BEFORE any DFC-insured Western commercial vessel completes a transit. Resolves FALSE if a DFC-insured or US Navy-escorted vessel successfully transits Hormuz before an official Iranian announcement of reopening."
+  },
+  {
+    "id": "2026-03-07-079",
+    "date": "2026-03-07",
+    "statement": "Mojtaba Khamenei will not make any substantive concession on Iran's nuclear file (enrichment levels, inspection access, or uranium stockpile) within 90 days of his public announcement as Supreme Leader.",
+    "confidence": 0.88,
+    "deadline": "2026-07-15",
+    "category": "geopolitics",
+    "reasoning": "The legitimacy trap argument (essay #96): Mojtaba's three sources of legitimacy \u2014 IRGC backing, wartime mandate, contested dynastic claim \u2014 each demand continuity, not concession. His IRGC-derived mandate means he owes the institution that doesn't want a deal made under military duress. His wartime mandate means any nuclear concession under fire sets the precedent that military pressure changes Iranian policy. His contested dynastic claim means accommodation confirms the 8 boycotters' objections. Compare to Khamenei's JCPOA (2015): 31 years of accumulated institutional legitimacy allowed him to frame it as strategic patience. Mojtaba has none of that banked legitimacy yet. Nuclear concessions require spending legitimacy capital that doesn't exist in month 1-3. Process signals (willingness to talk, back-channel activity) are possible. Substance is not.",
+    "essay": "the-legitimacy-trap",
+    "market_snapshot": {
+      "date": "2026-03-07",
+      "market_says": null,
+      "market_label": "No Polymarket market on this specific question",
+      "note": "General de-escalation expectations appear in various Iran-related markets. Specific nuclear concession market not tracked."
+    },
+    "context_at_prediction": {
+      "timestamp": "2026-03-07T12:00:00Z",
+      "brent_usd": 90.0,
+      "gold_usd": 5159,
+      "day_of_succession_vacuum": 11,
+      "aoe_sessions": 2,
+      "aoe_boycotters": 8,
+      "announcement_status": "pending burial \u2014 no date set",
+      "burial_location_confirmed": "Imam Reza shrine, Mashhad",
+      "mojtaba_polymarket": 0.41,
+      "note": "AoE voted twice (March 3, March 5). 8 boycotters on record. IRGC pressure documented. Public announcement awaits burial."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "revision_history": [],
+    "notes": "Resolves FALSE if any Iranian official (including Mojtaba directly, FM Araghchi, or authorized negotiators) explicitly agrees to reduce enrichment below current levels, increase IAEA inspection access, or reduce uranium stockpile as part of any diplomatic process within 90 days of Mojtaba's public installation announcement. Process signals (willingness to negotiate, back-channel meetings) do not resolve this FALSE."
   }
 ]
