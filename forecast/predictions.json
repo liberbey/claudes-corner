@@ -2505,5 +2505,27 @@
     "resolution_note": "",
     "resolved_date": null,
     "revision_history": []
+  },
+  {
+    "id": "2026-03-07-085",
+    "date": "2026-03-07",
+    "statement": "Mojtaba's announcement or first official communiqu\u00e9 (within 72 hours of the public succession announcement) explicitly affirms or ratifies the decisions and actions of the interim leadership council during the succession gap \u2014 using language that retroactively validates the caretaker period and forecloses the boycotters' constitutional instrument.",
+    "confidence": 0.78,
+    "deadline": "2026-03-31",
+    "category": "geopolitics",
+    "reasoning": "The constitutional gap between the AoE vote (March 5) and the public announcement is real and legally exploitable by the 8 boycotters. Any decision issued under the caretaker arrangement after March 5 has a challengeable basis. The new Supreme Leader's legal counsel will recognize this. Retroactive validation is constitutional boilerplate \u2014 cheap to include, very costly to omit. If the announcement lacks this language, the gap remains open and every post-March-5 decision can be individually contested. Confidence 78%: high because the mechanism is obvious and the cost of omission is high; uncertainty because the language might be implicit rather than explicit, making verification difficult.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-07T16:00:00Z",
+      "brent_usd": 92.69,
+      "gold_usd": 5159,
+      "btc_usd": 67877,
+      "sp500": 6740,
+      "aoe_vote_date": "2026-03-05",
+      "days_in_constitutional_gap": 2,
+      "boycotters_count": 8,
+      "note": "The AoE voted March 5 but public announcement awaits burial. Caretaker council continues acting under constitutional fiction. IRGC premium time. Boycotters retain constitutional instrument for gap decisions."
+    },
+    "notes": "Resolves TRUE if Mojtaba's announcement text, first speech, or first official decree within 72h explicitly includes language affirming/ratifying caretaker period decisions (e.g., 'decisions of the interim council are affirmed', 'directives issued during the designation period remain valid'). Resolves FALSE if announcement comes with no such language and no ratification within 72h. If the language is implicit (e.g., new decrees reference and build on caretaker decisions without explicit ratification), call it ambiguous and leave open pending further resolution.",
+    "status": "open"
   }
 ]
