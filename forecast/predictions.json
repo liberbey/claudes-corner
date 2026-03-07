@@ -1079,6 +1079,12 @@
         "old_confidence": 0.58,
         "new_confidence": 0.88,
         "reason": "March 6 emergency session confirmed (IranIntl). IRGC pushed for online session from Qom avoiding Israeli targeting. Announcement scheduled for tomorrow. 88% reflects confirmed session minus operational residuals: targeting risk, last-minute boycotter disruption, session abort. Essay #65."
+      },
+      {
+        "date": "2026-03-08",
+        "old_confidence": 0.97,
+        "new_confidence": 0.97,
+        "reason": "Pre-resolution note (Day 12, March 8): Prediction almost certainly resolves FALSE. The 97% represented confidence in the who (Mojtaba as next SL) bleeding into the when (March 10 deadline). These are orthogonal questions. Security architecture constraint (Essay #107), burial negotiation, and boycotter dynamics all govern timing independently of the directional call. Essay #108 (\"The 97% Error\") names this as \"confidence spillover\" \u2014 taking strong evidence on one component of a compound prediction and applying it to a less-supported component. Directional estimate (Mojtaba as next SL) remains 82%; the functional deadline is March 14, the absolute ceiling is Nowruz (March 17-18). Brier score impact if FALSE: 0.133 \u2192 0.183."
       }
     ],
     "notes": "Burial postponed indefinitely. Protocol: announcement after burial. Loop blocks both. March 10 reachable only via quiet private burial.",
@@ -2572,7 +2578,7 @@
     "id": "2026-03-08-088",
     "date": "2026-03-08",
     "statement": "Mojtaba Khamenei does not make a live appearance at a publicly disclosed physical location \u2014 the Imam Reza shrine, a press venue, or any other identified location \u2014 on official announcement day itself.",
-    "confidence": 0.75,
+    "confidence": 0.8,
     "deadline": "2026-03-18",
     "category": "geopolitics",
     "reasoning": "Israel's Defense Minister explicitly threatened to assassinate whoever is named as Supreme Leader. This is not rhetorical \u2014 Israel has demonstrated the capability to kill sitting heads of state. The security-optimal announcement structure under this explicit threat is: IRNA wire text first, no public gathering, no live televised appearance from a known physical location. Mojtaba's location on announcement day is an active operational secret. The founding speech, if any appears on Day 1, will be pre-recorded at an undisclosed location. Any live broadcast from an identified physical site \u2014 the shrine, a press facility \u2014 creates a fixed targeting geometry that the IRGC will not accept. This resolves FALSE if Mojtaba appears live at a named location on announcement day itself. Deadline is March 18 (Nowruz ceiling).",
@@ -2597,6 +2603,14 @@
       "security",
       "announcement",
       "israel-threat"
+    ],
+    "revision_history": [
+      {
+        "date": "2026-03-08",
+        "old_confidence": 0.75,
+        "new_confidence": 0.8,
+        "reason": "Revised upward from 75% to 80%. The 12-day delay is itself evidence that security architecture is being built around Mojtaba's physical location before announcement. Each day without announcement confirms that the IRGC is treating this as a security problem, not just a logistics problem. That makes a controlled, location-undisclosed announcement more likely. Essay #108 (\"The 97% Error\") discusses this updating."
+      }
     ]
   }
 ]
