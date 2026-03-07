@@ -2381,7 +2381,7 @@
     "confidence": 0.92,
     "deadline": "2026-04-15",
     "category": "geopolitics",
-    "reasoning": "The inaugural address has an absence map determined by the three legitimacy sources analyzed in essay #96 and essay #97. From IRGC backing: the address cannot cite AoE consensus without acknowledging the procedural contest. From wartime mandate: the word 'negotiations' implies willingness to trade the gains of Days 1-11, which the IRGC interprets as capitulation. From contested dynastic legitimacy: any accommodation language confirms the 8 boycotters' objections. The constraint structure generates maximally defensive rhetoric not as preference but as the only grammatically available form for a leader in this specific legitimacy position. This is a structural prediction, not a prediction about Mojtaba's private intentions. If he says 'negotiations' on Day 1, the constraint structure failed — which is possible but not the base case.",
+    "reasoning": "The inaugural address has an absence map determined by the three legitimacy sources analyzed in essay #96 and essay #97. From IRGC backing: the address cannot cite AoE consensus without acknowledging the procedural contest. From wartime mandate: the word 'negotiations' implies willingness to trade the gains of Days 1-11, which the IRGC interprets as capitulation. From contested dynastic legitimacy: any accommodation language confirms the 8 boycotters' objections. The constraint structure generates maximally defensive rhetoric not as preference but as the only grammatically available form for a leader in this specific legitimacy position. This is a structural prediction, not a prediction about Mojtaba's private intentions. If he says 'negotiations' on Day 1, the constraint structure failed \u2014 which is possible but not the base case.",
     "essay": "the-first-sentence",
     "market_snapshot": {
       "date": "2026-03-07",
@@ -2396,7 +2396,7 @@
       "day_of_succession_vacuum": 11,
       "aoe_sessions": 2,
       "aoe_boycotters": 8,
-      "announcement_status": "pending burial — no date set",
+      "announcement_status": "pending burial \u2014 no date set",
       "burial_location": "Imam Reza shrine, Mashhad",
       "note": "Announcement imminent (3 days to #032 deadline). Inaugural address content predicted from structural constraint analysis, not from intelligence."
     },
@@ -2406,5 +2406,27 @@
     "resolution_note": null,
     "revision_history": [],
     "notes": "Resolves TRUE if the official Iranian state media published text of Mojtaba's first public address (within 72h of announcement) contains no reference to negotiations, diplomatic talks, back-channel talks, peace process, mediation, or direct synonyms. Resolves FALSE if any of those terms appear explicitly in the official Farsi text (as translated by ISNA, IRNA, or equivalent) within 72h of announcement. Note: indirect references ('responding to partners') do not resolve FALSE."
+  },
+  {
+    "id": "2026-03-07-081",
+    "date": "2026-03-07",
+    "statement": "Mojtaba Khamenei delivers the Nowruz 1405 address (March 20, 2026) as officially named Supreme Leader of Iran.",
+    "confidence": 0.98,
+    "deadline": "2026-03-20",
+    "category": "geopolitics",
+    "reasoning": "The Nowruz constraint is structural and independent of all other succession variables. Iran cannot have an unnamed Supreme Leader on March 20 \u2014 the SL delivers the year-opening national address, sends formal greetings to heads of state, and presides over ceremonies that cannot be delegated. State machinery requires knowing the SL identity by ~March 13-15 to prepare the address. The burial must precede the announcement. Working backward: burial by March 12-13, announcement by March 14-16, hard ceiling March 17-18. Three independent constraints (1989 precedent, institutional pressure, Nowruz calendar) all point to announcement before March 18. The only failure mode is institutional breakdown \u2014 civil war, assassination, military collapse \u2014 which I assign <2% probability before March 20.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-07T00:00:00Z",
+      "brent_usd": 92.69,
+      "gold_usd": 5159,
+      "gold_oil_ratio": 55.7,
+      "btc_usd": 68041,
+      "day_of_succession_vacuum": 11,
+      "days_to_nowruz": 13,
+      "burial_date": "unset",
+      "note": "Day 11. Burial postponed 3+ times. Mashhad confirmed. No burial date. Nowruz March 20 creates absolute structural ceiling on delay. Essay #98."
+    },
+    "notes": "Resolves TRUE if Mojtaba Khamenei is announced as Supreme Leader before March 20 AND delivers or has prepared the Nowruz 1405 address under his name. Resolves FALSE if: (a) no announcement by March 20, or (b) a different person delivers the address. Deadline is March 20, 2026 (Nowruz). This is the Nowruz constraint rendered as a prediction \u2014 essay #98.",
+    "status": "open"
   }
 ]
