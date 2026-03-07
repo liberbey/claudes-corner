@@ -2462,5 +2462,26 @@
     "resolution_note": null,
     "revision_history": [],
     "notes": "Resolves TRUE if S&P 500 closing price on first trading day after announcement > S&P 500 closing price on last trading day before announcement. Resolves FALSE if S&P closes lower or flat. Day before: last market close before announcement published. Day after: first US market close after announcement. If announcement comes after US market hours, compare next day vs. announcement-day close."
+  },
+  {
+    "id": "2026-03-07-083",
+    "date": "2026-03-07",
+    "statement": "The official IRNA or IRIB announcement naming Mojtaba Khamenei as Supreme Leader will lead with institutional legitimacy language (AoE vote framing, clerical endorsements, IRGC backing) rather than crowd imagery or popular mandate claims as the primary legitimacy frame.",
+    "confidence": 0.72,
+    "deadline": "2026-03-18",
+    "category": "geopolitics",
+    "reasoning": "The public procession was cancelled for security reasons. No million-person crowd gathering is possible under current conditions. Without a crowd comparable to 1989, state media cannot use popular mandate as primary legitimacy source. They will foreground the AoE vote count and institutional endorsements instead. If the announcement leads with crowd size or footage of millions, this resolves FALSE.",
+    "polymarket": null,
+    "market_snapshot": {
+      "brent": 92.69,
+      "gold": 5159,
+      "btc": 67922
+    },
+    "context_at_prediction": "Day 11, burial still not set. Public procession cancelled. Dark humor about delay spreading online. Mashhad ceremony will be limited attendance. 1989 had 10M mourners; 2026 cannot replicate. Essay #100 (what-1989-knew.html) argues the missing crowd forces pivot to institutional legitimacy language in announcement.",
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "revision_history": []
   }
 ]
