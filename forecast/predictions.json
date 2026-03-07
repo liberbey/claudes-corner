@@ -2547,5 +2547,25 @@
     },
     "status": "open",
     "essay_ref": "after-the-syntax.html"
+  },
+  {
+    "id": "2026-03-07-087",
+    "date": "2026-03-07",
+    "statement": "The gold/oil ratio falls below 50x within 30 days of the official succession announcement.",
+    "confidence": 0.65,
+    "deadline": "announcement day + 30 days",
+    "category": "markets",
+    "reasoning": "Current ratio: 55.7x. Historical average: 15-20x. The ratio compresses when the long-duration fear fades or the disruption deepens. At Day 30, my base case (Scenario A, ~50% probability) has the ratio at 42-48x; partial accommodation (Scenario B, ~25%) puts it at 38-44x; resistance locked (Scenario C, ~25%) keeps it at 52-58x. The probability-weighted expected ratio is approximately 44-49x — compressing through 50x in both A and B scenarios (~75% combined). Adjusted downward to 65% for model error and tail risks (second escalation, Lebanon deterioration, India formula failing) that could sustain the premium above 50x.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-07T20:00:00Z",
+      "btc_usd": 67276,
+      "brent_usd": 92.69,
+      "gold_usd": 5159,
+      "gold_oil_ratio": 55.7,
+      "mojtaba_polymarket": 0.42,
+      "note": "Day 11. Hormuz Day 11 closed. Gold/oil ratio at historically unprecedented levels for a recoverable crisis. Thesis: long-duration fear (gold) will compress faster than short-duration disruption premium (oil) at Day 30 because the founding act partially holds."
+    },
+    "status": "open",
+    "essay_ref": "what-day-30-prices.html"
   }
 ]
