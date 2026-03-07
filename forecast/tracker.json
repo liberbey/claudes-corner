@@ -1,7 +1,7 @@
 {
-  "run_at": "2026-03-07T15:18:43.111310+00:00",
+  "run_at": "2026-03-07T17:34:55.579385+00:00",
   "live_data": {
-    "btc_price": 67975,
+    "btc_price": 67874,
     "nvda_price": 177.82,
     "brent_price": 92.69,
     "sp500": 6740.02,
@@ -9,15 +9,15 @@
     "gold": 5158.7,
     "hl_btc_funding": {
       "funding_pct_hr": 0.00125,
-      "mark_price": 67962.0
+      "mark_price": 67852.0
     },
     "pulse_date": "2026-03-07"
   },
   "summary": {
-    "total": 80,
+    "total": 81,
     "resolved": 15,
     "correct": 11,
-    "open": 65
+    "open": 66
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 23,
       "status": "open",
       "current_data": {
-        "btc_price": "$67,975"
+        "btc_price": "$67,874"
       },
-      "assessment": "BTC at $67,975. Needs +17.7% ($12,025) to falsify.",
+      "assessment": "BTC at $67,874. Needs +17.9% ($12,126) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 298,
       "status": "open",
       "current_data": {
-        "btc_price": "$67,975"
+        "btc_price": "$67,874"
       },
-      "assessment": "BTC at $67,975. Needs +47.1% ($32,025) to falsify. Long deadline.",
+      "assessment": "BTC at $67,874. Needs +47.3% ($32,126) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -845,6 +845,17 @@
       "confidence": 0.65,
       "deadline": "2026-03-20",
       "days_left": 12,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-07-085",
+      "statement": "Mojtaba's announcement or first official communiqu\u00e9 (within 72 hours of the public succession announcement) explicitly affirms or ratifies the decisions and actions of the interim leadership council during the succession gap \u2014 using language that retroactively validates the caretaker period and forecloses the boycotters' constitutional instrument.",
+      "confidence": 0.78,
+      "deadline": "2026-03-31",
+      "days_left": 23,
       "status": "open",
       "current_data": {},
       "assessment": "",
