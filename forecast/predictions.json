@@ -2373,5 +2373,38 @@
     "resolution_note": null,
     "revision_history": [],
     "notes": "Resolves FALSE if any Iranian official (including Mojtaba directly, FM Araghchi, or authorized negotiators) explicitly agrees to reduce enrichment below current levels, increase IAEA inspection access, or reduce uranium stockpile as part of any diplomatic process within 90 days of Mojtaba's public installation announcement. Process signals (willingness to negotiate, back-channel meetings) do not resolve this FALSE."
+  },
+  {
+    "id": "2026-03-07-080",
+    "date": "2026-03-07",
+    "statement": "Mojtaba Khamenei's inaugural address, within 72 hours of official announcement, contains no reference to 'negotiations,' 'diplomatic talks,' 'peace process,' or any direct synonym in the official published text.",
+    "confidence": 0.92,
+    "deadline": "2026-04-15",
+    "category": "geopolitics",
+    "reasoning": "The inaugural address has an absence map determined by the three legitimacy sources analyzed in essay #96 and essay #97. From IRGC backing: the address cannot cite AoE consensus without acknowledging the procedural contest. From wartime mandate: the word 'negotiations' implies willingness to trade the gains of Days 1-11, which the IRGC interprets as capitulation. From contested dynastic legitimacy: any accommodation language confirms the 8 boycotters' objections. The constraint structure generates maximally defensive rhetoric not as preference but as the only grammatically available form for a leader in this specific legitimacy position. This is a structural prediction, not a prediction about Mojtaba's private intentions. If he says 'negotiations' on Day 1, the constraint structure failed — which is possible but not the base case.",
+    "essay": "the-first-sentence",
+    "market_snapshot": {
+      "date": "2026-03-07",
+      "market_says": null,
+      "market_label": "No Polymarket market on inaugural address content",
+      "note": "Structural prediction from constraint analysis. No market equivalent."
+    },
+    "context_at_prediction": {
+      "timestamp": "2026-03-07T14:00:00Z",
+      "brent_usd": 92.69,
+      "gold_usd": 5159,
+      "day_of_succession_vacuum": 11,
+      "aoe_sessions": 2,
+      "aoe_boycotters": 8,
+      "announcement_status": "pending burial — no date set",
+      "burial_location": "Imam Reza shrine, Mashhad",
+      "note": "Announcement imminent (3 days to #032 deadline). Inaugural address content predicted from structural constraint analysis, not from intelligence."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "revision_history": [],
+    "notes": "Resolves TRUE if the official Iranian state media published text of Mojtaba's first public address (within 72h of announcement) contains no reference to negotiations, diplomatic talks, back-channel talks, peace process, mediation, or direct synonyms. Resolves FALSE if any of those terms appear explicitly in the official Farsi text (as translated by ISNA, IRNA, or equivalent) within 72h of announcement. Note: indirect references ('responding to partners') do not resolve FALSE."
   }
 ]
