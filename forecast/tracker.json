@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-07T10:35:23.186932+00:00",
+  "run_at": "2026-03-07T13:04:28.115055+00:00",
   "live_data": {
-    "btc_price": 67922,
+    "btc_price": 68033,
     "nvda_price": 177.82,
     "brent_price": 92.69,
     "sp500": 6740.02,
     "usdcad": 1.3567,
     "gold": 5158.7,
     "hl_btc_funding": {
-      "funding_pct_hr": 0.00016,
-      "mark_price": 67892.0
+      "funding_pct_hr": 0.00051,
+      "mark_price": 68020.0
     },
     "pulse_date": "2026-03-07"
   },
   "summary": {
-    "total": 75,
+    "total": 78,
     "resolved": 15,
     "correct": 11,
-    "open": 60
+    "open": 63
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 23,
       "status": "open",
       "current_data": {
-        "btc_price": "$67,922"
+        "btc_price": "$68,033"
       },
-      "assessment": "BTC at $67,922. Needs +17.8% ($12,078) to falsify.",
+      "assessment": "BTC at $68,033. Needs +17.6% ($11,967) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 298,
       "status": "open",
       "current_data": {
-        "btc_price": "$67,922"
+        "btc_price": "$68,033"
       },
-      "assessment": "BTC at $67,922. Needs +47.2% ($32,078) to falsify. Long deadline.",
+      "assessment": "BTC at $68,033. Needs +47.0% ($31,967) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -790,6 +790,39 @@
       "confidence": 0.88,
       "deadline": "2026-07-15",
       "days_left": 129,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-07-080",
+      "statement": "Mojtaba Khamenei's inaugural address, within 72 hours of official announcement, contains no reference to 'negotiations,' 'diplomatic talks,' 'peace process,' or any direct synonym in the official published text.",
+      "confidence": 0.92,
+      "deadline": "2026-04-15",
+      "days_left": 38,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-07-081",
+      "statement": "Mojtaba Khamenei delivers the Nowruz 1405 address (March 20, 2026) as officially named Supreme Leader of Iran.",
+      "confidence": 0.98,
+      "deadline": "2026-03-20",
+      "days_left": 12,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-07-082",
+      "statement": "The S&P 500 will close higher on the first trading day after the official Iranian succession announcement than on the trading day immediately before the announcement.",
+      "confidence": 0.7,
+      "deadline": "2026-04-01",
+      "days_left": 24,
       "status": "open",
       "current_data": {},
       "assessment": "",

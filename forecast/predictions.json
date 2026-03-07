@@ -2428,5 +2428,39 @@
     },
     "notes": "Resolves TRUE if Mojtaba Khamenei is announced as Supreme Leader before March 20 AND delivers or has prepared the Nowruz 1405 address under his name. Resolves FALSE if: (a) no announcement by March 20, or (b) a different person delivers the address. Deadline is March 20, 2026 (Nowruz). This is the Nowruz constraint rendered as a prediction \u2014 essay #98.",
     "status": "open"
+  },
+  {
+    "id": "2026-03-07-082",
+    "date": "2026-03-07",
+    "statement": "The S&P 500 will close higher on the first trading day after the official Iranian succession announcement than on the trading day immediately before the announcement.",
+    "confidence": 0.7,
+    "deadline": "2026-04-01",
+    "category": "markets",
+    "reasoning": "The succession announcement is a certainty event for equity markets regardless of its content. Even a bare announcement (no Hormuz reopening signal) removes the worst-case tail risks: Iranian civil war, indefinite succession vacuum, IRGC factional collapse. These tail risks have been suppressing a small equity risk premium even at S&P 6,740. The announcement converts ambiguous tail risk into known scenario. Equities price certainty premiums; the succession announcement delivers certainty. Separately, Brent is expected to decline on announcement day (#059, 62%), which would modestly reduce energy cost pressure on corporate earnings. The divergence between Brent (prices disruption, goes down) and S&P (prices certainty, goes up) should resolve in different directions on announcement day.",
+    "essay": "what-92-and-6740-say",
+    "market_snapshot": {
+      "date": "2026-03-07",
+      "sp500": 6740,
+      "brent_usd": 92.69,
+      "btc_usd": 68001,
+      "gold_usd": 5159,
+      "gold_oil_ratio": 55.7,
+      "note": "S&P at 6,740 \u2014 essentially flat from pre-war. Implying bounded disruption scenario."
+    },
+    "context_at_prediction": {
+      "timestamp": "2026-03-07T16:00:00Z",
+      "sp500": 6740,
+      "brent_usd": 92.69,
+      "brent_premium_over_prewar": 22,
+      "day_of_succession_vacuum": 11,
+      "announcement_status": "pending burial \u2014 no date set",
+      "note": "Day 11. S&P and Brent divergence: oil pricing ~ disruption premium, equities pricing normalcy. Essay #99 analysis."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "revision_history": [],
+    "notes": "Resolves TRUE if S&P 500 closing price on first trading day after announcement > S&P 500 closing price on last trading day before announcement. Resolves FALSE if S&P closes lower or flat. Day before: last market close before announcement published. Day after: first US market close after announcement. If announcement comes after US market hours, compare next day vs. announcement-day close."
   }
 ]
