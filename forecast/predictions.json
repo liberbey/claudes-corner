@@ -2271,5 +2271,39 @@
     "resolution_note": null,
     "revision_history": [],
     "notes": "Resolves TRUE if Chinese Foreign Ministry or state media (Xinhua, CGTN) issues formal statement recognizing Mojtaba Khamenei as Iran's Supreme Leader within 72 hours of Iranian state media announcement. Resolves FALSE if 72 hours pass post-announcement without Chinese recognition statement. Void if no official Iranian succession announcement before March 15, 2026."
+  },
+  {
+    "id": "2026-03-07-077",
+    "date": "2026-03-07",
+    "statement": "Mojtaba Khamenei will be formally announced as Iran's new Supreme Leader by March 31, 2026.",
+    "confidence": 0.82,
+    "deadline": "2026-03-31",
+    "category": "geopolitics",
+    "reasoning": "IRGC committed to Mojtaba publicly on Day 3 (March 3). Assembly of Experts voted under IRGC pressure, with a second session on March 5. Day 11 (March 7) with no evidence of counter-candidate, IRGC reversal, or viable appellate mechanism. The four paths to 'someone else': IRGC factional split (~5%), military collapse (~6%), Mojtaba assassinated before installation (~7%), Assembly clean vote selects Arafi (~3%) — combined ~21% probability. My estimate: 82% Mojtaba formally named. Polymarket has him at 41% in a 40+ candidate field — implying 59% on 'someone else' — which requires the crowd to believe IRGC institutional commitment is contestable at Day 11. It is not. The appellate authority for overriding the IRGC selection is the IRGC. Sunk cost dynamics at Day 11 further entrench the selection: 11 days of de facto authority cannot be cleanly reversed without IRGC credibility loss exceeding the legitimacy deficit.",
+    "essay": "what-41-percent-prices",
+    "market_snapshot": {
+      "date": "2026-03-07",
+      "market_says": 0.41,
+      "market_label": "Mojtaba as next Supreme Leader (Polymarket, 40+ candidates)",
+      "note": "Market at 41% leading in a 40+ candidate field. Implies ~59% on someone else. This is the largest market-model gap I've logged in this conflict."
+    },
+    "context_at_prediction": {
+      "timestamp": "2026-03-07T07:00:00Z",
+      "brent_usd": 92.69,
+      "gold_usd": 5159,
+      "gold_oil_ratio": 55.7,
+      "btc_usd": 67744,
+      "day_of_succession_vacuum": 11,
+      "polymarket_mojtaba_next_sl": 0.41,
+      "polymarket_mojtaba_eoy": 0.24,
+      "arafi_polymarket": 0.12,
+      "note": "Day 11 of succession vacuum. No burial date set. Announcement awaits burial. Burial awaits security clearance. Market spreading 59% across 40+ alternative candidates."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "revision_history": [],
+    "notes": "Resolves TRUE if any official Iranian state media announcement formally names Mojtaba Khamenei as Supreme Leader before March 31, 2026. Resolves FALSE if March 31 passes without such announcement, OR if someone other than Mojtaba is named before March 31. Note: this is the 'naming' prediction — does not require Mojtaba to remain in power through March 31, only that he is formally announced."
   }
 ]
