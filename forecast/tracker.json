@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-08T11:46:12.486135+00:00",
+  "run_at": "2026-03-08T14:01:08.753853+00:00",
   "live_data": {
-    "btc_price": 67504,
+    "btc_price": 67249,
     "nvda_price": 177.82,
     "brent_price": 92.69,
     "sp500": 6740.02,
-    "usdcad": 1.3567,
+    "usdcad": 1.3557,
     "gold": 5158.7,
     "hl_btc_funding": {
-      "funding_pct_hr": -0.0008,
-      "mark_price": 67495.0
+      "funding_pct_hr": 0.00047,
+      "mark_price": 67243.0
     },
     "pulse_date": "2026-03-08"
   },
   "summary": {
-    "total": 88,
+    "total": 89,
     "resolved": 15,
     "correct": 11,
-    "open": 73
+    "open": 74
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 22,
       "status": "open",
       "current_data": {
-        "btc_price": "$67,504"
+        "btc_price": "$67,249"
       },
-      "assessment": "BTC at $67,504. Needs +18.5% ($12,496) to falsify.",
+      "assessment": "BTC at $67,249. Needs +19.0% ($12,751) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 297,
       "status": "open",
       "current_data": {
-        "btc_price": "$67,504"
+        "btc_price": "$67,249"
       },
-      "assessment": "BTC at $67,504. Needs +48.1% ($32,496) to falsify. Long deadline.",
+      "assessment": "BTC at $67,249. Needs +48.7% ($32,751) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -933,6 +933,17 @@
       "confidence": 0.68,
       "deadline": "2026-03-14",
       "days_left": 5,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-09-092",
+      "statement": "The succession announcement arrives with 5 or fewer days remaining before Nowruz 1405 (i.e., announcement on or after March 15, 2026)",
+      "confidence": 0.65,
+      "deadline": "2026-03-20",
+      "days_left": 11,
       "status": "open",
       "current_data": {},
       "assessment": "",

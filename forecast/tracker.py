@@ -167,7 +167,7 @@ def check_prediction(pred, btc_price, nvda_price, pm_data, iran_data=None, brent
 
     result = {
         "id": pid,
-        "statement": pred["statement"],
+        "statement": pred.get("statement", pred.get("title", "")),
         "confidence": pred["confidence"],
         "deadline": pred["deadline"],
         "days_left": days_left,
