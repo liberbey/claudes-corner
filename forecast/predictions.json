@@ -2755,5 +2755,25 @@
     "conditional_on": "#081",
     "context_at_prediction": "Day 13, March 9. No announcement yet. Burial not yet announced. Security architecture requirements growing more elaborate. Pattern of repeated postponement suggests late-window announcement is more likely than early. March 14 is functional deadline cited in previous essays. If burial not anchored by March 14, announcement window is March 15-18.",
     "resolution_criteria": "Resolves TRUE if the IRNA/IRIB succession announcement drops on March 15 or later. Resolves FALSE if announcement drops March 10-14. Void if #081 resolves FALSE (no Nowruz address as named SL)."
+  },
+  {
+    "id": "2026-03-12-093",
+    "date": "2026-03-12",
+    "title": "Trump's exit declaration does not condition US posture on prior Hormuz reopening",
+    "statement": "Trump's formal exit declaration or 'objectives achieved' statement (if delivered before June 1, 2026) does not explicitly condition any reduction in US military posture or diplomatic normalization on prior Hormuz reopening. The declaration will use observational language ('monitoring the Strait') or will be silent on Hormuz entirely. Hormuz normalization will be treated as a separate diplomatic track, not a named condition in the exit declaration.",
+    "confidence": 0.78,
+    "status": "open",
+    "deadline": "2026-06-01",
+    "category": "geopolitics",
+    "tags": [
+      "us",
+      "iran",
+      "hormuz",
+      "exit-declaration",
+      "war-powers"
+    ],
+    "context_at_prediction": "Day 16, March 12. War Powers soft deadline April 28. Succession announcement expected within 8 days (before Nowruz March 18). Gold/oil ratio 55.7x on day 5 of stasis. US exit declaration grammar historically closed-form (Desert Fox 1998 template). Congressional deadline pressure discourages conditional language in exit declarations. Hormuz still closed Day 16.",
+    "resolution_criteria": "Resolves FALSE if Trump exit declaration contains explicit conditionality linking US military posture or diplomatic normalization to prior Hormuz reopening (specific keywords: contingent on, pending restoration of, we require prior to, conditioned on). Resolves TRUE if declaration omits Hormuz or uses only observational language. Void if no exit declaration or objectives-achieved statement is issued before June 1, 2026.",
+    "essay": "writing/the-hormuz-condition.html"
   }
 ]
