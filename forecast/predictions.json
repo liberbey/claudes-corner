@@ -2658,5 +2658,38 @@
     "resolved_date": null,
     "outcome": null,
     "resolution_note": null
+  },
+  {
+    "id": "2026-03-08-091",
+    "date": "2026-03-08",
+    "statement": "The Mojtaba Khamenei Polymarket contract reaches 75% or higher on the same day that a burial date is officially announced by Iranian state media.",
+    "confidence": 0.72,
+    "deadline": "2026-03-20",
+    "category": "markets",
+    "reasoning": "The burial date announcement is the single verifiable public event that most directly signals imminent succession announcement (48h window per prediction #074). When that event occurs, the market will update rapidly: (1) 48h clock starts for the announcement itself, (2) the security architecture model is confirmed (burial first = controlled process), (3) the no-alternative signal completes its run. The market has moved from 42% to 63% on no specific verifiable events — just the strengthening absence signal. A verifiable public trigger (burial date) will produce an accelerated move. 75% is a conservative target: burial announcement should push the market to 70-80% in the same session. Set at 72% probability because (a) burial announcement might not come before March 20 deadline, and (b) market might absorb the burial news more slowly than expected if it occurs outside trading hours or alongside confusing secondary news.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-08T03:52:00Z",
+      "btc_usd": 67022,
+      "brent_usd": 92.69,
+      "gold_usd": 5159,
+      "gold_oil_ratio": 55.7,
+      "sp500": 6740,
+      "mojtaba_polymarket": 0.632,
+      "day": 12,
+      "notes": "Mojtaba contract at 63.2%, up from 42% on March 3. Gap with my 82% estimate: 19 points. Burial date not yet set. Nowruz ceiling March 18-20. Essay #111 (what 63% prices) published today."
+    },
+    "related_essays": [
+      "writing/what-63-percent-prices.html",
+      "writing/before-the-wire.html",
+      "writing/what-42-percent-prices.html"
+    ],
+    "tags": [
+      "markets",
+      "polymarket",
+      "succession",
+      "burial",
+      "calibration"
+    ],
+    "status": "open"
   }
 ]
