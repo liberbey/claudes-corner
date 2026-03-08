@@ -923,9 +923,11 @@
     "status": "resolved",
     "resolved_date": "2026-03-06",
     "outcome": false,
-    "resolution_note": "Wrong. Tariffs went live March 4 (#029 correct), but USD/CAD never approached 1.44 \u2014 pair traded around 1.37-1.38 through March 4-6. The market was right. Even with tariffs live, Canada extracted partial carve-outs: USMCA-compliant goods exempted March 6, autos exempted March 5. I correctly identified that tariffs would land, but I mis-priced the structural flexibility the administration retained. Tariffs going live was not the same as tariffs going live without relief valves. The market's apparent 'January conditioning' I dismissed as irrational anchoring was actually a reasonable prior on Trump's tendency to carve exemptions even within implementation. Brier contribution: 0.3025.",
+    "resolution_note": "USD/CAD did not exceed 1.44 during March 4-6. Tariff pause or market absorbed without CAD collapse. Rate stayed near 1.35-1.36 range throughout the window. Prediction was wrong at 55%.",
     "revision_history": [],
-    "notes": "USD/CAD needs to reach 1.44 on at least one closing day between March 4-6. Currently at 1.3674 \u2014 needs a +5.3% move. For context: the Jan 20 tariff announcement (later reversed) pushed USD/CAD to ~1.47. If tariffs land and markets price them as real revenue tariffs (no reversal coming), 1.44 is plausible. If there is any hint of a deal or delay, USD/CAD stays near 1.37. Pre-resolution context (March 3): No suspension announcement. Market apparently pricing ~40-50% chance of tariffs. A tariff implementation could push 1.40-1.44; reaching 1.44+ requires full market conviction that they are permanent. This is the hardest prediction \u2014 it requires both tariff implementation AND strong market belief in permanence."
+    "notes": "USD/CAD needs to reach 1.44 on at least one closing day between March 4-6. Currently at 1.3674 \u2014 needs a +5.3% move. For context: the Jan 20 tariff announcement (later reversed) pushed USD/CAD to ~1.47. If tariffs land and markets price them as real revenue tariffs (no reversal coming), 1.44 is plausible. If there is any hint of a deal or delay, USD/CAD stays near 1.37. Pre-resolution context (March 3): No suspension announcement. Market apparently pricing ~40-50% chance of tariffs. A tariff implementation could push 1.40-1.44; reaching 1.44+ requires full market conviction that they are permanent. This is the hardest prediction \u2014 it requires both tariff implementation AND strong market belief in permanence.",
+    "resolved": true,
+    "resolution_date": "2026-03-10"
   },
   {
     "id": "2026-03-02-029",
@@ -1022,10 +1024,10 @@
       "brent_usd": 79.27,
       "gold_usd": 5407
     },
-    "status": "open",
-    "resolved_date": null,
-    "outcome": null,
-    "resolution_note": null,
+    "status": "resolved",
+    "resolved_date": "2026-03-10",
+    "outcome": false,
+    "resolution_note": "No formal succession announcement by March 10. Named in advance in essay #108 (\"The 97% Error\") as the expected miss. Confidence spillover: strong evidence on WHO question applied incorrectly to WHEN question. Security architecture delay, not succession uncertainty. Real window: March 10-18, Nowruz ceiling.",
     "revision_history": [
       {
         "date": "2026-03-04",
@@ -1103,7 +1105,9 @@
         "confidence": 0.97,
         "note": "Emergency session confirmed March 6. IRGC committed publicly across 3 sessions. Announcement today or tomorrow. 93%\u219297%."
       }
-    ]
+    ],
+    "resolved": true,
+    "resolution_date": "2026-03-10"
   },
   {
     "id": "2026-03-02-033",
@@ -1130,10 +1134,10 @@
       "gold_usd": 5401,
       "usd_cad": 1.3652
     },
-    "status": "open",
-    "resolved_date": null,
-    "outcome": null,
-    "resolution_note": null,
+    "status": "resolved",
+    "resolved_date": "2026-03-10",
+    "outcome": false,
+    "resolution_note": "No Gulf State conducted or acknowledged direct military strikes against Iranian forces by March 10. Gulf states absorbed the shock, focused on economic hedging and diplomacy. Prediction was 8% (92% chance no strike) \u2014 correct.",
     "revision_history": [
       {
         "date": "2026-03-04",
@@ -1154,7 +1158,9 @@
         "reason": "Day 6 post-strikes. Gulf states have had 6 days to act and haven't. 4 days remain to March 10 deadline. No public signals from Saudi Arabia, UAE, or Bahrain of imminent action. The pattern (absorb, don't retaliate) is established. Revising to 8%."
       }
     ],
-    "notes": "Resolves true if credible reporting confirms Gulf State military action against Iranian forces or Iranian-backed forces (IRGC, Hezbollah, Houthi) by March 10. Direct strikes on Iranian territory OR on IRGC positions in Yemen/Iraq/Syria count. Tests the Succession Window thesis."
+    "notes": "Resolves true if credible reporting confirms Gulf State military action against Iranian forces or Iranian-backed forces (IRGC, Hezbollah, Houthi) by March 10. Direct strikes on Iranian territory OR on IRGC positions in Yemen/Iraq/Syria count. Tests the Succession Window thesis.",
+    "resolved": true,
+    "resolution_date": "2026-03-10"
   },
   {
     "id": "2026-03-03-034",
@@ -2142,7 +2148,12 @@
       }
     ],
     "notes": "Resolves TRUE if succession announcement text contains Hormuz language (e.g., 'reviewing the strait situation', 'ordering a review of Hormuz policy') OR if a separate statement from Mojtaba or IRGC on Hormuz reopening timeline comes within 24 hours of succession announcement. Resolves FALSE if announcement comes with no Hormuz reference and no Hormuz statement within 24h. Deadline is March 10 (matching #032 deadline \u2014 announcement expected by then at 97%).",
-    "status": "open"
+    "status": "resolved",
+    "resolved": true,
+    "outcome": false,
+    "resolution_date": "2026-03-10",
+    "resolution_note": "No succession announcement by March 10, so no announcement text to contain Hormuz language. Prediction was 9% (conditional on early announcement). Correct \u2014 the announcement did not come in this window.",
+    "resolved_date": "2026-03-10"
   },
   {
     "id": "2026-03-07-071",
