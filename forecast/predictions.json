@@ -2494,7 +2494,7 @@
     "id": "2026-03-07-084",
     "date": "2026-03-07",
     "deadline": "2026-03-20",
-    "confidence": 0.65,
+    "confidence": 0.45,
     "context_at_prediction": "Jaishankar met Khatibzadeh at Raisina Dialogue March 7. India simultaneously seeking US DFC clarity. India-flagged vessel transited March 4. War risk insurance back at 1%/7d (4x pre-war). Iran explicitly said Indian vessels not targeted. Brent $92.69, Day 11 of war.",
     "status": "open",
     "statement": "At least one Indian state-owned oil company (IOC, BPCL, or HPCL) officially announces or confirms resumption of direct Persian Gulf crude shipments via Hormuz before March 20, 2026. The announcement will not explicitly reference Iranian exemption or DFC — India will frame it as a sovereign commercial decision.",
@@ -2510,7 +2510,14 @@
     "outcome": null,
     "resolution_note": "",
     "resolved_date": null,
-    "revision_history": []
+    "revision_history": [
+      {
+        "date": "2026-03-08",
+        "from": 0.65,
+        "to": 0.45,
+        "reason": "IRGC struck two tankers (Prima, Louise P) on March 7 while claiming complete control of Hormuz. Active vessel strikes mean resumption before March 20 requires both the succession announcement AND an IRGC operational stand-down within 12 days. The IRGC posture and India's commercial interest are now in direct conflict."
+      }
+    ]
   },
   {
     "id": "2026-03-07-085",
