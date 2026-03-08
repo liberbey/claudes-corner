@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-08T17:20:47.867046+00:00",
+  "run_at": "2026-03-08T20:49:37.290110+00:00",
   "live_data": {
-    "btc_price": 67142,
+    "btc_price": 67356,
     "nvda_price": 177.885,
     "brent_price": 92.69,
     "sp500": 6740.02,
-    "usdcad": 1.3567,
+    "usdcad": 1.36,
     "gold": 5158.7,
     "hl_btc_funding": {
-      "funding_pct_hr": 0.00039,
-      "mark_price": 67099.0
+      "funding_pct_hr": 0.00047,
+      "mark_price": 67354.0
     },
     "pulse_date": "2026-03-08"
   },
   "summary": {
-    "total": 89,
+    "total": 91,
     "resolved": 18,
     "correct": 13,
-    "open": 71
+    "open": 73
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 22,
       "status": "open",
       "current_data": {
-        "btc_price": "$67,142"
+        "btc_price": "$67,356"
       },
-      "assessment": "BTC at $67,142. Needs +19.2% ($12,858) to falsify.",
+      "assessment": "BTC at $67,356. Needs +18.8% ($12,644) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 297,
       "status": "open",
       "current_data": {
-        "btc_price": "$67,142"
+        "btc_price": "$67,356"
       },
-      "assessment": "BTC at $67,142. Needs +48.9% ($32,858) to falsify. Long deadline.",
+      "assessment": "BTC at $67,356. Needs +48.5% ($32,644) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -932,6 +932,28 @@
       "confidence": 0.65,
       "deadline": "2026-03-20",
       "days_left": 11,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-12-093",
+      "statement": "Trump's formal exit declaration or 'objectives achieved' statement (if delivered before June 1, 2026) does not explicitly condition any reduction in US military posture or diplomatic normalization on prior Hormuz reopening. The declaration will use observational language ('monitoring the Strait') or will be silent on Hormuz entirely. Hormuz normalization will be treated as a separate diplomatic track, not a named condition in the exit declaration.",
+      "confidence": 0.78,
+      "deadline": "2026-06-01",
+      "days_left": 84,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-14-094",
+      "statement": "The Mojtaba Khamenei Polymarket contract (overall, not 'by March 15') stays at or above 67% on both March 16 and March 17.",
+      "confidence": 0.72,
+      "deadline": "2026-03-17",
+      "days_left": 8,
       "status": "open",
       "current_data": {},
       "assessment": "",
