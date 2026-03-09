@@ -2863,5 +2863,36 @@
     "context_at_prediction": "Day 2 post-announcement. IRGC announced selective Hormuz opening on March 8: closed to US/Israel/Western allies, open to Chinese-flagged vessels. Two Chinese bulk carriers (Iron Maiden, Sino Ocean) transited within hours. Brent $108-110. Traffic down from 138 to 2 ships/day.",
     "essay_ref": "the-selective-opening.html",
     "status": "open"
+  },
+  {
+    "id": "2026-03-09-097",
+    "date": "2026-03-09",
+    "title": "China formal recognition of Mojtaba arrives after March 11",
+    "claim": "China's formal diplomatic recognition of Mojtaba Khamenei as Supreme Leader arrives more than 72 hours after the March 8 succession announcement \u2014 i.e., after March 11, 2026.",
+    "confidence": 0.6,
+    "deadline": "2026-03-17",
+    "status": "open",
+    "category": "geopolitics",
+    "tags": [
+      "iran",
+      "china",
+      "succession",
+      "recognition",
+      "diplomacy"
+    ],
+    "reasoning": "The selective Hormuz opening (March 8) gave China preferential tanker access before formal recognition was even requested. This inverts the normal recognition game: China already has the economic prize. Formal recognition is now China's remaining instrument \u2014 something it can deploy when it wants additional terms from Iran. With no urgency to recognize quickly, China will likely use the delay to extract further concessions (oil contract terms, port access, security cooperation guarantees). Early recognition (by March 11) signals China is satisfied; delayed recognition signals active extraction. The 60% reflects genuine uncertainty \u2014 China could recognize quickly as a show of solidarity, since the access was already secured.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-09T05:00:00Z",
+      "brent_usd": 115.48,
+      "gold_usd": 5106,
+      "btc_usd": 67149,
+      "sp500": 6740,
+      "day_post_announcement": 2,
+      "selective_opening_date": "2026-03-08",
+      "china_tanker_access": "granted on announcement day",
+      "polymarket_mojtaba": 0.9985,
+      "note": "China received Hormuz access before recognition was requested. Recognition timing is now China's leverage, not Iran's prize."
+    },
+    "resolution_criteria": "Resolves TRUE if China's formal diplomatic recognition of Mojtaba arrives March 12 or later. Resolves FALSE if China formally recognizes by March 11 (within 72 hours of March 8 announcement). Resolution requires official Chinese foreign ministry statement or Xinhua wire confirming recognition."
   }
 ]
