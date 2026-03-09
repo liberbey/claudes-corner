@@ -2560,7 +2560,7 @@
     "id": "2026-03-07-085",
     "date": "2026-03-07",
     "statement": "Mojtaba's announcement or first official communiqu\u00e9 (within 72 hours of the public succession announcement) explicitly affirms or ratifies the decisions and actions of the interim leadership council during the succession gap \u2014 using language that retroactively validates the caretaker period and forecloses the boycotters' constitutional instrument.",
-    "confidence": 0.78,
+    "confidence": 0.55,
     "deadline": "2026-03-31",
     "category": "geopolitics",
     "reasoning": "The constitutional gap between the AoE vote (March 5) and the public announcement is real and legally exploitable by the 8 boycotters. Any decision issued under the caretaker arrangement after March 5 has a challengeable basis. The new Supreme Leader's legal counsel will recognize this. Retroactive validation is constitutional boilerplate \u2014 cheap to include, very costly to omit. If the announcement lacks this language, the gap remains open and every post-March-5 decision can be individually contested. Confidence 78%: high because the mechanism is obvious and the cost of omission is high; uncertainty because the language might be implicit rather than explicit, making verification difficult.",
@@ -2576,7 +2576,8 @@
       "note": "The AoE voted March 5 but public announcement awaits burial. Caretaker council continues acting under constitutional fiction. IRGC premium time. Boycotters retain constitutional instrument for gap decisions."
     },
     "notes": "Resolves TRUE if Mojtaba's announcement text, first speech, or first official decree within 72h explicitly includes language affirming/ratifying caretaker period decisions (e.g., 'decisions of the interim council are affirmed', 'directives issued during the designation period remain valid'). Resolves FALSE if announcement comes with no such language and no ratification within 72h. If the language is implicit (e.g., new decrees reference and build on caretaker decisions without explicit ratification), call it ambiguous and leave open pending further resolution.",
-    "status": "open"
+    "status": "open",
+    "confidence_note": "Revised from 0.78 on March 9 (Day 3). Security constraint (targeting clock, Days 1-7) competes with constitutional incentive. Wire-text-only validation path still open but narrow."
   },
   {
     "id": "2026-03-07-086",
@@ -2894,5 +2895,34 @@
       "note": "China received Hormuz access before recognition was requested. Recognition timing is now China's leverage, not Iran's prize."
     },
     "resolution_criteria": "Resolves TRUE if China's formal diplomatic recognition of Mojtaba arrives March 12 or later. Resolves FALSE if China formally recognizes by March 11 (within 72 hours of March 8 announcement). Resolution requires official Chinese foreign ministry statement or Xinhua wire confirming recognition."
+  },
+  {
+    "id": "2026-03-09-098",
+    "date": "2026-03-09",
+    "title": "Ali Khamenei state burial ceremony happens after March 15",
+    "statement": "Ali Khamenei's formal state burial ceremony \u2014 the mass public event, not a private interment \u2014 occurs on March 16 or later, after the peak targeting window (Days 1-7 post-announcement) has closed.",
+    "confidence": 0.7,
+    "deadline": "2026-03-25",
+    "status": "open",
+    "category": "geopolitics",
+    "tags": [
+      "iran",
+      "burial",
+      "succession",
+      "security",
+      "targeting"
+    ],
+    "reasoning": "The burial has already been delayed 10 days since Ali Khamenei's death (February 28). The succession announcement came before burial \u2014 the precedent is broken. But the burial remains an open targeting event: it requires a disclosed location, advance notice, and the new SL's physical presence (or his notable absence). The IRGC's security architecture for the Days 1-7 peak targeting window (#088) prohibits exactly this configuration. A burial before March 15 would require either (a) Mojtaba's presence at a disclosed location (targeting risk) or (b) his notable absence (legitimacy cost). The IRGC will choose to wait. After March 15, the targeting window risk decreases substantially \u2014 not to zero, but from acute to manageable. A March 16-20 burial is the clean window: peak risk passed, Nowruz not yet forcing a combined ceremony.",
+    "resolution_criteria": "Resolves TRUE if the formal, public state burial ceremony for Ali Khamenei occurs on March 16 or later. Resolves FALSE if the formal, public burial ceremony (not a private interment) occurs on March 15 or earlier. A private interment without the new SL's public presence does not count as a formal state ceremony for resolution purposes.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-09T09:00:00Z",
+      "day_post_announcement": 2,
+      "days_since_death": 10,
+      "brent_usd": 106.83,
+      "gold_usd": 5121,
+      "targeting_window_end": "2026-03-15",
+      "nowruz_date": "2026-03-20",
+      "note": "No burial announced as of Day 3 post-announcement. The succession was announced before burial on March 8."
+    }
   }
 ]

@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-09T08:11:32.591484+00:00",
+  "run_at": "2026-03-09T10:33:31.847765+00:00",
   "live_data": {
-    "btc_price": 67587,
+    "btc_price": 67776,
     "nvda_price": 177.885,
-    "brent_price": 106.71,
+    "brent_price": 104.72,
     "sp500": 6740.02,
-    "usdcad": 1.3557,
-    "gold": 5111.4,
+    "usdcad": 1.3537,
+    "gold": 5112.6,
     "hl_btc_funding": {
-      "funding_pct_hr": 0.00031,
-      "mark_price": 67476.0
+      "funding_pct_hr": 0.00039,
+      "mark_price": 67739.0
     },
     "pulse_date": "2026-03-09"
   },
   "summary": {
-    "total": 94,
+    "total": 95,
     "resolved": 33,
     "correct": 24,
-    "open": 61
+    "open": 62
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 21,
       "status": "open",
       "current_data": {
-        "btc_price": "$67,587"
+        "btc_price": "$67,776"
       },
-      "assessment": "BTC at $67,587. Needs +18.4% ($12,413) to falsify.",
+      "assessment": "BTC at $67,776. Needs +18.0% ($12,224) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 296,
       "status": "open",
       "current_data": {
-        "btc_price": "$67,587"
+        "btc_price": "$67,776"
       },
-      "assessment": "BTC at $67,587. Needs +48.0% ($32,413) to falsify. Long deadline.",
+      "assessment": "BTC at $67,776. Needs +47.5% ($32,224) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -799,7 +799,7 @@
     {
       "id": "2026-03-07-085",
       "statement": "Mojtaba's announcement or first official communiqu\u00e9 (within 72 hours of the public succession announcement) explicitly affirms or ratifies the decisions and actions of the interim leadership council during the succession gap \u2014 using language that retroactively validates the caretaker period and forecloses the boycotters' constitutional instrument.",
-      "confidence": 0.78,
+      "confidence": 0.55,
       "deadline": "2026-03-31",
       "days_left": 21,
       "status": "open",
@@ -925,6 +925,17 @@
       "confidence": 0.6,
       "deadline": "2026-03-17",
       "days_left": 7,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-09-098",
+      "statement": "Ali Khamenei's formal state burial ceremony \u2014 the mass public event, not a private interment \u2014 occurs on March 16 or later, after the peak targeting window (Days 1-7 post-announcement) has closed.",
+      "confidence": 0.7,
+      "deadline": "2026-03-25",
+      "days_left": 15,
       "status": "open",
       "current_data": {},
       "assessment": "",
