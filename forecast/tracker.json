@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-09T14:04:53.139577+00:00",
+  "run_at": "2026-03-09T15:13:12.372711+00:00",
   "live_data": {
-    "btc_price": 69120,
-    "nvda_price": 177.889,
-    "brent_price": 102.8,
-    "sp500": 6669.05,
-    "usdcad": 1.3572,
-    "gold": 5082.7,
+    "btc_price": 69070,
+    "nvda_price": 179.33,
+    "brent_price": 102.27,
+    "sp500": 6697.3,
+    "usdcad": 1.3585,
+    "gold": 5094.1,
     "hl_btc_funding": {
-      "funding_pct_hr": 0.00101,
-      "mark_price": 69001.0
+      "funding_pct_hr": -0.00178,
+      "mark_price": 69072.0
     },
     "pulse_date": "2026-03-09"
   },
   "summary": {
-    "total": 97,
+    "total": 98,
     "resolved": 33,
     "correct": 24,
-    "open": 64
+    "open": 65
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 21,
       "status": "open",
       "current_data": {
-        "btc_price": "$69,120"
+        "btc_price": "$69,070"
       },
-      "assessment": "BTC at $69,120. Needs +15.7% ($10,880) to falsify.",
+      "assessment": "BTC at $69,070. Needs +15.8% ($10,930) to falsify.",
       "trending": "toward"
     },
     {
@@ -55,9 +55,9 @@
       "days_left": 112,
       "status": "open",
       "current_data": {
-        "nvda_price": "$177.89"
+        "nvda_price": "$179.33"
       },
-      "assessment": "NVDA at $177.89. Needs +23.7% ($42) to confirm.",
+      "assessment": "NVDA at $179.33. Needs +22.7% ($41) to confirm.",
       "trending": "neutral"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 296,
       "status": "open",
       "current_data": {
-        "btc_price": "$69,120"
+        "btc_price": "$69,070"
       },
-      "assessment": "BTC at $69,120. Needs +44.7% ($30,880) to falsify. Long deadline.",
+      "assessment": "BTC at $69,070. Needs +44.8% ($30,930) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -958,6 +958,17 @@
       "confidence": 0.65,
       "deadline": "2026-03-20",
       "days_left": 10,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-09-101",
+      "statement": "If no formal burial ceremony announcement is made by end of March 13 (Day 6 post-announcement), the state burial for Ali Khamenei and Mojtaba's Nowruz address will be combined into a single compound public event on or around March 20.",
+      "confidence": 0.65,
+      "deadline": "2026-03-22",
+      "days_left": 12,
       "status": "open",
       "current_data": {},
       "assessment": "",
