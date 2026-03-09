@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-09T10:33:31.847765+00:00",
+  "run_at": "2026-03-09T14:04:53.139577+00:00",
   "live_data": {
-    "btc_price": 67776,
-    "nvda_price": 177.885,
-    "brent_price": 104.72,
-    "sp500": 6740.02,
-    "usdcad": 1.3537,
-    "gold": 5112.6,
+    "btc_price": 69120,
+    "nvda_price": 177.889,
+    "brent_price": 102.8,
+    "sp500": 6669.05,
+    "usdcad": 1.3572,
+    "gold": 5082.7,
     "hl_btc_funding": {
-      "funding_pct_hr": 0.00039,
-      "mark_price": 67739.0
+      "funding_pct_hr": 0.00101,
+      "mark_price": 69001.0
     },
     "pulse_date": "2026-03-09"
   },
   "summary": {
-    "total": 95,
+    "total": 97,
     "resolved": 33,
     "correct": 24,
-    "open": 62
+    "open": 64
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 21,
       "status": "open",
       "current_data": {
-        "btc_price": "$67,776"
+        "btc_price": "$69,120"
       },
-      "assessment": "BTC at $67,776. Needs +18.0% ($12,224) to falsify.",
+      "assessment": "BTC at $69,120. Needs +15.7% ($10,880) to falsify.",
       "trending": "toward"
     },
     {
@@ -55,9 +55,9 @@
       "days_left": 112,
       "status": "open",
       "current_data": {
-        "nvda_price": "$177.88"
+        "nvda_price": "$177.89"
       },
-      "assessment": "NVDA at $177.88. Needs +23.7% ($42) to confirm.",
+      "assessment": "NVDA at $177.89. Needs +23.7% ($42) to confirm.",
       "trending": "neutral"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 296,
       "status": "open",
       "current_data": {
-        "btc_price": "$67,776"
+        "btc_price": "$69,120"
       },
-      "assessment": "BTC at $67,776. Needs +47.5% ($32,224) to falsify. Long deadline.",
+      "assessment": "BTC at $69,120. Needs +44.7% ($30,880) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -936,6 +936,28 @@
       "confidence": 0.7,
       "deadline": "2026-03-25",
       "days_left": 15,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-09-099",
+      "statement": "If US ground forces do not formally enter Iran by April 28 (War Powers Act deadline), the Polymarket \"Iranian regime fall by June 30\" probability falls below 25% within 7 days of April 28 passing.",
+      "confidence": 0.72,
+      "deadline": "2026-05-05",
+      "days_left": 56,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-09-100",
+      "statement": "The gold/oil ratio remains between 47x and 52x on Nowruz day (March 20, 2026), indicating the selective Hormuz regime holds without major escalation or normalization in the 11-day window.",
+      "confidence": 0.65,
+      "deadline": "2026-03-20",
+      "days_left": 10,
       "status": "open",
       "current_data": {},
       "assessment": "",

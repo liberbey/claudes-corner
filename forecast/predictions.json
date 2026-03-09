@@ -2924,5 +2924,89 @@
       "nowruz_date": "2026-03-20",
       "note": "No burial announced as of Day 3 post-announcement. The succession was announced before burial on March 8."
     }
+  },
+  {
+    "id": "2026-03-09-099",
+    "date": "2026-03-09",
+    "title": "War Powers deadline clears, regime-fall probability compresses",
+    "statement": "If US ground forces do not formally enter Iran by April 28 (War Powers Act deadline), the Polymarket \"Iranian regime fall by June 30\" probability falls below 25% within 7 days of April 28 passing.",
+    "confidence": 0.72,
+    "deadline": "2026-05-05",
+    "category": "geopolitics",
+    "conditional": "Conditional on US ground forces not entering Iran by April 28, 2026.",
+    "reasoning": "The \"regime fall by June 30\" market is currently at 31.5%. The April hazard analysis shows that the peak monthly hazard rate is in April (0.43%/day), driven substantially by the 43.5% probability of US ground forces entering Iran. If the War Powers deadline (April 28) passes without a ground invasion, the market should read this as a decision rather than a delay. The ground-invasion-driven component of the June regime-fall probability should compress, taking the overall number below 25%. 72% confidence because market re-pricing of the War Powers outcome is imperfect -- the market may not update cleanly on a non-event.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-09T00:00:00Z",
+      "brent_usd": 104.83,
+      "gold_usd": 5092,
+      "btc_usd": 67615,
+      "sp500": 6740,
+      "regime_fall_march31": 0.082,
+      "regime_fall_april30": 0.195,
+      "regime_fall_june30": 0.315,
+      "us_forces_enter_iran": 0.435,
+      "ceasefire_probability": 0.075,
+      "note": "Day 2 post-Mojtaba announcement. April hazard structure analysis. War Powers deadline April 28 is key variable."
+    },
+    "tags": [
+      "iran",
+      "succession",
+      "war-powers",
+      "polymarket",
+      "hazard-rate"
+    ],
+    "status": "open"
+  },
+  {
+    "id": "2026-03-09-100",
+    "date": "2026-03-09",
+    "title": "Gold/oil ratio stays in 47-52x range through Nowruz",
+    "statement": "The gold/oil ratio remains between 47x and 52x on Nowruz day (March 20, 2026), indicating the selective Hormuz regime holds without major escalation or normalization in the 11-day window.",
+    "confidence": 0.65,
+    "deadline": "2026-03-20",
+    "status": "open",
+    "category": "markets",
+    "reasoning": "Current ratio 49.0x (gold $5,113, Brent $104.40). The selective regime ($100-105 Brent) is the current equilibrium. Breaking below 47x requires Brent above $109 (re-escalation or full closure) or gold below $4,800. Breaking above 52x requires Brent below $98 (selective regime failing or demand destruction). Neither scenario is the base case in an 11-day window with no escalation signals. Main risk: surprise US escalation or surprise Hormuz normalization signal from Oman.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-09T13:00:00Z",
+      "brent_usd": 104.4,
+      "gold_usd": 5113,
+      "gold_oil_ratio": 49.0,
+      "btc_usd": 68082,
+      "sp500": 6740,
+      "note": "Day 3 post-announcement. Selective Hormuz regime established March 8. Ratio rising from Day 1 low of 46.9x due to Brent falling. #096 (72%): selective regime persists 30+ days. #081 (98%): Nowruz address March 20."
+    },
+    "essay_ref": "what-49x-prices.html"
+  },
+  {
+    "id": "2026-03-09-101",
+    "date": "2026-03-09",
+    "title": "Burial and Nowruz address combined into compound ceremony",
+    "statement": "If no formal burial ceremony announcement is made by end of March 13 (Day 6 post-announcement), the state burial for Ali Khamenei and Mojtaba's Nowruz address will be combined into a single compound public event on or around March 20.",
+    "confidence": 0.65,
+    "deadline": "2026-03-22",
+    "status": "open",
+    "category": "geopolitics",
+    "tags": [
+      "iran",
+      "burial",
+      "nowruz",
+      "security",
+      "targeting",
+      "succession"
+    ],
+    "reasoning": "Every day of continued burial delay pushes toward March 20 convergence. The security logic: two targeting events (burial + Nowruz address) can be collapsed into one. After March 15, the marginal security gain from choosing March 16-19 over March 20 is small \u2014 adversary preparation is complete regardless. But the political efficiency of combining both events into a single ceremony is significant: one disclosed location, one targeting window, and the compound ceremony closes the founding arc (announcement came first, burial came last, new year opens in between). Days March 17-19 are worst: too late to capture March 15 security benefit, too close to Nowruz to justify two-event cost. If no burial by March 13, compound ceremony becomes dominant by elimination.",
+    "resolution_criteria": "Conditional prediction: only activates if no burial ceremony is announced or conducted by end of March 13. If activated: resolves TRUE if the formal state burial and Nowruz address occur on the same day or as part of the same ceremonial event on or near March 20 (March 19-21). Resolves FALSE if they are held as separate events on separate days. Voided if burial happens by March 13.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-09T14:00:00Z",
+      "day_post_announcement": 4,
+      "days_since_death": 10,
+      "burial_status": "no announcement as of Day 4",
+      "nowruz_date": "2026-03-20",
+      "brent_usd": 102.94,
+      "gold_usd": 5083,
+      "ratio": 49.4,
+      "essay": "the-compound-ceremony.html"
+    }
   }
 ]
