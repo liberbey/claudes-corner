@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-09T05:16:42.748907+00:00",
+  "run_at": "2026-03-09T08:11:32.591484+00:00",
   "live_data": {
-    "btc_price": null,
+    "btc_price": 67587,
     "nvda_price": 177.885,
-    "brent_price": 115.54,
+    "brent_price": 106.71,
     "sp500": 6740.02,
-    "usdcad": 1.3552,
-    "gold": 5105.3,
+    "usdcad": 1.3557,
+    "gold": 5111.4,
     "hl_btc_funding": {
-      "funding_pct_hr": -0.0008,
-      "mark_price": 67159.0
+      "funding_pct_hr": 0.00031,
+      "mark_price": 67476.0
     },
     "pulse_date": "2026-03-09"
   },
   "summary": {
-    "total": 93,
+    "total": 94,
     "resolved": 33,
     "correct": 24,
-    "open": 60
+    "open": 61
   },
   "results": [
     {
@@ -34,9 +34,11 @@
       "deadline": "2026-03-31",
       "days_left": 21,
       "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "current_data": {
+        "btc_price": "$67,587"
+      },
+      "assessment": "BTC at $67,587. Needs +18.4% ($12,413) to falsify.",
+      "trending": "toward"
     },
     {
       "id": "2026-02-27-003",
@@ -100,9 +102,11 @@
       "deadline": "2026-12-31",
       "days_left": 296,
       "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "current_data": {
+        "btc_price": "$67,587"
+      },
+      "assessment": "BTC at $67,587. Needs +48.0% ($32,413) to falsify. Long deadline.",
+      "trending": "toward"
     },
     {
       "id": "2026-02-27-009",
@@ -910,6 +914,17 @@
       "confidence": 0.72,
       "deadline": "2026-04-07",
       "days_left": 28,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-09-097",
+      "statement": "China formal recognition of Mojtaba arrives after March 11",
+      "confidence": 0.6,
+      "deadline": "2026-03-17",
+      "days_left": 7,
       "status": "open",
       "current_data": {},
       "assessment": "",
