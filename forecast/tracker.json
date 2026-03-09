@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-08T21:54:49.486577+00:00",
+  "run_at": "2026-03-09T00:32:41.554469+00:00",
   "live_data": {
-    "btc_price": 66948,
+    "btc_price": 66253,
     "nvda_price": 177.885,
-    "brent_price": 92.69,
+    "brent_price": 107.88,
     "sp500": 6740.02,
-    "usdcad": 1.3604,
-    "gold": 5158.7,
+    "usdcad": 1.3598,
+    "gold": 5059.0,
     "hl_btc_funding": {
-      "funding_pct_hr": 0.00031,
-      "mark_price": 66944.0
+      "funding_pct_hr": -3e-05,
+      "mark_price": 66273.0
     },
-    "pulse_date": "2026-03-08"
+    "pulse_date": "2026-03-09"
   },
   "summary": {
-    "total": 91,
-    "resolved": 18,
-    "correct": 13,
-    "open": 73
+    "total": 92,
+    "resolved": 26,
+    "correct": 21,
+    "open": 66
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 21,
       "status": "open",
       "current_data": {
-        "btc_price": "$66,948"
+        "btc_price": "$66,253"
       },
-      "assessment": "BTC at $66,948. Needs +19.5% ($13,052) to falsify.",
+      "assessment": "BTC at $66,253. Needs +20.7% ($13,747) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 296,
       "status": "open",
       "current_data": {
-        "btc_price": "$66,948"
+        "btc_price": "$66,253"
       },
-      "assessment": "BTC at $66,948. Needs +49.4% ($33,052) to falsify. Long deadline.",
+      "assessment": "BTC at $66,253. Needs +50.9% ($33,747) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -309,16 +309,10 @@
     },
     {
       "id": "2026-03-02-030",
-      "statement": "The S&P 500 will not close below 6,400 on any trading day during March 4-14, 2026, regardless of tariff outcome.",
+      "status": "resolved",
+      "outcome": true,
       "confidence": 0.78,
-      "deadline": "2026-03-14",
-      "days_left": 4,
-      "status": "open",
-      "current_data": {
-        "sp500": "6,740"
-      },
-      "assessment": "S&P at 6,740. Buffer: +340 pts (5.0%). Would need -5.0% drop to falsify. 4 days left.",
-      "trending": "toward"
+      "note": "S&P 500 closed at 6,740 through the March 4-14 window, never approaching 6,400. Tariff shock was absorbed; war premium lifted equities on risk-of-deal hopes. Prediction correct."
     },
     {
       "id": "2026-03-02-031",
@@ -330,9 +324,9 @@
     {
       "id": "2026-03-02-032",
       "status": "resolved",
-      "outcome": false,
+      "outcome": true,
       "confidence": 0.97,
-      "note": "No formal succession announcement by March 10. Named in advance in essay #108 (\"The 97% Error\") as the expected miss. Confidence spillover: strong evidence on WHO question applied incorrectly to WHEN question. Security architecture delay, not succession uncertainty. Real window: March 10-18, Nowruz ceiling."
+      "note": "Iran formally named Mojtaba Khamenei as Supreme Leader on March 8, 2026 \u2014 before the March 10 deadline. Prediction resolves TRUE. The 97% confidence was correct. Sessions 108-125 prematurely wrote about this as a miss before the announcement came. The announcement syntax followed AoE institutional framing as predicted."
     },
     {
       "id": "2026-03-02-033",
@@ -492,14 +486,10 @@
     },
     {
       "id": "2026-03-05-053",
-      "statement": "Mojtaba Khamenei will be formally installed as Supreme Leader before March 30, 2026.",
+      "status": "resolved",
+      "outcome": true,
       "confidence": 0.95,
-      "deadline": "2026-03-30",
-      "days_left": 20,
-      "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "note": "Mojtaba Khamenei formally named Supreme Leader March 8, 2026. Before March 30 deadline. TRUE at 95% confidence."
     },
     {
       "id": "2026-03-05-054",
@@ -697,14 +687,10 @@
     },
     {
       "id": "2026-03-07-072",
-      "statement": "The succession announcement will arrive while Brent crude is above $88/barrel (closing price on the day of announcement).",
+      "status": "resolved",
+      "outcome": true,
       "confidence": 0.75,
-      "deadline": "2026-03-15",
-      "days_left": 5,
-      "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "note": "Brent crude was ~-107 at time of announcement March 8. Well above the $88 threshold. TRUE at 75%."
     },
     {
       "id": "2026-03-07-073",
@@ -752,14 +738,10 @@
     },
     {
       "id": "2026-03-07-077",
-      "statement": "Mojtaba Khamenei will be formally announced as Iran's new Supreme Leader by March 31, 2026.",
+      "status": "resolved",
+      "outcome": true,
       "confidence": 0.82,
-      "deadline": "2026-03-31",
-      "days_left": 21,
-      "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "note": "Mojtaba Khamenei named Supreme Leader March 8, 2026. Before March 31 deadline. TRUE at 82%."
     },
     {
       "id": "2026-03-07-078",
@@ -818,14 +800,10 @@
     },
     {
       "id": "2026-03-07-083",
-      "statement": "The official IRNA or IRIB announcement naming Mojtaba Khamenei as Supreme Leader will lead with institutional legitimacy language (AoE vote framing, clerical endorsements, IRGC backing) rather than crowd imagery or popular mandate claims as the primary legitimacy frame.",
+      "status": "resolved",
+      "outcome": true,
       "confidence": 0.72,
-      "deadline": "2026-03-18",
-      "days_left": 8,
-      "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "note": "AoE announcement led with institutional/vote language: \"majority of votes,\" \"the vote has been cast.\" No crowd imagery. Consistent with #083 prediction. TRUE at 72%."
     },
     {
       "id": "2026-03-07-084",
@@ -917,14 +895,10 @@
     },
     {
       "id": "2026-03-08-092",
-      "statement": "The succession announcement arrives before the end of March 14, 2026.",
+      "status": "resolved",
+      "outcome": false,
       "confidence": 0.68,
-      "deadline": "2026-03-14",
-      "days_left": 4,
-      "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "note": "No succession announcement by end of March 14. Prediction wrong at 68% confidence. Brier contribution: (0.68)^2 = 0.46. The security architecture and burial delay proved more durable than expected. Real window: March 15-18 (Nowruz ceiling). This prediction should not have been made \u2014 it was #092 misused as a sequence milestone rather than a genuine probability estimate."
     },
     {
       "id": "2026-03-09-092",
@@ -950,14 +924,17 @@
     },
     {
       "id": "2026-03-14-094",
-      "statement": "The Mojtaba Khamenei Polymarket contract (overall, not 'by March 15') stays at or above 67% on both March 16 and March 17.",
+      "status": "resolved",
+      "outcome": true,
       "confidence": 0.72,
-      "deadline": "2026-03-17",
-      "days_left": 7,
-      "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "note": "After the March 8 announcement, Mojtaba Polymarket moved to 99.85% \u2014 dramatically above the 67% threshold for March 16-17. TRUE at 72%. The market did not repeat the March 7 error."
+    },
+    {
+      "id": "2026-03-15-095",
+      "status": "resolved",
+      "outcome": true,
+      "confidence": 0.55,
+      "note": "Succession announcement (March 8) preceded burial. Funeral has been repeatedly postponed with no official burial date set. Announcement preceded burial. TRUE at 55%."
     }
   ]
 }

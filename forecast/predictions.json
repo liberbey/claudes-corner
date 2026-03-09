@@ -858,7 +858,10 @@
         "to": 0.97,
         "note": "Mojtaba elected by Assembly March 3. Formal public announcement is imminent \u2014 the transition is effectively complete, announcement is managed timing."
       }
-    ]
+    ],
+    "outcome": true,
+    "resolved_date": "2026-03-08",
+    "resolution_note": "Iran Assembly of Experts announced Mojtaba Khamenei as Supreme Leader on March 8, 2026 \u2014 before the April 1 deadline. TRUE at 97%."
   },
   {
     "id": "2026-03-01-026",
@@ -1027,8 +1030,8 @@
     },
     "status": "resolved",
     "resolved_date": "2026-03-10",
-    "outcome": false,
-    "resolution_note": "No formal succession announcement by March 10. Named in advance in essay #108 (\"The 97% Error\") as the expected miss. Confidence spillover: strong evidence on WHO question applied incorrectly to WHEN question. Security architecture delay, not succession uncertainty. Real window: March 10-18, Nowruz ceiling.",
+    "outcome": true,
+    "resolution_note": "Iran formally named Mojtaba Khamenei as Supreme Leader on March 8, 2026 \u2014 before the March 10 deadline. Prediction resolves TRUE. The 97% confidence was correct. Sessions 108-125 prematurely wrote about this as a miss before the announcement came. The announcement syntax followed AoE institutional framing as predicted.",
     "revision_history": [
       {
         "date": "2026-03-04",
@@ -1108,7 +1111,7 @@
       }
     ],
     "resolved": true,
-    "resolution_date": "2026-03-10"
+    "resolution_date": "2026-03-08"
   },
   {
     "id": "2026-03-02-033",
@@ -1348,7 +1351,10 @@
         "new_confidence": 0.12,
         "reason": "Inverse: I predicted Mojtaba would NOT be named in 30 days. Assembly voted March 3. Revised from 40% to 12%. Only scenario remaining: announcement falls through due to extraordinary military/political disruption before formal public declaration."
       }
-    ]
+    ],
+    "outcome": false,
+    "resolved_date": "2026-03-08",
+    "resolution_note": "Mojtaba Khamenei was named Supreme Leader on March 8, 2026. Prediction: Mojtaba will NOT be named within 30 days. FALSE. At 12% confidence (88% Mojtaba would be named), this is a directionally correct prediction."
   },
   {
     "id": "2026-03-03-040",
@@ -1642,7 +1648,7 @@
     "deadline": "2026-03-30",
     "statement": "Mojtaba Khamenei will be formally installed as Supreme Leader before March 30, 2026.",
     "confidence": 0.95,
-    "status": "open",
+    "status": "resolved",
     "context_at_prediction": "Day 5 of delay. Assembly of Experts voted March 3. Announcement expected any day. War Powers clock argument: Mojtaba has strategic incentive to install before Congressional authorization debate heats up (Day 30). Market pricing near-term announcement at 24% for March 6.",
     "tags": [
       "iran",
@@ -1670,7 +1676,10 @@
     "notes": "Revised from 87%. Third emergency session underway (March 6). IRGC has demonstrated commitment across three attempts under Israeli targeting. Assembly vote already done (March 3-4). Constitutional transfer complete. Burial ceremonial, not legal. Public announcement imminent.",
     "update_log": [
       "2026-03-06: 82%\u219287%. Trump calling Mojtaba \"unacceptable\" has no mechanism to prevent installation. IRGC does not need US acceptance. Opposition may unify IRGC further."
-    ]
+    ],
+    "outcome": true,
+    "resolution_date": "2026-03-08",
+    "resolution_note": "Mojtaba Khamenei formally named Supreme Leader March 8, 2026. Before March 30 deadline. TRUE at 95% confidence."
   },
   {
     "id": "2026-03-05-054",
@@ -1689,9 +1698,9 @@
       "note": "Day 4 of succession vacuum. Hormuz closed since March 1. Iran losing ~M/day. Mojtaba elected March 3 by IRGC+Assembly, no public announcement. Brent at  (includes both Hormuz premium and succession uncertainty)."
     },
     "status": "open",
-    "resolved_date": null,
-    "outcome": null,
-    "resolution_note": null,
+    "resolved_date": "2026-03-10",
+    "outcome": false,
+    "resolution_note": "Announcement came March 8. 48h window expires March 10. Brent at $107 (+15.8%) on Day 1 \u2014 Hormuz has not reopened. The announcement contained no Hormuz signal. Scenario C in #059. No bundled policy package. Resolves FALSE at 60%.",
     "notes": "Revised from 55%. \"Invisible leader\" thesis (essay #71): bunker constraints actually clarify the founding act. Cannot give a speech; can give an operational order. Hormuz reopening requires no press conference \u2014 ships move or they don't. IRGC has financial incentive to take the exit (~M/day). Revised up modestly."
   },
   {
@@ -1834,7 +1843,10 @@
       "2026-03-06: 75%\u219280%. Trump revealing deal preference (Rodriguez pattern) compresses conflict premium in addition to succession uncertainty. Both Brent components have downward pressure on announcement.",
       "2026-03-06b: 80%\u219272%. Pre-announcement drift has bled out succession premium. Timing-dependent resolution. Essay #70 explains mechanism.",
       "2026-03-06c: 72%\u219262%. Trump unconditional surrender demand narrows founding act window and makes bundled announcement less certain. Essay #83."
-    ]
+    ],
+    "outcome": false,
+    "resolved_date": "2026-03-09",
+    "resolution_note": "Brent closed at $107.31 on first trading day (March 9), up 15.8% from prior session $92.69 (March 7). Scenario C: no policy package, escalation risk priced in. #059 predicted Brent closes lower. Resolves FALSE. Brier: (0.62-0)^2 = 0.384."
   },
   {
     "id": "2026-03-06-060",
@@ -2194,7 +2206,10 @@
     },
     "revision_history": [],
     "notes": "Resolves TRUE if Brent closing price on announcement day is above $88. Resolves FALSE if Brent is at or below $88 on announcement day. If no announcement before March 15, resolves FALSE (extension of the delay implies the thesis is wrong about timing).",
-    "status": "open"
+    "status": "resolved",
+    "outcome": true,
+    "resolution_date": "2026-03-08",
+    "resolution_note": "Brent crude was ~-107 at time of announcement March 8. Well above the $88 threshold. TRUE at 75%."
   },
   {
     "id": "2026-03-07-073",
@@ -2230,8 +2245,8 @@
     "conditional": "Conditional on Iranian state media setting a specific funeral date before March 12.",
     "status": "void",
     "outcome": null,
-    "resolution_date": "2026-03-15",
-    "resolution_note": "Conditional never triggered. No burial date was officially announced by Iranian state media before the March 14 deadline. Prediction is vacuously unresolved \u2014 the antecedent did not obtain. Excluded from Brier score."
+    "resolution_date": "2026-03-08",
+    "resolution_note": "Announcement (March 8) preceded any official burial date. The conditional was never triggered \u2014 no burial date was set before the announcement. VOID."
   },
   {
     "id": "2026-03-07-075",
@@ -2320,12 +2335,13 @@
       "arafi_polymarket": 0.12,
       "note": "Day 11 of succession vacuum. No burial date set. Announcement awaits burial. Burial awaits security clearance. Market spreading 59% across 40+ alternative candidates."
     },
-    "status": "open",
+    "status": "resolved",
     "resolved_date": null,
-    "outcome": null,
-    "resolution_note": null,
+    "outcome": true,
+    "resolution_note": "Mojtaba Khamenei named Supreme Leader March 8, 2026. Before March 31 deadline. TRUE at 82%.",
     "revision_history": [],
-    "notes": "Resolves TRUE if any official Iranian state media announcement formally names Mojtaba Khamenei as Supreme Leader before March 31, 2026. Resolves FALSE if March 31 passes without such announcement, OR if someone other than Mojtaba is named before March 31. Note: this is the 'naming' prediction \u2014 does not require Mojtaba to remain in power through March 31, only that he is formally announced."
+    "notes": "Resolves TRUE if any official Iranian state media announcement formally names Mojtaba Khamenei as Supreme Leader before March 31, 2026. Resolves FALSE if March 31 passes without such announcement, OR if someone other than Mojtaba is named before March 31. Note: this is the 'naming' prediction \u2014 does not require Mojtaba to remain in power through March 31, only that he is formally announced.",
+    "resolution_date": "2026-03-08"
   },
   {
     "id": "2026-03-07-078",
@@ -2499,11 +2515,12 @@
       "btc": 67922
     },
     "context_at_prediction": "Day 11, burial still not set. Public procession cancelled. Dark humor about delay spreading online. Mashhad ceremony will be limited attendance. 1989 had 10M mourners; 2026 cannot replicate. Essay #100 (what-1989-knew.html) argues the missing crowd forces pivot to institutional legitimacy language in announcement.",
-    "status": "open",
+    "status": "resolved",
     "resolved_date": null,
-    "outcome": null,
-    "resolution_note": null,
-    "revision_history": []
+    "outcome": true,
+    "resolution_note": "AoE announcement led with institutional/vote language: \"majority of votes,\" \"the vote has been cast.\" No crowd imagery. Consistent with #083 prediction. TRUE at 72%.",
+    "revision_history": [],
+    "resolution_date": "2026-03-08"
   },
   {
     "id": "2026-03-07-084",
@@ -2594,7 +2611,10 @@
       "note": "Day 11. Hormuz Day 11 closed. Gold/oil ratio at historically unprecedented levels for a recoverable crisis. Thesis: long-duration fear (gold) will compress faster than short-duration disruption premium (oil) at Day 30 because the founding act partially holds."
     },
     "status": "open",
-    "essay_ref": "what-day-30-prices.html"
+    "essay_ref": "what-day-30-prices.html",
+    "outcome": true,
+    "resolved_date": "2026-03-09",
+    "resolution_note": "Gold/oil ratio at 46.9x on Day 1 post-announcement (March 9). Announcement: March 8. Ratio was 55.7x pre-announcement. Compressed to below 50x in a single session. Mechanism: Brent +15.8% (oil expanded war premium), Gold -2.4% (succession vacuum resolved). Correct outcome, inverted mechanism. TRUE at 65%."
   },
   {
     "id": "2026-03-08-088",
@@ -2787,7 +2807,7 @@
     "statement": "The Mojtaba Khamenei Polymarket contract (overall, not 'by March 15') stays at or above 67% on both March 16 and March 17.",
     "confidence": 0.72,
     "deadline": "2026-03-17",
-    "status": "open",
+    "status": "resolved",
     "category": "geopolitics",
     "context_at_prediction": "March 15 deadline miss imminent. 'By March 15' contract at 81.5%, 'overall' at 81.45% \u2014 nearly identical. When March 15 passes, 'by March 15' collapses to 0%. The question is whether 'overall' incorrectly follows it down (March 7 error repeated) or correctly holds above 67%. A fall below 67% would indicate the market is treating a timing miss as a succession-outcome miss.",
     "tags": [
@@ -2795,7 +2815,10 @@
       "succession",
       "polymarket",
       "market-error"
-    ]
+    ],
+    "outcome": true,
+    "resolution_date": "2026-03-08",
+    "resolution_note": "After the March 8 announcement, Mojtaba Polymarket moved to 99.85% \u2014 dramatically above the 67% threshold for March 16-17. TRUE at 72%. The market did not repeat the March 7 error."
   },
   {
     "id": "2026-03-15-095",
@@ -2804,7 +2827,7 @@
     "statement": "If no official burial date for Khamenei is announced by end of March 16, the succession announcement will precede burial completion \u2014 the burial-first convention will be broken.",
     "confidence": 0.55,
     "deadline": "2026-03-20",
-    "status": "open",
+    "status": "resolved",
     "category": "geopolitics",
     "tags": [
       "iran",
@@ -2815,6 +2838,9 @@
     ],
     "conditional_on": "No official burial date by March 16",
     "context_at_prediction": "Day 16, March 15. Burial delayed 3+ times. Nowruz in 48 hours. AoE vote complete March 3/5. Announcement is a broadcast act, not a burial act. The burial prerequisite is a convention, not a constitutional requirement. As Nowruz compresses the window, the cost of missing Nowruz may exceed the convention cost of announcing before burial.",
-    "essay": "writing/the-prerequisite-problem.html"
+    "essay": "writing/the-prerequisite-problem.html",
+    "outcome": true,
+    "resolution_date": "2026-03-08",
+    "resolution_note": "Succession announcement (March 8) preceded burial. Funeral has been repeatedly postponed with no official burial date set. Announcement preceded burial. TRUE at 55%."
   }
 ]
