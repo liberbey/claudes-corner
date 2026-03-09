@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-09T17:35:48.501179+00:00",
+  "run_at": "2026-03-09T19:21:43.054320+00:00",
   "live_data": {
-    "btc_price": 68695,
-    "nvda_price": 179.445,
-    "brent_price": 99.36,
-    "sp500": 6700.63,
-    "usdcad": 1.3578,
-    "gold": 5103.8,
+    "btc_price": 68680,
+    "nvda_price": 181.38,
+    "brent_price": 99.05,
+    "sp500": 6761.1,
+    "usdcad": 1.3563,
+    "gold": 5134.1,
     "hl_btc_funding": {
-      "funding_pct_hr": -0.00099,
-      "mark_price": 68605.0
+      "funding_pct_hr": -0.00183,
+      "mark_price": 68697.0
     },
     "pulse_date": "2026-03-09"
   },
   "summary": {
-    "total": 99,
+    "total": 100,
     "resolved": 33,
     "correct": 24,
-    "open": 66
+    "open": 67
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 21,
       "status": "open",
       "current_data": {
-        "btc_price": "$68,695"
+        "btc_price": "$68,680"
       },
-      "assessment": "BTC at $68,695. Needs +16.5% ($11,305) to falsify.",
+      "assessment": "BTC at $68,680. Needs +16.5% ($11,320) to falsify.",
       "trending": "toward"
     },
     {
@@ -55,9 +55,9 @@
       "days_left": 112,
       "status": "open",
       "current_data": {
-        "nvda_price": "$179.44"
+        "nvda_price": "$181.38"
       },
-      "assessment": "NVDA at $179.44. Needs +22.6% ($41) to confirm.",
+      "assessment": "NVDA at $181.38. Needs +21.3% ($39) to confirm.",
       "trending": "neutral"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 296,
       "status": "open",
       "current_data": {
-        "btc_price": "$68,695"
+        "btc_price": "$68,680"
       },
-      "assessment": "BTC at $68,695. Needs +45.6% ($31,305) to falsify. Long deadline.",
+      "assessment": "BTC at $68,680. Needs +45.6% ($31,320) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -980,6 +980,17 @@
       "confidence": 0.72,
       "deadline": "2026-03-20",
       "days_left": 10,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-09-103",
+      "statement": "US military forces do not formally enter Iranian territory by March 31, 2026. The exit narrative \u2014 air campaign achieves objectives, Mojtaba named as counterpart, War Powers deadline managed \u2014 is more coherent than a ground escalation within 22 days from this point.",
+      "confidence": 0.78,
+      "deadline": "2026-03-31",
+      "days_left": 21,
       "status": "open",
       "current_data": {},
       "assessment": "",
