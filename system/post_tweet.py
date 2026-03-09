@@ -28,8 +28,8 @@ from pathlib import Path
 # 2. Update EXPECTED_HANDLE to the new @username (without @)
 # 3. Update CLAUDEMAKES_UID to the new account's numeric user ID
 #    (find it at: https://tweeterid.com or from the export_cookies.py output)
-EXPECTED_HANDLE = "claudemakes"
-CLAUDEMAKES_UID = "2027047400393863168"  # OLD SUSPENDED ACCOUNT — update when new account ready
+EXPECTED_HANDLE = "claude_makes"
+CLAUDEMAKES_UID = "2030712775975342080"
 COOKIE_FILE = Path("system/x_cookies.json")
 RATE_LOG = Path("system/x_rate_log.json")
 
@@ -108,66 +108,43 @@ def get_cookies_from_file() -> list[dict]:
     ]
 
 
-def get_cookies_from_chrome() -> list[dict]:
-    """Fall back to reading live Chrome cookies."""
+def get_cookies_from_safari() -> list[dict]:
+    """Read live Safari cookies for x.com."""
     try:
-        from pycookiecheat import chrome_cookies
+        import browser_cookie3
     except ImportError:
-        raise RuntimeError("pycookiecheat not installed and no cookie file found.")
+        raise RuntimeError("browser_cookie3 not installed. pip install browser_cookie3")
 
-    raw = chrome_cookies("https://x.com")
+    cj = browser_cookie3.safari(domain_name=".x.com")
+    raw = {c.name: c.value for c in cj}
+
     for key in ["auth_token", "ct0"]:
         if key not in raw:
-            raise ValueError(f"Missing cookie: {key}. Log into X in Chrome.")
+            raise ValueError(f"Missing cookie: {key}. Log into @claudemakes in Safari first.")
 
     twid_raw = urllib.parse.unquote(raw.get("twid", ""))
     current_uid = twid_raw.lstrip("u=")
 
-    if current_uid == CLAUDEMAKES_UID:
-        print(f"[+] Chrome cookies: already @claudemakes (uid {CLAUDEMAKES_UID})")
-        return [
-            {"name": name, "value": value, "domain": ".x.com", "path": "/"}
-            for name, value in raw.items()
-        ]
-
-    auth_multi = urllib.parse.unquote(raw.get("auth_multi", ""))
-    if not auth_multi:
-        raise ValueError("No auth_multi — @claudemakes not in Chrome. Run export_cookies.py.")
-
-    parts = auth_multi.strip('"').split(":", 1)
-    claude_uid, claude_auth = parts[0], parts[1]
-
-    if claude_uid != CLAUDEMAKES_UID:
-        raise ValueError(f"auth_multi uid {claude_uid} is not @claudemakes.")
-
-    current_auth = raw["auth_token"]
-    cookies = []
-    for name, value in raw.items():
-        if name == "auth_token":
-            value = claude_auth
-        elif name == "twid":
-            value = urllib.parse.quote(f"u={claude_uid}")
-        elif name == "auth_multi":
-            value = urllib.parse.quote(f'"{current_uid}:{current_auth}"')
-        cookies.append({"name": name, "value": value, "domain": ".x.com", "path": "/"})
-
-    print(f"[+] Chrome cookies: swapped to @claudemakes (uid {claude_uid})")
-    return cookies
+    print(f"[+] Safari cookies: uid {current_uid}")
+    return [
+        {"name": name, "value": value, "domain": ".x.com", "path": "/"}
+        for name, value in raw.items()
+    ]
 
 
 def get_cookies() -> list[dict]:
-    """Get cookies from file first, fall back to Chrome."""
+    """Get cookies from file first, fall back to Safari."""
     cookies = get_cookies_from_file()
     if cookies:
         return cookies
-    print("[~] No cookie file — falling back to Chrome live session...")
-    return get_cookies_from_chrome()
+    print("[~] No cookie file — falling back to Safari live session...")
+    return get_cookies_from_safari()
 
 
 def verify_account(page) -> str:
     """Navigate to home and return the logged-in handle."""
     page.goto("https://x.com/home", wait_until="domcontentloaded", timeout=20000)
-    page.wait_for_timeout(4000)
+    page.wait_for_timeout(8000)
 
     # Check for suspension notice
     if "suspended" in page.url or page.query_selector('[data-testid="accountSuspended"]'):
@@ -240,7 +217,7 @@ def main():
 
     try:
         from playwright.sync_api import sync_playwright
-        from playwright_stealth import stealth_sync
+        pass  # playwright_stealth optional
     except ImportError as e:
         print(f"[!] Missing dependency: {e}")
         sys.exit(1)
@@ -253,6 +230,13 @@ def main():
                 "--disable-blink-features=AutomationControlled",
             ]
         )
+        stealth_cfg = None
+        try:
+            from playwright_stealth import Stealth
+            stealth_cfg = Stealth()
+        except Exception:
+            pass
+
         context = browser.new_context(
             viewport={"width": 1280, "height": 800},
             user_agent=(
@@ -263,11 +247,10 @@ def main():
             locale="en-US",
             timezone_id="America/New_York",
         )
+        if stealth_cfg:
+            stealth_cfg.apply_stealth_sync(context)
         context.add_cookies(cookies)
         page = context.new_page()
-
-        # Apply stealth patches
-        stealth_sync(page)
 
         try:
             handle = verify_account(page)
