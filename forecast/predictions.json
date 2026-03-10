@@ -2962,7 +2962,7 @@
     "date": "2026-03-09",
     "title": "Gold/oil ratio stays in 47-52x range through Nowruz",
     "statement": "The gold/oil ratio remains between 47x and 52x on Nowruz day (March 20, 2026), indicating the selective Hormuz regime holds without major escalation or normalization in the 11-day window.",
-    "confidence": 0.65,
+    "confidence": 0.35,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "markets",
@@ -2976,7 +2976,15 @@
       "sp500": 6740,
       "note": "Day 3 post-announcement. Selective Hormuz regime established March 8. Ratio rising from Day 1 low of 46.9x due to Brent falling. #096 (72%): selective regime persists 30+ days. #081 (98%): Nowruz address March 20."
     },
-    "essay_ref": "what-49x-prices.html"
+    "essay_ref": "what-49x-prices.html",
+    "revision_history": [
+      {
+        "date": "2026-03-09",
+        "old_confidence": 0.65,
+        "new_confidence": 0.35,
+        "reason": "Ratio already at 55.6x (gold $5,148, Brent $92.64), outside the 47-52x range. To resolve TRUE, ratio must fall back to 52x by March 20, requiring Brent recovery above $99. Demand destruction factor suggests continued Brent weakness. Revising down sharply."
+      }
+    ]
   },
   {
     "id": "2026-03-09-101",
@@ -3017,9 +3025,9 @@
     "text": "Brent crude does not reach $95 or below between now and Nowruz (March 20, 2026). The structural conditions for normalization \u2014 Mojtaba's first public appearance, burial ceremony, selective-to-full Hormuz transition \u2014 are not present in the 11-day window. $95 implies ~62% near-term normalization probability.",
     "context_at_prediction": "Day 4 post-announcement. Brent at $102.27. Selective Hormuz (China carve-out) in place. No burial announced. No Mojtaba statement. Linear model: $102 = 25% normalization implied. Structural case for <10% near-term normalization. No burial = no compound ceremony until March 20.",
     "essay": "what-102-prices",
-    "outcome": null,
-    "resolution_note": null,
-    "status": "open",
+    "outcome": false,
+    "resolution_note": "WRONG. Brent reached $92.64 on Day 6 (March 9), well below the $95 floor. The macro demand destruction factor (tariff/trade-war slowdown) was underweighted relative to the structural Hormuz thesis. Gold held flat while Brent fell 14% from the Day 1 announcement price \u2014 the split confirmed demand destruction, not normalization, as the dominant driver. Called the wrong mechanism.",
+    "status": "resolved",
     "statement": "Brent crude does not reach $95 or below between now and Nowruz (March 20, 2026). The structural conditions for normalization \u2014 Mojtaba's first public appearance, burial ceremony, selective-to-full Hormuz transition \u2014 are not present in the 11-day window. $95 implies ~62% near-term normalization probability.",
     "revision_history": [
       {
@@ -3048,5 +3056,163 @@
     ],
     "context_at_prediction": "Day 5 post-announcement. Polymarket: US forces by March 31 at 39.5% \u2014 market pricing coin-flip odds on escalation. Mojtaba at 34.3% year-end survival. No visible mobilization signals in open sources.",
     "reasoning": "No visible mobilization signals. War Powers deadline creates exit incentive rather than escalation incentive for near-term. Trump victory narrative better served by named counterpart + declaration than open-ended ground campaign. 22 days insufficient for major ground force entry without visible staging. Tail risks: large Iranian attack as trigger (5-8%), pre-positioned assets I am not seeing (5-7%), total victory framing demanding ground component (8-10%)."
+  },
+  {
+    "id": "2026-03-09-104",
+    "date": "2026-03-09",
+    "title": "Gold/oil ratio stays above 52x through Nowruz",
+    "statement": "The gold/oil ratio remains above 52x on Nowruz day (March 20, 2026). The demand destruction factor keeps Brent suppressed while gold holds as a geopolitical instrument. No normalization signal arrives in the 11-day window sufficient to push Brent back above $99.",
+    "confidence": 0.8,
+    "deadline": "2026-03-20",
+    "status": "open",
+    "category": "markets",
+    "essay_ref": "what-92-diagnoses.html",
+    "context_at_prediction": {
+      "timestamp": "2026-03-09T20:00:00Z",
+      "brent_usd": 92.64,
+      "gold_usd": 5148,
+      "gold_oil_ratio": 55.6,
+      "note": "Day 6 post-announcement. #102 resolved WRONG (Brent below $95). Demand destruction thesis: gold flat (+2.2%), Brent -13.7% since announcement. Hormuz still selectively closed. No burial, no Mojtaba statement. Previous #100 (47-52x range) revised down to 35%."
+    }
+  },
+  {
+    "id": "2026-03-09-105",
+    "date": "2026-03-09",
+    "title": "Brent stays above pre-war baseline ($87.50) on Nowruz",
+    "statement": "Brent crude closes above $87.50 on Nowruz day (March 20, 2026), confirming that residual Hormuz closure premium persists despite demand destruction. The pre-war baseline is the structural floor: demand contraction and supply normalization cannot compound simultaneously while Hormuz remains selectively closed.",
+    "confidence": 0.45,
+    "deadline": "2026-03-20",
+    "status": "open",
+    "category": "markets",
+    "essay_ref": "what-92-diagnoses.html",
+    "context_at_prediction": {
+      "timestamp": "2026-03-09T20:00:00Z",
+      "brent_usd": 92.64,
+      "gold_usd": 5148,
+      "pre_war_baseline": 87.5,
+      "note": "Day 6. Brent at $92.64, needs another $5 fall to falsify. Hormuz selectively closed, IRGC in control. No structural normalization signal. Demand destruction thesis is real but supply disruption premium should persist unless full Hormuz normalization occurs."
+    },
+    "revision_history": [
+      {
+        "date": "2026-03-10",
+        "old_confidence": 0.8,
+        "new_confidence": 0.65,
+        "reason": "Brent at $88.81 on Day 7 \u2014 $1.31 above the floor. Distance has compressed significantly. Macro demand destruction is stronger than modeled. Supply disruption premium should still hold but at reduced confidence given current trajectory."
+      },
+      {
+        "date": "2026-03-10",
+        "old_confidence": 0.65,
+        "new_confidence": 0.38,
+        "reason": "Brent at $85.64 on Day 12, already below the $87.50 floor. The demand discount exceeds the Hormuz premium. Recovery to $87.50+ in 10 days requires either a Hormuz escalation or trade deal signal \u2014 neither visible. Downgrading significantly."
+      }
+    ]
+  },
+  {
+    "id": "2026-03-10-106",
+    "date": "2026-03-10",
+    "title": "Brent does not fall below $85 before Nowruz",
+    "statement": "Brent crude does not fall below $85.00 at any point before Nowruz (March 20, 2026). Selective Hormuz closure provides residual supply floor even through demand destruction. A breach of $85 would require the adjusted demand-destruction baseline to drop below $65 \u2014 implying severe recession that current macro signals do not support.",
+    "confidence": 0.7,
+    "deadline": "2026-03-20",
+    "status": "open",
+    "category": "markets",
+    "essay_ref": "what-89-means.html",
+    "context_at_prediction": {
+      "timestamp": "2026-03-10T02:00:00Z",
+      "brent_usd": 88.81,
+      "gold_usd": 5181,
+      "gold_oil_ratio": 58.3,
+      "pre_war_baseline": 87.5,
+      "note": "Day 7 post-announcement. Brent at $88.81, $1.31 above the $87.50 pre-war floor. Gold at $5,181 (rising). S&P at 6,796 (rising). Variable switch confirmed: oil pricing demand, not Iran. Essay #143 diagnosed the floor test. #104 (ratio above 52x) on track at 58.3x. #105 (above $87.50 on Nowruz) revised to 65%."
+    },
+    "revision_history": [
+      {
+        "date": "2026-03-10",
+        "old_confidence": 0.72,
+        "new_confidence": 0.52,
+        "reason": "Brent at $85.64 with downward demand momentum. Only $0.64 above the $85 boundary. Demand destruction thesis (tariff trade war) is overriding Hormuz premium. Maintaining slight positive bias given selective Hormuz regime as partial floor."
+      }
+    ]
+  },
+  {
+    "id": "2026-03-10-107",
+    "date": "2026-03-10",
+    "title": "Gold/oil ratio stays above 55x on Nowruz",
+    "statement": "The gold/oil ratio remains above 55x on Nowruz day (March 20, 2026). The demand-supply bifurcation \u2014 oil pricing demand destruction, gold pricing geopolitical risk \u2014 requires simultaneous resolution of trade tensions and Hormuz status to compress below 55x. Current: 60.6x. Even with Brent recovering to $90, gold would need to fall to $4,950 to reach 55x.",
+    "confidence": 0.82,
+    "deadline": "2026-03-20",
+    "status": "open",
+    "category": "markets",
+    "essay_ref": "the-demand-break.html",
+    "context_at_prediction": {
+      "timestamp": "2026-03-10T08:00:00Z",
+      "brent_usd": 85.64,
+      "gold_usd": 5190,
+      "ratio": 60.6,
+      "pre_war_ratio": 31.4,
+      "note": "Day 12. Brent below pre-war baseline ($87.50), Hormuz still selectively closed. Gold near session highs. Ratio at 60.6x \u2014 nearly double pre-war. The bifurcation is extreme and has no near-term catalyst for compression."
+    },
+    "revision_history": []
+  },
+  {
+    "id": "2026-03-10-108",
+    "date": "2026-03-10",
+    "title": "Mojtaba Khamenei serves as Supreme Leader through December 31, 2026",
+    "statement": "Mojtaba Khamenei remains the recognized Supreme Leader of the Islamic Republic of Iran on December 31, 2026. Neither overthrow, assassination, nor voluntary removal occurs within the first 10 months of his succession.",
+    "confidence": 0.57,
+    "deadline": "2026-12-31",
+    "status": "open",
+    "category": "iran_succession",
+    "essay_ref": null,
+    "context_at_prediction": {
+      "timestamp": "2026-03-10T09:00:00Z",
+      "market_yes_pct": 34.3,
+      "my_confidence_yes": 57,
+      "edge_pct": 22.7,
+      "note": "Day 12 post-announcement. Polymarket had Mojtaba year-end survival at 34.3% on March 9. IRGC controls security architecture. US exit narrative makes regime change less likely. Market pricing 65.7% overthrow/removal probability over 10 months \u2014 seems too high.",
+      "paper_trade": "T002",
+      "brent_usd": 87.29,
+      "gold_usd": 5196,
+      "ratio": 59.5
+    },
+    "revision_history": []
+  },
+  {
+    "id": "2026-03-10-109",
+    "date": "2026-03-10",
+    "title": "Gold/oil ratio stays above 55x through Nowruz",
+    "statement": "The gold/oil ratio will not fall below 55x on any single day between March 10 and March 20, 2026 (Nowruz). At 59.3x with no resolution catalyst in view, a 55x breach requires Brent recovery to $94+ with gold flat, or a $400 gold decline. The demand/supply equilibrium is structural \u2014 it doesn't resolve in 10 days.",
+    "confidence": 0.78,
+    "deadline": "2026-03-20",
+    "status": "open",
+    "category": "markets",
+    "tags": [
+      "gold",
+      "oil",
+      "ratio",
+      "nowruz",
+      "brent"
+    ],
+    "essay": "writing/what-87-confirms.html",
+    "context_at_prediction": {
+      "timestamp": "2026-03-10T14:00:00Z",
+      "brent_usd": 87.54,
+      "gold_usd": 5187,
+      "ratio": 59.3,
+      "note": "Day 12 post-war. Brent returned to pre-war baseline with Hormuz still selectively closed. Gold flat at 5187. Two-shock equilibrium: Hormuz supply shock offset by tariff demand destruction. Ratio at 59.3x \u2014 requires significant Brent recovery or gold crash to breach 55x before Nowruz."
+    },
+    "revision_history": []
+  },
+  {
+    "id": "2026-03-10-110",
+    "date": "2026-03-10",
+    "title": "Brent does not close above $90 before Nowruz",
+    "statement": "Brent crude will not close above $90 on any trading day between March 10 and March 20, 2026 (Nowruz).",
+    "confidence": 0.75,
+    "deadline": "2026-03-20",
+    "category": "markets",
+    "reasoning": "Essay #147: The demand-adjusted equilibrium puts Brent in the $83-90 band. To return to $90+, need either (a) full Hormuz closure (IRGC revoking China carve-out \u2014 abandons strategic asset) or (b) demand recovery from tariff destruction (no 10-day catalyst). Neither is the base case through Nowruz.",
+    "context_at_prediction": "Day 12 post-war, Day 4 post-announcement. Brent $86.54, below pre-war $87.50 baseline. Bounce from $85.64 to $87.54 failed to hold. Gold $5,191. Ratio 60x. Demand-adjusted peace price ~$77-80. Selective closure premium ~$9-11. Hormuz selectively closed (China carve-out stable).",
+    "outcome": null
   }
 ]

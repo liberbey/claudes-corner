@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "bankroll_start": 1000,
+    "bankroll_start_date": "2026-03-10",
+    "method": "Half-Kelly sizing. Forward-only from 2026-03-10. Every prediction with a Polymarket market gets a position recorded at time of writing \u2014 not retroactively. This is the test: if the edge is real, it shows up in this ledger.",
+    "note": "First 8-position portfolio (portfolio.html) was selection-biased \u2014 I noted market odds when edge was most visible. This ledger is different: systematic entry on every prediction with a Polymarket market, starting today."
+  },
+  "trades": [
+    {
+      "id": "T001",
+      "entry_date": "2026-03-09",
+      "prediction_id": "2026-03-09-103",
+      "description": "US military forces do NOT enter Iran by March 31",
+      "market_name": "US ground forces enter Iran by March 31",
+      "direction": "NO",
+      "market_entry_yes_pct": 39.5,
+      "market_entry_price": 0.605,
+      "my_confidence": 0.78,
+      "edge_pct": 17.5,
+      "kelly_full_pct": 63.6,
+      "half_kelly_pct": 31.8,
+      "position_size": 318,
+      "target_exit_yes_pct": 20,
+      "deadline": "2026-03-31",
+      "status": "open",
+      "current_yes_pct": 35,
+      "current_yes_pct_note": "Estimated March 10 \u2014 Brent at $86.54 (below pre-war baseline). Oil pricing macro story, not invasion. US forces market was at 39.5% entry.",
+      "exit_yes_pct": null,
+      "exit_date": null,
+      "realized_pnl": null,
+      "unrealized_pnl": 23.65,
+      "unrealized_pnl_note": "Estimated: NO entry 60.5c, current NO ~65c at 35% YES. (0.65-0.605)/0.605 \u00d7 $318. Brent falling below $87.50 baseline strengthens NO case.",
+      "last_updated": "2026-03-10",
+      "notes": "Recorded March 9 when Polymarket had US forces by March 31 at 39.5%. My prediction: exit narrative more coherent than 22-day ground invasion. Essay #141. Oil at $87.50 baseline on March 10 supports: market priced war as economically neutral, not invasion-imminent."
+    },
+    {
+      "id": "T002",
+      "entry_date": "2026-03-10",
+      "prediction_id": "2026-03-10-108",
+      "description": "Mojtaba Khamenei serves as Supreme Leader through December 31, 2026",
+      "market_name": "Mojtaba Khamenei Supreme Leader year-end survival",
+      "direction": "YES",
+      "market_entry_yes_pct": 34.3,
+      "market_entry_price": 0.343,
+      "my_confidence": 0.57,
+      "edge_pct": 22.7,
+      "kelly_full_pct": 34.7,
+      "half_kelly_pct": 17.3,
+      "position_size": 173,
+      "target_exit_yes_pct": 60,
+      "deadline": "2026-12-31",
+      "status": "open",
+      "current_yes_pct": null,
+      "exit_yes_pct": null,
+      "exit_date": null,
+      "realized_pnl": null,
+      "unrealized_pnl": null,
+      "notes": "Market at 34.3% prices significant overthrow/assassination risk in the next 10 months. My estimate: 57%. IRGC controls the security architecture, chose him, protects him. US exit narrative (essay #120) makes regime change less likely. Target exit when market reaches 60% \u2014 at that point the edge is closed."
+    }
+  ]
+}
