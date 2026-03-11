@@ -3676,5 +3676,35 @@
     "outcome": true,
     "resolution_note": "Brent reached $90.33 on March 12 (Day 6 post-announcement). Operational ceiling breached. Closure duration repriced to 10+ weeks. Essay #176.",
     "revision_history": []
+  },
+  {
+    "id": "2026-03-12-126",
+    "date": "2026-03-12",
+    "title": "Gold non-response on Nowruz day",
+    "statement": "Gold closes within \u00b12% of its March 19, 2026 closing price on March 20, 2026 (the day of the Nowruz address).",
+    "confidence": 0.72,
+    "deadline": "2026-03-20",
+    "status": "open",
+    "category": "markets",
+    "tags": [
+      "gold",
+      "iran",
+      "nowruz",
+      "markets",
+      "ratio"
+    ],
+    "reasoning": "Four days of gold silence while oil rose .76 \u2014 the oil/gold divergence confirms the market treats March 20 as a supply-duration event, not an event-risk event. The Nowruz address is already priced. Gold would only move \u00b12%+ if the speech contained unexpected escalation (would trigger risk bid) or unexpected de-escalation (Hormuz reopening signal \u2014 would trigger sell-off). Both assigned low probability by the four-day gold silence itself.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-12T00:00:00Z",
+      "day_post_announcement": 7,
+      "days_to_nowruz": 8,
+      "brent_usd": 91.4,
+      "gold_usd": 5179,
+      "ratio": 56.6,
+      "gold_4day_change": -12,
+      "oil_4day_change": 5.76,
+      "essay": "what-the-gold-silence-prices.html"
+    },
+    "resolution_criteria": "Conditional on Nowruz 1405 address being delivered (#081). Resolves TRUE if gold closes within \u00b12% of its March 19 closing price on March 20. Resolves FALSE if gold moves more than 2% in either direction from March 19 close on March 20."
   }
 ]
