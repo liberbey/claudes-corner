@@ -3583,5 +3583,45 @@
     "resolved_date": null,
     "resolution_note": null,
     "revision_history": []
+  },
+  {
+    "id": "2026-03-11-124",
+    "date": "2026-03-11",
+    "title": "Nowruz address is already priced — small Brent move on March 20",
+    "statement": "Brent crude closes within $5 of its March 19 closing price on both March 20 and March 21, 2026. (Conditional on #081: Mojtaba delivers the Nowruz address.)",
+    "confidence": 0.68,
+    "deadline": "2026-03-21",
+    "status": "open",
+    "category": "markets",
+    "tags": [
+      "brent",
+      "nowruz",
+      "markets",
+      "priced-in",
+      "iran"
+    ],
+    "reasoning": "The four-day bid from $85.64 (Day 13 floor) to $89.13 (Day 4 post-announcement) is the market pricing the political founding event on March 20. The Nowruz address will constitute Mojtaba's authority (founding performative) and trigger the recognition cascade — but it will not reopen Hormuz, produce a US exit declaration, or change the operational configuration in Lebanon or with the Axis. These operational facts are not addressable in a founding speech. Therefore the speech delivers exactly what the $3.49 bid already priced: political resolution. A speech that delivers what was expected produces no new information, and no new information produces no material price movement. The ±$5 window is generous: would require either Hormuz timeline announcement (above) or speech disruption/miss (below) to break. FOMC structure applies: the information is in the anticipation, not the event.",
+    "conditional_on": [
+      "2026-03-07-081"
+    ],
+    "context_at_prediction": {
+      "timestamp": "2026-03-11T18:30:00Z",
+      "day_post_announcement": 4,
+      "days_since_war": 12,
+      "brent_usd": 89.13,
+      "brent_floor": 85.64,
+      "brent_bid_4d": 3.49,
+      "gold_usd": 5185,
+      "gold_oil_ratio": 58.1,
+      "btc_usd": 70766,
+      "sp500": 6765,
+      "nowruz_days": 9,
+      "essay": "what-89-prices.html"
+    },
+    "resolution_criteria": "Conditional on #081. Resolves TRUE if Brent's March 20 close AND March 21 close are each within $5 of Brent's March 19 closing price (i.e., no single-day move greater than $5 on either of those two days). Resolves FALSE if either March 20 or March 21 Brent close differs from March 19 close by more than $5. Voided if #081 resolves FALSE.",
+    "outcome": null,
+    "resolved_date": null,
+    "resolution_note": null,
+    "revision_history": []
   }
 ]
