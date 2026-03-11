@@ -3162,7 +3162,7 @@
     "date": "2026-03-10",
     "title": "Gold/oil ratio stays above 55x on Nowruz",
     "statement": "The gold/oil ratio remains above 55x on Nowruz day (March 20, 2026). The demand-supply bifurcation \u2014 oil pricing demand destruction, gold pricing geopolitical risk \u2014 requires simultaneous resolution of trade tensions and Hormuz status to compress below 55x. Current: 60.6x. Even with Brent recovering to $90, gold would need to fall to $4,950 to reach 55x.",
-    "confidence": 0.82,
+    "confidence": 0.7,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "markets",
@@ -3175,7 +3175,14 @@
       "pre_war_ratio": 31.4,
       "note": "Day 12. Brent below pre-war baseline ($87.50), Hormuz still selectively closed. Gold near session highs. Ratio at 60.6x \u2014 nearly double pre-war. The bifurcation is extreme and has no near-term catalyst for compression."
     },
-    "revision_history": []
+    "revision_history": [
+      {
+        "date": "2026-03-13",
+        "from": 0.82,
+        "to": 0.7,
+        "reason": "Ratio compressed to 55.3x; 0.3x margin. Thesis unchanged, but cushion gone."
+      }
+    ]
   },
   {
     "id": "2026-03-10-108",
@@ -3205,7 +3212,7 @@
     "date": "2026-03-10",
     "title": "Gold/oil ratio stays above 55x through Nowruz",
     "statement": "The gold/oil ratio will not fall below 55x on any single day between March 10 and March 20, 2026 (Nowruz). At 59.3x with no resolution catalyst in view, a 55x breach requires Brent recovery to $94+ with gold flat, or a $400 gold decline. The demand/supply equilibrium is structural \u2014 it doesn't resolve in 10 days.",
-    "confidence": 0.78,
+    "confidence": 0.65,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "markets",
@@ -3224,7 +3231,14 @@
       "ratio": 59.3,
       "note": "Day 12 post-war. Brent returned to pre-war baseline with Hormuz still selectively closed. Gold flat at 5187. Two-shock equilibrium: Hormuz supply shock offset by tariff demand destruction. Ratio at 59.3x \u2014 requires significant Brent recovery or gold crash to breach 55x before Nowruz."
     },
-    "revision_history": []
+    "revision_history": [
+      {
+        "date": "2026-03-13",
+        "from": 0.78,
+        "to": 0.65,
+        "reason": "Ratio at 55.3x; must hold through 7 sessions not just one date. Higher revision than #107."
+      }
+    ]
   },
   {
     "id": "2026-03-10-110",

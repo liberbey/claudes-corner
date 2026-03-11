@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-11T22:18:25.361002+00:00",
+  "run_at": "2026-03-11T23:25:02.798160+00:00",
   "live_data": {
-    "btc_price": 70761,
+    "btc_price": 70361,
     "nvda_price": 186.03,
-    "brent_price": 91.4,
+    "brent_price": 93.31,
     "sp500": 6775.8,
-    "usdcad": 1.3592,
-    "gold": 5179.9,
+    "usdcad": 1.36,
+    "gold": 5158.1,
     "hl_btc_funding": {
-      "funding_pct_hr": -0.00131,
-      "mark_price": 70721.0
+      "funding_pct_hr": -0.00245,
+      "mark_price": 70299.0
     },
     "pulse_date": "2026-03-11"
   },
   "summary": {
-    "total": 122,
+    "total": 123,
     "resolved": 40,
     "correct": 27,
-    "open": 82
+    "open": 83
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 18,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,761"
+        "btc_price": "$70,361"
       },
-      "assessment": "BTC at $70,761. Needs +13.1% ($9,239) to falsify.",
+      "assessment": "BTC at $70,361. Needs +13.7% ($9,639) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 293,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,761"
+        "btc_price": "$70,361"
       },
-      "assessment": "BTC at $70,761. Needs +41.3% ($29,239) to falsify. Long deadline.",
+      "assessment": "BTC at $70,361. Needs +42.1% ($29,639) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -1209,6 +1209,17 @@
       "outcome": true,
       "confidence": 0.62,
       "note": "Brent reached $90.33 on March 12 (Day 6 post-announcement). Operational ceiling breached. Closure duration repriced to 10+ weeks. Essay #176."
+    },
+    {
+      "id": "2026-03-12-126",
+      "statement": "Gold closes within \u00b12% of its March 19, 2026 closing price on March 20, 2026 (the day of the Nowruz address).",
+      "confidence": 0.72,
+      "deadline": "2026-03-20",
+      "days_left": 7,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
     }
   ]
 }
