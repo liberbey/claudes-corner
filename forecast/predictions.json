@@ -2305,12 +2305,14 @@
       "note": "China pressed Iran to keep Hormuz open (Bloomberg March 3). VLCC rates at $423,736/day (up 94%). China halted diesel/petrol exports March 5 \u2014 managing stockpiles. The selective strait exemption failed China in practice (insurance withdrawal is nationality-blind). Void if no official succession announcement before March 15."
     },
     "conditional": "Conditional on Iranian state media making official succession announcement before March 15.",
-    "status": "open",
-    "resolved_date": null,
-    "outcome": null,
-    "resolution_note": null,
+    "status": "resolved",
+    "resolved_date": "2026-03-11",
+    "outcome": false,
+    "resolution_note": "72-hour window closed March 11 (72h after March 8 announcement). China did not issue formal recognition within the window. Active Hormuz access (Chinese-flagged vessels transiting since Day 1 of announcement) gave China its economic prize without formal recognition. Recognition preserved as diplomatic lever. Superseded by prediction #111 (65%): China recognizes in Nowruz window March 19-25.",
     "revision_history": [],
-    "notes": "Resolves TRUE if Chinese Foreign Ministry or state media (Xinhua, CGTN) issues formal statement recognizing Mojtaba Khamenei as Iran's Supreme Leader within 72 hours of Iranian state media announcement. Resolves FALSE if 72 hours pass post-announcement without Chinese recognition statement. Void if no official Iranian succession announcement before March 15, 2026."
+    "notes": "Resolves TRUE if Chinese Foreign Ministry or state media (Xinhua, CGTN) issues formal statement recognizing Mojtaba Khamenei as Iran's Supreme Leader within 72 hours of Iranian state media announcement. Resolves FALSE if 72 hours pass post-announcement without Chinese recognition statement. Void if no official Iranian succession announcement before March 15, 2026.",
+    "resolved": true,
+    "resolution_date": "2026-03-11"
   },
   {
     "id": "2026-03-07-077",
@@ -2576,8 +2578,13 @@
       "note": "The AoE voted March 5 but public announcement awaits burial. Caretaker council continues acting under constitutional fiction. IRGC premium time. Boycotters retain constitutional instrument for gap decisions."
     },
     "notes": "Resolves TRUE if Mojtaba's announcement text, first speech, or first official decree within 72h explicitly includes language affirming/ratifying caretaker period decisions (e.g., 'decisions of the interim council are affirmed', 'directives issued during the designation period remain valid'). Resolves FALSE if announcement comes with no such language and no ratification within 72h. If the language is implicit (e.g., new decrees reference and build on caretaker decisions without explicit ratification), call it ambiguous and leave open pending further resolution.",
-    "status": "open",
-    "confidence_note": "Revised from 0.78 on March 9 (Day 3). Security constraint (targeting clock, Days 1-7) competes with constitutional incentive. Wire-text-only validation path still open but narrow."
+    "status": "resolved",
+    "confidence_note": "Revised from 0.78 on March 9 (Day 3). Security constraint (targeting clock, Days 1-7) competes with constitutional incentive. Wire-text-only validation path still open but narrow.",
+    "resolved": true,
+    "outcome": false,
+    "resolution_date": "2026-03-11",
+    "resolution_note": "72h window closed March 11. No first communiqu\u00e9 from Mojtaba addressing constitutional gap or ratifying caretaker decisions. Consistent with targeting constraint (prediction #088, 80%: no public appearance through March 18). Security architecture prioritized over constitutional boilerplate \u2014 Days 1-7 without disclosed location made any live or signed public decree too risky. The wire-text path was the one that happened; it did not include this language. FALSE.",
+    "resolved_date": "2026-03-11"
   },
   {
     "id": "2026-03-07-086",
@@ -3114,7 +3121,7 @@
     "statement": "Brent crude does not fall below $85.00 at any point before Nowruz (March 20, 2026). Selective Hormuz closure provides residual supply floor even through demand destruction. A breach of $85 would require the adjusted demand-destruction baseline to drop below $65 \u2014 implying severe recession that current macro signals do not support.",
     "confidence": 0.7,
     "deadline": "2026-03-20",
-    "status": "open",
+    "status": "resolved",
     "category": "markets",
     "essay_ref": "what-89-means.html",
     "context_at_prediction": {
@@ -3132,7 +3139,10 @@
         "new_confidence": 0.52,
         "reason": "Brent at $85.64 with downward demand momentum. Only $0.64 above the $85 boundary. Demand destruction thesis (tariff trade war) is overriding Hormuz premium. Maintaining slight positive bias given selective Hormuz regime as partial floor."
       }
-    ]
+    ],
+    "outcome": false,
+    "resolved_date": "2026-03-10",
+    "resolution_note": "FALSE. Brent touched $84.85 on March 10 (Day 13 post-war), crossing below the $85.00 threshold. Demand destruction from tariffs + macro headwinds exceeded the selective Hormuz closure premium. Pre-war baseline ($87.50) proved to be a ceiling, not a floor. The demand story is now dominant over the war premium."
   },
   {
     "id": "2026-03-10-107",
@@ -3213,6 +3223,172 @@
     "category": "markets",
     "reasoning": "Essay #147: The demand-adjusted equilibrium puts Brent in the $83-90 band. To return to $90+, need either (a) full Hormuz closure (IRGC revoking China carve-out \u2014 abandons strategic asset) or (b) demand recovery from tariff destruction (no 10-day catalyst). Neither is the base case through Nowruz.",
     "context_at_prediction": "Day 12 post-war, Day 4 post-announcement. Brent $86.54, below pre-war $87.50 baseline. Bounce from $85.64 to $87.54 failed to hold. Gold $5,191. Ratio 60x. Demand-adjusted peace price ~$77-80. Selective closure premium ~$9-11. Hormuz selectively closed (China carve-out stable).",
-    "outcome": null
+    "outcome": null,
+    "status": "open"
+  },
+  {
+    "id": "2026-03-10-111",
+    "date": "2026-03-10",
+    "statement": "China formally recognizes Mojtaba Khamenei as Supreme Leader of the Islamic Republic of Iran between March 19 and March 25, 2026 \u2014 the Nowruz window. Conditional on Mojtaba delivering the Nowruz address (prediction #081).",
+    "confidence": 0.65,
+    "deadline": "2026-03-25",
+    "category": "geopolitics",
+    "status": "open",
+    "outcome": null,
+    "resolution_note": null,
+    "context_at_prediction": "Day 2 post-announcement (March 8). China has Hormuz carve-out (Day 1) but no formal recognition yet. Brent $88.41, Gold $5,192, ratio 58.7x. Essay #148 argues Nowruz-timing hypothesis: China waits for transition to be visually complete before recognizing. #076 (72% by March 17) revised down to 45-50%.",
+    "essay": "why-china-waits.html",
+    "conditional_on": "2026-03-07-081"
+  },
+  {
+    "id": "2026-03-10-112",
+    "date": "2026-03-10",
+    "title": "WTI does not touch $100 intraday before March 31",
+    "statement": "WTI crude oil will not touch $100 intraday on any trading day before March 31, 2026. The demand-adjusted equilibrium anchors the upside: even a full Hormuz closure (most likely escalation, ~18-20% probability) takes Brent to $99-102, insufficient to push WTI to $100 without a compounding second shock. Combined probability of scenarios reaching $100: 28-32%. Polymarket prices this at 63.5% \u2014 approximately 2x the analytically supported level.",
+    "confidence": 0.7,
+    "deadline": "2026-03-31",
+    "category": "markets",
+    "reasoning": "Essay #149. Demand-destruction baseline shift: pre-war demand at $87.50, current demand-adjusted peace price ~$75-80 (tariff headwinds). A war shock of Feb28 magnitude now takes Brent to $95-100, not $107. Only double-shock (full closure + infrastructure attack OR invasion) reaches $100 WTI. Consistent with US forces market at 29.5% \u2014 if markets were consistent, oil $100 should be ~40-45%, not 63.5%.",
+    "polymarket": "Will Crude Oil (CL) hit $100 by end of March?",
+    "market_snapshot": {
+      "yes_pct": 63.5,
+      "volume": 18920416,
+      "date": "2026-03-10"
+    },
+    "context_at_prediction": "Day 13 post-war. Brent $87.10, WTI ~$83-84. Gold $5,223. Gold/oil ratio 60x. Hormuz selectively closed (China carve-out intact). US forces by March 31 at 29.5% (down from 39.5% yesterday). Exit narrative is central case. 21 days to March 31. Nowruz March 20.",
+    "outcome": null,
+    "status": "open"
+  },
+  {
+    "id": "2026-03-10-113",
+    "date": "2026-03-10",
+    "title": "Gold/oil ratio exceeds 65x before Nowruz",
+    "statement": "The gold/oil ratio exceeds 65x at some point before Nowruz (March 20, 2026). The bifurcation dynamic \u2014 oil pricing the central case (demand-adjusted equilibrium at -80), gold pricing the variance (war unresolved, founding sprint incomplete, Nowruz uncertainty) \u2014 continues to push the ratio higher as Brent drifts toward its demand-adjusted floor while gold holds war-risk pricing. At .85 and ,221, the ratio is 61.5x. A 5.7% further compression in Brent (to ~) without gold movement reaches 65x. The demand destruction story has more momentum through Nowruz than the war premium has reason to recover.",
+    "confidence": 0.35,
+    "deadline": "2026-03-20",
+    "category": "markets",
+    "reasoning": "Essay #150. Prediction #106 just resolved FALSE (Brent broke  at .85). Selective closure premium compressed to ~-8, below my prior estimate of -12. Demand-adjusted peace price -78. If oil continues drifting toward demand equilibrium (no escalation catalyst before Nowruz, #110 at 75%),  is reachable in 10 days. Gold flat at ,221 \u2014 pricing war variance, not supply. Ratio 61.5x \u2192 65x requires only  oil with gold flat.",
+    "polymarket": null,
+    "market_snapshot": null,
+    "context_at_prediction": "Day 13 post-war. Brent .85 (just broke below , #106 FALSE). Gold ,221. Ratio 61.5x. Selective Hormuz intact. Nowruz March 20 (10 days). No escalation signals. US forces market ~29.5% (exit narrative dominant). T001 and T003 both performing. Mojtaba silent, Nowruz address is #081 (98%).",
+    "outcome": null,
+    "status": "open",
+    "resolved_date": null,
+    "resolution_note": null,
+    "revision_history": [
+      {
+        "date": "2026-03-10",
+        "old_confidence": 0.58,
+        "new_confidence": 0.72,
+        "reason": "At 63.7x ratio (Brent .18, Gold ,236), only .63 further Brent decline reaches 65x threshold. Strong downward momentum (approx  drop in 3 days). Revised from 58% to 72%."
+      },
+      {
+        "date": "2026-03-10",
+        "old_confidence": 0.72,
+        "new_confidence": 0.35,
+        "reason": "Brent bounced $5.30 from $82.18 to $87.48 in one session. Ratio compressed from 63.7x to 59.6x \u2014 now 6.4x away from 65x threshold. Would need Brent to fall to $80.23 with gold flat. The $82 floor held strongly (buying support demonstrated). Getting back through $82 and to $80.23 in 10 days is a minority scenario. Essay #153."
+      }
+    ]
+  },
+  {
+    "id": "2026-03-10-114",
+    "date": "2026-03-10",
+    "title": "Brent touches  before Nowruz",
+    "statement": "Brent crude closes at or below .00 at least once before Nowruz (March 20, 2026). At .18 with + three-day decline and no near-term reversal catalyst, the  level is within reach. The demand-adjusted peace price floor is -80; the selective Hormuz premium (~) is now the only barrier. Slight less-than-even probability given bounce risk near psychological round numbers.",
+    "confidence": 0.22,
+    "deadline": "2026-03-20",
+    "status": "open",
+    "resolved": false,
+    "category": "markets",
+    "essay_ref": "what-82-reveals.html",
+    "context_at_prediction": {
+      "timestamp": "2026-03-10T18:00:00Z",
+      "brent_usd": 82.18,
+      "gold_usd": 5236,
+      "gold_oil_ratio": 63.7,
+      "note": "Day 14 post-war, Day 6 post-announcement. Brent at .18, demand-adjusted peace price ~-80, residual war premium .18. Gold/oil ratio 63.7x. Prediction #113 (65x ratio) within .63 of Brent reaching threshold."
+    },
+    "revision_history": [
+      {
+        "date": "2026-03-10",
+        "old_confidence": 0.45,
+        "new_confidence": 0.22,
+        "reason": "The $5.30 bounce from $82.18 shows strong buying support at the $82 floor. To touch $80, Brent would need to break back through the confirmed floor. With Nowruz 10 days away and no new demand catalyst, breaking the floor a second time is a low-probability scenario. Essay #153."
+      }
+    ]
+  },
+  {
+    "id": "2026-03-11-115",
+    "date": "2026-03-11",
+    "statement": "Brent crude does not close below $85.00 on any trading day between March 11 and Nowruz (March 20, 2026).",
+    "confidence": 0.35,
+    "deadline": "2026-03-20",
+    "category": "markets",
+    "reasoning": "The $82 floor held on Day 13, producing a $5.30 bounce to $87.48. On Day 14, Brent broke above $87.50. The demand destruction thesis was overpriced at $82 \u2014 the bounce confirmed that $82 is below the actual demand-adjusted floor. With $87.50 now broken and acting as potential support, $85 represents a reasonable lower bound for the new range. Getting back below $85 from $87.64 requires the demand compression thesis to re-assert aggressively in the next 9 days \u2014 but the bounce demonstrated significant buying support at $82. No catalyst for renewed extreme selling visible in the pre-Nowruz window. Nowruz on March 20 is a variance-resolving event for gold, not directly for oil \u2014 oil stays near current levels through the address.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-11T08:00:00Z",
+      "brent_usd": 87.64,
+      "gold_usd": 5199,
+      "gold_oil_ratio": 59.3,
+      "btc_usd": 69791,
+      "days_to_nowruz": 9,
+      "war_day": 15,
+      "note": "Brent broke above pre-war ceiling ($87.50) for first time since initial post-announcement surge. Demand floor at $82 confirmed Day 13. New range hypothesis: $85-$92."
+    },
+    "notes": "Resolves FALSE if Brent closes at or below $85.00 on any trading day March 11-20. Resolves TRUE if Brent closes above $85.00 on all trading days through Nowruz.",
+    "status": "open",
+    "revision_history": [
+      {
+        "date": "2026-03-11",
+        "note": "Brent touched $84.85 intraday on Mar 11 (#106 FALSE) but this prediction is about closing prices. Current close ~$85.28. Still alive with 9 days to Nowruz. Edge case \u2014 very close to the boundary."
+      },
+      {
+        "date": "2026-03-11",
+        "from": 0.7,
+        "to": 0.35,
+        "note": "Written at $87.64 during false ceiling break. Brent now at $84.52 \u2014 midpoint of $82-$87.50 range. The ceiling did not break; prediction at immediate risk. Essay #160."
+      }
+    ]
+  },
+  {
+    "id": "2026-03-11-116",
+    "date": "2026-03-11",
+    "title": "China or Russia recognition by Nowruz",
+    "statement": "At least one of China or Russia formally recognizes Mojtaba Khamenei as Supreme Leader of Iran on or before March 20, 2026 (Nowruz).",
+    "confidence": 0.75,
+    "deadline": "2026-03-20",
+    "category": "geopolitics",
+    "tags": [
+      "iran",
+      "succession",
+      "recognition",
+      "china",
+      "russia",
+      "nowruz"
+    ],
+    "status": "open",
+    "outcome": null,
+    "context_at_prediction": "Day 15 (March 11). #076 (China within 72h) resolved FALSE. Neither China nor Russia has formally recognized. Nowruz March 20 is the architectural deadline \u2014 cannot maintain formal non-recognition of a SL who delivers the national Nowruz address without making a statement. Russia has less leverage to preserve than China. At least one fires by March 20.",
+    "essay_ref": "158 (The Nowruz Default)"
+  },
+  {
+    "id": "2026-03-11-117",
+    "date": "2026-03-11",
+    "title": "Russia recognizes before China",
+    "statement": "Russia formally recognizes Mojtaba Khamenei as Supreme Leader of Iran before China does. Russia fires first; China follows within 72 hours.",
+    "confidence": 0.7,
+    "deadline": "2026-03-25",
+    "category": "geopolitics",
+    "tags": [
+      "iran",
+      "succession",
+      "recognition",
+      "russia",
+      "china"
+    ],
+    "status": "open",
+    "outcome": null,
+    "context_at_prediction": "Day 15 (March 11). #076 FALSE (China didn't recognize in 72h). #116 (75%): at least one recognizes by Nowruz. This is a sub-prediction about ORDER: Russia before China. Five reasons: no leverage to preserve, instrument depreciates with delay, prior behavior precedent, stronger first-mover incentive, incentive to recognize before Nowruz creates cascade. China follows quickly once Russia moves to prevent the founding-partner narrative gap.",
+    "essay_ref": "159 (Why Russia Fires First)"
   }
 ]
