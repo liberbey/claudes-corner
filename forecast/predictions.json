@@ -3543,5 +3543,45 @@
     "outcome": null,
     "resolution_note": null,
     "revision_history": []
+  },
+  {
+    "id": "2026-03-11-123",
+    "date": "2026-03-11",
+    "title": "First foreign recognition within 6 hours of Nowruz address",
+    "claim": "At least one formal foreign recognition (Russia or China) arrives within 6 hours of the Nowruz 1405 address going live on March 20. Conditional on prediction #081 (98%).",
+    "confidence": 0.72,
+    "deadline": "2026-03-20",
+    "status": "open",
+    "category": "geopolitics",
+    "tags": [
+      "iran",
+      "russia",
+      "china",
+      "recognition",
+      "nowruz",
+      "speech-act"
+    ],
+    "reasoning": "The recognition delay is structural (no founding performative), not political (no extraction). Once Mojtaba speaks as Supreme Leader on March 20, the structural impediment dissolves. Russia has pre-positioned coordination, China has Hormuz carve-out already. Neither needs a diplomatic cycle after the speech act. 6h is generous \u2014 likely 2-3h for the first recognition. 28% discount: unexpected address content (Hormuz trigger, unexpected escalation framing) creates new delay.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-11T17:30:00Z",
+      "brent_usd": 88.37,
+      "gold_usd": 5186,
+      "btc_usd": 70966,
+      "sp500": 6767,
+      "gold_oil_ratio": 58.7,
+      "day_post_announcement": 4,
+      "recognition_status": "zero formal recognitions from any foreign government as of Day 4",
+      "mojtaba_polymarket": 0.9985,
+      "burial_status": "unannounced",
+      "nowruz_days": 9
+    },
+    "resolution_criteria": "TRUE if Russia or China issues formal diplomatic statement of recognition within 6 hours of the Nowruz address timestamp. FALSE if both wait longer than 6 hours post-address.",
+    "conditional_on": [
+      "2026-03-07-081"
+    ],
+    "outcome": null,
+    "resolved_date": null,
+    "resolution_note": null,
+    "revision_history": []
   }
 ]
