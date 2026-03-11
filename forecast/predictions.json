@@ -2864,13 +2864,14 @@
     "id": "2026-03-09-096",
     "date": "2026-03-09",
     "statement": "The selective Hormuz regime \u2014 closed to Western/US/Israeli ships, open to Chinese-flagged vessels \u2014 persists without moving to full normalization for at least 30 days after the March 8 announcement (through April 7, 2026).",
-    "confidence": 0.72,
+    "confidence": 0.8,
     "deadline": "2026-04-07",
     "category": "geopolitics",
     "reasoning": "The selective opening is a durable intermediate instrument. Full closure creates pressure from China; full normalization eliminates leverage. The carve-out avoids both. Iran has structural incentive to maintain it: it rewards its most important partner while maintaining maximum pressure on adversaries. The 30-day constraint box makes normalization structurally impossible in this window.",
     "context_at_prediction": "Day 2 post-announcement. IRGC announced selective Hormuz opening on March 8: closed to US/Israel/Western allies, open to Chinese-flagged vessels. Two Chinese bulk carriers (Iron Maiden, Sino Ocean) transited within hours. Brent $108-110. Traffic down from 138 to 2 ships/day.",
-    "essay_ref": "the-selective-opening.html",
-    "status": "open"
+    "essay_ref": "why-the-carve-out-holds.html",
+    "status": "open",
+    "revision_note": "March 11, revised from 72% to 80%. Structural stability analysis (essay #167): neither Iran nor China can exit the cooperative equilibrium at acceptable cost within 30 days. Iran cannot close to China (primary revenue) or open to West (capitulation). China cannot stop transiting (loses differential) or push for full normalization (ends competitive advantage). All three destabilizers (US secondary sanctions, domestic instability, political deal) require preconditions not yet met."
   },
   {
     "id": "2026-03-09-097",
@@ -2998,7 +2999,7 @@
     "date": "2026-03-09",
     "title": "Burial and Nowruz address combined into compound ceremony",
     "statement": "If no formal burial ceremony announcement is made by end of March 13 (Day 6 post-announcement), the state burial for Ali Khamenei and Mojtaba's Nowruz address will be combined into a single compound public event on or around March 20.",
-    "confidence": 0.65,
+    "confidence": 0.78,
     "deadline": "2026-03-22",
     "status": "open",
     "category": "geopolitics",
@@ -3478,5 +3479,38 @@
     "resolved_date": null,
     "resolution_note": null,
     "revision_history": []
+  },
+  {
+    "id": "2026-03-11-121",
+    "date": "2026-03-11",
+    "title": "At least one major power recognizes Mojtaba within 24h of Nowruz address",
+    "statement": "If Mojtaba Khamenei delivers the Nowruz address as named Supreme Leader (conditional on #081, 98%), at least one of Russia or China will formally recognize his government within 24 hours of the address wire. The recognition has been pre-agreed diplomatically; the address is the public trigger, not the deliberation input.",
+    "confidence": 0.68,
+    "deadline": "2026-03-21",
+    "status": "open",
+    "category": "geopolitics",
+    "essay_ref": "the-three-silences.html",
+    "tags": [
+      "iran",
+      "succession",
+      "recognition",
+      "russia",
+      "china",
+      "nowruz",
+      "compound-ceremony"
+    ],
+    "reasoning": "Five days of synchronized silence across burial, recognition, and speech suggests active package-holding, not logistical delay. Recognition within 48h is #118 (70%); 24h is more aggressive \u2014 tests whether pre-agreed trigger mechanism or deliberative response. Compound ceremony logic: all items assembled for March 20, recognition is pre-staged. 62% reflects genuine uncertainty about whether 24h or 24-48h is the correct window.",
+    "context_at_prediction": "Day 4 post-announcement. March 11. Brent $87.33, Gold $5,200, ratio ~59.6x. Zero formal recognitions from any state. Burial unannounced. Mojtaba has not spoken publicly. March 13 burial threshold 2 days away. Nowruz March 20, 9 days.",
+    "outcome": null,
+    "resolved_date": null,
+    "resolution_note": null,
+    "revision_history": [
+      {
+        "date": "2026-03-11",
+        "from": 0.62,
+        "to": 0.68,
+        "note": "Essay #168: recognition is pre-staged, not deliberative. The 24h window captures pre-staged execution; 48h captures deliberative response. This is pre-staged. Revised 62%\u219268%."
+      }
+    ]
   }
 ]
