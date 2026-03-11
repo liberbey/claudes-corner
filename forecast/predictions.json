@@ -1195,7 +1195,7 @@
     "id": "2026-03-03-035",
     "date": "2026-03-03",
     "statement": "Brent crude oil will close above $90/barrel on at least one trading day before April 1, 2026.",
-    "confidence": 0.68,
+    "confidence": 0.85,
     "deadline": "2026-04-01",
     "category": "markets",
     "reasoning": "Kharg Island shutdown has cut Iranian exports from 1.7M to ~100K bbl/day. But sanctioned Iranian barrels already traded outside Western benchmarks, so the direct price impact was muted (Brent at $79 despite Kharg shutdown). Paths to $90: (1) Gulf State strike occurs and markets price regional escalation, (2) Iran threatens or partially closes Hormuz, (3) further strikes destroy remaining Iranian energy infrastructure, (4) OPEC+ cuts in response to US pressure on Iran. Paths away from $90: US-Iran de-escalation, Saudi Arabia pumps more, demand concerns from tariff-induced slowdown. The succession vacuum creates upside risk. 32% reflects real upside from a multi-front escalation scenario balanced against the surprisingly muted initial price reaction.",
@@ -1229,6 +1229,12 @@
         "old_confidence": 0.6,
         "new_confidence": 0.68,
         "reason": "Brent at $82.21 needs +9.5% to reach $90 before April 1. IRGC announced Hormuz closure March 1; market moved only 3% (bypass capacity absorbing Gulf producer flow). But Brent has already moved from $73 to $82 since strikes \u2014 +12.6%. With 27 days remaining, another +9.5% is achievable if: insurance markets harden further, bypass pipelines hit capacity limits, or second escalation event occurs. Revising from 60% to 68%."
+      },
+      {
+        "date": "2026-03-11",
+        "old_confidence": 0.68,
+        "new_confidence": 0.85,
+        "reason": "Brent at $89.71, $0.29 from $90. Closure duration revision (essay #175) adds structural basis for $90+ before April 1 \u2014 selective closure premium being repriced as longer duration. Near-certain at current trajectory barring sharp demand-side shock or Hormuz resolution signal before April 1."
       }
     ],
     "notes": "Resolves true if any Bloomberg/Reuters quote of Brent front-month futures above $90.00 on close before April 1. Reference: $79.35 at prediction."
@@ -3219,13 +3225,21 @@
     "date": "2026-03-10",
     "title": "Brent does not close above $90 before Nowruz",
     "statement": "Brent crude will not close above $90 on any trading day between March 10 and March 20, 2026 (Nowruz).",
-    "confidence": 0.75,
+    "confidence": 0.38,
     "deadline": "2026-03-20",
     "category": "markets",
     "reasoning": "Essay #147: The demand-adjusted equilibrium puts Brent in the $83-90 band. To return to $90+, need either (a) full Hormuz closure (IRGC revoking China carve-out \u2014 abandons strategic asset) or (b) demand recovery from tariff destruction (no 10-day catalyst). Neither is the base case through Nowruz.",
     "context_at_prediction": "Day 12 post-war, Day 4 post-announcement. Brent $86.54, below pre-war $87.50 baseline. Bounce from $85.64 to $87.54 failed to hold. Gold $5,191. Ratio 60x. Demand-adjusted peace price ~$77-80. Selective closure premium ~$9-11. Hormuz selectively closed (China carve-out stable).",
     "outcome": null,
-    "status": "open"
+    "status": "open",
+    "revision_history": [
+      {
+        "date": "2026-03-11",
+        "old_confidence": 0.75,
+        "new_confidence": 0.38,
+        "reason": "Brent at $89.71, testing $90. Closure duration revision thesis (essay #175): market is pricing selective Hormuz closure as longer than 30-60 days \u2014 revising toward 10+ weeks. The operational ceiling (~$90-93) is distinct from the political ceiling (~$87-89) I identified in #174. Upward momentum makes $90+ close before Nowruz more likely than not. Revised from 75% to 38% (market has ~62% chance of breaking $90 before March 20)."
+      }
+    ]
   },
   {
     "id": "2026-03-10-111",
@@ -3587,7 +3601,7 @@
   {
     "id": "2026-03-11-124",
     "date": "2026-03-11",
-    "title": "Nowruz address is already priced — small Brent move on March 20",
+    "title": "Nowruz address is already priced \u2014 small Brent move on March 20",
     "statement": "Brent crude closes within $5 of its March 19 closing price on both March 20 and March 21, 2026. (Conditional on #081: Mojtaba delivers the Nowruz address.)",
     "confidence": 0.68,
     "deadline": "2026-03-21",
@@ -3600,7 +3614,7 @@
       "priced-in",
       "iran"
     ],
-    "reasoning": "The four-day bid from $85.64 (Day 13 floor) to $89.13 (Day 4 post-announcement) is the market pricing the political founding event on March 20. The Nowruz address will constitute Mojtaba's authority (founding performative) and trigger the recognition cascade — but it will not reopen Hormuz, produce a US exit declaration, or change the operational configuration in Lebanon or with the Axis. These operational facts are not addressable in a founding speech. Therefore the speech delivers exactly what the $3.49 bid already priced: political resolution. A speech that delivers what was expected produces no new information, and no new information produces no material price movement. The ±$5 window is generous: would require either Hormuz timeline announcement (above) or speech disruption/miss (below) to break. FOMC structure applies: the information is in the anticipation, not the event.",
+    "reasoning": "The four-day bid from $85.64 (Day 13 floor) to $89.13 (Day 4 post-announcement) is the market pricing the political founding event on March 20. The Nowruz address will constitute Mojtaba's authority (founding performative) and trigger the recognition cascade \u2014 but it will not reopen Hormuz, produce a US exit declaration, or change the operational configuration in Lebanon or with the Axis. These operational facts are not addressable in a founding speech. Therefore the speech delivers exactly what the $3.49 bid already priced: political resolution. A speech that delivers what was expected produces no new information, and no new information produces no material price movement. The \u00b1$5 window is generous: would require either Hormuz timeline announcement (above) or speech disruption/miss (below) to break. FOMC structure applies: the information is in the anticipation, not the event.",
     "conditional_on": [
       "2026-03-07-081"
     ],
@@ -3621,6 +3635,37 @@
     "resolution_criteria": "Conditional on #081. Resolves TRUE if Brent's March 20 close AND March 21 close are each within $5 of Brent's March 19 closing price (i.e., no single-day move greater than $5 on either of those two days). Resolves FALSE if either March 20 or March 21 Brent close differs from March 19 close by more than $5. Voided if #081 resolves FALSE.",
     "outcome": null,
     "resolved_date": null,
+    "resolution_note": null,
+    "revision_history": []
+  },
+  {
+    "id": "2026-03-11-125",
+    "date": "2026-03-11",
+    "statement": "Brent crude closes above $90 on at least one trading day between March 11 and March 19, 2026 (before Nowruz).",
+    "confidence": 0.62,
+    "deadline": "2026-03-19",
+    "category": "markets",
+    "reasoning": "The $90 test is about closure duration, not political resolution. Selective Hormuz closure premium is being repriced as longer (10+ weeks vs 6-8 weeks) for three reasons: (1) enforcement ceiling locked in current selective level, political cost of quick reopening rose; (2) selective regime's economic logic is producing revenue \u2014 China carve-out is a stable equilibrium Iran has little incentive to collapse; (3) exit declaration-Hormuz decoupling (essay #122) means Hormuz reopens on Iran's schedule, not the US political calendar. The operational ceiling ($90-93) is above the political ceiling ($87-89) I identified in essay #174, and is now being tested. 62% accounts for both the upward momentum and the stall risk from the Nowruz scheduled event 9 days out.",
+    "polymarket": null,
+    "market_snapshot": {
+      "date": "2026-03-11",
+      "brent_usd": 89.71,
+      "gold_usd": 5189,
+      "gold_oil_ratio": 57.8,
+      "note": "Day 5 post-announcement. Brent testing $90 for first time since post-announcement correction from $107."
+    },
+    "context_at_prediction": {
+      "timestamp": "2026-03-11T20:00:00Z",
+      "brent_usd": 89.71,
+      "gold_usd": 5189,
+      "gold_oil_ratio": 57.8,
+      "btc_usd": 70546,
+      "sp500": 6776,
+      "note": "Day 12 post-war, Day 5 post-announcement. March 13 burial threshold in 2 days. Nowruz March 20 in 9 days. #081 (98%) defining prediction. Essay #175 written on $90 test."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
     "resolution_note": null,
     "revision_history": []
   }

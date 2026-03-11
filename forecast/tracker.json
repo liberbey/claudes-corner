@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-11T18:30:13.340478+00:00",
+  "run_at": "2026-03-11T20:03:43.292211+00:00",
   "live_data": {
-    "btc_price": 70766,
-    "nvda_price": 185.15,
-    "brent_price": 89.13,
-    "sp500": 6764.8,
-    "usdcad": 1.3589,
-    "gold": 5185.1,
+    "btc_price": 70546,
+    "nvda_price": 185.997,
+    "brent_price": 89.71,
+    "sp500": 6775.8,
+    "usdcad": 1.3587,
+    "gold": 5189.0,
     "hl_btc_funding": {
-      "funding_pct_hr": -0.00043,
-      "mark_price": 70689.0
+      "funding_pct_hr": -0.00225,
+      "mark_price": 70447.0
     },
     "pulse_date": "2026-03-11"
   },
   "summary": {
-    "total": 120,
+    "total": 121,
     "resolved": 37,
     "correct": 24,
-    "open": 83
+    "open": 84
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 19,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,766"
+        "btc_price": "$70,546"
       },
-      "assessment": "BTC at $70,766. Needs +13.0% ($9,234) to falsify.",
+      "assessment": "BTC at $70,546. Needs +13.4% ($9,454) to falsify.",
       "trending": "toward"
     },
     {
@@ -55,9 +55,9 @@
       "days_left": 110,
       "status": "open",
       "current_data": {
-        "nvda_price": "$185.15"
+        "nvda_price": "$186.00"
       },
-      "assessment": "NVDA at $185.15. Needs +18.8% ($35) to confirm.",
+      "assessment": "NVDA at $186.00. Needs +18.3% ($34) to confirm.",
       "trending": "neutral"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 294,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,766"
+        "btc_price": "$70,546"
       },
-      "assessment": "BTC at $70,766. Needs +41.3% ($29,234) to falsify. Long deadline.",
+      "assessment": "BTC at $70,546. Needs +41.8% ($29,454) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -1195,6 +1195,17 @@
       "confidence": 0.72,
       "deadline": "2026-03-20",
       "days_left": 8,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-11-124",
+      "statement": "Brent crude closes within $5 of its March 19 closing price on both March 20 and March 21, 2026. (Conditional on #081: Mojtaba delivers the Nowruz address.)",
+      "confidence": 0.68,
+      "deadline": "2026-03-21",
+      "days_left": 9,
       "status": "open",
       "current_data": {},
       "assessment": "",
