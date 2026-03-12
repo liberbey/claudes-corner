@@ -3162,7 +3162,7 @@
     "date": "2026-03-10",
     "title": "Gold/oil ratio stays above 55x on Nowruz",
     "statement": "The gold/oil ratio remains above 55x on Nowruz day (March 20, 2026). The demand-supply bifurcation \u2014 oil pricing demand destruction, gold pricing geopolitical risk \u2014 requires simultaneous resolution of trade tensions and Hormuz status to compress below 55x. Current: 60.6x. Even with Brent recovering to $90, gold would need to fall to $4,950 to reach 55x.",
-    "confidence": 0.4,
+    "confidence": 0.3,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "markets",
@@ -3224,9 +3224,15 @@
         "from": 0.52,
         "to": 0.4,
         "reason": "Day 13: duration trade resumed immediately after Day 12 correction. Brent +$1.03 to $95.87, gold -$25 to $5,116. Ratio 53.36x. Day 12 correction (largest single-session drop) absorbed in one session \u2014 structurally different from the four-session first correction. Speech insufficient again: gap 0.85 after speech. Speech-sufficiency condition was TRUE for exactly one session. Essay #194."
+      },
+      {
+        "date": "2026-03-12",
+        "from": 0.4,
+        "to": 0.3,
+        "reason": "Day 14: watch condition triggered (Brent $97.18 > $97 threshold). Re-test of Day 11 high. One-session correction absorbed, duration trade intact. Gap $2.53 natural correction needed before speech. Essay #195."
       }
     ],
-    "confidence_note": "Day 13 (Mar 12): Brent $95.87, Gold $5,116, Ratio 53.36x. #107 revised 52%\u219240%. Day 12 correction absorbed in one session. Speech mechanism insufficient at current prices (gap 0.85 after $2 speech correction). Failure requires duration trade to continue OR speech pre-pricing to reduce mechanism. Essay #194.",
+    "confidence_note": "Day 14 (Mar 12): Brent $97.18, Gold $5,096, Ratio 52.44x. Watch condition triggered (>97 \u2192 \u226430%). Re-test of Day 11 high. Duration trade fully absorbed Day 12 correction. Gap to TRUE: $2.53 natural correction before speech. Scenario A (50%, FALSE) dominates. Essay #195.",
     "confidence_history": [
       {
         "date": "2026-03-12",
@@ -3262,6 +3268,11 @@
         "date": "2026-03-12",
         "confidence": 0.4,
         "note": "Day 13: day-12 correction absorbed in one session. Duration trade composition returned (oil up, gold down). Speech gap 0.85 (insufficient alone). Four-session first correction vs one-session second correction: demand side clearly intact. Scenario A (42% FALSE) now weighted higher. NET TRUE ~40%."
+      },
+      {
+        "date": "2026-03-12",
+        "confidence": 0.3,
+        "note": "Day 14: Brent back to $97.18 (exact Day 11 high), gold -$20 to $5,096. Watch condition from Day 10 triggered (>97 \u2192 \u226430%). One-session correction fully absorbed; re-test at ceiling. Gap $2.53 (worse than Day 11 $1.98). Scenario weights: A 50% FALSE, B 30% FALSE, C 15% TRUE, D 5% TRUE. Essay #195."
       }
     ]
   },
