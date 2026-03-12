@@ -3162,7 +3162,7 @@
     "date": "2026-03-10",
     "title": "Gold/oil ratio stays above 55x on Nowruz",
     "statement": "The gold/oil ratio remains above 55x on Nowruz day (March 20, 2026). The demand-supply bifurcation \u2014 oil pricing demand destruction, gold pricing geopolitical risk \u2014 requires simultaneous resolution of trade tensions and Hormuz status to compress below 55x. Current: 60.6x. Even with Brent recovering to $90, gold would need to fall to $4,950 to reach 55x.",
-    "confidence": 0.45,
+    "confidence": 0.38,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "markets",
@@ -3193,6 +3193,18 @@
         "from": 0.62,
         "to": 0.55,
         "reason": "Brent new high at $95.55, above $94.76 peak. $93 clearing price lasted one session \u2014 failed. Ratio new low at 54.13x. Speech correction now needs $2+ minimum. Essay #181."
+      },
+      {
+        "date": "2026-03-12",
+        "from": 0.55,
+        "to": 0.45,
+        "reason": "Gold down $17 (day 1 decomposition) while oil bids. Double compression narrows #107 conditions: needs speech to correct oil AND gold to hold. Essay #182."
+      },
+      {
+        "date": "2026-03-12",
+        "from": 0.45,
+        "to": 0.38,
+        "reason": "Day 2 of decomposition confirms signal. Gold down $4 (deceleration). At $5,150 gold, 55x requires $2.63 oil correction \u2014 above the speech mechanism ceiling. Neither stable-gold nor drifting-gold scenario has ratio clearing 55x on speech alone. Essay #183."
       }
     ],
     "confidence_note": "Revised: 82% (Mar10) \u2192 70% (Mar13) \u2192 55% (Mar14) \u2192 62% (Mar15) \u2192 55% (Mar16) \u2192 45% (Mar17). Gold declined $17 while oil made new high at $96.16. First decomposition signal: succession-risk premium in gold releasing while supply-duration bid in oil holds. Double compression on ratio: oil up (denominator), gold down (numerator). At 53.6x, speech needs $2.45 Brent correction with gold flat. If gold drifts to $5100, need $3.07 correction. Speech mechanism ceiling: ~$2. Essay #182."
@@ -3712,7 +3724,7 @@
     "date": "2026-03-12",
     "title": "Gold non-response on Nowruz day",
     "statement": "Gold closes within \u00b12% of its March 19, 2026 closing price on March 20, 2026 (the day of the Nowruz address).",
-    "confidence": 0.72,
+    "confidence": 0.82,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "markets",
@@ -3735,6 +3747,14 @@
       "oil_4day_change": 5.76,
       "essay": "what-the-gold-silence-prices.html"
     },
-    "resolution_criteria": "Conditional on Nowruz 1405 address being delivered (#081). Resolves TRUE if gold closes within \u00b12% of its March 19 closing price on March 20. Resolves FALSE if gold moves more than 2% in either direction from March 19 close on March 20."
+    "resolution_criteria": "Conditional on Nowruz 1405 address being delivered (#081). Resolves TRUE if gold closes within \u00b12% of its March 19 closing price on March 20. Resolves FALSE if gold moves more than 2% in either direction from March 19 close on March 20.",
+    "revision_history": [
+      {
+        "date": "2026-03-12",
+        "from": 0.72,
+        "to": 0.82,
+        "reason": "Two-day gold decomposition confirms succession premium pre-releasing before March 20. Gold will have very little uncertainty premium left to release on founding speech day. \u00b12% band is nearly certain. Essay #183."
+      }
+    ]
   }
 ]
