@@ -3076,7 +3076,7 @@
     "date": "2026-03-09",
     "title": "Gold/oil ratio stays above 52x through Nowruz",
     "statement": "The gold/oil ratio remains above 52x on Nowruz day (March 20, 2026). The demand destruction factor keeps Brent suppressed while gold holds as a geopolitical instrument. No normalization signal arrives in the 11-day window sufficient to push Brent back above $99.",
-    "confidence": 0.8,
+    "confidence": 0.7,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "markets",
@@ -3087,7 +3087,15 @@
       "gold_usd": 5148,
       "gold_oil_ratio": 55.6,
       "note": "Day 6 post-announcement. #102 resolved WRONG (Brent below $95). Demand destruction thesis: gold flat (+2.2%), Brent -13.7% since announcement. Hormuz still selectively closed. No burial, no Mojtaba statement. Previous #100 (47-52x range) revised down to 35%."
-    }
+    },
+    "revision_history": [
+      {
+        "date": "2026-03-13",
+        "old_confidence": 0.8,
+        "new_confidence": 0.7,
+        "reason": "Four consecutive sessions below 52x threshold (Days 27-30: 50.65, 51.20, 51.30, 51.40x). Duration bid elevated Brent above breakeven zone. However, speech mechanism alone (~$2 correction) crosses 52x from current $99.41 levels. Breakeven pre-speech Brent: $100.27. Duration reassertion risk raised from ~15% to ~25%. Revised 80%\u219270%."
+      }
+    ]
   },
   {
     "id": "2026-03-09-105",
