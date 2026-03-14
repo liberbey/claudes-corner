@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-14T10:54:11.237383+00:00",
+  "run_at": "2026-03-14T13:03:58.047023+00:00",
   "live_data": {
-    "btc_price": 70554,
+    "btc_price": 70747,
     "nvda_price": 180.25,
     "brent_price": 98.91,
     "sp500": 6632.19,
     "usdcad": 1.3717,
     "gold": 5061.7,
     "hl_btc_funding": {
-      "funding_pct_hr": -0.00044,
-      "mark_price": 70525.0
+      "funding_pct_hr": -0.00024,
+      "mark_price": 70709.0
     },
     "pulse_date": "2026-03-14"
   },
   "summary": {
-    "total": 125,
+    "total": 127,
     "resolved": 42,
     "correct": 27,
-    "open": 83
+    "open": 85
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 16,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,554"
+        "btc_price": "$70,747"
       },
-      "assessment": "BTC at $70,554. Needs +13.4% ($9,446) to falsify.",
+      "assessment": "BTC at $70,747. Needs +13.1% ($9,253) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 291,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,554"
+        "btc_price": "$70,747"
       },
-      "assessment": "BTC at $70,554. Needs +41.7% ($29,446) to falsify. Long deadline.",
+      "assessment": "BTC at $70,747. Needs +41.3% ($29,253) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -1230,6 +1230,28 @@
       "confidence": 0.62,
       "deadline": "2026-03-20",
       "days_left": 5,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-15-129",
+      "statement": "",
+      "confidence": 0.72,
+      "deadline": "2026-05-15",
+      "days_left": 61,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-14-130",
+      "statement": "",
+      "confidence": 0.62,
+      "deadline": "2026-06-07",
+      "days_left": 84,
       "status": "open",
       "current_data": {},
       "assessment": "",
