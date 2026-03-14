@@ -2728,7 +2728,7 @@
     "id": "2026-03-08-091",
     "date": "2026-03-08",
     "statement": "The Mojtaba Khamenei Polymarket contract reaches 75% or higher on the same day that a burial date is officially announced by Iranian state media.",
-    "confidence": 0.72,
+    "confidence": 0.95,
     "deadline": "2026-03-20",
     "category": "markets",
     "reasoning": "The burial date announcement is the single verifiable public event that most directly signals imminent succession announcement (48h window per prediction #074). When that event occurs, the market will update rapidly: (1) 48h clock starts for the announcement itself, (2) the security architecture model is confirmed (burial first = controlled process), (3) the no-alternative signal completes its run. The market has moved from 42% to 63% on no specific verifiable events \u2014 just the strengthening absence signal. A verifiable public trigger (burial date) will produce an accelerated move. 75% is a conservative target: burial announcement should push the market to 70-80% in the same session. Set at 72% probability because (a) burial announcement might not come before March 20 deadline, and (b) market might absorb the burial news more slowly than expected if it occurs outside trading hours or alongside confusing secondary news.",
@@ -2755,7 +2755,15 @@
       "burial",
       "calibration"
     ],
-    "status": "open"
+    "status": "open",
+    "revision_history": [
+      {
+        "date": "2026-03-14",
+        "from": 0.72,
+        "to": 0.95,
+        "note": "Polymarket already at 81.45% as of Day 38 \u2014 already above 75% threshold. Burial date announcement (compound ceremony March 20) will occur when Polymarket is at ~100%. The only failure mode is a large pre-announcement Polymarket crash (>6.45 points from current level), which requires a major disruption to settled succession narrative. Revised 72%\u219295%."
+      }
+    ]
   },
   {
     "id": "2026-03-08-092",
@@ -3566,7 +3574,7 @@
     "date": "2026-03-10",
     "title": "Brent touches  before Nowruz",
     "statement": "Brent crude closes at or below .00 at least once before Nowruz (March 20, 2026). At .18 with + three-day decline and no near-term reversal catalyst, the  level is within reach. The demand-adjusted peace price floor is -80; the selective Hormuz premium (~) is now the only barrier. Slight less-than-even probability given bounce risk near psychological round numbers.",
-    "confidence": 0.22,
+    "confidence": 0.03,
     "deadline": "2026-03-20",
     "status": "open",
     "resolved": false,
@@ -3585,6 +3593,12 @@
         "old_confidence": 0.45,
         "new_confidence": 0.22,
         "reason": "The $5.30 bounce from $82.18 shows strong buying support at the $82 floor. To touch $80, Brent would need to break back through the confirmed floor. With Nowruz 10 days away and no new demand catalyst, breaking the floor a second time is a low-probability scenario. Essay #153."
+      },
+      {
+        "date": "2026-03-14",
+        "from": 0.22,
+        "to": 0.03,
+        "note": "Brent at $98.91. Would require 19.1% drop ($18.91) in 5 trading days to hit $80.00 \u2014 no plausible trigger visible. Written at Brent $87.49, where $80 floor required only 8.5% drop. Demand destruction thesis is a $90-100 range, not a $80 range. Revised 22%\u21923%."
       }
     ]
   },
@@ -3592,7 +3606,7 @@
     "id": "2026-03-11-115",
     "date": "2026-03-11",
     "statement": "Brent crude does not close below $85.00 on any trading day between March 11 and Nowruz (March 20, 2026).",
-    "confidence": 0.35,
+    "confidence": 0.96,
     "deadline": "2026-03-20",
     "category": "markets",
     "reasoning": "The $82 floor held on Day 13, producing a $5.30 bounce to $87.48. On Day 14, Brent broke above $87.50. The demand destruction thesis was overpriced at $82 \u2014 the bounce confirmed that $82 is below the actual demand-adjusted floor. With $87.50 now broken and acting as potential support, $85 represents a reasonable lower bound for the new range. Getting back below $85 from $87.64 requires the demand compression thesis to re-assert aggressively in the next 9 days \u2014 but the bounce demonstrated significant buying support at $82. No catalyst for renewed extreme selling visible in the pre-Nowruz window. Nowruz on March 20 is a variance-resolving event for gold, not directly for oil \u2014 oil stays near current levels through the address.",
@@ -3618,6 +3632,12 @@
         "from": 0.7,
         "to": 0.35,
         "note": "Written at $87.64 during false ceiling break. Brent now at $84.52 \u2014 midpoint of $82-$87.50 range. The ceiling did not break; prediction at immediate risk. Essay #160."
+      },
+      {
+        "date": "2026-03-14",
+        "from": 0.35,
+        "to": 0.96,
+        "note": "Brent at $98.91. Closing below $85 requires 14% drop ($13.91) in 5 trading days. Demand destruction has Brent in $90-100 range, not approaching $85. Written at $87.49 where $85 floor was a live question (only 2.8% move). Context entirely changed. Revised 35%\u219296%."
       }
     ]
   },
