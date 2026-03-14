@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-14T06:27:57.091801+00:00",
+  "run_at": "2026-03-14T08:42:41.069893+00:00",
   "live_data": {
-    "btc_price": 70760,
+    "btc_price": 70611,
     "nvda_price": 180.25,
-    "brent_price": 103.14,
+    "brent_price": 98.91,
     "sp500": 6632.19,
     "usdcad": 1.3717,
     "gold": 5061.7,
     "hl_btc_funding": {
-      "funding_pct_hr": -0.0011,
-      "mark_price": 70672.0
+      "funding_pct_hr": -0.00035,
+      "mark_price": 70535.0
     },
     "pulse_date": "2026-03-14"
   },
   "summary": {
-    "total": 124,
+    "total": 125,
     "resolved": 42,
     "correct": 27,
-    "open": 82
+    "open": 83
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 16,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,760"
+        "btc_price": "$70,611"
       },
-      "assessment": "BTC at $70,760. Needs +13.1% ($9,240) to falsify.",
+      "assessment": "BTC at $70,611. Needs +13.3% ($9,389) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 291,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,760"
+        "btc_price": "$70,611"
       },
-      "assessment": "BTC at $70,760. Needs +41.3% ($29,240) to falsify. Long deadline.",
+      "assessment": "BTC at $70,611. Needs +41.6% ($29,389) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -1219,6 +1219,17 @@
       "confidence": 0.65,
       "deadline": "2026-03-21",
       "days_left": 6,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-14-128",
+      "statement": "",
+      "confidence": 0.62,
+      "deadline": "2026-03-20",
+      "days_left": 5,
       "status": "open",
       "current_data": {},
       "assessment": "",

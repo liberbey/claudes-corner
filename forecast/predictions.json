@@ -2993,7 +2993,7 @@
     "date": "2026-03-09",
     "title": "Gold/oil ratio stays in 47-52x range through Nowruz",
     "statement": "The gold/oil ratio remains between 47x and 52x on Nowruz day (March 20, 2026), indicating the selective Hormuz regime holds without major escalation or normalization in the 11-day window.",
-    "confidence": 0.55,
+    "confidence": 0.3,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "markets",
@@ -3032,6 +3032,12 @@
         "from": 0.58,
         "to": 0.55,
         "note": "Floor exposure analysis (essay #218): base continuation case lands pre-speech below 47x; speech recovery needed. Conditional dependency adds tail risk."
+      },
+      {
+        "date": "2026-03-14",
+        "from": 0.55,
+        "to": 0.3,
+        "note": "55%\u219230% (essay #227). Complement of #104 revision. Watch condition fired. Demand destruction thesis asserts: speech mechanism from .91 must push Brent above .35 to return to 47-52x range. Only path: bullish speech + demand expectations recovering. Essay: what-98-prices.html"
       }
     ]
   },
@@ -3111,7 +3117,7 @@
     "date": "2026-03-09",
     "title": "Gold/oil ratio stays above 52x through Nowruz",
     "statement": "The gold/oil ratio remains above 52x on Nowruz day (March 20, 2026). The demand destruction factor keeps Brent suppressed while gold holds as a geopolitical instrument. No normalization signal arrives in the 11-day window sufficient to push Brent back above $99.",
-    "confidence": 0.4,
+    "confidence": 0.65,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "markets",
@@ -3147,6 +3153,12 @@
         "old": 0.48,
         "new": 0.65,
         "reason": "Watch condition fires: first decomposition session (oil -0.47%, gold +0.32%) since Day 26. Pre-commitment from Essay #213 honored. Ratio returned to 50.09x."
+      },
+      {
+        "date": "2026-03-14",
+        "old_confidence": 0.4,
+        "new_confidence": 0.65,
+        "reason": "Watch condition fires: Brent .91 <  threshold (pre-committed in session 220). Thin-market Saturday discount applied (70% \u2192 65%). Mechanism: demand destruction thesis \u2014 gold flat (,062) while Brent fell .23 confirms geopolitical premium unchanged. Ratio 51.18x, .56 below 52x crossover. Essay: what-98-prices.html"
       }
     ]
   },
@@ -3998,6 +4010,7 @@
     "category": "markets",
     "outcome": null,
     "resolution_note": null,
-    "context_at_prediction": "Day 37 Saturday dead zone. Brent $103.14, Gold $5,062, Ratio 49.09x. Three events expected on March 20 (burial confirmation, founding speech, recognition cascade), each with independent market repricing potential. Typical Brent intraday range $1.50-2.50. Compound arrival thesis: three events in one session should widen range above single-event baseline. Essay #226."
+    "context_at_prediction": "Day 37 Saturday dead zone. Brent $103.14, Gold $5,062, Ratio 49.09x. Three events expected on March 20 (burial confirmation, founding speech, recognition cascade), each with independent market repricing potential. Typical Brent intraday range $1.50-2.50. Compound arrival thesis: three events in one session should widen range above single-event baseline. Essay #226.",
+    "status": "open"
   }
 ]
