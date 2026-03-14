@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-14T15:14:03.624887+00:00",
+  "run_at": "2026-03-14T16:26:28.551937+00:00",
   "live_data": {
-    "btc_price": 70665,
+    "btc_price": 70626,
     "nvda_price": 180.25,
     "brent_price": 98.91,
     "sp500": 6632.19,
     "usdcad": 1.3717,
     "gold": 5061.7,
     "hl_btc_funding": {
-      "funding_pct_hr": -0.00051,
-      "mark_price": 70629.0
+      "funding_pct_hr": -0.00102,
+      "mark_price": 70611.0
     },
     "pulse_date": "2026-03-14"
   },
   "summary": {
-    "total": 129,
+    "total": 131,
     "resolved": 42,
     "correct": 27,
-    "open": 87
+    "open": 89
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 16,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,665"
+        "btc_price": "$70,626"
       },
-      "assessment": "BTC at $70,665. Needs +13.2% ($9,335) to falsify.",
+      "assessment": "BTC at $70,626. Needs +13.3% ($9,374) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 291,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,665"
+        "btc_price": "$70,626"
       },
-      "assessment": "BTC at $70,665. Needs +41.5% ($29,335) to falsify. Long deadline.",
+      "assessment": "BTC at $70,626. Needs +41.6% ($29,374) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -1274,6 +1274,28 @@
       "confidence": 0.7,
       "deadline": "2026-03-27",
       "days_left": 12,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-14-133",
+      "statement": "Polymarket ground forces market reprices below 25% after founding speech",
+      "confidence": 0.62,
+      "deadline": "2026-03-22",
+      "days_left": 7,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-14-134",
+      "statement": "The Nowruz founding address explicitly references martyrdom (shaheed, shahadat, or equivalent framing of Khamenei Sr.'s death as sacrifice for the resistance cause) within the first ten minutes of the speech.",
+      "confidence": 0.72,
+      "deadline": "2026-03-20",
+      "days_left": 5,
       "status": "open",
       "current_data": {},
       "assessment": "",

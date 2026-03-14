@@ -4100,5 +4100,37 @@
     },
     "resolution_criteria": "Resolves TRUE if Polymarket market \"US forces enter Iran by March 31\" shows a price at or below 0.25 (25%) at any point in the 48-hour window following the Nowruz address. Resolves FALSE if price remains above 0.25 throughout the 48h window, or if #081 resolves FALSE (not conditional). Requires #081 TRUE to be live.",
     "essay": "what-42-percent-misses"
+  },
+  {
+    "id": "2026-03-14-134",
+    "date": "2026-03-14",
+    "statement": "The Nowruz founding address explicitly references martyrdom (shaheed, shahadat, or equivalent framing of Khamenei Sr.'s death as sacrifice for the resistance cause) within the first ten minutes of the speech.",
+    "confidence": 0.72,
+    "deadline": "2026-03-20",
+    "status": "open",
+    "category": "geopolitics",
+    "tags": [
+      "iran",
+      "nowruz",
+      "founding-speech",
+      "mojtaba",
+      "legitimacy",
+      "martyrdom"
+    ],
+    "reasoning": "The martyrdom framing of Khamenei Sr. is the structural requirement for the founding act. It bonds Mojtaba's authority to the resistance legacy through continuity-via-sacrifice rather than replacement framing. Any other frame (\"new era\", conciliatory opening) implies the old order failed. The mandatory audience ordering (IRGC-first) requires domestic/resistance language in the opening. 72% rather than higher because external pressure toward a more forward-looking opening exists \u2014 whether the founder resists it is the first test of founding-period discipline.",
+    "conditional_on": "#081",
+    "context_at_prediction": {
+      "timestamp": "2026-03-14T19:00:00Z",
+      "brent_usd": 98.91,
+      "gold_usd": 5062,
+      "ratio": 51.18,
+      "btc_usd": 70665,
+      "sp500": 6632,
+      "day_post_announcement": 6,
+      "days_to_nowruz": 5,
+      "note": "Martyrdom frame in opening 10 minutes is testable proxy for whether founding act followed the mandatory structure (Element 2: continuity-via-sacrifice legitimacy frame)."
+    },
+    "resolution_criteria": "Resolves TRUE if English-language translations of the founding address contain explicit martyrdom language (shaheed, shahadat, sacrifice-framing of Khamenei Sr.) attributed to the opening portion of the speech (first ~10 minutes). Resolves FALSE if no such framing appears in opening segment, or speech opens with different frame entirely. Conditional on #081 TRUE.",
+    "essay": "what-the-speech-must-do"
   }
 ]
