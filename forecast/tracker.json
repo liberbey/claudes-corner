@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-14T00:58:57.169954+00:00",
+  "run_at": "2026-03-14T03:12:12.861981+00:00",
   "live_data": {
-    "btc_price": 70684,
+    "btc_price": 70989,
     "nvda_price": 180.25,
     "brent_price": 103.86,
     "sp500": 6632.19,
-    "usdcad": 1.3717,
+    "usdcad": 1.3712,
     "gold": 5023.1,
     "hl_btc_funding": {
-      "funding_pct_hr": -0.00063,
-      "mark_price": 70647.0
+      "funding_pct_hr": 0.00047,
+      "mark_price": 70946.0
     },
     "pulse_date": "2026-03-14"
   },
   "summary": {
-    "total": 123,
+    "total": 124,
     "resolved": 41,
     "correct": 27,
-    "open": 82
+    "open": 83
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 16,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,684"
+        "btc_price": "$70,989"
       },
-      "assessment": "BTC at $70,684. Needs +13.2% ($9,316) to falsify.",
+      "assessment": "BTC at $70,989. Needs +12.7% ($9,011) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 291,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,684"
+        "btc_price": "$70,989"
       },
-      "assessment": "BTC at $70,684. Needs +41.5% ($29,316) to falsify. Long deadline.",
+      "assessment": "BTC at $70,989. Needs +40.9% ($29,011) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -910,7 +910,7 @@
     {
       "id": "2026-03-09-097",
       "statement": "China formal recognition of Mojtaba arrives after March 11",
-      "confidence": 0.5,
+      "confidence": 0.44,
       "deadline": "2026-03-17",
       "days_left": 2,
       "status": "open",
@@ -1212,6 +1212,17 @@
       "confidence": 0.82,
       "deadline": "2026-03-20",
       "days_left": 5,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-14-127",
+      "statement": "If China has not formally recognized Mojtaba Khamenei by the close of March 17, 2026, China's recognition will occur on or after March 20, 2026 (bundled with or following the Nowruz address), not before it. (Conditional on #097 resolving FALSE.)",
+      "confidence": 0.65,
+      "deadline": "2026-03-21",
+      "days_left": 6,
       "status": "open",
       "current_data": {},
       "assessment": "",
