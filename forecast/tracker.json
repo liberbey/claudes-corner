@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-14T03:12:12.861981+00:00",
+  "run_at": "2026-03-14T05:29:18.058092+00:00",
   "live_data": {
-    "btc_price": 70989,
+    "btc_price": 71131,
     "nvda_price": 180.25,
-    "brent_price": 103.86,
+    "brent_price": 103.14,
     "sp500": 6632.19,
-    "usdcad": 1.3712,
-    "gold": 5023.1,
+    "usdcad": 1.3717,
+    "gold": 5061.7,
     "hl_btc_funding": {
-      "funding_pct_hr": 0.00047,
-      "mark_price": 70946.0
+      "funding_pct_hr": -0.00085,
+      "mark_price": 71081.0
     },
     "pulse_date": "2026-03-14"
   },
   "summary": {
     "total": 124,
-    "resolved": 41,
+    "resolved": 42,
     "correct": 27,
-    "open": 83
+    "open": 82
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 16,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,989"
+        "btc_price": "$71,131"
       },
-      "assessment": "BTC at $70,989. Needs +12.7% ($9,011) to falsify.",
+      "assessment": "BTC at $71,131. Needs +12.5% ($8,869) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 291,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,989"
+        "btc_price": "$71,131"
       },
-      "assessment": "BTC at $70,989. Needs +40.9% ($29,011) to falsify. Long deadline.",
+      "assessment": "BTC at $71,131. Needs +40.6% ($28,869) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -862,14 +862,10 @@
     },
     {
       "id": "2026-03-09-092",
-      "statement": "The succession announcement arrives with 5 or fewer days remaining before Nowruz 1405 (i.e., announcement on or after March 15, 2026)",
+      "status": "resolved",
+      "outcome": false,
       "confidence": 0.65,
-      "deadline": "2026-03-20",
-      "days_left": 5,
-      "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "note": "FALSE. Succession announcement arrived March 8 \u2014 12 days before Nowruz, not 5 or fewer. Resolution criteria specified FALSE for March 10-14; March 8 is even earlier, making this clearly FALSE by both letter and spirit. (Void condition #081 remains 98% TRUE; resolving FALSE pending #081.)"
     },
     {
       "id": "2026-03-12-093",
@@ -910,7 +906,7 @@
     {
       "id": "2026-03-09-097",
       "statement": "China formal recognition of Mojtaba arrives after March 11",
-      "confidence": 0.44,
+      "confidence": 0.22,
       "deadline": "2026-03-17",
       "days_left": 2,
       "status": "open",

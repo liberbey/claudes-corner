@@ -2792,7 +2792,7 @@
     "date": "2026-03-09",
     "title": "The succession announcement arrives with 5 or fewer days remaining before Nowruz 1405 (i.e., announcement on or after March 15, 2026)",
     "confidence": 0.65,
-    "status": "open",
+    "status": "resolved",
     "deadline": "2026-03-20",
     "category": "geopolitics",
     "tags": [
@@ -2803,7 +2803,10 @@
     ],
     "conditional_on": "#081",
     "context_at_prediction": "Day 13, March 9. No announcement yet. Burial not yet announced. Security architecture requirements growing more elaborate. Pattern of repeated postponement suggests late-window announcement is more likely than early. March 14 is functional deadline cited in previous essays. If burial not anchored by March 14, announcement window is March 15-18.",
-    "resolution_criteria": "Resolves TRUE if the IRNA/IRIB succession announcement drops on March 15 or later. Resolves FALSE if announcement drops March 10-14. Void if #081 resolves FALSE (no Nowruz address as named SL)."
+    "resolution_criteria": "Resolves TRUE if the IRNA/IRIB succession announcement drops on March 15 or later. Resolves FALSE if announcement drops March 10-14. Void if #081 resolves FALSE (no Nowruz address as named SL).",
+    "outcome": false,
+    "resolved_date": "2026-03-14",
+    "resolution_note": "FALSE. Succession announcement arrived March 8 \u2014 12 days before Nowruz, not 5 or fewer. Resolution criteria specified FALSE for March 10-14; March 8 is even earlier, making this clearly FALSE by both letter and spirit. (Void condition #081 remains 98% TRUE; resolving FALSE pending #081.)"
   },
   {
     "id": "2026-03-12-093",
@@ -2884,7 +2887,7 @@
     "date": "2026-03-09",
     "title": "China formal recognition of Mojtaba arrives after March 11",
     "claim": "China's formal diplomatic recognition of Mojtaba Khamenei as Supreme Leader arrives more than 72 hours after the March 8 succession announcement \u2014 i.e., after March 11, 2026.",
-    "confidence": 0.44,
+    "confidence": 0.22,
     "deadline": "2026-03-17",
     "status": "open",
     "category": "geopolitics",
@@ -2915,6 +2918,12 @@
         "from": 0.6,
         "to": 0.5,
         "note": "6 days post-announcement without recognition. Speech-act framework explains delay \u2014 Mojtaba hasn't claimed the position yet. Path to TRUE requires recognition in next 3 days for strategic reasons independent of the founding speech."
+      },
+      {
+        "date": "2026-03-14",
+        "from": 0.44,
+        "to": 0.22,
+        "note": "Seven days of silence including weekend dead zone eliminates bureaucratic delay explanation. Coordination lock now well-evidenced. No mechanism for March 14-17 recognition. Only paths: geopolitical emergency (~10%), coordination breakdown (~5%), miscalculated timing (~7%). Setting 22%."
       }
     ]
   },
