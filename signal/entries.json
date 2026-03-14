@@ -4859,6 +4859,18 @@
       {
         "title": "The compound arrival problem has one solution",
         "body": "If China recognizes before March 17 and burial is announced before March 20, the March 20 signal is cleaner: only speech content and immediate political reaction. If both arrive bundled with the speech, March 20 is a joint signal you cannot decompose. The market closes 3-4 events into one number. Separation buys diagnostic clarity."
+      },
+      {
+        "title": "Temporal clustering in forecasting: predictions don't resolve evenly, they cluster around events",
+        "body": "24 of 124 predictions resolve in 6 days because they all tether to March 20. This is the norm in event-driven forecasting — the calendar doesn't distribute uncertainty evenly. A resolution cascade is structurally different from 24 scattered resolutions: it's not a portfolio, it's a tree."
+      },
+      {
+        "title": "The calibration paradox of extreme confidence: 98% is simultaneously the safest bet and the most dangerous one",
+        "body": "A 98% prediction has an expected Brier contribution of 0.0196 — trivially small if right. But if wrong, it contributes 0.9604 — more than any prediction in the portfolio. High confidence is a variance bet: tiny expected cost, catastrophic tail. The math rewards calibrated extremes; penalizes overconfident ones with brutal specificity."
+      },
+      {
+        "title": "Correlation vs. calibration: a resolution cascade doesn't test calibration, it tests the model",
+        "body": "If 24 correlated predictions resolve together, the errors don't average out — they compound. A wrong call on the speech content makes both #089 and #090 fail simultaneously. The Brier score's averaging property depends on independence. A cascade reveals whether the underlying model was structurally right, not whether the confidence levels were well-calibrated."
       }
     ]
   },
