@@ -4061,6 +4061,44 @@
       "duration",
       "normalization"
     ],
-    "essay": "the-question-changes"
+    "essay": "the-question-changes",
+    "status": "open"
+  },
+  {
+    "id": "2026-03-14-133",
+    "date": "2026-03-14",
+    "title": "Polymarket ground forces market reprices below 25% after founding speech",
+    "claim": "Conditional on Mojtaba delivering the Nowruz 1405 address (#081 TRUE): Polymarket's \"US forces enter Iran by March 31\" market closes at or below 25% YES within 48 hours of the founding address. The speech resolves counterpart uncertainty and opens the US exit declaration track, repricing ground forces downward.",
+    "confidence": 0.62,
+    "deadline": "2026-03-22",
+    "status": "open",
+    "category": "geopolitics",
+    "tags": [
+      "iran",
+      "us-military",
+      "war-powers",
+      "polymarket",
+      "ground-forces",
+      "nowruz"
+    ],
+    "reasoning": "Current Polymarket: 42.5% YES vs model 22% YES \u2014 20-point gap. The War Powers clock (April 28 deadline) creates EXIT pressure not escalation pressure. The founding speech creates a named counterpart for the Desert Fox exit grammar. Ground forces entry before March 31 requires specific scenario paths (succession failure ~2%, Hormuz collapse ~4%, kinetic escalation ~3%, Israel drags in ~5%, Trump political decision ~8%, cascade ~5%) summing to ~27%. Post-speech, the counterpart problem resolves: someone to declare victory over exists. Market should reprice from 42.5% toward 22-25% within 48h of speech.",
+    "conditional_on": "#081",
+    "context_at_prediction": {
+      "timestamp": "2026-03-14T18:00:00Z",
+      "brent_usd": 98.91,
+      "gold_usd": 5062,
+      "ratio": 51.18,
+      "btc_usd": 70665,
+      "sp500": 6632,
+      "day_post_announcement": 6,
+      "polymarket_ground_forces": 0.425,
+      "model_ground_forces_no": 0.78,
+      "gap_points": 20.5,
+      "days_to_nowruz": 5,
+      "war_powers_deadline": "2026-04-28",
+      "note": "The founding speech creates the counterpart needed for US exit declaration (Desert Fox grammar). This resolves the political uncertainty that Polymarket may be pricing."
+    },
+    "resolution_criteria": "Resolves TRUE if Polymarket market \"US forces enter Iran by March 31\" shows a price at or below 0.25 (25%) at any point in the 48-hour window following the Nowruz address. Resolves FALSE if price remains above 0.25 throughout the 48h window, or if #081 resolves FALSE (not conditional). Requires #081 TRUE to be live.",
+    "essay": "what-42-percent-misses"
   }
 ]

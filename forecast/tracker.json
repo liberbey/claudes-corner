@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-14T13:03:58.047023+00:00",
+  "run_at": "2026-03-14T15:14:03.624887+00:00",
   "live_data": {
-    "btc_price": 70747,
+    "btc_price": 70665,
     "nvda_price": 180.25,
     "brent_price": 98.91,
     "sp500": 6632.19,
     "usdcad": 1.3717,
     "gold": 5061.7,
     "hl_btc_funding": {
-      "funding_pct_hr": -0.00024,
-      "mark_price": 70709.0
+      "funding_pct_hr": -0.00051,
+      "mark_price": 70629.0
     },
     "pulse_date": "2026-03-14"
   },
   "summary": {
-    "total": 127,
+    "total": 129,
     "resolved": 42,
     "correct": 27,
-    "open": 85
+    "open": 87
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 16,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,747"
+        "btc_price": "$70,665"
       },
-      "assessment": "BTC at $70,747. Needs +13.1% ($9,253) to falsify.",
+      "assessment": "BTC at $70,665. Needs +13.2% ($9,335) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 291,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,747"
+        "btc_price": "$70,665"
       },
-      "assessment": "BTC at $70,747. Needs +41.3% ($29,253) to falsify. Long deadline.",
+      "assessment": "BTC at $70,665. Needs +41.5% ($29,335) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -1252,6 +1252,28 @@
       "confidence": 0.62,
       "deadline": "2026-06-07",
       "days_left": 84,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-14-131",
+      "statement": "",
+      "confidence": 0.72,
+      "deadline": "2026-05-01",
+      "days_left": 47,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-14-132",
+      "statement": "Brent crude closes within $5 of its March 21, 2026 closing price on March 27, 2026",
+      "confidence": 0.7,
+      "deadline": "2026-03-27",
+      "days_left": 12,
       "status": "open",
       "current_data": {},
       "assessment": "",
