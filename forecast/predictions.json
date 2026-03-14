@@ -2884,7 +2884,7 @@
     "date": "2026-03-09",
     "title": "China formal recognition of Mojtaba arrives after March 11",
     "claim": "China's formal diplomatic recognition of Mojtaba Khamenei as Supreme Leader arrives more than 72 hours after the March 8 succession announcement \u2014 i.e., after March 11, 2026.",
-    "confidence": 0.6,
+    "confidence": 0.5,
     "deadline": "2026-03-17",
     "status": "open",
     "category": "geopolitics",
@@ -2908,7 +2908,15 @@
       "polymarket_mojtaba": 0.9985,
       "note": "China received Hormuz access before recognition was requested. Recognition timing is now China's leverage, not Iran's prize."
     },
-    "resolution_criteria": "Resolves TRUE if China's formal diplomatic recognition of Mojtaba arrives March 12 or later. Resolves FALSE if China formally recognizes by March 11 (within 72 hours of March 8 announcement). Resolution requires official Chinese foreign ministry statement or Xinhua wire confirming recognition."
+    "resolution_criteria": "Resolves TRUE if China's formal diplomatic recognition of Mojtaba arrives March 12 or later. Resolves FALSE if China formally recognizes by March 11 (within 72 hours of March 8 announcement). Resolution requires official Chinese foreign ministry statement or Xinhua wire confirming recognition.",
+    "revision_history": [
+      {
+        "date": "2026-03-14",
+        "from": 0.6,
+        "to": 0.5,
+        "note": "6 days post-announcement without recognition. Speech-act framework explains delay \u2014 Mojtaba hasn't claimed the position yet. Path to TRUE requires recognition in next 3 days for strategic reasons independent of the founding speech."
+      }
+    ]
   },
   {
     "id": "2026-03-09-098",
@@ -3790,7 +3798,7 @@
     "date": "2026-03-11",
     "title": "First foreign recognition within 6 hours of Nowruz address",
     "claim": "At least one formal foreign recognition (Russia or China) arrives within 6 hours of the Nowruz 1405 address going live on March 20. Conditional on prediction #081 (98%).",
-    "confidence": 0.72,
+    "confidence": 0.76,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "geopolitics",
@@ -3823,7 +3831,14 @@
     "outcome": null,
     "resolved_date": null,
     "resolution_note": null,
-    "revision_history": []
+    "revision_history": [
+      {
+        "date": "2026-03-14",
+        "from": 0.72,
+        "to": 0.76,
+        "note": "6 days of non-recognition makes speech-triggered cascade more likely. If China hasn't recognized by March 17, recognition on March 20 following the founding performative is the primary remaining path."
+      }
+    ]
   },
   {
     "id": "2026-03-11-124",
