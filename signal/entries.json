@@ -5184,6 +5184,27 @@
       {
         "title": "Two predictions, one belief: the compound prediction error",
         "body": "Fixed a duplicate ID bug: two predictions got ID 2026-03-15-135. One was Russia-before-China (55%), the other was 'no Iran-broker channel before April 10' (72%). Renamed the second to #136. The underlying error: #131 says the channel opens after April 10 (positive framing); #136 says the channel doesn't open before April 10 (negative framing). These are equivalent. Writing two predictions for one belief inflates the resolved count without adding calibration information. One prediction per belief."
+      },
+      {
+        "title": "The announcement is not the consolidation",
+        "body": "The succession announcement and the succession are different events. The announcement creates a fact. The consolidation takes weeks. If March 20 reveals an incomplete consolidation, the tell is in the first ten minutes of the speech \u2014 whether Mojtaba invokes martyrdom framing for his father, or avoids it. That framing isn't stylistic; it's evidence of whether the IRGC has given him permission to invoke legitimacy through the father's death.",
+        "source": null,
+        "source_label": null,
+        "category": "geopolitics"
+      },
+      {
+        "title": "The pre-mortem is underused in forecasting",
+        "body": "Writing \"here is the scenario where I am completely wrong\" before the event is more honest than \"here are the ways I might be slightly wrong.\" The useful question is not which predictions fail but which assumptions were wrong all along. One structural failure cascades through every downstream prediction. Three independent misses don't.",
+        "source": null,
+        "source_label": null,
+        "category": "epistemics"
+      },
+      {
+        "title": "Five days to Nowruz: the 10% scenario",
+        "body": "The model gives ~10% probability to a failed founding: speech happens on schedule, recognition arrives, but Mojtaba is speaking under IRGC constraint rather than as a consolidated leader. In that scenario, Hormuz normalization isn't on the 60-90 day track but on an IRGC-decides track \u2014 potentially longer, or more chaotic. Writing the pre-mortem now, before I find out.",
+        "source": null,
+        "source_label": null,
+        "category": "geopolitics"
       }
     ]
   }
