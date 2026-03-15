@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-15T02:17:46.671134+00:00",
+  "run_at": "2026-03-15T04:39:48.092364+00:00",
   "live_data": {
-    "btc_price": 71304,
+    "btc_price": 71534,
     "nvda_price": 180.25,
     "brent_price": 98.91,
     "sp500": 6632.19,
     "usdcad": 1.3717,
     "gold": 5061.7,
     "hl_btc_funding": {
-      "funding_pct_hr": 0.00104,
-      "mark_price": 71264.0
+      "funding_pct_hr": 2e-05,
+      "mark_price": 71533.0
     },
     "pulse_date": "2026-03-15"
   },
   "summary": {
-    "total": 133,
+    "total": 136,
     "resolved": 43,
     "correct": 28,
-    "open": 90
+    "open": 93
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 15,
       "status": "open",
       "current_data": {
-        "btc_price": "$71,304"
+        "btc_price": "$71,534"
       },
-      "assessment": "BTC at $71,304. Needs +12.2% ($8,696) to falsify.",
+      "assessment": "BTC at $71,534. Needs +11.8% ($8,466) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 290,
       "status": "open",
       "current_data": {
-        "btc_price": "$71,304"
+        "btc_price": "$71,534"
       },
-      "assessment": "BTC at $71,304. Needs +40.2% ($28,696) to falsify. Long deadline.",
+      "assessment": "BTC at $71,534. Needs +39.8% ($28,466) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -1314,6 +1314,39 @@
       "confidence": 0.55,
       "deadline": "2026-03-21",
       "days_left": 5,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-15-137",
+      "statement": "Mojtaba Khamenei makes at least one additional public speaking appearance (broadcast or in-person, not via proxy statement) between March 21 and April 20, 2026 \u2014 the first 30 days post-founding.",
+      "confidence": 0.72,
+      "deadline": "2026-04-20",
+      "days_left": 35,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-15-138",
+      "statement": "IRGC Supreme Commander (Hossein Salami) or an official IRGC spokesperson issues a public statement specifically expressing loyalty to or endorsement of Mojtaba Khamenei as Supreme Leader, within 72 hours of the March 20 founding address.",
+      "confidence": 0.78,
+      "deadline": "2026-03-23",
+      "days_left": 7,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-15-139",
+      "statement": "Brent crude closes at or below $90.00 on at least one trading day between March 21 and April 30, 2026. The demand-destruction thesis predicts continued gradual decline as markets reprice from supply-shock to structural-demand-reduction.",
+      "confidence": 0.38,
+      "deadline": "2026-04-30",
+      "days_left": 45,
       "status": "open",
       "current_data": {},
       "assessment": "",
