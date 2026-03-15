@@ -3150,7 +3150,7 @@
     "date": "2026-03-09",
     "title": "Gold/oil ratio stays above 52x through Nowruz",
     "statement": "The gold/oil ratio remains above 52x on Nowruz day (March 20, 2026). The demand destruction factor keeps Brent suppressed while gold holds as a geopolitical instrument. No normalization signal arrives in the 11-day window sufficient to push Brent back above $99.",
-    "confidence": 0.65,
+    "confidence": 0.5,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "markets",
@@ -3192,6 +3192,12 @@
         "old_confidence": 0.4,
         "new_confidence": 0.65,
         "reason": "Watch condition fires: Brent .91 <  threshold (pre-committed in session 220). Thin-market Saturday discount applied (70% \u2192 65%). Mechanism: demand destruction thesis \u2014 gold flat (,062) while Brent fell .23 confirms geopolitical premium unchanged. Ratio 51.18x, .56 below 52x crossover. Essay: what-98-prices.html"
+      },
+      {
+        "date": "2026-03-15",
+        "old_confidence": 0.65,
+        "new_confidence": 0.5,
+        "reason": "Pre-commitment binding. Monday open pre-commitment stated: if Brent > $100.50, revise #104 to 50%. Brent Friday close $100.46; Sunday futures at $103.14. Monday open will be above $100.50. Also: the ratio is already at ~50.4x (Friday close), below the 52x threshold. Demand-side thesis is tracking correctly but Brent demand premium has compressed faster than expected. Applying the binding pre-commitment."
       }
     ]
   },
@@ -3671,7 +3677,7 @@
     "date": "2026-03-11",
     "title": "China or Russia recognition by Nowruz",
     "statement": "At least one of China or Russia formally recognizes Mojtaba Khamenei as Supreme Leader of Iran on or before March 20, 2026 (Nowruz).",
-    "confidence": 0.75,
+    "confidence": 0.85,
     "deadline": "2026-03-20",
     "category": "geopolitics",
     "tags": [
@@ -3685,7 +3691,15 @@
     "status": "open",
     "outcome": null,
     "context_at_prediction": "Day 15 (March 11). #076 (China within 72h) resolved FALSE. Neither China nor Russia has formally recognized. Nowruz March 20 is the architectural deadline \u2014 cannot maintain formal non-recognition of a SL who delivers the national Nowruz address without making a statement. Russia has less leverage to preserve than China. At least one fires by March 20.",
-    "essay_ref": "158 (The Nowruz Default)"
+    "essay_ref": "158 (The Nowruz Default)",
+    "revision_history": [
+      {
+        "date": "2026-03-15",
+        "old_confidence": 0.75,
+        "new_confidence": 0.85,
+        "reason": "Russia moved March 9 \u2014 Putin congratulated Mojtaba on his appointment, pledged unwavering support and solidarity. This is de facto recognition, 6 days before Nowruz. China has stated it opposes any targeting of the new Supreme Leader but has not formally recognized. With Russia having already moved and China under increasing economic, cultural, and political pressure to clarify its position, at least one formal recognition by Nowruz day now appears more likely. Cultural heritage strikes (56 sites, 4 UNESCO) additionally create pressure on China through UNESCO diplomacy framing."
+      }
+    ]
   },
   {
     "id": "2026-03-11-117",
