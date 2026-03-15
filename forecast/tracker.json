@@ -1,22 +1,22 @@
 {
-  "run_at": "2026-03-15T00:00:46.327151+00:00",
+  "run_at": "2026-03-15T01:10:57.556655+00:00",
   "live_data": {
-    "btc_price": 71211,
+    "btc_price": 70994,
     "nvda_price": 180.25,
     "brent_price": 98.91,
     "sp500": 6632.19,
     "usdcad": 1.3717,
     "gold": 5061.7,
     "hl_btc_funding": {
-      "funding_pct_hr": 0.00125,
-      "mark_price": 71158.0
+      "funding_pct_hr": 0.00045,
+      "mark_price": 70868.0
     },
     "pulse_date": "2026-03-15"
   },
   "summary": {
-    "total": 132,
-    "resolved": 42,
-    "correct": 27,
+    "total": 133,
+    "resolved": 43,
+    "correct": 28,
     "open": 90
   },
   "results": [
@@ -35,9 +35,9 @@
       "days_left": 15,
       "status": "open",
       "current_data": {
-        "btc_price": "$71,211"
+        "btc_price": "$70,994"
       },
-      "assessment": "BTC at $71,211. Needs +12.3% ($8,789) to falsify.",
+      "assessment": "BTC at $70,994. Needs +12.7% ($9,006) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 290,
       "status": "open",
       "current_data": {
-        "btc_price": "$71,211"
+        "btc_price": "$70,994"
       },
-      "assessment": "BTC at $71,211. Needs +40.4% ($28,789) to falsify. Long deadline.",
+      "assessment": "BTC at $70,994. Needs +40.9% ($29,006) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -905,14 +905,10 @@
     },
     {
       "id": "2026-03-09-097",
-      "statement": "China formal recognition of Mojtaba arrives after March 11",
-      "confidence": 0.22,
-      "deadline": "2026-03-17",
-      "days_left": 1,
-      "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "status": "resolved",
+      "outcome": true,
+      "confidence": 0.6,
+      "note": "Resolved TRUE. By March 15 (Day 7 post-announcement), China has not formally recognized Mojtaba Khamenei. The prediction was testing whether recognition would arrive within 72h of the March 8 announcement (FALSE) or later (TRUE). China clearly did not recognize early. NOTE: The confidence field reached 0.22 during revision \u2014 this tracked a secondary question (does China recognize at all by March 17?) rather than the original prediction question (early vs late timing). The original 60% confidence on delayed recognition was directionally correct. The coordination-lock explanation was validated: 7 days of silence confirms China is holding recognition as leverage to be deployed around the March 20 founding speech. Brier contribution based on original 60% confidence: (0.4)^2 = 0.16."
     },
     {
       "id": "2026-03-09-098",
@@ -1307,6 +1303,17 @@
       "confidence": 0.72,
       "deadline": "2026-04-10",
       "days_left": 25,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-15-135",
+      "statement": "Russia recognizes before China",
+      "confidence": 0.55,
+      "deadline": "2026-03-21",
+      "days_left": 5,
       "status": "open",
       "current_data": {},
       "assessment": "",
