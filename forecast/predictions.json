@@ -2643,7 +2643,7 @@
     "id": "2026-03-08-088",
     "date": "2026-03-08",
     "statement": "Mojtaba Khamenei does not make a live appearance at a publicly disclosed physical location \u2014 the Imam Reza shrine, a press venue, or any other identified location \u2014 on official announcement day itself.",
-    "confidence": 0.8,
+    "confidence": 0.92,
     "deadline": "2026-03-18",
     "category": "geopolitics",
     "reasoning": "Israel's Defense Minister explicitly threatened to assassinate whoever is named as Supreme Leader. This is not rhetorical \u2014 Israel has demonstrated the capability to kill sitting heads of state. The security-optimal announcement structure under this explicit threat is: IRNA wire text first, no public gathering, no live televised appearance from a known physical location. Mojtaba's location on announcement day is an active operational secret. The founding speech, if any appears on Day 1, will be pre-recorded at an undisclosed location. Any live broadcast from an identified physical site \u2014 the shrine, a press facility \u2014 creates a fixed targeting geometry that the IRGC will not accept. This resolves FALSE if Mojtaba appears live at a named location on announcement day itself. Deadline is March 18 (Nowruz ceiling).",
@@ -2675,6 +2675,12 @@
         "old_confidence": 0.75,
         "new_confidence": 0.8,
         "reason": "Revised upward from 75% to 80%. The 12-day delay is itself evidence that security architecture is being built around Mojtaba's physical location before announcement. Each day without announcement confirms that the IRGC is treating this as a security problem, not just a logistics problem. That makes a controlled, location-undisclosed announcement more likely. Essay #108 (\"The 97% Error\") discusses this updating."
+      },
+      {
+        "date": "2026-03-15",
+        "old_confidence": 0.8,
+        "new_confidence": 0.92,
+        "reason": "March 12 statement delivered via anchor, not in person. Injuries confirmed (fractured foot, facial lacerations). 3 days to deadline. No structural reason for live appearance before founding ceremony."
       }
     ],
     "status": "open"
@@ -2683,8 +2689,8 @@
     "id": "2026-03-08-089",
     "date": "2026-03-08",
     "statement": "Mojtaba Khamenei's Nowruz 1405 address (if delivered as named Supreme Leader) does not mention the Strait of Hormuz by name.",
-    "confidence": 0.75,
-    "deadline": "2026-03-18",
+    "confidence": 0.62,
+    "deadline": "2026-03-20",
     "category": "geopolitics",
     "reasoning": "The founding Nowruz address faces a Hormuz trap: mentioning it either signals reopening (undermines the 'no concession' frame the IRGC needs) or confirms closure (constrains future negotiating room unnecessarily). The optimal founding address avoids operational specifics entirely. Instead: unity, resistance, legitimacy, continuity with Khamenei legacy. Hormuz is implicit in the war framing \u2014 it does not need to be named. Conditional on #081 resolving TRUE (Mojtaba delivers Nowruz address as named SL). Based on Essay #110 (The Nowruz Test): the address must do four things (claim legitimate authority, address the succession itself, invoke Persian continuity, signal resistance posture) and none require naming Hormuz.",
     "context_at_prediction": {
@@ -2700,14 +2706,22 @@
     "status": "open",
     "resolved_date": null,
     "outcome": null,
-    "resolution_note": null
+    "resolution_note": null,
+    "revision_history": [
+      {
+        "date": "2026-03-15",
+        "old_confidence": 0.75,
+        "new_confidence": 0.62,
+        "reason": "March 12 statement committed publicly to Hormuz closure. Founding speech inherits stated position. Balance between reinforcing vs. treating as settled is less clean than before. Hormuz trap still applies but partially pre-empted."
+      }
+    ]
   },
   {
     "id": "2026-03-08-090",
     "date": "2026-03-08",
     "statement": "Mojtaba Khamenei's Nowruz 1405 address (if delivered as named Supreme Leader) leads with resistance or martyrdom framing \u2014 not economic relief or reconstruction \u2014 in the first two minutes.",
-    "confidence": 0.78,
-    "deadline": "2026-03-18",
+    "confidence": 0.85,
+    "deadline": "2026-03-20",
     "category": "geopolitics",
     "reasoning": "The founding address must consolidate the IRGC's legitimizing narrative before anything else. Resistance framing costs nothing internationally (the adversarial relationship exists regardless) and earns everything domestically \u2014 it places the new SL as the natural inheritor of Khamenei's role, not a compromise candidate. Economic promises are necessary but come second: opening with economic relief before establishing the resistance mandate would signal weakness at founding, which is the one thing the IRGC cannot afford. The 1989 Khamenei precedent (Essay #99): the founding address after Khomeini was explicitly framed around continuing the revolution, not governing. Conditional on #081 resolving TRUE. Essay #110 names this as the first test: whether the first sixty seconds establish the founding as revolution-in-continuity or transition-to-governance.",
     "context_at_prediction": {
@@ -2722,7 +2736,15 @@
     "status": "open",
     "resolved_date": null,
     "outcome": null,
-    "resolution_note": null
+    "resolution_note": null,
+    "revision_history": [
+      {
+        "date": "2026-03-15",
+        "old_confidence": 0.78,
+        "new_confidence": 0.85,
+        "reason": "March 12 statement established resistance as governing register: vengeance, continuation, expansion. Founding address reinforces the established frame."
+      }
+    ]
   },
   {
     "id": "2026-03-08-091",
@@ -4128,7 +4150,7 @@
     "id": "2026-03-14-134",
     "date": "2026-03-14",
     "statement": "The Nowruz founding address explicitly references martyrdom (shaheed, shahadat, or equivalent framing of Khamenei Sr.'s death as sacrifice for the resistance cause) within the first ten minutes of the speech.",
-    "confidence": 0.72,
+    "confidence": 0.85,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "geopolitics",
@@ -4154,7 +4176,15 @@
       "note": "Martyrdom frame in opening 10 minutes is testable proxy for whether founding act followed the mandatory structure (Element 2: continuity-via-sacrifice legitimacy frame)."
     },
     "resolution_criteria": "Resolves TRUE if English-language translations of the founding address contain explicit martyrdom language (shaheed, shahadat, sacrifice-framing of Khamenei Sr.) attributed to the opening portion of the speech (first ~10 minutes). Resolves FALSE if no such framing appears in opening segment, or speech opens with different frame entirely. Conditional on #081 TRUE.",
-    "essay": "what-the-speech-must-do"
+    "essay": "what-the-speech-must-do",
+    "revision_history": [
+      {
+        "date": "2026-03-15",
+        "old_confidence": 0.72,
+        "new_confidence": 0.85,
+        "reason": "March 12 statement used martyrdom language explicitly (visited body, fist clenched, family to caravan of martyrs). Body present at burial on March 20. Founding address has no other available register. Revised up from 72%."
+      }
+    ]
   },
   {
     "id": "2026-03-15-136",
