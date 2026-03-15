@@ -4212,5 +4212,89 @@
     },
     "resolution_criteria": "Resolves TRUE if official Russian foreign ministry statement or TASS wire confirming recognition of Mojtaba arrives before official Chinese foreign ministry statement or Xinhua wire. Resolves FALSE if China recognizes first. VOID if either country has not recognized by March 21.",
     "conditional": "Void if either Russia or China has not formally recognized by March 21, 2026."
+  },
+  {
+    "id": "2026-03-15-137",
+    "date": "2026-03-15",
+    "statement": "Mojtaba Khamenei makes at least one additional public speaking appearance (broadcast or in-person, not via proxy statement) between March 21 and April 20, 2026 \u2014 the first 30 days post-founding.",
+    "confidence": 0.72,
+    "deadline": "2026-04-20",
+    "category": "geopolitics",
+    "reasoning": "If the founding act on March 20 constitutes a genuine, complete transfer of authority, the new Supreme Leader needs to be visible governing. Historical Iranian succession: Khamenei Sr made multiple public appearances within the first month of his investiture. The pre-mortem scenario (#242) posits IRGC constraint as the failure mode \u2014 if constraint is real, Mojtaba may return to the same silence that preceded the founding act. A second public appearance within 30 days distinguishes genuine founding from performed founding. 72% reflects confidence that the succession is complete (per #081 at 98%), offset by uncertainty that Mojtaba's personal governance style may favor infrequent appearances regardless of IRGC dynamics.",
+    "polymarket": null,
+    "market_snapshot": {
+      "date": "2026-03-15",
+      "market_says": null,
+      "market_label": "No Polymarket market for this",
+      "note": "No market available. Pure structural prediction."
+    },
+    "context_at_prediction": {
+      "timestamp": "2026-03-15T00:00:00Z",
+      "brent_usd": 98.91,
+      "gold_usd": 5062,
+      "gold_oil_ratio": 51.18,
+      "days_to_nowruz": 5,
+      "note": "Pre-founding. Mojtaba has not spoken publicly since March 8 announcement. Founding speech expected March 20."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "revision_history": []
+  },
+  {
+    "id": "2026-03-15-138",
+    "date": "2026-03-15",
+    "statement": "IRGC Supreme Commander (Hossein Salami) or an official IRGC spokesperson issues a public statement specifically expressing loyalty to or endorsement of Mojtaba Khamenei as Supreme Leader, within 72 hours of the March 20 founding address.",
+    "confidence": 0.78,
+    "deadline": "2026-03-23",
+    "category": "geopolitics",
+    "reasoning": "The IRGC public endorsement is the key observable for the pre-mortem scenario (#242). If IRGC factional alignment is genuine, they'll want to signal it publicly \u2014 both to deter internal challengers and to project unity to external observers. The 78% reflects: (a) 90% probability the founding act is complete (#242 assigns 10% to IRGC constraint), (b) given complete founding, ~87% probability IRGC publicly endorses within 72h (there's a small chance they endorse but later, or in ambiguous terms). The 22% downside captures the pre-mortem scenario plus the possibility that IRGC endorses the act without using language that constitutes a specific personal loyalty statement to Mojtaba.",
+    "polymarket": null,
+    "market_snapshot": {
+      "date": "2026-03-15",
+      "market_says": null,
+      "market_label": "No Polymarket market for this",
+      "note": "No market. Observable: TASS, Xinhua, ISNA, Iranian state media for IRGC statement within 72h of speech."
+    },
+    "context_at_prediction": {
+      "timestamp": "2026-03-15T00:00:00Z",
+      "brent_usd": 98.91,
+      "gold_usd": 5062,
+      "note": "Key diagnostic prediction. Cross-reference with #134 (martyrdom framing) as first signal; #138 as 72h follow-up signal."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "revision_history": []
+  },
+  {
+    "id": "2026-03-15-139",
+    "date": "2026-03-15",
+    "statement": "Brent crude closes at or below $90.00 on at least one trading day between March 21 and April 30, 2026. The demand-destruction thesis predicts continued gradual decline as markets reprice from supply-shock to structural-demand-reduction.",
+    "confidence": 0.38,
+    "deadline": "2026-04-30",
+    "category": "markets",
+    "reasoning": "Brent at $98.91. The demand-destruction thesis (#225 'What $98 Prices'): Brent decline is demand destruction, not normalization. Kharg Island offline reduces Iranian export supply AND signals reduced downstream demand for refinery feedstock. The $90 floor is ~9% below current. Arguments for: global demand slowdown signal in oil market, no Hormuz reopening in this window, continued demand-destruction from high prices, Q2 demand typically weaker seasonally. Arguments against: supply shock premium still priced in, Hormuz selective closure creates genuine scarcity for Western buyers, geopolitical risk floor. 38% gives the thesis some credit but acknowledges $90 requires a sustained decline without Hormuz reopening. If Hormuz opens, oil drops hard and fast; but this prediction is for the no-opening scenario (which is modal).",
+    "polymarket": null,
+    "market_snapshot": {
+      "date": "2026-03-15",
+      "market_says": null,
+      "market_label": "No Polymarket market for $90 Brent floor",
+      "note": "Current Brent: $98.91. $90 = 9.0% decline from here. 46 days to deadline."
+    },
+    "context_at_prediction": {
+      "timestamp": "2026-03-15T00:00:00Z",
+      "brent_usd": 98.91,
+      "gold_usd": 5062,
+      "gold_oil_ratio": 51.18,
+      "note": "Day 43 post-war. Gold/oil ratio at 51.18x, demand-destruction window active. Selective Hormuz closure ongoing."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "revision_history": []
   }
 ]
