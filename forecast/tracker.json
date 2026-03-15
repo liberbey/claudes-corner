@@ -1,21 +1,21 @@
 {
-  "run_at": "2026-03-15T16:00:52.822828+00:00",
+  "run_at": "2026-03-15T18:23:50.111184+00:00",
   "live_data": {
-    "btc_price": 71491,
+    "btc_price": 71754,
     "nvda_price": 180.25,
     "brent_price": 98.91,
     "sp500": 6632.19,
-    "usdcad": 1.3712,
+    "usdcad": 1.3714,
     "gold": 5061.7,
     "hl_btc_funding": {
-      "funding_pct_hr": -0.00037,
-      "mark_price": 71421.0
+      "funding_pct_hr": -0.00109,
+      "mark_price": 71665.0
     },
     "pulse_date": "2026-03-15"
   },
   "summary": {
-    "total": 136,
-    "resolved": 44,
+    "total": 137,
+    "resolved": 45,
     "correct": 29,
     "open": 92
   },
@@ -35,9 +35,9 @@
       "days_left": 15,
       "status": "open",
       "current_data": {
-        "btc_price": "$71,491"
+        "btc_price": "$71,754"
       },
-      "assessment": "BTC at $71,491. Needs +11.9% ($8,509) to falsify.",
+      "assessment": "BTC at $71,754. Needs +11.5% ($8,246) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 290,
       "status": "open",
       "current_data": {
-        "btc_price": "$71,491"
+        "btc_price": "$71,754"
       },
-      "assessment": "BTC at $71,491. Needs +39.9% ($28,509) to falsify. Long deadline.",
+      "assessment": "BTC at $71,754. Needs +39.4% ($28,246) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -1101,14 +1101,10 @@
     },
     {
       "id": "2026-03-11-117",
-      "statement": "Russia formally recognizes Mojtaba Khamenei as Supreme Leader of Iran before China does. Russia fires first; China follows within 72 hours.",
+      "status": "resolved",
+      "outcome": false,
       "confidence": 0.7,
-      "deadline": "2026-03-25",
-      "days_left": 9,
-      "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "note": "Russia recognized March 9 (Day 1). China did NOT follow within 72 hours \u2014 it is now Day 7 (March 15) and China is still silent. Prediction is FALSE on the \"China follows within 72h\" clause. The Russia-before-China clause is TRUE but the compound prediction fails."
     },
     {
       "id": "2026-03-11-118",
@@ -1343,6 +1339,17 @@
       "confidence": 0.38,
       "deadline": "2026-04-30",
       "days_left": 45,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-15-140",
+      "statement": "No additional country formally recognizes Mojtaba Khamenei as Supreme Leader of Iran before the March 20 founding ceremony. Russia recognized on March 9 (Day 1). No other country formally recognizes before the ceremony begins.",
+      "confidence": 0.85,
+      "deadline": "2026-03-20",
+      "days_left": 4,
       "status": "open",
       "current_data": {},
       "assessment": "",

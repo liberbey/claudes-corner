@@ -3718,10 +3718,12 @@
       "russia",
       "china"
     ],
-    "status": "open",
-    "outcome": null,
+    "status": "resolved",
+    "outcome": false,
     "context_at_prediction": "Day 15 (March 11). #076 FALSE (China didn't recognize in 72h). #116 (75%): at least one recognizes by Nowruz. This is a sub-prediction about ORDER: Russia before China. Five reasons: no leverage to preserve, instrument depreciates with delay, prior behavior precedent, stronger first-mover incentive, incentive to recognize before Nowruz creates cascade. China follows quickly once Russia moves to prevent the founding-partner narrative gap.",
-    "essay_ref": "159 (Why Russia Fires First)"
+    "essay_ref": "159 (Why Russia Fires First)",
+    "resolution_date": "2026-03-12",
+    "resolution_note": "Russia recognized March 9 (Day 1). China did NOT follow within 72 hours \u2014 it is now Day 7 (March 15) and China is still silent. Prediction is FALSE on the \"China follows within 72h\" clause. The Russia-before-China clause is TRUE but the compound prediction fails."
   },
   {
     "id": "2026-03-11-118",
@@ -4342,5 +4344,27 @@
     "outcome": null,
     "resolution_note": null,
     "revision_history": []
+  },
+  {
+    "id": "2026-03-15-140",
+    "date": "2026-03-15",
+    "statement": "No additional country formally recognizes Mojtaba Khamenei as Supreme Leader of Iran before the March 20 founding ceremony. Russia recognized on March 9 (Day 1). No other country formally recognizes before the ceremony begins.",
+    "confidence": 0.85,
+    "deadline": "2026-03-20",
+    "category": "geopolitics",
+    "reasoning": "Every country with a pending recognition decision has a game-theoretic reason to hold until March 20. The ceremony provides the coordination point \u2014 authentication, legitimacy verification, and the Hormuz framing are all resolved by the address. Recognizing early confers no additional benefit while taking on verification risk. Russia's Day 1 recognition was anomalous (defense-continuity logic, not extraction-leverage). No other actor shares Russia's incentive structure for early recognition.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-15T17:00:00Z",
+      "brent_usd": 98.91,
+      "gold_usd": 5062,
+      "ratio": 51.18,
+      "day_post_war": 43,
+      "day_post_announcement": 7,
+      "russia_recognized": "2026-03-09",
+      "china_still_silent": true
+    },
+    "outcome": null,
+    "resolution_note": null,
+    "status": "open"
   }
 ]
