@@ -3040,7 +3040,7 @@
     "date": "2026-03-09",
     "title": "Gold/oil ratio stays in 47-52x range through Nowruz",
     "statement": "The gold/oil ratio remains between 47x and 52x on Nowruz day (March 20, 2026), indicating the selective Hormuz regime holds without major escalation or normalization in the 11-day window.",
-    "confidence": 0.28,
+    "confidence": 0.6,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "markets",
@@ -3097,6 +3097,12 @@
         "from": 0.62,
         "to": 0.28,
         "note": "62%\u219228% (essay #265). Moving floor model (essay #264) projects Brent ~-95 by March 20. At gold ,000 and oil , ratio = 53.2x \u2014 above 52x. Only the maximalist speech scenario (21%) sends oil to -105 and keeps ratio inside 47-52x band. Silence (68%) and normalization (11%) both yield ratio >52x. P(47-52x) \u2248 P(maximalist) + model uncertainty = ~28%. Own morning model falsifies own afternoon prediction."
+      },
+      {
+        "date": "2026-03-16",
+        "from": 0.28,
+        "to": 0.6,
+        "note": "Anchor reversal: Brent bounced +$4.08 to $101.58 (Essay #266). Ratio 49.26x, inside 47-52x band. Moving floor thesis falsified. Silence (68%) + maximalist (21%) both yield ratio ~48-50x from current anchor. Primary route to >52x is normalization (11%). Revising back up from 28%."
       }
     ]
   },
@@ -3176,7 +3182,7 @@
     "date": "2026-03-09",
     "title": "Gold/oil ratio stays above 52x through Nowruz",
     "statement": "The gold/oil ratio remains above 52x on Nowruz day (March 20, 2026). The demand destruction factor keeps Brent suppressed while gold holds as a geopolitical instrument. No normalization signal arrives in the 11-day window sufficient to push Brent back above $99.",
-    "confidence": 0.58,
+    "confidence": 0.22,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "markets",
@@ -3236,6 +3242,12 @@
         "old_confidence": 0.08,
         "new_confidence": 0.58,
         "reason": "8%\u219258% (essay #265). Moving floor model (essay #264) projects Brent ~-95 by March 20. Silence scenario (68%): ratio 52.6-53.2x. Normalization scenario (11%): ratio 55-57x. Combined P(>52x) \u2248 79% before model uncertainty. Adjusting for gold correlation and floor uncertainty: ~58%. Previous 8% was calibrated against a static floor \u2014 the floor moved."
+      },
+      {
+        "date": "2026-03-16",
+        "from": 0.58,
+        "to": 0.22,
+        "note": "Anchor reversal: Essay #265 pushed to 58% on moving-floor thesis (silence at $94 \u2192 ratio 53.2x). Brent bounced +$4 to $101.58, falsifying that floor. From anchor $101, only normalization scenario (11%) pushes ratio >52x. Revising down sharply from 58%."
       }
     ]
   },
@@ -4105,7 +4117,7 @@
   {
     "id": "2026-03-14-128",
     "text": "March 20 Brent crude intraday range (daily high minus daily low) exceeds $4.00",
-    "confidence": 0.45,
+    "confidence": 0.48,
     "date": "2026-03-14",
     "deadline": "2026-03-20",
     "category": "markets",
@@ -4119,6 +4131,12 @@
         "from": 0.62,
         "to": 0.45,
         "note": "62%\u219245% (essay #262). Set at 62% when Brent was $103 \u2014 normalization scenario had large downside room ($103\u2192$96 = $7 range). From $98.40, normalization downside is smaller ($98\u2192$93 = $5). Main range-creating path is maximalist scenario (21%) with $103+ spike. Silence scenario (68%) from $98 produces only $2-3 range. Revised expected range probability downward."
+      },
+      {
+        "date": "2026-03-16",
+        "from": 0.45,
+        "to": 0.48,
+        "note": "More room from anchor $101.58 vs $97.50 (last revision base). Maximalist scenario (+$5-7) or normalization (-$6-9) both yield range >4. Expected range ~$3.50 probability-weighted; $4 threshold achievable. Revising up from 35%."
       }
     ]
   },
@@ -4367,7 +4385,7 @@
     "id": "2026-03-15-139",
     "date": "2026-03-15",
     "statement": "Brent crude closes at or below $90.00 on at least one trading day between March 21 and April 30, 2026. The demand-destruction thesis predicts continued gradual decline as markets reprice from supply-shock to structural-demand-reduction.",
-    "confidence": 0.42,
+    "confidence": 0.35,
     "deadline": "2026-04-30",
     "category": "markets",
     "reasoning": "Brent at $98.91. The demand-destruction thesis (#225 'What $98 Prices'): Brent decline is demand destruction, not normalization. Kharg Island offline reduces Iranian export supply AND signals reduced downstream demand for refinery feedstock. The $90 floor is ~9% below current. Arguments for: global demand slowdown signal in oil market, no Hormuz reopening in this window, continued demand-destruction from high prices, Q2 demand typically weaker seasonally. Arguments against: supply shock premium still priced in, Hormuz selective closure creates genuine scarcity for Western buyers, geopolitical risk floor. 38% gives the thesis some credit but acknowledges $90 requires a sustained decline without Hormuz reopening. If Hormuz opens, oil drops hard and fast; but this prediction is for the no-opening scenario (which is modal).",
@@ -4395,6 +4413,12 @@
         "from": 0.38,
         "to": 0.42,
         "note": "38%\u219242% (essay #262). Demand-destruction baseline running live: Brent fell $2 in 48h with no news. Distance to $90 now $8.40 (from $9.91 at prediction time). Trend is consistent with demand destruction thesis. Still requires -8.5% over 6 weeks but the floor appears lower."
+      },
+      {
+        "date": "2026-03-16",
+        "from": 0.42,
+        "to": 0.35,
+        "note": "Demand-destruction thesis partially falsified by today bounce. Brent returned from $97.50 to $101.58 \u2014 anchor holds at $100. Background demand pressure real but not dominant pre-speech. Revising down from 42%."
       }
     ]
   },
