@@ -2689,7 +2689,7 @@
     "id": "2026-03-08-089",
     "date": "2026-03-08",
     "statement": "Mojtaba Khamenei's Nowruz 1405 address (if delivered as named Supreme Leader) does not mention the Strait of Hormuz by name.",
-    "confidence": 0.62,
+    "confidence": 0.68,
     "deadline": "2026-03-20",
     "category": "geopolitics",
     "reasoning": "The founding Nowruz address faces a Hormuz trap: mentioning it either signals reopening (undermines the 'no concession' frame the IRGC needs) or confirms closure (constrains future negotiating room unnecessarily). The optimal founding address avoids operational specifics entirely. Instead: unity, resistance, legitimacy, continuity with Khamenei legacy. Hormuz is implicit in the war framing \u2014 it does not need to be named. Conditional on #081 resolving TRUE (Mojtaba delivers Nowruz address as named SL). Based on Essay #110 (The Nowruz Test): the address must do four things (claim legitimate authority, address the succession itself, invoke Persian continuity, signal resistance posture) and none require naming Hormuz.",
@@ -2713,6 +2713,12 @@
         "old_confidence": 0.75,
         "new_confidence": 0.62,
         "reason": "March 12 statement committed publicly to Hormuz closure. Founding speech inherits stated position. Balance between reinforcing vs. treating as settled is less clean than before. Hormuz trap still applies but partially pre-empted."
+      },
+      {
+        "date": "2026-03-16",
+        "old_confidence": 0.62,
+        "new_confidence": 0.68,
+        "reason": "Two independent frameworks converge: constraint-satisfaction (essay #257) + identity-document framework (essay #258). Consolidator identity logic corroborates diplomatic silence hypothesis."
       }
     ]
   },
@@ -4371,7 +4377,6 @@
     "id": "2026-03-15-141",
     "date": "2026-03-15",
     "statement": "At least three countries beyond Russia formally recognize Mojtaba Khamenei as Supreme Leader of Iran within 72 hours of the March 20 founding address. Russia already recognized March 9. This requires China plus two additional countries to recognize within the 72-hour window.",
-    "probability": 65,
     "deadline": "2026-03-23",
     "status": "open",
     "context_at_prediction": "Russia recognized Day 1 (March 9). China predicted sub-6h on March 20 (#123, 76%). The third-country prediction tests whether the cascade has structural momentum beyond states with direct material interests. Cascade coordination properties: once China recognizes, cost of going second drops for all remaining states.",
@@ -4382,6 +4387,7 @@
       "succession",
       "recognition",
       "march20"
-    ]
+    ],
+    "confidence": 0.65
   }
 ]
