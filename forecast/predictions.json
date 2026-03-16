@@ -3032,7 +3032,7 @@
     "date": "2026-03-09",
     "title": "Gold/oil ratio stays in 47-52x range through Nowruz",
     "statement": "The gold/oil ratio remains between 47x and 52x on Nowruz day (March 20, 2026), indicating the selective Hormuz regime holds without major escalation or normalization in the 11-day window.",
-    "confidence": 0.3,
+    "confidence": 0.62,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "markets",
@@ -3077,6 +3077,12 @@
         "from": 0.55,
         "to": 0.3,
         "note": "55%\u219230% (essay #227). Complement of #104 revision. Watch condition fired. Demand destruction thesis asserts: speech mechanism from .91 must push Brent above .35 to return to 47-52x range. Only path: bullish speech + demand expectations recovering. Essay: what-98-prices.html"
+      },
+      {
+        "date": "2026-03-16",
+        "from": 0.3,
+        "to": 0.62,
+        "note": "30%\u219262% (essay #262). Ratio at 50.9x, currently inside 47-52x target range. Lower bound (>52x) requires Brent below $96.3 \u2014 2.1% drop from current $98.40, possible but not base case. Upper bound (<47x) requires Brent above $106.6 \u2014 very unlikely in 4 days. Main risk is demand-destruction sending Brent to $95-96 range. P(stay in range through March 20) ~62%."
       }
     ]
   },
@@ -4079,14 +4085,22 @@
   {
     "id": "2026-03-14-128",
     "text": "March 20 Brent crude intraday range (daily high minus daily low) exceeds $4.00",
-    "confidence": 0.62,
+    "confidence": 0.45,
     "date": "2026-03-14",
     "deadline": "2026-03-20",
     "category": "markets",
     "outcome": null,
     "resolution_note": null,
     "context_at_prediction": "Day 37 Saturday dead zone. Brent $103.14, Gold $5,062, Ratio 49.09x. Three events expected on March 20 (burial confirmation, founding speech, recognition cascade), each with independent market repricing potential. Typical Brent intraday range $1.50-2.50. Compound arrival thesis: three events in one session should widen range above single-event baseline. Essay #226.",
-    "status": "open"
+    "status": "open",
+    "revision_history": [
+      {
+        "date": "2026-03-16",
+        "from": 0.62,
+        "to": 0.45,
+        "note": "62%\u219245% (essay #262). Set at 62% when Brent was $103 \u2014 normalization scenario had large downside room ($103\u2192$96 = $7 range). From $98.40, normalization downside is smaller ($98\u2192$93 = $5). Main range-creating path is maximalist scenario (21%) with $103+ spike. Silence scenario (68%) from $98 produces only $2-3 range. Revised expected range probability downward."
+      }
+    ]
   },
   {
     "id": "2026-03-15-129",
@@ -4333,7 +4347,7 @@
     "id": "2026-03-15-139",
     "date": "2026-03-15",
     "statement": "Brent crude closes at or below $90.00 on at least one trading day between March 21 and April 30, 2026. The demand-destruction thesis predicts continued gradual decline as markets reprice from supply-shock to structural-demand-reduction.",
-    "confidence": 0.38,
+    "confidence": 0.42,
     "deadline": "2026-04-30",
     "category": "markets",
     "reasoning": "Brent at $98.91. The demand-destruction thesis (#225 'What $98 Prices'): Brent decline is demand destruction, not normalization. Kharg Island offline reduces Iranian export supply AND signals reduced downstream demand for refinery feedstock. The $90 floor is ~9% below current. Arguments for: global demand slowdown signal in oil market, no Hormuz reopening in this window, continued demand-destruction from high prices, Q2 demand typically weaker seasonally. Arguments against: supply shock premium still priced in, Hormuz selective closure creates genuine scarcity for Western buyers, geopolitical risk floor. 38% gives the thesis some credit but acknowledges $90 requires a sustained decline without Hormuz reopening. If Hormuz opens, oil drops hard and fast; but this prediction is for the no-opening scenario (which is modal).",
@@ -4355,7 +4369,14 @@
     "resolved_date": null,
     "outcome": null,
     "resolution_note": null,
-    "revision_history": []
+    "revision_history": [
+      {
+        "date": "2026-03-16",
+        "from": 0.38,
+        "to": 0.42,
+        "note": "38%\u219242% (essay #262). Demand-destruction baseline running live: Brent fell $2 in 48h with no news. Distance to $90 now $8.40 (from $9.91 at prediction time). Trend is consistent with demand destruction thesis. Still requires -8.5% over 6 weeks but the floor appears lower."
+      }
+    ]
   },
   {
     "id": "2026-03-15-140",

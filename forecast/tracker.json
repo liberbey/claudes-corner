@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-16T09:11:46.243741+00:00",
+  "run_at": "2026-03-16T11:33:53.584728+00:00",
   "live_data": {
-    "btc_price": 73163,
+    "btc_price": 73538,
     "nvda_price": 180.25,
-    "brent_price": 100.46,
+    "brent_price": 98.67,
     "sp500": 6632.19,
-    "usdcad": 1.3697,
-    "gold": 4993.0,
+    "usdcad": 1.3686,
+    "gold": 5021.7,
     "hl_btc_funding": {
-      "funding_pct_hr": 0.00054,
-      "mark_price": 73130.0
+      "funding_pct_hr": 0.00109,
+      "mark_price": 73539.0
     },
     "pulse_date": "2026-03-16"
   },
   "summary": {
-    "total": 138,
+    "total": 139,
     "resolved": 45,
     "correct": 29,
-    "open": 93
+    "open": 94
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 14,
       "status": "open",
       "current_data": {
-        "btc_price": "$73,163"
+        "btc_price": "$73,538"
       },
-      "assessment": "BTC at $73,163. Needs +9.3% ($6,837) to falsify.",
+      "assessment": "BTC at $73,538. Needs +8.8% ($6,462) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 289,
       "status": "open",
       "current_data": {
-        "btc_price": "$73,163"
+        "btc_price": "$73,538"
       },
-      "assessment": "BTC at $73,163. Needs +36.7% ($26,837) to falsify. Long deadline.",
+      "assessment": "BTC at $73,538. Needs +36.0% ($26,462) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -935,7 +935,7 @@
     {
       "id": "2026-03-09-100",
       "statement": "The gold/oil ratio remains between 47x and 52x on Nowruz day (March 20, 2026), indicating the selective Hormuz regime holds without major escalation or normalization in the 11-day window.",
-      "confidence": 0.3,
+      "confidence": 0.62,
       "deadline": "2026-03-20",
       "days_left": 3,
       "status": "open",
@@ -975,7 +975,7 @@
     {
       "id": "2026-03-09-104",
       "statement": "The gold/oil ratio remains above 52x on Nowruz day (March 20, 2026). The demand destruction factor keeps Brent suppressed while gold holds as a geopolitical instrument. No normalization signal arrives in the 11-day window sufficient to push Brent back above $99.",
-      "confidence": 0.5,
+      "confidence": 0.08,
       "deadline": "2026-03-20",
       "days_left": 3,
       "status": "open",
@@ -1215,7 +1215,7 @@
     {
       "id": "2026-03-14-128",
       "statement": "",
-      "confidence": 0.62,
+      "confidence": 0.45,
       "deadline": "2026-03-20",
       "days_left": 3,
       "status": "open",
@@ -1336,7 +1336,7 @@
     {
       "id": "2026-03-15-139",
       "statement": "Brent crude closes at or below $90.00 on at least one trading day between March 21 and April 30, 2026. The demand-destruction thesis predicts continued gradual decline as markets reprice from supply-shock to structural-demand-reduction.",
-      "confidence": 0.38,
+      "confidence": 0.42,
       "deadline": "2026-04-30",
       "days_left": 44,
       "status": "open",
@@ -1361,6 +1361,17 @@
       "confidence": 0.65,
       "deadline": "2026-03-23",
       "days_left": 6,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-16-142",
+      "statement": "Brent crude closes within $3 of its March 19, 2026 close price on March 20, 2026 (Nowruz / founding speech day).",
+      "confidence": 0.7,
+      "deadline": "2026-03-20",
+      "days_left": 3,
       "status": "open",
       "current_data": {},
       "assessment": "",
