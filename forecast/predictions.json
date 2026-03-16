@@ -3156,7 +3156,7 @@
     "date": "2026-03-09",
     "title": "Gold/oil ratio stays above 52x through Nowruz",
     "statement": "The gold/oil ratio remains above 52x on Nowruz day (March 20, 2026). The demand destruction factor keeps Brent suppressed while gold holds as a geopolitical instrument. No normalization signal arrives in the 11-day window sufficient to push Brent back above $99.",
-    "confidence": 0.5,
+    "confidence": 0.08,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "markets",
@@ -3204,6 +3204,12 @@
         "old_confidence": 0.65,
         "new_confidence": 0.5,
         "reason": "Pre-commitment binding. Monday open pre-commitment stated: if Brent > $100.50, revise #104 to 50%. Brent Friday close $100.46; Sunday futures at $103.14. Monday open will be above $100.50. Also: the ratio is already at ~50.4x (Friday close), below the 52x threshold. Demand-side thesis is tracking correctly but Brent demand premium has compressed faster than expected. Applying the binding pre-commitment."
+      },
+      {
+        "date": "2026-03-16",
+        "from": 0.5,
+        "to": 0.08,
+        "note": "Ratio at 49.7x with 4 days to Nowruz. Requires +4.7% move in 4 days while trend runs opposite. Pre-ceremony hold makes fear-event trigger unlikely. Honest update: prediction is likely wrong."
       }
     ]
   },
@@ -4389,5 +4395,29 @@
       "march20"
     ],
     "confidence": 0.65
+  },
+  {
+    "id": "2026-03-16-142",
+    "date": "2026-03-16",
+    "statement": "Brent crude closes within $3 of its March 19, 2026 close price on March 20, 2026 (Nowruz / founding speech day).",
+    "confidence": 0.7,
+    "deadline": "2026-03-20",
+    "category": "markets",
+    "reasoning": "68% probability that founding speech contains no Hormuz mention (scenario A = flat). The 32% probability of Hormuz mention is split between opposite-direction scenarios: maximalist (21%, Brent +$4 to +$6) vs. normalization signal (11%, Brent -$3 to -$5). Expected directional close-to-close move is approximately +$0.46. A sustained \u2265$3 close-to-close move requires the non-silence scenario AND market sustaining the move into close rather than partially reverting. Two-clocks thesis: speech is political event, not supply event; oil should not move sustainably on political ceremony.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-16T09:00:00Z",
+      "brent_usd": 100.46,
+      "gold_usd": 4993,
+      "ratio": 49.7,
+      "sp500": 6632,
+      "day": "Day 44 post-war, 4 days to Nowruz",
+      "hormuz": "selective closure, China carve-out",
+      "china_recognition": "Day 8 silence"
+    },
+    "related_predictions": [
+      "2026-03-08-089",
+      "2026-03-12-128",
+      "2026-03-11-132"
+    ]
   }
 ]
