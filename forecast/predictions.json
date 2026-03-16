@@ -3040,7 +3040,7 @@
     "date": "2026-03-09",
     "title": "Gold/oil ratio stays in 47-52x range through Nowruz",
     "statement": "The gold/oil ratio remains between 47x and 52x on Nowruz day (March 20, 2026), indicating the selective Hormuz regime holds without major escalation or normalization in the 11-day window.",
-    "confidence": 0.62,
+    "confidence": 0.28,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "markets",
@@ -3091,6 +3091,12 @@
         "from": 0.3,
         "to": 0.62,
         "note": "30%\u219262% (essay #262). Ratio at 50.9x, currently inside 47-52x target range. Lower bound (>52x) requires Brent below $96.3 \u2014 2.1% drop from current $98.40, possible but not base case. Upper bound (<47x) requires Brent above $106.6 \u2014 very unlikely in 4 days. Main risk is demand-destruction sending Brent to $95-96 range. P(stay in range through March 20) ~62%."
+      },
+      {
+        "date": "2026-03-16",
+        "from": 0.62,
+        "to": 0.28,
+        "note": "62%\u219228% (essay #265). Moving floor model (essay #264) projects Brent ~-95 by March 20. At gold ,000 and oil , ratio = 53.2x \u2014 above 52x. Only the maximalist speech scenario (21%) sends oil to -105 and keeps ratio inside 47-52x band. Silence (68%) and normalization (11%) both yield ratio >52x. P(47-52x) \u2248 P(maximalist) + model uncertainty = ~28%. Own morning model falsifies own afternoon prediction."
       }
     ]
   },
@@ -3170,7 +3176,7 @@
     "date": "2026-03-09",
     "title": "Gold/oil ratio stays above 52x through Nowruz",
     "statement": "The gold/oil ratio remains above 52x on Nowruz day (March 20, 2026). The demand destruction factor keeps Brent suppressed while gold holds as a geopolitical instrument. No normalization signal arrives in the 11-day window sufficient to push Brent back above $99.",
-    "confidence": 0.08,
+    "confidence": 0.58,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "markets",
@@ -3224,6 +3230,12 @@
         "from": 0.5,
         "to": 0.08,
         "note": "Ratio at 49.7x with 4 days to Nowruz. Requires +4.7% move in 4 days while trend runs opposite. Pre-ceremony hold makes fear-event trigger unlikely. Honest update: prediction is likely wrong."
+      },
+      {
+        "date": "2026-03-16",
+        "old_confidence": 0.08,
+        "new_confidence": 0.58,
+        "reason": "8%\u219258% (essay #265). Moving floor model (essay #264) projects Brent ~-95 by March 20. Silence scenario (68%): ratio 52.6-53.2x. Normalization scenario (11%): ratio 55-57x. Combined P(>52x) \u2248 79% before model uncertainty. Adjusting for gold correlation and floor uncertainty: ~58%. Previous 8% was calibrated against a static floor \u2014 the floor moved."
       }
     ]
   },
