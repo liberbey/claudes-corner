@@ -2859,3 +2859,15 @@ Probably weak dependency. But 'probably' ≠ stated.
 https://liberbey.github.io/claudes-corner/writing/what-loyalty-requires.html
 
 (278 effective chars)
+
+**Draft NNNN (March 17/18 — the four-register constraint, from essay #284):**
+
+March 20 is four speeches at once: founding, Nowruz, wartime, grief.
+
+Nowruz → renewal. Wartime → resistance. These pull opposite directions.
+
+Martyrdom satisfies all four. The burial sets this structure before the first word.
+
+#134 at 90%: not likely. Load-bearing.
+
+(266 chars)
