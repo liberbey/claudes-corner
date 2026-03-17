@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-17T10:04:34.474150+00:00",
+  "run_at": "2026-03-17T13:39:58.315409+00:00",
   "live_data": {
-    "btc_price": 73920,
-    "nvda_price": 183.22,
-    "brent_price": 102.86,
-    "sp500": 6699.38,
-    "usdcad": 1.3695,
+    "btc_price": 73864,
+    "nvda_price": 184.03,
+    "brent_price": 102.07,
+    "sp500": 6746.97,
+    "usdcad": 1.3687,
     "gold": 5017.5,
     "hl_btc_funding": {
-      "funding_pct_hr": 0.00075,
-      "mark_price": 73900.0
+      "funding_pct_hr": 0.0005,
+      "mark_price": 73969.0
     },
     "pulse_date": "2026-03-17"
   },
   "summary": {
     "total": 140,
-    "resolved": 45,
-    "correct": 29,
-    "open": 95
+    "resolved": 46,
+    "correct": 30,
+    "open": 94
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 13,
       "status": "open",
       "current_data": {
-        "btc_price": "$73,920"
+        "btc_price": "$73,864"
       },
-      "assessment": "BTC at $73,920. Needs +8.2% ($6,080) to falsify.",
+      "assessment": "BTC at $73,864. Needs +8.3% ($6,136) to falsify.",
       "trending": "toward"
     },
     {
@@ -55,9 +55,9 @@
       "days_left": 104,
       "status": "open",
       "current_data": {
-        "nvda_price": "$183.22"
+        "nvda_price": "$184.03"
       },
-      "assessment": "NVDA at $183.22. Needs +20.1% ($37) to confirm.",
+      "assessment": "NVDA at $184.03. Needs +19.5% ($36) to confirm.",
       "trending": "neutral"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 288,
       "status": "open",
       "current_data": {
-        "btc_price": "$73,920"
+        "btc_price": "$73,864"
       },
-      "assessment": "BTC at $73,920. Needs +35.3% ($26,080) to falsify. Long deadline.",
+      "assessment": "BTC at $73,864. Needs +35.4% ($26,136) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -280,14 +280,10 @@
     },
     {
       "id": "2026-03-01-027",
-      "statement": "At least one major North American auto manufacturer (GM, Ford, Stellantis, or Toyota NA) will announce a temporary production halt at a Mexican or Canadian assembly facility by March 18, 2026, due to tariff-driven supply chain disruption.",
+      "status": "resolved",
+      "outcome": false,
       "confidence": 0.18,
-      "deadline": "2026-03-18",
-      "days_left": 0,
-      "status": "open",
-      "current_data": {},
-      "assessment": "25% tariffs on parts crossing US-Canada-Mexico border. JIT supply chains cannot absorb 25% cost spike without pausing. Ford already warned of $1.5B annual impact. GM, Stellantis have Mexican assembly plants feeding US models. Q: does management have 14 days of buffer stock to delay the decision?",
-      "trending": "toward"
+      "note": "No major North American auto manufacturer announced a temporary production halt at a Mexican or Canadian facility by March 18. As revised: 30-45 day buffer stock means parts-shortage-driven halts arrive late April, not mid-March. The 14-day window was too short for inventory depletion to force a halt. Resolved FALSE as expected (18% confidence)."
     },
     {
       "id": "2026-03-02-028",
@@ -823,7 +819,7 @@
     {
       "id": "2026-03-08-089",
       "statement": "Mojtaba Khamenei's Nowruz 1405 address (if delivered as named Supreme Leader) does not mention the Strait of Hormuz by name.",
-      "confidence": 0.71,
+      "confidence": 0.74,
       "deadline": "2026-03-20",
       "days_left": 2,
       "status": "open",
@@ -834,7 +830,7 @@
     {
       "id": "2026-03-08-090",
       "statement": "Mojtaba Khamenei's Nowruz 1405 address (if delivered as named Supreme Leader) leads with resistance or martyrdom framing \u2014 not economic relief or reconstruction \u2014 in the first two minutes.",
-      "confidence": 0.85,
+      "confidence": 0.88,
       "deadline": "2026-03-20",
       "days_left": 2,
       "status": "open",
@@ -1215,7 +1211,7 @@
     {
       "id": "2026-03-14-128",
       "statement": "",
-      "confidence": 0.72,
+      "confidence": 0.52,
       "deadline": "2026-03-20",
       "days_left": 2,
       "status": "open",
@@ -1281,7 +1277,7 @@
     {
       "id": "2026-03-14-134",
       "statement": "The Nowruz founding address explicitly references martyrdom (shaheed, shahadat, or equivalent framing of Khamenei Sr.'s death as sacrifice for the resistance cause) within the first ten minutes of the speech.",
-      "confidence": 0.85,
+      "confidence": 0.9,
       "deadline": "2026-03-20",
       "days_left": 2,
       "status": "open",
@@ -1369,7 +1365,7 @@
     {
       "id": "2026-03-16-142",
       "statement": "Brent crude closes within $3 of its March 19, 2026 close price on March 20, 2026 (Nowruz / founding speech day).",
-      "confidence": 0.35,
+      "confidence": 0.62,
       "deadline": "2026-03-20",
       "days_left": 2,
       "status": "open",

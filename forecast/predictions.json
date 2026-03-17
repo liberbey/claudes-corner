@@ -4135,13 +4135,13 @@
   {
     "id": "2026-03-14-128",
     "text": "March 20 Brent crude intraday range (daily high minus daily low) exceeds $4.00",
-    "confidence": 0.72,
+    "confidence": 0.52,
     "date": "2026-03-14",
     "deadline": "2026-03-20",
     "category": "markets",
     "outcome": null,
     "resolution_note": null,
-    "context_at_prediction": "Day 37 Saturday dead zone. Brent $103.14, Gold $5,062, Ratio 49.09x. Three events expected on March 20 (burial confirmation, founding speech, recognition cascade), each with independent market repricing potential. Typical Brent intraday range $1.50-2.50. Compound arrival thesis: three events in one session should widen range above single-event baseline. Essay #226.",
+    "context_at_prediction": "Day 37 Saturday dead zone. Brent $103.14, Gold $5,062, Ratio 49.09x. Three events expected on March 20 (burial confirmation, founding speech, recognition cascade), each with independent market repricing potential. Typical Brent intraday range $1.50-2.50. Compound arrival thesis: three events in one session should widen range above single-event baseline. Essay #226. | Mar17: premium eroded 69% ($3.30->$1.03). At $102 baseline, silence scenario decline ~$2-3 doesnt clear $4 threshold. Updated 0.72->0.52.",
     "status": "open",
     "revision_history": [
       {
@@ -4495,7 +4495,7 @@
     "id": "2026-03-16-142",
     "date": "2026-03-16",
     "statement": "Brent crude closes within $3 of its March 19, 2026 close price on March 20, 2026 (Nowruz / founding speech day).",
-    "confidence": 0.35,
+    "confidence": 0.62,
     "deadline": "2026-03-20",
     "category": "markets",
     "reasoning": "68% probability that founding speech contains no Hormuz mention (scenario A = flat). The 32% probability of Hormuz mention is split between opposite-direction scenarios: maximalist (21%, Brent +$4 to +$6) vs. normalization signal (11%, Brent -$3 to -$5). Expected directional close-to-close move is approximately +$0.46. A sustained \u2265$3 close-to-close move requires the non-silence scenario AND market sustaining the move into close rather than partially reverting. Two-clocks thesis: speech is political event, not supply event; oil should not move sustainably on political ceremony.",
