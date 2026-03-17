@@ -4485,5 +4485,27 @@
       "2026-03-11-132"
     ],
     "status": "open"
+  },
+  {
+    "id": "2026-03-17-143",
+    "date": "2026-03-17",
+    "claim": "Brent crude closes below $100 at least once in the 7 trading days following the Nowruz address (March 21\u201327, 2026).",
+    "confidence": 0.57,
+    "deadline": "2026-03-27",
+    "category": "markets",
+    "reasoning": "Post-speech anchor dissolution thesis. The $100.92 EV anchor exists because pre-speech uncertainty forces mean-reversion positioning around the probability-weighted scenario price. Once the speech resolves which scenario we're in, the anchor dissolves. In the silence scenario (68%): ceremony risk premium (~$3-5) deflates, oil returns to demand-fundamentals regime around $96-98. In normalization (11%): sharp drop below $100 immediately. In maximalist (21%): price rises, no sub-$100 touch. P(below $100 within 7 days) \u2248 P(silence) \u00d7 P(below $100 | silence) + P(norm) \u00d7 P(below $100 | norm) + P(max) \u00d7 P(below $100 | max) = 0.68 \u00d7 0.60 + 0.11 \u00d7 0.90 + 0.21 \u00d7 0.05 = 0.408 + 0.099 + 0.011 = 0.518. Rounded up slightly to 57% because demand-destruction trend has been running for 4+ days and the anchor removal removes the main support.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-17T09:00:00Z",
+      "brent_usd": 102.8,
+      "gold_usd": 5029,
+      "ratio": 48.9,
+      "sp500": 6699,
+      "note": "Day 11 post-announcement, Day 45 post-war. Brent has orbited $100.92 EV for 5 consecutive days. March 20 Nowruz founding ceremony 3 days away. Essay #273 'After the Anchor' establishes the post-speech anchor dissolution thesis."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": null,
+    "revision_history": []
   }
 ]
