@@ -2930,7 +2930,6 @@
     "id": "2026-03-09-097",
     "date": "2026-03-09",
     "title": "China formal recognition of Mojtaba arrives after March 11",
-    "claim": "China's formal diplomatic recognition of Mojtaba Khamenei as Supreme Leader arrives more than 72 hours after the March 8 succession announcement \u2014 i.e., after March 11, 2026.",
     "confidence": 0.6,
     "deadline": "2026-03-17",
     "status": "resolved",
@@ -2972,7 +2971,8 @@
     ],
     "outcome": true,
     "resolved_date": "2026-03-15",
-    "resolution_note": "Resolved TRUE. By March 15 (Day 7 post-announcement), China has not formally recognized Mojtaba Khamenei. The prediction was testing whether recognition would arrive within 72h of the March 8 announcement (FALSE) or later (TRUE). China clearly did not recognize early. NOTE: The confidence field reached 0.22 during revision \u2014 this tracked a secondary question (does China recognize at all by March 17?) rather than the original prediction question (early vs late timing). The original 60% confidence on delayed recognition was directionally correct. The coordination-lock explanation was validated: 7 days of silence confirms China is holding recognition as leverage to be deployed around the March 20 founding speech. Brier contribution based on original 60% confidence: (0.4)^2 = 0.16."
+    "resolution_note": "Resolved TRUE. By March 15 (Day 7 post-announcement), China has not formally recognized Mojtaba Khamenei. The prediction was testing whether recognition would arrive within 72h of the March 8 announcement (FALSE) or later (TRUE). China clearly did not recognize early. NOTE: The confidence field reached 0.22 during revision \u2014 this tracked a secondary question (does China recognize at all by March 17?) rather than the original prediction question (early vs late timing). The original 60% confidence on delayed recognition was directionally correct. The coordination-lock explanation was validated: 7 days of silence confirms China is holding recognition as leverage to be deployed around the March 20 founding speech. Brier contribution based on original 60% confidence: (0.4)^2 = 0.16.",
+    "statement": "China's formal diplomatic recognition of Mojtaba Khamenei as Supreme Leader arrives more than 72 hours after the March 8 succession announcement \u2014 i.e., after March 11, 2026."
   },
   {
     "id": "2026-03-09-098",
@@ -3779,7 +3779,6 @@
     "id": "2026-03-11-118",
     "date": "2026-03-11",
     "title": "Nowruz address triggers recognition cascade within 48 hours",
-    "claim": "Within 48 hours of the Nowruz 1405 address delivered by Mojtaba Khamenei, Russia and/or China issues a formal diplomatic recognition of Mojtaba as Supreme Leader of Iran.",
     "confidence": 0.7,
     "deadline": "2026-03-22",
     "status": "open",
@@ -3806,13 +3805,13 @@
       "nowruz_days": 9,
       "note": "#085 FALSE, #076 FALSE, #086 FALSE. No personal statement, no recognition. Founding speech is March 20."
     },
-    "resolution_criteria": "TRUE if Russia or China issues formal diplomatic recognition by March 22 (48h after March 20 address). FALSE if no recognition from either by March 22."
+    "resolution_criteria": "TRUE if Russia or China issues formal diplomatic recognition by March 22 (48h after March 20 address). FALSE if no recognition from either by March 22.",
+    "statement": "Within 48 hours of the Nowruz 1405 address delivered by Mojtaba Khamenei, Russia and/or China issues a formal diplomatic recognition of Mojtaba as Supreme Leader of Iran."
   },
   {
     "id": "2026-03-11-119",
     "date": "2026-03-11",
     "title": "Brent moves less than \u00b13% on Nowruz day",
-    "claim": "Brent crude does not move more than \u00b13% on Nowruz day (March 20, 2026) relative to the March 19 close, regardless of address content. Oil has already priced the central case. The marginal information content of the address itself, for oil, is near zero.",
     "confidence": 0.75,
     "deadline": "2026-03-20",
     "status": "open",
@@ -3833,13 +3832,13 @@
     "outcome": null,
     "resolved_date": null,
     "resolution_note": null,
-    "revision_history": []
+    "revision_history": [],
+    "statement": "Brent crude does not move more than \u00b13% on Nowruz day (March 20, 2026) relative to the March 19 close, regardless of address content. Oil has already priced the central case. The marginal information content of the address itself, for oil, is near zero."
   },
   {
     "id": "2026-03-11-120",
     "date": "2026-03-11",
     "title": "Gold falls >5% in 5 days post-Nowruz address",
-    "claim": "Gold falls more than 5% from its March 19 close in the first five trading days following the Nowruz address (by March 27, 2026). Conditional on prediction #081 (Mojtaba delivers the Nowruz address).",
     "confidence": 0.65,
     "deadline": "2026-03-27",
     "status": "open",
@@ -3861,7 +3860,8 @@
     "outcome": null,
     "resolved_date": null,
     "resolution_note": null,
-    "revision_history": []
+    "revision_history": [],
+    "statement": "Gold falls more than 5% from its March 19 close in the first five trading days following the Nowruz address (by March 27, 2026). Conditional on prediction #081 (Mojtaba delivers the Nowruz address)."
   },
   {
     "id": "2026-03-11-121",
@@ -3931,7 +3931,6 @@
     "id": "2026-03-11-123",
     "date": "2026-03-11",
     "title": "First foreign recognition within 6 hours of Nowruz address",
-    "claim": "At least one formal foreign recognition (Russia or China) arrives within 6 hours of the Nowruz 1405 address going live on March 20. Conditional on prediction #081 (98%).",
     "confidence": 0.76,
     "deadline": "2026-03-20",
     "status": "open",
@@ -3972,7 +3971,8 @@
         "to": 0.76,
         "note": "6 days of non-recognition makes speech-triggered cascade more likely. If China hasn't recognized by March 17, recognition on March 20 following the founding performative is the primary remaining path."
       }
-    ]
+    ],
+    "statement": "At least one formal foreign recognition (Russia or China) arrives within 6 hours of the Nowruz 1405 address going live on March 20. Conditional on prediction #081 (98%)."
   },
   {
     "id": "2026-03-11-124",
@@ -4117,7 +4117,7 @@
   {
     "id": "2026-03-14-128",
     "text": "March 20 Brent crude intraday range (daily high minus daily low) exceeds $4.00",
-    "confidence": 0.48,
+    "confidence": 0.72,
     "date": "2026-03-14",
     "deadline": "2026-03-20",
     "category": "markets",
@@ -4137,6 +4137,12 @@
         "from": 0.45,
         "to": 0.48,
         "note": "More room from anchor $101.58 vs $97.50 (last revision base). Maximalist scenario (+$5-7) or normalization (-$6-9) both yield range >4. Expected range ~$3.50 probability-weighted; $4 threshold achievable. Revising up from 35%."
+      },
+      {
+        "date": "2026-03-17",
+        "from": 0.48,
+        "to": 0.72,
+        "note": "Brent .22 entering March 20: any post-speech scenario (silence --7, max +-11, norm --11) produces > range. Essay #276."
       }
     ]
   },
@@ -4195,7 +4201,6 @@
     "id": "2026-03-14-133",
     "date": "2026-03-14",
     "title": "Polymarket ground forces market reprices below 25% after founding speech",
-    "claim": "Conditional on Mojtaba delivering the Nowruz 1405 address (#081 TRUE): Polymarket's \"US forces enter Iran by March 31\" market closes at or below 25% YES within 48 hours of the founding address. The speech resolves counterpart uncertainty and opens the US exit declaration track, repricing ground forces downward.",
     "confidence": 0.62,
     "deadline": "2026-03-22",
     "status": "open",
@@ -4226,7 +4231,8 @@
       "note": "The founding speech creates the counterpart needed for US exit declaration (Desert Fox grammar). This resolves the political uncertainty that Polymarket may be pricing."
     },
     "resolution_criteria": "Resolves TRUE if Polymarket market \"US forces enter Iran by March 31\" shows a price at or below 0.25 (25%) at any point in the 48-hour window following the Nowruz address. Resolves FALSE if price remains above 0.25 throughout the 48h window, or if #081 resolves FALSE (not conditional). Requires #081 TRUE to be live.",
-    "essay": "what-42-percent-misses"
+    "essay": "what-42-percent-misses",
+    "statement": "Conditional on Mojtaba delivering the Nowruz 1405 address (#081 TRUE): Polymarket's \"US forces enter Iran by March 31\" market closes at or below 25% YES within 48 hours of the founding address. The speech resolves counterpart uncertainty and opens the US exit declaration track, repricing ground forces downward."
   },
   {
     "id": "2026-03-14-134",
@@ -4299,7 +4305,6 @@
     "id": "2026-03-15-135",
     "date": "2026-03-15",
     "title": "Russia recognizes before China",
-    "claim": "Russia formally recognizes Mojtaba Khamenei as Supreme Leader before China does, conditional on both countries formally recognizing by March 21, 2026.",
     "confidence": 0.55,
     "deadline": "2026-03-21",
     "status": "open",
@@ -4323,7 +4328,8 @@
       "days_to_nowruz": 5
     },
     "resolution_criteria": "Resolves TRUE if official Russian foreign ministry statement or TASS wire confirming recognition of Mojtaba arrives before official Chinese foreign ministry statement or Xinhua wire. Resolves FALSE if China recognizes first. VOID if either country has not recognized by March 21.",
-    "conditional": "Void if either Russia or China has not formally recognized by March 21, 2026."
+    "conditional": "Void if either Russia or China has not formally recognized by March 21, 2026.",
+    "statement": "Russia formally recognizes Mojtaba Khamenei as Supreme Leader before China does, conditional on both countries formally recognizing by March 21, 2026."
   },
   {
     "id": "2026-03-15-137",
@@ -4465,7 +4471,7 @@
     "id": "2026-03-16-142",
     "date": "2026-03-16",
     "statement": "Brent crude closes within $3 of its March 19, 2026 close price on March 20, 2026 (Nowruz / founding speech day).",
-    "confidence": 0.7,
+    "confidence": 0.35,
     "deadline": "2026-03-20",
     "category": "markets",
     "reasoning": "68% probability that founding speech contains no Hormuz mention (scenario A = flat). The 32% probability of Hormuz mention is split between opposite-direction scenarios: maximalist (21%, Brent +$4 to +$6) vs. normalization signal (11%, Brent -$3 to -$5). Expected directional close-to-close move is approximately +$0.46. A sustained \u2265$3 close-to-close move requires the non-silence scenario AND market sustaining the move into close rather than partially reverting. Two-clocks thesis: speech is political event, not supply event; oil should not move sustainably on political ceremony.",
@@ -4484,13 +4490,20 @@
       "2026-03-12-128",
       "2026-03-11-132"
     ],
-    "status": "open"
+    "status": "open",
+    "revision_history": [
+      {
+        "date": "2026-03-17",
+        "from": 0.7,
+        "to": 0.35,
+        "note": "Brent now .22. If March 19 close ~, silence scenario close ~-99 = --7 from close; exceeds  band. Essay #276."
+      }
+    ]
   },
   {
     "id": "2026-03-17-143",
     "date": "2026-03-17",
-    "claim": "Brent crude closes below $100 at least once in the 7 trading days following the Nowruz address (March 21\u201327, 2026).",
-    "confidence": 0.57,
+    "confidence": 0.65,
     "deadline": "2026-03-27",
     "category": "markets",
     "reasoning": "Post-speech anchor dissolution thesis. The $100.92 EV anchor exists because pre-speech uncertainty forces mean-reversion positioning around the probability-weighted scenario price. Once the speech resolves which scenario we're in, the anchor dissolves. In the silence scenario (68%): ceremony risk premium (~$3-5) deflates, oil returns to demand-fundamentals regime around $96-98. In normalization (11%): sharp drop below $100 immediately. In maximalist (21%): price rises, no sub-$100 touch. P(below $100 within 7 days) \u2248 P(silence) \u00d7 P(below $100 | silence) + P(norm) \u00d7 P(below $100 | norm) + P(max) \u00d7 P(below $100 | max) = 0.68 \u00d7 0.60 + 0.11 \u00d7 0.90 + 0.21 \u00d7 0.05 = 0.408 + 0.099 + 0.011 = 0.518. Rounded up slightly to 57% because demand-destruction trend has been running for 4+ days and the anchor removal removes the main support.",
@@ -4506,6 +4519,14 @@
     "resolved_date": null,
     "outcome": null,
     "resolution_note": null,
-    "revision_history": []
+    "revision_history": [
+      {
+        "date": "2026-03-17",
+        "from": 0.57,
+        "to": 0.65,
+        "note": "Higher entry price () -> larger silence-scenario drop -> clearer path to sub- close in March 21-27. Essay #276."
+      }
+    ],
+    "statement": "Brent crude closes below $100 at least once in the 7 trading days following the Nowruz address (March 21\u201327, 2026)."
   }
 ]

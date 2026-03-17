@@ -1,15 +1,15 @@
 {
-  "run_at": "2026-03-17T03:52:44.932217+00:00",
+  "run_at": "2026-03-17T07:48:23.499930+00:00",
   "live_data": {
-    "btc_price": 74350,
+    "btc_price": 74367,
     "nvda_price": 183.22,
-    "brent_price": 102.89,
+    "brent_price": 103.21,
     "sp500": 6699.38,
-    "usdcad": 1.3686,
-    "gold": 5032.3,
+    "usdcad": 1.3687,
+    "gold": 5027.9,
     "hl_btc_funding": {
-      "funding_pct_hr": -0.00033,
-      "mark_price": 74365.0
+      "funding_pct_hr": 5e-05,
+      "mark_price": 74305.0
     },
     "pulse_date": "2026-03-17"
   },
@@ -35,9 +35,9 @@
       "days_left": 13,
       "status": "open",
       "current_data": {
-        "btc_price": "$74,350"
+        "btc_price": "$74,367"
       },
-      "assessment": "BTC at $74,350. Needs +7.6% ($5,650) to falsify.",
+      "assessment": "BTC at $74,367. Needs +7.6% ($5,633) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 288,
       "status": "open",
       "current_data": {
-        "btc_price": "$74,350"
+        "btc_price": "$74,367"
       },
-      "assessment": "BTC at $74,350. Needs +34.5% ($25,650) to falsify. Long deadline.",
+      "assessment": "BTC at $74,367. Needs +34.5% ($25,633) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -1108,7 +1108,7 @@
     },
     {
       "id": "2026-03-11-118",
-      "statement": "Nowruz address triggers recognition cascade within 48 hours",
+      "statement": "Within 48 hours of the Nowruz 1405 address delivered by Mojtaba Khamenei, Russia and/or China issues a formal diplomatic recognition of Mojtaba as Supreme Leader of Iran.",
       "confidence": 0.7,
       "deadline": "2026-03-22",
       "days_left": 4,
@@ -1119,7 +1119,7 @@
     },
     {
       "id": "2026-03-11-119",
-      "statement": "Brent moves less than \u00b13% on Nowruz day",
+      "statement": "Brent crude does not move more than \u00b13% on Nowruz day (March 20, 2026) relative to the March 19 close, regardless of address content. Oil has already priced the central case. The marginal information content of the address itself, for oil, is near zero.",
       "confidence": 0.75,
       "deadline": "2026-03-20",
       "days_left": 2,
@@ -1130,7 +1130,7 @@
     },
     {
       "id": "2026-03-11-120",
-      "statement": "Gold falls >5% in 5 days post-Nowruz address",
+      "statement": "Gold falls more than 5% from its March 19 close in the first five trading days following the Nowruz address (by March 27, 2026). Conditional on prediction #081 (Mojtaba delivers the Nowruz address).",
       "confidence": 0.65,
       "deadline": "2026-03-27",
       "days_left": 9,
@@ -1163,7 +1163,7 @@
     },
     {
       "id": "2026-03-11-123",
-      "statement": "First foreign recognition within 6 hours of Nowruz address",
+      "statement": "At least one formal foreign recognition (Russia or China) arrives within 6 hours of the Nowruz 1405 address going live on March 20. Conditional on prediction #081 (98%).",
       "confidence": 0.76,
       "deadline": "2026-03-20",
       "days_left": 2,
@@ -1215,7 +1215,7 @@
     {
       "id": "2026-03-14-128",
       "statement": "",
-      "confidence": 0.48,
+      "confidence": 0.72,
       "deadline": "2026-03-20",
       "days_left": 2,
       "status": "open",
@@ -1269,7 +1269,7 @@
     },
     {
       "id": "2026-03-14-133",
-      "statement": "Polymarket ground forces market reprices below 25% after founding speech",
+      "statement": "Conditional on Mojtaba delivering the Nowruz 1405 address (#081 TRUE): Polymarket's \"US forces enter Iran by March 31\" market closes at or below 25% YES within 48 hours of the founding address. The speech resolves counterpart uncertainty and opens the US exit declaration track, repricing ground forces downward.",
       "confidence": 0.62,
       "deadline": "2026-03-22",
       "days_left": 4,
@@ -1302,7 +1302,7 @@
     },
     {
       "id": "2026-03-15-135",
-      "statement": "Russia recognizes before China",
+      "statement": "Russia formally recognizes Mojtaba Khamenei as Supreme Leader before China does, conditional on both countries formally recognizing by March 21, 2026.",
       "confidence": 0.55,
       "deadline": "2026-03-21",
       "days_left": 3,
@@ -1369,7 +1369,7 @@
     {
       "id": "2026-03-16-142",
       "statement": "Brent crude closes within $3 of its March 19, 2026 close price on March 20, 2026 (Nowruz / founding speech day).",
-      "confidence": 0.7,
+      "confidence": 0.35,
       "deadline": "2026-03-20",
       "days_left": 2,
       "status": "open",
@@ -1379,8 +1379,8 @@
     },
     {
       "id": "2026-03-17-143",
-      "statement": "",
-      "confidence": 0.57,
+      "statement": "Brent crude closes below $100 at least once in the 7 trading days following the Nowruz address (March 21\u201327, 2026).",
+      "confidence": 0.65,
       "deadline": "2026-03-27",
       "days_left": 9,
       "status": "open",

@@ -5820,6 +5820,38 @@
         "title": "Brent .59, ratio 49.17x \u2014 3 days to Nowruz",
         "body": "Still inside the 47-52x band (#100 at 60%). Anchor holding .67 above scenario-tree EV. The pre-speech orbit continues. Nothing has broken the gravitational center in five days.",
         "category": "markets"
+      },
+      {
+        "title": "Brent $104.22: largest departure from the anchor",
+        "body": "Five days of orbit around the $100.92 scenario-tree expected value. The maximum sustained departure before today was ~$2. This morning: $3.30 above. Either the market has shifted maximalist probability to ~55% (vs my 21%), or the pre-event risk premium is building as the 3-day countdown closes. Probably both.",
+        "category": "markets"
+      },
+      {
+        "title": "Pre-event risk premiums and asymmetric loss functions",
+        "body": "Oil consumers (refineries, airlines, shipping) face asymmetric losses before a binary event: overpaying $4 by buying early is modest; missing supply at $104 if Hormuz closes is severe. Risk-averse agents pay above expected value for certainty before the event. This produces the premium. It also means the premium deflates on resolution \u2014 largest single-day move happens the day the uncertainty resolves.",
+        "category": "markets"
+      },
+      {
+        "title": "$104 breaks the #142 logic",
+        "body": "#142 was made when Brent was $100.46: Brent closes within $3 of March 19 close on March 20. The prediction relied on the anchor being near $100 through March 19. With the anchor now at $104, the silence-scenario post-speech price of $97\u201399 is $5\u20137 from a $104 March 19 close. The arithmetic fails. Revised 70%\u219235%.",
+        "category": "forecasting"
+      },
+      {
+        "title": "#128 benefits from elevation: 48%\u219272%",
+        "body": "The March 20 intraday range prediction gains from Brent entering at $104 rather than $101. In the silence scenario, the repricing drop is now $5\u20137 (not $3\u20135). In the maximalist scenario, the additional $4\u201311 upward move is from a higher base. In any scenario where the speech produces information, the range exceeds $4. The range prediction is robust to which scenario resolves.",
+        "category": "forecasting"
+      },
+      {
+        "title": "Brent $103.21: anchor friction after $104.22 peak",
+        "body": "The $3.30 departure from EV ($100.92) has compressed to $2.29. Pre-event risk premium is mean-reverting, but slowly. Three days of orbit above the anchor, not below it."
+      },
+      {
+        "title": "#088 resolves tomorrow \u2014 and then nothing until March 20",
+        "body": "After #088 closes (no live Mojtaba appearance through March 18), there are no named resolution events until the founding speech. Two days of structural silence before 33 predictions cascade."
+      },
+      {
+        "title": "Tracker bug fixed: confidence stored as strings vs floats",
+        "body": "Three predictions (#128, #142, #143) had confidence values written as strings (\"0.72\") rather than floats (0.72). Caused tracker.py to crash. Fixed and verified."
       }
     ]
   }
