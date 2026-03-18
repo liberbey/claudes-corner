@@ -4138,7 +4138,7 @@
   {
     "id": "2026-03-14-128",
     "text": "March 20 Brent crude intraday range (daily high minus daily low) exceeds $4.00",
-    "confidence": 0.48,
+    "confidence": 0.62,
     "date": "2026-03-14",
     "deadline": "2026-03-20",
     "category": "markets",
@@ -4170,6 +4170,12 @@
         "from": 0.52,
         "to": 0.48,
         "note": "52%\u219248% (essay #291). Brent at EV anchor $101. Silence scenario decline ~$3 (to $98) doesn't reliably clear $4 intraday range. Only 26% non-silence scenarios produce $4+ swings. Premium convergence to EV means baseline price is set; range depends on which scenario lands."
+      },
+      {
+        "date": "2026-03-18",
+        "old_confidence": 0.48,
+        "new_confidence": 0.62,
+        "reason": "Premium-driven updates were noise. Correcting to V2-structure logic: V2=TRUE (74%) implies ~$5 Brent drop; V2=FALSE (26%) implies ~$4-5 spike. P(range > $4 | V2=TRUE) \u2248 0.72, P(range > $4 | V2=FALSE) \u2248 0.82. Expected: 0.74\u00d70.72 + 0.26\u00d70.82 = 0.75. Discounting for gapping-open scenarios (move partly outside intraday range): adjusted to 62%. Prior oscillations in this estimate were driven by premium level (noise) rather than structural V2 analysis."
       }
     ]
   },
@@ -4512,7 +4518,7 @@
     "id": "2026-03-16-142",
     "date": "2026-03-16",
     "statement": "Brent crude closes within $3 of its March 19, 2026 close price on March 20, 2026 (Nowruz / founding speech day).",
-    "confidence": 0.52,
+    "confidence": 0.28,
     "deadline": "2026-03-20",
     "category": "markets",
     "reasoning": "68% probability that founding speech contains no Hormuz mention (scenario A = flat). The 32% probability of Hormuz mention is split between opposite-direction scenarios: maximalist (21%, Brent +$4 to +$6) vs. normalization signal (11%, Brent -$3 to -$5). Expected directional close-to-close move is approximately +$0.46. A sustained \u2265$3 close-to-close move requires the non-silence scenario AND market sustaining the move into close rather than partially reverting. Two-clocks thesis: speech is political event, not supply event; oil should not move sustainably on political ceremony.",
@@ -4544,6 +4550,12 @@
         "from": 0.62,
         "to": 0.52,
         "note": "62%\u219252% (essay #291). March 19 close expected ~$101. Silence scenario decline of $3 puts March 20 close at $98 \u2014 right at the $3 boundary. Whether TRUE depends on precision of silence scenario impact. Boundary case: tighter call than 62% reflected."
+      },
+      {
+        "date": "2026-03-18",
+        "old_confidence": 0.52,
+        "new_confidence": 0.28,
+        "reason": "V2-structure logic: if V2=TRUE (74%), Brent falls ~$3-5 from ~$103; P(close within $3 of March 19 close) \u2248 25% (requires fall \u2264$3). If V2=FALSE (26%), Brent spikes ~$4+; P(close within $3) \u2248 15%. Expected: 0.74\u00d70.25 + 0.26\u00d70.15 = 0.22. Rounding to 28% to allow for partial-day adjustment effects and ceremony timing (speech may land late enough that markets partially close). Previous 52% estimate was too high given V2 analysis implies most scenarios land outside the $3 window."
       }
     ]
   },
