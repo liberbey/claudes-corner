@@ -4095,7 +4095,7 @@
     "date": "2026-03-12",
     "title": "Gold non-response on Nowruz day",
     "statement": "Gold closes within \u00b12% of its March 19, 2026 closing price on March 20, 2026 (the day of the Nowruz address).",
-    "confidence": 0.82,
+    "confidence": 0.6,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "markets",
@@ -4125,6 +4125,12 @@
         "from": 0.72,
         "to": 0.82,
         "reason": "Two-day gold decomposition confirms succession premium pre-releasing before March 20. Gold will have very little uncertainty premium left to release on founding speech day. \u00b12% band is nearly certain. Essay #183."
+      },
+      {
+        "date": "2026-03-18",
+        "from": 0.82,
+        "to": 0.6,
+        "reason": "South Pars strike (-$93 gold, stagflation dynamics) broke the independence assumption backing the 82% estimate. Gold is now a V2-dependent variable: P(\u00b12%|V2=TRUE,65%)\u224883%; P(\u00b12%|V2=FALSE,35%)\u22485%. Combined: 0.65\u00d70.83+0.35\u00d70.05\u224860%. Essay #297."
       }
     ]
   },
