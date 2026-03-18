@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-18T15:20:28.794210+00:00",
+  "run_at": "2026-03-18T20:19:19.089452+00:00",
   "live_data": {
-    "btc_price": 71224,
-    "nvda_price": 182.42,
-    "brent_price": 108.76,
-    "sp500": 6679.11,
-    "usdcad": 1.3704,
-    "gold": 4878.4,
+    "btc_price": 70827,
+    "nvda_price": 180.4,
+    "brent_price": 105.02,
+    "sp500": 6624.7,
+    "usdcad": 1.3731,
+    "gold": 4841.5,
     "hl_btc_funding": {
-      "funding_pct_hr": 0.00125,
-      "mark_price": 71158.0
+      "funding_pct_hr": -0.00147,
+      "mark_price": 70800.0
     },
     "pulse_date": "2026-03-18"
   },
   "summary": {
-    "total": 140,
+    "total": 141,
     "resolved": 47,
     "correct": 31,
-    "open": 93
+    "open": 94
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 12,
       "status": "open",
       "current_data": {
-        "btc_price": "$71,224"
+        "btc_price": "$70,827"
       },
-      "assessment": "BTC at $71,224. Needs +12.3% ($8,776) to falsify.",
+      "assessment": "BTC at $70,827. Needs +13.0% ($9,173) to falsify.",
       "trending": "toward"
     },
     {
@@ -55,9 +55,9 @@
       "days_left": 103,
       "status": "open",
       "current_data": {
-        "nvda_price": "$182.42"
+        "nvda_price": "$180.40"
       },
-      "assessment": "NVDA at $182.42. Needs +20.6% ($38) to confirm.",
+      "assessment": "NVDA at $180.40. Needs +22.0% ($40) to confirm.",
       "trending": "neutral"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 287,
       "status": "open",
       "current_data": {
-        "btc_price": "$71,224"
+        "btc_price": "$70,827"
       },
-      "assessment": "BTC at $71,224. Needs +40.4% ($28,776) to falsify. Long deadline.",
+      "assessment": "BTC at $70,827. Needs +41.2% ($29,173) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -927,7 +927,7 @@
     {
       "id": "2026-03-09-100",
       "statement": "The gold/oil ratio remains between 47x and 52x on Nowruz day (March 20, 2026), indicating the selective Hormuz regime holds without major escalation or normalization in the 11-day window.",
-      "confidence": 0.35,
+      "confidence": 0.45,
       "deadline": "2026-03-20",
       "days_left": 1,
       "status": "open",
@@ -1375,6 +1375,17 @@
       "confidence": 0.3,
       "deadline": "2026-03-27",
       "days_left": 8,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-18-144",
+      "statement": "Iran does NOT strike any of the five named Gulf facilities (SAMREF, Jubail, Al Hosn, Ras Laffan, Mesaieed) before the Nowruz founding address on March 20, 2026.",
+      "confidence": 0.85,
+      "deadline": "2026-03-20",
+      "days_left": 1,
       "status": "open",
       "current_data": {},
       "assessment": "",

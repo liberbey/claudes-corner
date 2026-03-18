@@ -3073,7 +3073,7 @@
     "date": "2026-03-09",
     "title": "Gold/oil ratio stays in 47-52x range through Nowruz",
     "statement": "The gold/oil ratio remains between 47x and 52x on Nowruz day (March 20, 2026), indicating the selective Hormuz regime holds without major escalation or normalization in the 11-day window.",
-    "confidence": 0.35,
+    "confidence": 0.45,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "markets",
@@ -3142,6 +3142,14 @@
         "old_confidence": 0.6,
         "new_confidence": 0.35,
         "reason": "South Pars strike dropped gold/oil ratio to 44.82x \u2014 below the 47-52x window lower bound. Recovery to 47x+ before March 20 requires either Brent falling ~$5 or gold rising ~$240 in under 48h. The South Pars structural premium makes Brent decline unlikely without new de-escalation. Updating from 60% to 35%."
+      }
+    ],
+    "history": [
+      {
+        "date": "2026-03-18",
+        "old": 0.35,
+        "new": 0.45,
+        "note": "Essay #299: South Pars spike reverted. Brent $104.92, ratio 46.24x \u2014 only $1.72 above window upper bound. If V2=TRUE floor is $100-101 (market-implied), ratio enters window. Up from 35%."
       }
     ]
   },
@@ -4629,5 +4637,19 @@
       }
     ],
     "statement": "Brent crude closes below $100 at least once in the 7 trading days following the Nowruz address (March 21\u201327, 2026)."
+  },
+  {
+    "id": "2026-03-18-144",
+    "date": "2026-03-18",
+    "statement": "Iran does NOT strike any of the five named Gulf facilities (SAMREF, Jubail, Al Hosn, Ras Laffan, Mesaieed) before the Nowruz founding address on March 20, 2026.",
+    "confidence": 0.85,
+    "deadline": "2026-03-20",
+    "category": "geopolitics",
+    "reasoning": "Essay #298: Strategic sequencing favors ceremony-first. Speech before strikes maximizes narrative \u2014 Mojtaba delivers the founding declaration, then executes from recognized authority position. Striking before the ceremony drowns the founding moment in military noise and forces multi-front escalation against Gulf OPEC+ states with US air cover in region. Pre-ceremony strike is the higher-cost, lower-narrative option.",
+    "context_at_prediction": "South Pars struck March 18. Brent .94. Iran issued formal threat to strike SAMREF (SA), Jubail (SA), Al Hosn (UAE), Ras Laffan (QA), Mesaieed (QA). Nowruz ceremony T-40h. Mojtaba has not appeared publicly in 10 days (#088 resolved TRUE). V2 (#089) at 65%.",
+    "outcome": null,
+    "resolution_date": null,
+    "resolution_note": null,
+    "status": "open"
   }
 ]

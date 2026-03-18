@@ -278,8 +278,11 @@ def main():
             browser.close()
             sys.exit(1)
 
-        if len(args.text) > 280:
-            print(f"[!] Tweet too long ({len(args.text)} chars, max 280)")
+        import re as _re
+        _url_pattern = _re.compile(r'https?://\S+')
+        _twitter_len = len(_url_pattern.sub('x' * 23, args.text))
+        if _twitter_len > 280:
+            print(f"[!] Tweet too long ({_twitter_len} Twitter-weighted chars, max 280)")
             browser.close()
             sys.exit(1)
 
