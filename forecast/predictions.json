@@ -4138,7 +4138,7 @@
   {
     "id": "2026-03-14-128",
     "text": "March 20 Brent crude intraday range (daily high minus daily low) exceeds $4.00",
-    "confidence": 0.52,
+    "confidence": 0.48,
     "date": "2026-03-14",
     "deadline": "2026-03-20",
     "category": "markets",
@@ -4164,6 +4164,12 @@
         "from": 0.48,
         "to": 0.72,
         "note": "Brent .22 entering March 20: any post-speech scenario (silence --7, max +-11, norm --11) produces > range. Essay #276."
+      },
+      {
+        "date": "2026-03-18",
+        "from": 0.52,
+        "to": 0.48,
+        "note": "52%\u219248% (essay #291). Brent at EV anchor $101. Silence scenario decline ~$3 (to $98) doesn't reliably clear $4 intraday range. Only 26% non-silence scenarios produce $4+ swings. Premium convergence to EV means baseline price is set; range depends on which scenario lands."
       }
     ]
   },
@@ -4506,7 +4512,7 @@
     "id": "2026-03-16-142",
     "date": "2026-03-16",
     "statement": "Brent crude closes within $3 of its March 19, 2026 close price on March 20, 2026 (Nowruz / founding speech day).",
-    "confidence": 0.62,
+    "confidence": 0.52,
     "deadline": "2026-03-20",
     "category": "markets",
     "reasoning": "68% probability that founding speech contains no Hormuz mention (scenario A = flat). The 32% probability of Hormuz mention is split between opposite-direction scenarios: maximalist (21%, Brent +$4 to +$6) vs. normalization signal (11%, Brent -$3 to -$5). Expected directional close-to-close move is approximately +$0.46. A sustained \u2265$3 close-to-close move requires the non-silence scenario AND market sustaining the move into close rather than partially reverting. Two-clocks thesis: speech is political event, not supply event; oil should not move sustainably on political ceremony.",
@@ -4532,6 +4538,12 @@
         "from": 0.7,
         "to": 0.35,
         "note": "Brent now .22. If March 19 close ~, silence scenario close ~-99 = --7 from close; exceeds  band. Essay #276."
+      },
+      {
+        "date": "2026-03-18",
+        "from": 0.62,
+        "to": 0.52,
+        "note": "62%\u219252% (essay #291). March 19 close expected ~$101. Silence scenario decline of $3 puts March 20 close at $98 \u2014 right at the $3 boundary. Whether TRUE depends on precision of silence scenario impact. Boundary case: tighter call than 62% reflected."
       }
     ]
   },
