@@ -1,14 +1,17 @@
 # Resolution Checklist — March 20, 2026 (Nowruz 1405)
 
-Written March 19, T-30h. Ceremony at 18:15 UTC.
+Written March 19, T-30h. Updated March 20, T-21h. Ceremony at 18:15 UTC.
 
 ## Anchors needed before resolving market predictions
 
 **March 19 closing prices (fill in after market close ~21:00 UTC today):**
-- Brent close March 19: _______ (at 19:50 UTC: $101.84 — continued falling from $103.93; est. close $101-103)
-- Gold close March 19: _______ (at 19:50 UTC: $4,643 — up from $4,612 since last session)
-- Ratio March 19 close: _______ (at 19:50 UTC: ~45.6x)
-- NOTE: #142 window updated to ~$99-106 based on revised anchor estimate. #143 updated 37%→55%.
+- Brent close March 19: _______ (at 20:55 UTC: $103.40 — bounced from $101.84 low; est. close $103)
+- Gold close March 19: _______ (at 20:55 UTC: $4,654)
+- Ratio March 19 close: _______ (at 20:55 UTC: ~45.0x)
+- NOTE: Brent bounced $1.56 from $101.84 to $103.40 overnight — March 19 close likely $102-104 range.
+- #142 window (±$3): if close at $103 → window $100-106. V2=TRUE path ~$97-101, likely outside.
+- #143 at 55%: $100 now $3.40 away from current price. V2=TRUE (63%) → probably hits $100 in 7 days.
+- #128 updated to 72% (was 62% in original checklist).
 
 **March 20 closing prices (fill in ~21:00 UTC March 20):**
 - Brent close March 20: _______
@@ -128,18 +131,20 @@ Written March 19, T-30h. Ceremony at 18:15 UTC.
 - V2=TRUE: ~$3-5 drop → borderline. V2=FALSE: spike → likely FALSE
 - Note: uses close vs open, not close vs previous close
 
-### #128 (62%): Brent intraday range > $4 on March 20
+### #128 (72%): Brent intraday range > $4 on March 20
 - **TRUE** if (March 20 high - March 20 low) > $4.00
 - V2=TRUE → $3-5 drop from open → range likely > $4
 - V2=FALSE → spike + reversion → range > $4
 - Both scenarios produce range. Likely TRUE.
+- Updated 62%→72%: March 19 showed $5.70 range without speech; speech adds more volatility.
 
-### #142 (59%): Brent March 20 close within $3 of March 19 close
+### #142 (40%): Brent March 20 close within $3 of March 19 close
 - Anchor: March 19 closing price (fill in above)
 - Window: [March 19 close - $3, March 19 close + $3]
-- V2=TRUE: Brent falls $3-5 → near or outside lower bound
-- V2=FALSE: Brent spikes → outside upper bound
-- This is tighter than it looks. Check after both closes.
+- V2=TRUE: Brent falls $3-6 → likely outside lower bound (est. close $97-101)
+- V2=FALSE: Brent spikes $4-8 → outside upper bound
+- Updated 59%→40%: lower anchor ($101-103 range) compresses TRUE path significantly.
+- TRUE only if V2=TRUE + market already oversold (modest speech reaction, stays near $103).
 
 ### #126 (55%): Gold within ±2% of March 19 close on March 20
 - Anchor: Gold March 19 closing price

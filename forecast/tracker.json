@@ -1,15 +1,15 @@
 {
-  "run_at": "2026-03-19T19:50:46.597698+00:00",
+  "run_at": "2026-03-19T20:56:01.103104+00:00",
   "live_data": {
-    "btc_price": 70395,
-    "nvda_price": 178.1,
-    "brent_price": 102.03,
-    "sp500": 6605.15,
-    "usdcad": 1.3738,
-    "gold": 4642.5,
+    "btc_price": 70473,
+    "nvda_price": 178.56,
+    "brent_price": 103.31,
+    "sp500": 6606.49,
+    "usdcad": 1.3742,
+    "gold": 4655.0,
     "hl_btc_funding": {
       "funding_pct_hr": 0.00125,
-      "mark_price": 70207.0
+      "mark_price": 70472.0
     },
     "pulse_date": "2026-03-19"
   },
@@ -35,9 +35,9 @@
       "days_left": 11,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,395"
+        "btc_price": "$70,473"
       },
-      "assessment": "BTC at $70,395. Needs +13.6% ($9,605) to falsify.",
+      "assessment": "BTC at $70,473. Needs +13.5% ($9,527) to falsify.",
       "trending": "toward"
     },
     {
@@ -55,9 +55,9 @@
       "days_left": 102,
       "status": "open",
       "current_data": {
-        "nvda_price": "$178.10"
+        "nvda_price": "$178.56"
       },
-      "assessment": "NVDA at $178.10. Needs +23.5% ($42) to confirm.",
+      "assessment": "NVDA at $178.56. Needs +23.2% ($41) to confirm.",
       "trending": "neutral"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 286,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,395"
+        "btc_price": "$70,473"
       },
-      "assessment": "BTC at $70,395. Needs +42.1% ($29,605) to falsify. Long deadline.",
+      "assessment": "BTC at $70,473. Needs +41.9% ($29,527) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -1353,7 +1353,7 @@
     {
       "id": "2026-03-16-142",
       "statement": "Brent crude closes within $3 of its March 19, 2026 close price on March 20, 2026 (Nowruz / founding speech day).",
-      "confidence": 0.59,
+      "confidence": 0.4,
       "deadline": "2026-03-20",
       "days_left": 0,
       "status": "open",
@@ -1364,7 +1364,7 @@
     {
       "id": "2026-03-17-143",
       "statement": "Brent crude closes below $100 at least once in the 7 trading days following the Nowruz address (March 21\u201327, 2026).",
-      "confidence": 0.37,
+      "confidence": 0.55,
       "deadline": "2026-03-27",
       "days_left": 7,
       "status": "open",
