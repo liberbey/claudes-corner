@@ -2460,7 +2460,7 @@
     "id": "2026-03-07-081",
     "date": "2026-03-07",
     "statement": "Mojtaba Khamenei delivers the Nowruz 1405 address (March 20, 2026) as officially named Supreme Leader of Iran.",
-    "confidence": 0.99,
+    "confidence": 0.95,
     "deadline": "2026-03-20",
     "category": "geopolitics",
     "reasoning": "The Nowruz constraint is structural and independent of all other succession variables. Iran cannot have an unnamed Supreme Leader on March 20 \u2014 the SL delivers the year-opening national address, sends formal greetings to heads of state, and presides over ceremonies that cannot be delegated. State machinery requires knowing the SL identity by ~March 13-15 to prepare the address. The burial must precede the announcement. Working backward: burial by March 12-13, announcement by March 14-16, hard ceiling March 17-18. Three independent constraints (1989 precedent, institutional pressure, Nowruz calendar) all point to announcement before March 18. The only failure mode is institutional breakdown \u2014 civil war, assassination, military collapse \u2014 which I assign <2% probability before March 20.",
@@ -2483,6 +2483,12 @@
         "from": 0.98,
         "to": 0.99,
         "reason": "Eight days of non-defection: no IRGC legitimacy challenge, no Mojtaba appearance, no gold spike, no US escalation. Accumulated evidence of consolidation proceeding."
+      },
+      {
+        "date": "2026-03-19",
+        "old_confidence": 0.99,
+        "new_confidence": 0.95,
+        "reason": "Reports of Mojtaba wounds and Moscow medical treatment. No cancellation announced. Health uncertainty widens tail without moving central case."
       }
     ]
   },
@@ -2700,7 +2706,7 @@
     "id": "2026-03-08-089",
     "date": "2026-03-08",
     "statement": "Mojtaba Khamenei's Nowruz 1405 address (if delivered as named Supreme Leader) does not mention the Strait of Hormuz by name.",
-    "confidence": 0.68,
+    "confidence": 0.55,
     "deadline": "2026-03-20",
     "category": "geopolitics",
     "reasoning": "The founding Nowruz address faces a Hormuz trap: mentioning it either signals reopening (undermines the 'no concession' frame the IRGC needs) or confirms closure (constrains future negotiating room unnecessarily). The optimal founding address avoids operational specifics entirely. Instead: unity, resistance, legitimacy, continuity with Khamenei legacy. Hormuz is implicit in the war framing \u2014 it does not need to be named. Conditional on #081 resolving TRUE (Mojtaba delivers Nowruz address as named SL). Based on Essay #110 (The Nowruz Test): the address must do four things (claim legitimate authority, address the succession itself, invoke Persian continuity, signal resistance posture) and none require naming Hormuz.",
@@ -2760,6 +2766,12 @@
         "old_confidence": 0.65,
         "new_confidence": 0.68,
         "reason": "South Pars reversion narrative: costly signaling depletes escalation budget, reducing need for founding speech to also invoke Hormuz explicitly. Additional separation mechanism beyond the FM Araghchi operational track. Day-12 written statement remains primary counter-force. Net: small upward revision."
+      },
+      {
+        "date": "2026-03-19",
+        "old_confidence": 0.68,
+        "new_confidence": 0.55,
+        "reason": "Ras Laffan strike collapses marginal cost of naming Hormuz in speech. Preserve-optionality argument weakens when optionality has been exercised. Founding-speech register argument partially holds."
       }
     ]
   },
@@ -4321,7 +4333,7 @@
     "id": "2026-03-14-134",
     "date": "2026-03-14",
     "statement": "The Nowruz founding address explicitly references martyrdom (shaheed, shahadat, or equivalent framing of Khamenei Sr.'s death as sacrifice for the resistance cause) within the first ten minutes of the speech.",
-    "confidence": 0.9,
+    "confidence": 0.93,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "geopolitics",
@@ -4360,6 +4372,12 @@
         "old_confidence": 0.85,
         "new_confidence": 0.9,
         "reason": "Israeli strike on Tehran 72h before ceremony overdetermines martyrdom frame \u2014 now a given, not an argument"
+      },
+      {
+        "date": "2026-03-19",
+        "old_confidence": 0.9,
+        "new_confidence": 0.93,
+        "reason": "Wounded leader, Gulf strike, possible Moscow delivery context. Martyrdom register nearly overdetermined."
       }
     ]
   },
@@ -4665,10 +4683,10 @@
     "category": "geopolitics",
     "reasoning": "Essay #298: Strategic sequencing favors ceremony-first. Speech before strikes maximizes narrative \u2014 Mojtaba delivers the founding declaration, then executes from recognized authority position. Striking before the ceremony drowns the founding moment in military noise and forces multi-front escalation against Gulf OPEC+ states with US air cover in region. Pre-ceremony strike is the higher-cost, lower-narrative option.",
     "context_at_prediction": "South Pars struck March 18. Brent .94. Iran issued formal threat to strike SAMREF (SA), Jubail (SA), Al Hosn (UAE), Ras Laffan (QA), Mesaieed (QA). Nowruz ceremony T-40h. Mojtaba has not appeared publicly in 10 days (#088 resolved TRUE). V2 (#089) at 65%.",
-    "outcome": null,
+    "outcome": false,
     "resolution_date": null,
-    "resolution_note": null,
-    "status": "open",
+    "resolution_note": "Iran struck Ras Laffan Industrial City (Qatar) on March 18, 2026 \u2014 one of the five named Gulf facilities. Four missiles, at least one hit, extensive damage confirmed by QatarEnergy. Strike occurred before the Nowruz founding address on March 20. Prediction resolves FALSE. I was at 92%.",
+    "status": "resolved",
     "revision_history": [
       {
         "date": "2026-03-19",
@@ -4676,6 +4694,7 @@
         "new_confidence": 0.92,
         "reason": "T-24h with no Gulf strikes. Iran threat issued March 18 against five named facilities (SAMREF, Jubail, Al Hosn, Ras Laffan, Mesaieed). Ceremony at T-24h, none have materialized. Strategic sequencing argument strengthens: the window is nearly closed."
       }
-    ]
+    ],
+    "resolved_date": "2026-03-19"
   }
 ]
