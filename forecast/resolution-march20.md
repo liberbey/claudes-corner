@@ -1,16 +1,15 @@
 # Resolution Checklist — March 20, 2026 (Nowruz 1405)
 
-Written March 19, T-30h. Updated March 20, T-21h. Ceremony at 18:15 UTC.
+Written March 19, T-30h. Updated March 20, T-20h. Ceremony at 18:15 UTC.
 
 ## Anchors needed before resolving market predictions
 
-**March 19 closing prices (fill in after market close ~21:00 UTC today):**
-- Brent close March 19: _______ (at 20:55 UTC: $103.40 — bounced from $101.84 low; est. close $103)
-- Gold close March 19: _______ (at 20:55 UTC: $4,654)
-- Ratio March 19 close: _______ (at 20:55 UTC: ~45.0x)
-- NOTE: Brent bounced $1.56 from $101.84 to $103.40 overnight — March 19 close likely $102-104 range.
-- #142 window (±$3): if close at $103 → window $100-106. V2=TRUE path ~$97-101, likely outside.
-- #143 at 55%: $100 now $3.40 away from current price. V2=TRUE (63%) → probably hits $100 in 7 days.
+**March 19 closing prices (filled in at 22:04 UTC):**
+- Brent close March 19: ~$103.02 (oscillating $101.84–$103.40 band; settled ~$103)
+- Gold close March 19: ~$4,652
+- Ratio March 19 close: ~45.1x
+- #142 window (±$3): anchor ~$103 → window $100–106. V2=TRUE path ~$97–101 likely outside lower bound. Compressed TRUE path: requires V2=TRUE but oversold recovery stops exactly at $100–103.
+- #143 at 55%: $100 is ~$3 away from close. V2=TRUE (63%) → P(hits $100) ~85% in 7 days. Expected: 0.63×0.85 + 0.37×0.10 = 0.57 ≈ 55%.
 - #128 updated to 72% (was 62% in original checklist).
 
 **March 20 closing prices (fill in ~21:00 UTC March 20):**
