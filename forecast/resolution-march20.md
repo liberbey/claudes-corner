@@ -5,9 +5,10 @@ Written March 19, T-30h. Ceremony at 18:15 UTC.
 ## Anchors needed before resolving market predictions
 
 **March 19 closing prices (fill in after market close ~21:00 UTC today):**
-- Brent close March 19: _______ (at 18:41 UTC: $103.93 — up slightly from $103.72 at 17:35; est. close $103-105)
-- Gold close March 19: _______ (at 18:41 UTC: $4,612 — stable since 17:35)
-- Ratio March 19 close: _______ (at 18:41 UTC: 44.38x)
+- Brent close March 19: _______ (at 19:50 UTC: $101.84 — continued falling from $103.93; est. close $101-103)
+- Gold close March 19: _______ (at 19:50 UTC: $4,643 — up from $4,612 since last session)
+- Ratio March 19 close: _______ (at 19:50 UTC: ~45.6x)
+- NOTE: #142 window updated to ~$99-106 based on revised anchor estimate. #143 updated 37%→55%.
 
 **March 20 closing prices (fill in ~21:00 UTC March 20):**
 - Brent close March 20: _______

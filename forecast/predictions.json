@@ -4646,7 +4646,7 @@
     "id": "2026-03-16-142",
     "date": "2026-03-16",
     "statement": "Brent crude closes within $3 of its March 19, 2026 close price on March 20, 2026 (Nowruz / founding speech day).",
-    "confidence": 0.59,
+    "confidence": 0.4,
     "deadline": "2026-03-20",
     "category": "markets",
     "reasoning": "68% probability that founding speech contains no Hormuz mention (scenario A = flat). The 32% probability of Hormuz mention is split between opposite-direction scenarios: maximalist (21%, Brent +$4 to +$6) vs. normalization signal (11%, Brent -$3 to -$5). Expected directional close-to-close move is approximately +$0.46. A sustained \u2265$3 close-to-close move requires the non-silence scenario AND market sustaining the move into close rather than partially reverting. Two-clocks thesis: speech is political event, not supply event; oil should not move sustainably on political ceremony.",
@@ -4690,13 +4690,19 @@
         "old_confidence": 0.28,
         "new_confidence": 0.59,
         "reason": "Floor change carry-through from South Pars. Old logic: V2=TRUE floor ~$98, March 19 close ~$103 \u2192 gap $5, outside $3 window \u2192 28%. New logic (post-essay #296): V2=TRUE floor ~$104.5, March 19 close ~$105.35 \u2192 gap $0.85, inside $3 window. Corrected: 0.68\u00d70.85 + 0.32\u00d70.05 = 59%. Floor assumption was shared with #143/#139 updates but not carried through to #142. Essay #301."
+      },
+      {
+        "date": "2026-03-19",
+        "from": 0.59,
+        "to": 0.4,
+        "reason": "Brent tracking to close ~$101-102 (not $103-105 as estimated). Lower anchor means March 20 window is $99-105. V2=TRUE scenario likely takes Brent to $97-99 (outside lower bound). V2=FALSE spikes to $107-110 (outside upper bound). Revised down as anchor-sensitive bet now more exposed."
       }
     ]
   },
   {
     "id": "2026-03-17-143",
     "date": "2026-03-17",
-    "confidence": 0.37,
+    "confidence": 0.55,
     "deadline": "2026-03-27",
     "category": "markets",
     "reasoning": "Post-speech anchor dissolution thesis. The $100.92 EV anchor exists because pre-speech uncertainty forces mean-reversion positioning around the probability-weighted scenario price. Once the speech resolves which scenario we're in, the anchor dissolves. In the silence scenario (68%): ceremony risk premium (~$3-5) deflates, oil returns to demand-fundamentals regime around $96-98. In normalization (11%): sharp drop below $100 immediately. In maximalist (21%): price rises, no sub-$100 touch. P(below $100 within 7 days) \u2248 P(silence) \u00d7 P(below $100 | silence) + P(norm) \u00d7 P(below $100 | norm) + P(max) \u00d7 P(below $100 | max) = 0.68 \u00d7 0.60 + 0.11 \u00d7 0.90 + 0.21 \u00d7 0.05 = 0.408 + 0.099 + 0.011 = 0.518. Rounded up slightly to 57% because demand-destruction trend has been running for 4+ days and the anchor removal removes the main support.",
@@ -4724,6 +4730,12 @@
         "old_confidence": 0.65,
         "new_confidence": 0.3,
         "reason": "South Pars strike raised the Brent floor. Pre-South Pars: V2=TRUE implied Brent drifting toward $98, making <$100 plausible. Post-South Pars: the floor is $103-106 (South Pars physical supply constraint persists after ceremony premium collapses). Even in V2=TRUE scenario, <$100 within 7 days requires additional de-escalation beyond the speech resolving silence. In V2=FALSE, Brent stays at $109+. Updating from 65% to 30%."
+      },
+      {
+        "date": "2026-03-19",
+        "from": 0.37,
+        "to": 0.55,
+        "reason": "Brent at $101.84 at 19:50 UTC \u2014 only $1.84 from $100. Under V2=TRUE (63%), current trajectory makes $100 touch highly likely in 7 days post-speech. P(hits $100 | V2=TRUE) ~85%, P(hits $100 | V2=FALSE) ~10%. Expected: 0.63*0.85 + 0.37*0.10 = 0.57."
       }
     ],
     "statement": "Brent crude closes below $100 at least once in the 7 trading days following the Nowruz address (March 21\u201327, 2026).",
