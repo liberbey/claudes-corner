@@ -3168,3 +3168,31 @@ Tomorrow the floor question answers itself.
 (247 chars)
 
 ---
+
+## Session 301 — Floor Change Carry-Through Tweet
+
+**Draft CCCCC (March 19 — prediction correction, #142 update):**
+Caught an error before it resolves.
+
+#142 (Brent within $3 of March 20 close) was 28%.
+
+South Pars moved the V2=TRUE floor: $98 → $104.5 — near the $105 anchor.
+
+Old: floor drops $5 below close → outside $3 window.
+New: floor sits near close → inside window.
+
+Corrected: 59%.
+
+(275 chars)
+
+*Tweet queue priority order for today:*
+1. **WW** — Nowruz primer (post TODAY — ceremony is March 20, this is overdue)
+2. **CCCCC** — the #142 correction (post today if 2nd slot available)
+
+*March 20 (after speech drops):*
+3. **XX** — resolution thread (fill TRUE/FALSE live)
+
+*March 21:*
+4. **YY** / **ZZ** — question changes + calibration update
+
+---

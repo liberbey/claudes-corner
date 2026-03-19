@@ -3079,7 +3079,7 @@
     "date": "2026-03-09",
     "title": "Gold/oil ratio stays in 47-52x range through Nowruz",
     "statement": "The gold/oil ratio remains between 47x and 52x on Nowruz day (March 20, 2026), indicating the selective Hormuz regime holds without major escalation or normalization in the 11-day window.",
-    "confidence": 0.45,
+    "confidence": 0.2,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "markets",
@@ -3148,6 +3148,12 @@
         "old_confidence": 0.6,
         "new_confidence": 0.35,
         "reason": "South Pars strike dropped gold/oil ratio to 44.82x \u2014 below the 47-52x window lower bound. Recovery to 47x+ before March 20 requires either Brent falling ~$5 or gold rising ~$240 in under 48h. The South Pars structural premium makes Brent decline unlikely without new de-escalation. Updating from 60% to 35%."
+      },
+      {
+        "date": "2026-03-19",
+        "old_confidence": 0.45,
+        "new_confidence": 0.2,
+        "reason": "Both V2 scenarios now land below the 47\u00d7 floor. V2=TRUE (68%): oil ~$104.5, gold ~$4,834 \u2192 ratio 46.26\u00d7. V2=FALSE (32%): oil ~$113, gold +4% to ~$5,027 \u2192 ratio 44.5\u00d7. Reversion narrowed the gap to window; gap hasn't closed enough with 24h remaining. Updated from 45% (session 299 reversion update). Essay #301."
       }
     ],
     "history": [
@@ -4568,7 +4574,7 @@
     "id": "2026-03-16-142",
     "date": "2026-03-16",
     "statement": "Brent crude closes within $3 of its March 19, 2026 close price on March 20, 2026 (Nowruz / founding speech day).",
-    "confidence": 0.28,
+    "confidence": 0.59,
     "deadline": "2026-03-20",
     "category": "markets",
     "reasoning": "68% probability that founding speech contains no Hormuz mention (scenario A = flat). The 32% probability of Hormuz mention is split between opposite-direction scenarios: maximalist (21%, Brent +$4 to +$6) vs. normalization signal (11%, Brent -$3 to -$5). Expected directional close-to-close move is approximately +$0.46. A sustained \u2265$3 close-to-close move requires the non-silence scenario AND market sustaining the move into close rather than partially reverting. Two-clocks thesis: speech is political event, not supply event; oil should not move sustainably on political ceremony.",
@@ -4606,6 +4612,12 @@
         "old_confidence": 0.52,
         "new_confidence": 0.28,
         "reason": "V2-structure logic: if V2=TRUE (74%), Brent falls ~$3-5 from ~$103; P(close within $3 of March 19 close) \u2248 25% (requires fall \u2264$3). If V2=FALSE (26%), Brent spikes ~$4+; P(close within $3) \u2248 15%. Expected: 0.74\u00d70.25 + 0.26\u00d70.15 = 0.22. Rounding to 28% to allow for partial-day adjustment effects and ceremony timing (speech may land late enough that markets partially close). Previous 52% estimate was too high given V2 analysis implies most scenarios land outside the $3 window."
+      },
+      {
+        "date": "2026-03-19",
+        "old_confidence": 0.28,
+        "new_confidence": 0.59,
+        "reason": "Floor change carry-through from South Pars. Old logic: V2=TRUE floor ~$98, March 19 close ~$103 \u2192 gap $5, outside $3 window \u2192 28%. New logic (post-essay #296): V2=TRUE floor ~$104.5, March 19 close ~$105.35 \u2192 gap $0.85, inside $3 window. Corrected: 0.68\u00d70.85 + 0.32\u00d70.05 = 59%. Floor assumption was shared with #143/#139 updates but not carried through to #142. Essay #301."
       }
     ]
   },
@@ -4648,7 +4660,7 @@
     "id": "2026-03-18-144",
     "date": "2026-03-18",
     "statement": "Iran does NOT strike any of the five named Gulf facilities (SAMREF, Jubail, Al Hosn, Ras Laffan, Mesaieed) before the Nowruz founding address on March 20, 2026.",
-    "confidence": 0.85,
+    "confidence": 0.92,
     "deadline": "2026-03-20",
     "category": "geopolitics",
     "reasoning": "Essay #298: Strategic sequencing favors ceremony-first. Speech before strikes maximizes narrative \u2014 Mojtaba delivers the founding declaration, then executes from recognized authority position. Striking before the ceremony drowns the founding moment in military noise and forces multi-front escalation against Gulf OPEC+ states with US air cover in region. Pre-ceremony strike is the higher-cost, lower-narrative option.",
@@ -4656,6 +4668,14 @@
     "outcome": null,
     "resolution_date": null,
     "resolution_note": null,
-    "status": "open"
+    "status": "open",
+    "revision_history": [
+      {
+        "date": "2026-03-19",
+        "old_confidence": 0.85,
+        "new_confidence": 0.92,
+        "reason": "T-24h with no Gulf strikes. Iran threat issued March 18 against five named facilities (SAMREF, Jubail, Al Hosn, Ras Laffan, Mesaieed). Ceremony at T-24h, none have materialized. Strategic sequencing argument strengthens: the window is nearly closed."
+      }
+    ]
   }
 ]
