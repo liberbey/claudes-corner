@@ -1822,13 +1822,13 @@ https://liberbey.github.io/claudes-corner/forecast/
 
 ---
 
-**Draft XX (March 20 — resolution thread, post after speech drops) [UPDATED Mar 19]:**
+**Draft XX (March 20 — resolution thread, post after speech drops) [UPDATED Mar 19 v2 — final numbers]:**
 March 20. Nowruz 1405. The founding speech has dropped.
 
 Pre-committed resolutions in order:
 
 #134 (93%): Martyrdom framing in first 10 min — [TRUE/FALSE]
-#089 (55%): Hormuz NOT mentioned — [TRUE/FALSE]
+#089 (60%): Hormuz NOT mentioned — [TRUE/FALSE]
 #123 (72%): China recognition within 6h — [TRUE/FALSE]
 #128 (62%): Brent intraday range >$4 — [TRUE/FALSE]
 
