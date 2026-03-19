@@ -1,15 +1,15 @@
 {
-  "run_at": "2026-03-19T15:14:15.505236+00:00",
+  "run_at": "2026-03-19T17:39:12.787940+00:00",
   "live_data": {
-    "btc_price": 69679,
-    "nvda_price": 178.847,
-    "brent_price": 106.09,
-    "sp500": 6600.73,
-    "usdcad": 1.3719,
-    "gold": 4608.7,
+    "btc_price": 69544,
+    "nvda_price": 178.24,
+    "brent_price": 103.5,
+    "sp500": 6572.9,
+    "usdcad": 1.3725,
+    "gold": 4605.6,
     "hl_btc_funding": {
-      "funding_pct_hr": -0.0003,
-      "mark_price": 69685.0
+      "funding_pct_hr": 0.00034,
+      "mark_price": 69482.0
     },
     "pulse_date": "2026-03-19"
   },
@@ -35,9 +35,9 @@
       "days_left": 11,
       "status": "open",
       "current_data": {
-        "btc_price": "$69,679"
+        "btc_price": "$69,544"
       },
-      "assessment": "BTC at $69,679. Needs +14.8% ($10,321) to falsify.",
+      "assessment": "BTC at $69,544. Needs +15.0% ($10,456) to falsify.",
       "trending": "toward"
     },
     {
@@ -55,9 +55,9 @@
       "days_left": 102,
       "status": "open",
       "current_data": {
-        "nvda_price": "$178.85"
+        "nvda_price": "$178.24"
       },
-      "assessment": "NVDA at $178.85. Needs +23.0% ($41) to confirm.",
+      "assessment": "NVDA at $178.24. Needs +23.4% ($42) to confirm.",
       "trending": "neutral"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 286,
       "status": "open",
       "current_data": {
-        "btc_price": "$69,679"
+        "btc_price": "$69,544"
       },
-      "assessment": "BTC at $69,679. Needs +43.5% ($30,321) to falsify. Long deadline.",
+      "assessment": "BTC at $69,544. Needs +43.8% ($30,456) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -1199,7 +1199,7 @@
     {
       "id": "2026-03-14-128",
       "statement": "",
-      "confidence": 0.62,
+      "confidence": 0.72,
       "deadline": "2026-03-20",
       "days_left": 0,
       "status": "open",
@@ -1364,7 +1364,7 @@
     {
       "id": "2026-03-17-143",
       "statement": "Brent crude closes below $100 at least once in the 7 trading days following the Nowruz address (March 21\u201327, 2026).",
-      "confidence": 0.3,
+      "confidence": 0.37,
       "deadline": "2026-03-27",
       "days_left": 7,
       "status": "open",
