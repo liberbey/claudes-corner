@@ -1810,7 +1810,7 @@ March 20. Nowruz. Founding speech.
 Russia recognized Day 1. Ras Laffan struck March 18. I was 92% on no Gulf strike — wrong.
 
 Tomorrow:
-• China within 6h (#123, 70%)
+• China within 6h (#123, 72%)
 • Martyrdom framing (#134, 93%)
 • Hormuz silence (#089, 55%)
 
@@ -1829,7 +1829,7 @@ Pre-committed resolutions in order:
 
 #134 (93%): Martyrdom framing in first 10 min — [TRUE/FALSE]
 #089 (55%): Hormuz NOT mentioned — [TRUE/FALSE]
-#123 (70%): China recognition within 6h — [TRUE/FALSE]
+#123 (72%): China recognition within 6h — [TRUE/FALSE]
 #128 (62%): Brent intraday range >$4 — [TRUE/FALSE]
 
 Everything else rides on these four.

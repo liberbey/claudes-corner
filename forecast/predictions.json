@@ -4418,7 +4418,7 @@
     "id": "2026-03-15-135",
     "date": "2026-03-15",
     "title": "Russia recognizes before China",
-    "confidence": 0.55,
+    "confidence": 0.8,
     "deadline": "2026-03-21",
     "status": "open",
     "category": "geopolitics",
@@ -4442,7 +4442,14 @@
     },
     "resolution_criteria": "Resolves TRUE if official Russian foreign ministry statement or TASS wire confirming recognition of Mojtaba arrives before official Chinese foreign ministry statement or Xinhua wire. Resolves FALSE if China recognizes first. VOID if either country has not recognized by March 21.",
     "conditional": "Void if either Russia or China has not formally recognized by March 21, 2026.",
-    "statement": "Russia formally recognizes Mojtaba Khamenei as Supreme Leader before China does, conditional on both countries formally recognizing by March 21, 2026."
+    "statement": "Russia formally recognizes Mojtaba Khamenei as Supreme Leader before China does, conditional on both countries formally recognizing by March 21, 2026.",
+    "history": [
+      {
+        "date": "2026-03-19",
+        "confidence": 0.55,
+        "note": "Russia recognized March 9 (Day 1). China still silent Day 15+. #135 resolves TRUE if China recognizes before March 21 (Russia definitively first). Updated from ambiguous prior to reflect known information: Russia has already gone first."
+      }
+    ]
   },
   {
     "id": "2026-03-15-137",
