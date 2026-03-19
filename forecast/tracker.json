@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-19T11:39:59.214675+00:00",
+  "run_at": "2026-03-19T12:56:29.987330+00:00",
   "live_data": {
-    "btc_price": 70061,
+    "btc_price": 69282,
     "nvda_price": 180.4,
-    "brent_price": 108.05,
+    "brent_price": 106.94,
     "sp500": 6624.7,
-    "usdcad": 1.3734,
-    "gold": 4690.0,
+    "usdcad": 1.3729,
+    "gold": 4556.1,
     "hl_btc_funding": {
-      "funding_pct_hr": -0.00147,
-      "mark_price": 69997.0
+      "funding_pct_hr": -0.00243,
+      "mark_price": 69264.0
     },
     "pulse_date": "2026-03-19"
   },
   "summary": {
     "total": 141,
-    "resolved": 48,
-    "correct": 31,
-    "open": 93
+    "resolved": 50,
+    "correct": 33,
+    "open": 91
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 11,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,061"
+        "btc_price": "$69,282"
       },
-      "assessment": "BTC at $70,061. Needs +14.2% ($9,939) to falsify.",
+      "assessment": "BTC at $69,282. Needs +15.5% ($10,718) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 286,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,061"
+        "btc_price": "$69,282"
       },
-      "assessment": "BTC at $70,061. Needs +42.7% ($29,939) to falsify. Long deadline.",
+      "assessment": "BTC at $69,282. Needs +44.3% ($30,718) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -815,7 +815,7 @@
     {
       "id": "2026-03-08-089",
       "statement": "Mojtaba Khamenei's Nowruz 1405 address (if delivered as named Supreme Leader) does not mention the Strait of Hormuz by name.",
-      "confidence": 0.6,
+      "confidence": 0.63,
       "deadline": "2026-03-20",
       "days_left": 0,
       "status": "open",
@@ -1053,25 +1053,17 @@
     },
     {
       "id": "2026-03-10-113",
-      "statement": "The gold/oil ratio exceeds 65x at some point before Nowruz (March 20, 2026). The bifurcation dynamic \u2014 oil pricing the central case (demand-adjusted equilibrium at -80), gold pricing the variance (war unresolved, founding sprint incomplete, Nowruz uncertainty) \u2014 continues to push the ratio higher as Brent drifts toward its demand-adjusted floor while gold holds war-risk pricing. At .85 and ,221, the ratio is 61.5x. A 5.7% further compression in Brent (to ~) without gold movement reaches 65x. The demand destruction story has more momentum through Nowruz than the war premium has reason to recover.",
+      "status": "resolved",
+      "outcome": false,
       "confidence": 0.35,
-      "deadline": "2026-03-20",
-      "days_left": 0,
-      "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "note": "FALSE. Gold/oil ratio peaked at ~63.7x on March 10 when Brent was $82.18, then bounced strongly. By March 14 Brent was $98.91 (ratio ~53x). By March 18-19 Brent $108, Gold $4690, ratio ~43.4x. The ratio never reached 65x. The demand destruction thesis was overtaken by the war-premium dynamic (South Pars, Ras Laffan strikes). Was 35% \u2014 correct direction, Brier cost 0.123."
     },
     {
       "id": "2026-03-10-114",
-      "statement": "Brent crude closes at or below .00 at least once before Nowruz (March 20, 2026). At .18 with + three-day decline and no near-term reversal catalyst, the  level is within reach. The demand-adjusted peace price floor is -80; the selective Hormuz premium (~) is now the only barrier. Slight less-than-even probability given bounce risk near psychological round numbers.",
+      "status": "resolved",
+      "outcome": false,
       "confidence": 0.03,
-      "deadline": "2026-03-20",
-      "days_left": 0,
-      "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "note": "FALSE. Brent closed $82.18 on March 10 (closest approach), bounced to $87.48 same day. By March 19, Brent $108.07. Never touched $80. Was 3% \u2014 negligible Brier cost."
     },
     {
       "id": "2026-03-11-115",
@@ -1156,7 +1148,7 @@
     {
       "id": "2026-03-11-123",
       "statement": "At least one formal foreign recognition (Russia or China) arrives within 6 hours of the Nowruz 1405 address going live on March 20. Conditional on prediction #081 (98%).",
-      "confidence": 0.72,
+      "confidence": 0.7,
       "deadline": "2026-03-20",
       "days_left": 0,
       "status": "open",

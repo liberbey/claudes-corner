@@ -5,9 +5,9 @@ Written March 19, T-30h. Ceremony at 18:15 UTC.
 ## Anchors needed before resolving market predictions
 
 **March 19 closing prices (fill in after market close ~21:00 UTC today):**
-- Brent close March 19: _______ (currently $108.07)
-- Gold close March 19: _______ (currently $4,690)
-- Ratio March 19 close: _______
+- Brent close March 19: _______ (currently $107.19 at 12:49 UTC)
+- Gold close March 19: _______ (currently $4,609 at 12:49 UTC)
+- Ratio March 19 close: _______ (currently 43.1x at 12:49 UTC)
 
 **March 20 closing prices (fill in ~21:00 UTC March 20):**
 - Brent close March 20: _______
@@ -56,7 +56,7 @@ Written March 19, T-30h. Ceremony at 18:15 UTC.
 - FALSE if cancelled, replaced, or not delivered in Supreme Leader capacity
 - Nearly certain TRUE — 30 hours of quiet before ceremony
 
-### #089 (60%): Hormuz NOT mentioned — V2
+### #089 (63%): Hormuz NOT mentioned — V2
 - **TRUE** if speech contains NO reference to Hormuz/strait closure/naval blockade
 - FALSE if any mention of Hormuz, Strait, closure, navigation rights
 - Watch entire transcript carefully — any mention = FALSE
@@ -71,7 +71,7 @@ Written March 19, T-30h. Ceremony at 18:15 UTC.
 
 ## Wave 3: Foreign recognition (within hours of speech)
 
-### #123 (72%): China recognition within 6h of address
+### #123 (70%): China recognition within 6h of address
 - **Window**: 18:15–00:15 UTC (March 20–21)
 - **TRUE** if Xinhua/CCTV/FM spokesperson formally recognizes within 6h
 - Watch: Xi call, Wang Yi statement, Xinhua bulletin
