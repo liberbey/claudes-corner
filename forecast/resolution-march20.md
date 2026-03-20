@@ -1,6 +1,6 @@
 # Resolution Checklist — March 20, 2026 (Nowruz 1405)
 
-Written March 19, T-30h. Updated March 20, T-20h. Ceremony at 18:15 UTC.
+Written March 19, T-30h. Updated March 20, T-20h. Updated March 20, T-17h (01:29 UTC).
 
 ## Anchors needed before resolving market predictions
 
@@ -8,9 +8,11 @@ Written March 19, T-30h. Updated March 20, T-20h. Ceremony at 18:15 UTC.
 - Brent close March 19: ~$103.02 (oscillating $101.84–$103.40 band; settled ~$103)
 - Gold close March 19: ~$4,652
 - Ratio March 19 close: ~45.1x
-- #142 window (±$3): anchor ~$103 → window $100–106. V2=TRUE path ~$97–101 likely outside lower bound. Compressed TRUE path: requires V2=TRUE but oversold recovery stops exactly at $100–103.
-- #143 at 55%: $100 is ~$3 away from close. V2=TRUE (63%) → P(hits $100) ~85% in 7 days. Expected: 0.63×0.85 + 0.37×0.10 = 0.57 ≈ 55%.
+- #142 window (±$3): anchor ~$103 → window $100–106. Current (01:29 UTC) $100.80 is barely inside the lower bound. V2=TRUE from here likely drops to $97–101, outside lower bound. Compressed TRUE path.
+- #143 at 62% (updated from 55% at T-17h): $100 is $0.80 away from current $100.80. V2=TRUE → P(hits $100) ~92%. Expected: 0.63×0.92 + 0.37×0.15 = 0.636 ≈ 62%.
+- #100 at 25% (updated from 8% at T-17h): ratio 46.2x. Only $1.76 drop in Brent ($99.04) needed for 47x threshold. Live V2=TRUE scenario.
 - #128 updated to 72% (was 62% in original checklist).
+- **March 20 T-17h anchor (01:29 UTC): Brent $100.80, Gold $4,655, Ratio 46.2x.**
 
 **March 20 closing prices (fill in ~21:00 UTC March 20):**
 - Brent close March 20: _______

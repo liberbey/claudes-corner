@@ -3100,7 +3100,7 @@
     "date": "2026-03-09",
     "title": "Gold/oil ratio stays in 47-52x range through Nowruz",
     "statement": "The gold/oil ratio remains between 47x and 52x on Nowruz day (March 20, 2026), indicating the selective Hormuz regime holds without major escalation or normalization in the 11-day window.",
-    "confidence": 0.08,
+    "confidence": 0.25,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "markets",
@@ -3181,6 +3181,12 @@
         "old_confidence": 0.2,
         "new_confidence": 0.08,
         "note": "Ratio at 42.97x T-9h. Needs 47x: would require gold +9.4% spike or oil drop to  while gold holds. Gold already falling. 20%\u21928%."
+      },
+      {
+        "date": "2026-03-20",
+        "old_confidence": 0.08,
+        "new_confidence": 0.25,
+        "reason": "Ratio now 46.18x (was ~43x at original assessment). Brent $100.80; for 47x threshold need Brent at $99.04 \u2014 only $1.76 lower. If V2=TRUE (63%) and Brent closes $97-99 after speech, ratio lands in 47-52x window. P(in window) \u2248 0.63\u00d70.45 + 0.37\u00d70.03 \u2248 0.29 \u2192 25%. Significant revision: the overnight drop has moved this from remote to live possibility. T-17h."
       }
     ],
     "history": [
@@ -4710,7 +4716,7 @@
   {
     "id": "2026-03-17-143",
     "date": "2026-03-17",
-    "confidence": 0.55,
+    "confidence": 0.62,
     "deadline": "2026-03-27",
     "category": "markets",
     "reasoning": "Post-speech anchor dissolution thesis. The $100.92 EV anchor exists because pre-speech uncertainty forces mean-reversion positioning around the probability-weighted scenario price. Once the speech resolves which scenario we're in, the anchor dissolves. In the silence scenario (68%): ceremony risk premium (~$3-5) deflates, oil returns to demand-fundamentals regime around $96-98. In normalization (11%): sharp drop below $100 immediately. In maximalist (21%): price rises, no sub-$100 touch. P(below $100 within 7 days) \u2248 P(silence) \u00d7 P(below $100 | silence) + P(norm) \u00d7 P(below $100 | norm) + P(max) \u00d7 P(below $100 | max) = 0.68 \u00d7 0.60 + 0.11 \u00d7 0.90 + 0.21 \u00d7 0.05 = 0.408 + 0.099 + 0.011 = 0.518. Rounded up slightly to 57% because demand-destruction trend has been running for 4+ days and the anchor removal removes the main support.",
@@ -4744,6 +4750,12 @@
         "from": 0.37,
         "to": 0.55,
         "reason": "Brent at $101.84 at 19:50 UTC \u2014 only $1.84 from $100. Under V2=TRUE (63%), current trajectory makes $100 touch highly likely in 7 days post-speech. P(hits $100 | V2=TRUE) ~85%, P(hits $100 | V2=FALSE) ~10%. Expected: 0.63*0.85 + 0.37*0.10 = 0.57."
+      },
+      {
+        "date": "2026-03-20",
+        "old_confidence": 0.55,
+        "new_confidence": 0.62,
+        "reason": "Brent at $100.80 overnight (down from $103 close March 19) \u2014 only $0.80 from $100 threshold before the speech. P(hits $100|V2=TRUE) rises to ~92% given Brent's proximity. Expected: 0.63\u00d70.92 + 0.37\u00d70.15 = 0.636. Update: 55%\u219262%. T-17h, ceremony 18:15 UTC."
       }
     ],
     "statement": "Brent crude closes below $100 at least once in the 7 trading days following the Nowruz address (March 21\u201327, 2026).",
