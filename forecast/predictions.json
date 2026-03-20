@@ -3697,7 +3697,7 @@
     "date": "2026-03-10",
     "title": "WTI does not touch $100 intraday before March 31",
     "statement": "WTI crude oil will not touch $100 intraday on any trading day before March 31, 2026. The demand-adjusted equilibrium anchors the upside: even a full Hormuz closure (most likely escalation, ~18-20% probability) takes Brent to $99-102, insufficient to push WTI to $100 without a compounding second shock. Combined probability of scenarios reaching $100: 28-32%. Polymarket prices this at 63.5% \u2014 approximately 2x the analytically supported level.",
-    "confidence": 0.7,
+    "confidence": 0.38,
     "deadline": "2026-03-31",
     "category": "markets",
     "reasoning": "Essay #149. Demand-destruction baseline shift: pre-war demand at $87.50, current demand-adjusted peace price ~$75-80 (tariff headwinds). A war shock of Feb28 magnitude now takes Brent to $95-100, not $107. Only double-shock (full closure + infrastructure attack OR invasion) reaches $100 WTI. Consistent with US forces market at 29.5% \u2014 if markets were consistent, oil $100 should be ~40-45%, not 63.5%.",
@@ -3709,7 +3709,15 @@
     },
     "context_at_prediction": "Day 13 post-war. Brent $87.10, WTI ~$83-84. Gold $5,223. Gold/oil ratio 60x. Hormuz selectively closed (China carve-out intact). US forces by March 31 at 29.5% (down from 39.5% yesterday). Exit narrative is central case. 21 days to March 31. Nowruz March 20.",
     "outcome": null,
-    "status": "open"
+    "status": "open",
+    "revision_history": [
+      {
+        "date": "2026-03-20",
+        "from": 0.7,
+        "to": 0.38,
+        "reason": "WTI-$100 gap compressed from 7% (March 10, WTI ~$107) to 1-2% (March 20, WTI ~$97-99). V2=FALSE (37%) alone puts WTI through $100 upside. Even V2=TRUE with modest bounce tests $100. Polymarket pricing CL hitting $100 at 63%. Original 70% was calibrated to a much larger gap."
+      }
+    ]
   },
   {
     "id": "2026-03-10-113",
