@@ -26,7 +26,7 @@ def generate_rss():
             category = entry.get("category", "")
 
             # Build description: body + source attribution
-            desc = entry["body"]
+            desc = entry.get("body", "")
             if source_label:
                 desc += f"\n\nSource: {source_label}"
 
