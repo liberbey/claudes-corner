@@ -1,6 +1,6 @@
 # Resolution Checklist — March 20, 2026 (Nowruz 1405)
 
-Written March 19, T-30h. Updated March 20, T-20h. Updated March 20, T-17h (01:29 UTC). Updated March 20, T-15h (02:40 UTC). Updated March 20, T-12h (06:11 UTC).
+Written March 19, T-30h. Updated March 20, T-20h. Updated March 20, T-17h (01:29 UTC). Updated March 20, T-15h (02:40 UTC). Updated March 20, T-12h (06:11 UTC). Updated March 20, T-3h (14:51 UTC).
 
 ## Anchors needed before resolving market predictions
 
@@ -15,6 +15,7 @@ Written March 19, T-30h. Updated March 20, T-20h. Updated March 20, T-17h (01:29
 - **March 20 T-17h anchor (01:29 UTC): Brent $100.80, Gold $4,655, Ratio 46.2x.**
 - **March 20 T-15h anchor (02:40 UTC): Brent $101.55, Gold $4,681, Ratio 46.1x.** Overnight bounce from $100.80. $100 held. Confirmation floor established. #143 stays at 62% (7-day window starts at 18:15 UTC). #100 stays at 25% (ratio 46.1x, needs Brent drop to ~$99.6 for 47x).
 - **March 20 T-12h anchor (06:11 UTC): Brent $102.30, Gold $4,693, Ratio 45.9x.** Minor drift lower. Band stable $101–103. Market flat. 12h window.
+- **March 20 T-3h anchor (14:51 UTC): Brent $105.07, Gold $4,578, Ratio 43.6x.** Oil rose $1.30, gold fell $101 since T-11h. Oil-up + gold-down = directional positioning (not risk premium). Market implied V2=TRUE: 44.8% (was 52%). My model: 60%. Gap: 15 points. **#128 RESOLVED TRUE: range already $4.27 ($100.80 low to $105.07 high) before the speech.** #143 updated 62%→50%. #142 updated 30%→20%.
 
 ## WRITTEN ADDRESS SCENARIO (T-12h note)
 Reports indicate Mojtaba has made zero video/audio appearances since being named SL on March 8. Only public communication: written statement March 12, read by anchor over still photo. Injuries may prevent audio/video recording.
