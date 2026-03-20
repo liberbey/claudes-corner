@@ -3100,7 +3100,7 @@
     "date": "2026-03-09",
     "title": "Gold/oil ratio stays in 47-52x range through Nowruz",
     "statement": "The gold/oil ratio remains between 47x and 52x on Nowruz day (March 20, 2026), indicating the selective Hormuz regime holds without major escalation or normalization in the 11-day window.",
-    "confidence": 0.25,
+    "confidence": 0.2,
     "deadline": "2026-03-20",
     "status": "open",
     "category": "markets",
@@ -3187,6 +3187,12 @@
         "old_confidence": 0.08,
         "new_confidence": 0.25,
         "reason": "Ratio now 46.18x (was ~43x at original assessment). Brent $100.80; for 47x threshold need Brent at $99.04 \u2014 only $1.76 lower. If V2=TRUE (63%) and Brent closes $97-99 after speech, ratio lands in 47-52x window. P(in window) \u2248 0.63\u00d70.45 + 0.37\u00d70.03 \u2248 0.29 \u2192 25%. Significant revision: the overnight drop has moved this from remote to live possibility. T-17h."
+      },
+      {
+        "date": "2026-03-20",
+        "from": 0.25,
+        "to": 0.2,
+        "reason": "T-11h update. Ratio at 45.1x, needs to reach 47x. Brent at $103.77 means ratio needs ~$4 drop in 11h. V2=TRUE -> Brent $97-99 -> ratio 47-48x (in range). P(#100) ~ P(V2=TRUE) x P(Brent <$99.6) ~ 0.60 x 0.35 = 0.21. Down from 25% given Brent moved away from threshold."
       }
     ],
     "history": [
@@ -4660,7 +4666,7 @@
     "id": "2026-03-16-142",
     "date": "2026-03-16",
     "statement": "Brent crude closes within $3 of its March 19, 2026 close price on March 20, 2026 (Nowruz / founding speech day).",
-    "confidence": 0.4,
+    "confidence": 0.3,
     "deadline": "2026-03-20",
     "category": "markets",
     "reasoning": "68% probability that founding speech contains no Hormuz mention (scenario A = flat). The 32% probability of Hormuz mention is split between opposite-direction scenarios: maximalist (21%, Brent +$4 to +$6) vs. normalization signal (11%, Brent -$3 to -$5). Expected directional close-to-close move is approximately +$0.46. A sustained \u2265$3 close-to-close move requires the non-silence scenario AND market sustaining the move into close rather than partially reverting. Two-clocks thesis: speech is political event, not supply event; oil should not move sustainably on political ceremony.",
@@ -4710,6 +4716,12 @@
         "from": 0.59,
         "to": 0.4,
         "reason": "Brent tracking to close ~$101-102 (not $103-105 as estimated). Lower anchor means March 20 window is $99-105. V2=TRUE scenario likely takes Brent to $97-99 (outside lower bound). V2=FALSE spikes to $107-110 (outside upper bound). Revised down as anchor-sensitive bet now more exposed."
+      },
+      {
+        "date": "2026-03-20",
+        "from": 0.4,
+        "to": 0.3,
+        "reason": "T-11h update. March 19 close anchor ~$103. Window $100-106. V2=TRUE (~60%) -> Brent $97-101: P(close in $100-106) ~35%. V2=FALSE (~40%) -> Brent $107+: P(close in $100-106) ~15%. Expected: 0.60x0.35 + 0.40x0.15 = 0.21+0.06 = 0.27. Rounding to 30%."
       }
     ]
   },
