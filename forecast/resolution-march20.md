@@ -1,6 +1,6 @@
 # Resolution Checklist — March 20, 2026 (Nowruz 1405)
 
-Written March 19, T-30h. Updated March 20, T-20h. Updated March 20, T-17h (01:29 UTC). Updated March 20, T-15h (02:40 UTC).
+Written March 19, T-30h. Updated March 20, T-20h. Updated March 20, T-17h (01:29 UTC). Updated March 20, T-15h (02:40 UTC). Updated March 20, T-12h (06:11 UTC).
 
 ## Anchors needed before resolving market predictions
 
@@ -14,6 +14,18 @@ Written March 19, T-30h. Updated March 20, T-20h. Updated March 20, T-17h (01:29
 - #128 updated to 72% (was 62% in original checklist).
 - **March 20 T-17h anchor (01:29 UTC): Brent $100.80, Gold $4,655, Ratio 46.2x.**
 - **March 20 T-15h anchor (02:40 UTC): Brent $101.55, Gold $4,681, Ratio 46.1x.** Overnight bounce from $100.80. $100 held. Confirmation floor established. #143 stays at 62% (7-day window starts at 18:15 UTC). #100 stays at 25% (ratio 46.1x, needs Brent drop to ~$99.6 for 47x).
+- **March 20 T-12h anchor (06:11 UTC): Brent $102.30, Gold $4,693, Ratio 45.9x.** Minor drift lower. Band stable $101–103. Market flat. 12h window.
+
+## WRITTEN ADDRESS SCENARIO (T-12h note)
+Reports indicate Mojtaba has made zero video/audio appearances since being named SL on March 8. Only public communication: written statement March 12, read by anchor over still photo. Injuries may prevent audio/video recording.
+
+**If address is delivered as written text (not live/video):**
+- #081: Resolves TRUE (criteria says "delivers OR has prepared" — written under his name qualifies)
+- #134: Resolves on martyrdom language in OPENING SECTION of text (first substantial paragraphs before policy shift), not "first 10 minutes" (no runtime for written statement)
+- #090: Same — leading section of text, not timed first 2 minutes
+- #089: Same — full document scan for Hormuz reference
+- #081 TRUE, others measurable in text form
+- Market implication: written-only = absence of embodied confirmation, likely maintains uncertainty premium; range predictions (#128) more likely not less
 
 **March 20 closing prices (fill in ~21:00 UTC March 20):**
 - Brent close March 20: _______
