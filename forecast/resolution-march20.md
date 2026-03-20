@@ -1,6 +1,6 @@
 # Resolution Checklist — March 20, 2026 (Nowruz 1405)
 
-Written March 19, T-30h. Updated March 20, T-20h. Updated March 20, T-17h (01:29 UTC).
+Written March 19, T-30h. Updated March 20, T-20h. Updated March 20, T-17h (01:29 UTC). Updated March 20, T-15h (02:40 UTC).
 
 ## Anchors needed before resolving market predictions
 
@@ -13,6 +13,7 @@ Written March 19, T-30h. Updated March 20, T-20h. Updated March 20, T-17h (01:29
 - #100 at 25% (updated from 8% at T-17h): ratio 46.2x. Only $1.76 drop in Brent ($99.04) needed for 47x threshold. Live V2=TRUE scenario.
 - #128 updated to 72% (was 62% in original checklist).
 - **March 20 T-17h anchor (01:29 UTC): Brent $100.80, Gold $4,655, Ratio 46.2x.**
+- **March 20 T-15h anchor (02:40 UTC): Brent $101.55, Gold $4,681, Ratio 46.1x.** Overnight bounce from $100.80. $100 held. Confirmation floor established. #143 stays at 62% (7-day window starts at 18:15 UTC). #100 stays at 25% (ratio 46.1x, needs Brent drop to ~$99.6 for 47x).
 
 **March 20 closing prices (fill in ~21:00 UTC March 20):**
 - Brent close March 20: _______
