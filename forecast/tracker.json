@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-21T06:17:23.012650+00:00",
+  "run_at": "2026-03-21T09:49:00.327502+00:00",
   "live_data": {
-    "btc_price": 70705,
+    "btc_price": 70625,
     "nvda_price": 172.7,
     "brent_price": 106.41,
     "sp500": 6506.48,
     "usdcad": 1.3723,
     "gold": 4574.9,
     "hl_btc_funding": {
-      "funding_pct_hr": 0.00039,
-      "mark_price": 70695.0
+      "funding_pct_hr": 0.00034,
+      "mark_price": 70615.0
     },
     "pulse_date": "2026-03-21"
   },
   "summary": {
     "total": 141,
-    "resolved": 71,
-    "correct": 49,
-    "open": 70
+    "resolved": 77,
+    "correct": 50,
+    "open": 64
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 9,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,705"
+        "btc_price": "$70,625"
       },
-      "assessment": "BTC at $70,705. Needs +13.1% ($9,295) to falsify.",
+      "assessment": "BTC at $70,625. Needs +13.3% ($9,375) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 284,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,705"
+        "btc_price": "$70,625"
       },
-      "assessment": "BTC at $70,705. Needs +41.4% ($29,295) to falsify. Long deadline.",
+      "assessment": "BTC at $70,625. Needs +41.6% ($29,375) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -820,14 +820,10 @@
     },
     {
       "id": "2026-03-08-091",
-      "statement": "The Mojtaba Khamenei Polymarket contract reaches 75% or higher on the same day that a burial date is officially announced by Iranian state media.",
+      "status": "resolved",
+      "outcome": false,
       "confidence": 0.95,
-      "deadline": "2026-03-20",
-      "days_left": -2,
-      "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "note": "No formal burial date announcement by Iranian state media. Private interment only; no public state ceremony announcement triggered Polymarket movement. Condition not met."
     },
     {
       "id": "2026-03-08-092",
@@ -917,14 +913,10 @@
     },
     {
       "id": "2026-03-09-101",
-      "statement": "If no formal burial ceremony announcement is made by end of March 13 (Day 6 post-announcement), the state burial for Ali Khamenei and Mojtaba's Nowruz address will be combined into a single compound public event on or around March 20.",
+      "status": "resolved",
+      "outcome": false,
       "confidence": 0.78,
-      "deadline": "2026-03-22",
-      "days_left": 0,
-      "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "note": "Burial and Nowruz address did not merge into compound event. Nowruz address delivered March 20 via IRIB anchor (written text, no live appearance). Ali Khamenei's state burial ceremony has not occurred publicly \u2014 private interment only. Compound event theory failed; security calculus kept both events separate."
     },
     {
       "id": "2026-03-09-102",
@@ -1056,14 +1048,10 @@
     },
     {
       "id": "2026-03-11-118",
-      "statement": "Within 48 hours of the Nowruz 1405 address delivered by Mojtaba Khamenei, Russia and/or China issues a formal diplomatic recognition of Mojtaba as Supreme Leader of Iran.",
+      "status": "resolved",
+      "outcome": false,
       "confidence": 0.7,
-      "deadline": "2026-03-22",
-      "days_left": 0,
-      "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "note": "China did not issue formal recognition within 48h of March 20 speech. Russia had already recognized March 9 (before the speech). China maintained Day 18+ silence through the deadline. The 48h window closed without new recognition from either power."
     },
     {
       "id": "2026-03-11-119",
@@ -1075,7 +1063,7 @@
     {
       "id": "2026-03-11-120",
       "statement": "Gold falls more than 5% from its March 19 close in the first five trading days following the Nowruz address (by March 27, 2026). Conditional on prediction #081 (Mojtaba delivers the Nowruz address).",
-      "confidence": 0.65,
+      "confidence": 0.4,
       "deadline": "2026-03-27",
       "days_left": 5,
       "status": "open",
@@ -1127,14 +1115,10 @@
     },
     {
       "id": "2026-03-14-127",
-      "statement": "If China has not formally recognized Mojtaba Khamenei by the close of March 17, 2026, China's recognition will occur on or after March 20, 2026 (bundled with or following the Nowruz address), not before it. (Conditional on #097 resolving FALSE.)",
+      "status": "resolved",
+      "outcome": false,
       "confidence": 0.65,
-      "deadline": "2026-03-21",
-      "days_left": -1,
-      "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "note": "China has not formally recognized Mojtaba Khamenei by March 21 (Day 18+ of silence). Recognition did not occur bundled with or following the Nowruz address. China's vetting system access removes the material incentive to recognize at all."
     },
     {
       "id": "2026-03-14-128",
@@ -1214,14 +1198,10 @@
     },
     {
       "id": "2026-03-15-135",
-      "statement": "Russia formally recognizes Mojtaba Khamenei as Supreme Leader before China does, conditional on both countries formally recognizing by March 21, 2026.",
+      "status": "resolved",
+      "outcome": false,
       "confidence": 0.8,
-      "deadline": "2026-03-21",
-      "days_left": -1,
-      "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "note": "Conditional not met: China has not formally recognized by March 21. Both countries have not recognized within the window. Russia recognized March 9; China still silent Day 18+. Condition failure."
     },
     {
       "id": "2026-03-15-137",
@@ -1261,14 +1241,10 @@
     },
     {
       "id": "2026-03-15-141",
-      "statement": "At least three countries beyond Russia formally recognize Mojtaba Khamenei as Supreme Leader of Iran within 72 hours of the March 20 founding address. Russia already recognized March 9. This requires China plus two additional countries to recognize within the 72-hour window.",
+      "status": "resolved",
+      "outcome": false,
       "confidence": 0.25,
-      "deadline": "2026-03-23",
-      "days_left": 1,
-      "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "note": "Cascade model failed entirely. China did not recognize (Day 18+ silence). Without China as anchor, no trigger for secondary recognitions. Zero countries beyond Russia recognized within 72h. Vetting system provides operational access without the recognition cost \u2014 removes material incentive for declaratory acts."
     },
     {
       "id": "2026-03-16-142",
@@ -1280,7 +1256,7 @@
     {
       "id": "2026-03-17-143",
       "statement": "Brent crude closes below $100 at least once in the 7 trading days following the Nowruz address (March 21\u201327, 2026).",
-      "confidence": 0.03,
+      "confidence": 0.12,
       "deadline": "2026-03-27",
       "days_left": 5,
       "status": "open",

@@ -3933,7 +3933,7 @@
     "title": "Nowruz address triggers recognition cascade within 48 hours",
     "confidence": 0.7,
     "deadline": "2026-03-22",
-    "status": "open",
+    "status": "resolved",
     "category": "geopolitics",
     "tags": [
       "iran",
@@ -3958,7 +3958,10 @@
       "note": "#085 FALSE, #076 FALSE, #086 FALSE. No personal statement, no recognition. Founding speech is March 20."
     },
     "resolution_criteria": "TRUE if Russia or China issues formal diplomatic recognition by March 22 (48h after March 20 address). FALSE if no recognition from either by March 22.",
-    "statement": "Within 48 hours of the Nowruz 1405 address delivered by Mojtaba Khamenei, Russia and/or China issues a formal diplomatic recognition of Mojtaba as Supreme Leader of Iran."
+    "statement": "Within 48 hours of the Nowruz 1405 address delivered by Mojtaba Khamenei, Russia and/or China issues a formal diplomatic recognition of Mojtaba as Supreme Leader of Iran.",
+    "resolved_date": "2026-03-21",
+    "outcome": false,
+    "resolution_note": "China did not issue formal recognition within 48h of March 20 speech. Russia had already recognized March 9 (before the speech). China maintained Day 18+ silence through the deadline. The 48h window closed without new recognition from either power."
   },
   {
     "id": "2026-03-11-119",
@@ -3991,7 +3994,7 @@
     "id": "2026-03-11-120",
     "date": "2026-03-11",
     "title": "Gold falls >5% in 5 days post-Nowruz address",
-    "confidence": 0.65,
+    "confidence": 0.4,
     "deadline": "2026-03-27",
     "status": "open",
     "category": "markets",
@@ -4012,7 +4015,14 @@
     "outcome": null,
     "resolved_date": null,
     "resolution_note": null,
-    "revision_history": [],
+    "revision_history": [
+      {
+        "date": "2026-03-21",
+        "old_confidence": 0.65,
+        "new_confidence": 0.4,
+        "reason": "Gold at $4,575 (March 21 08:30 UTC). March 19 close approximately $4,612. Need $4,381 by March 27 \u2014 additional 4.2% drop required. Iraq force majeure and Kuwait refinery strikes create upward commodity pressure. V2=TRUE de-escalation signal partially priced. Supply disruptions limit war-premium deflation pace. Was 65%."
+      }
+    ],
     "statement": "Gold falls more than 5% from its March 19 close in the first five trading days following the Nowruz address (by March 27, 2026). Conditional on prediction #081 (Mojtaba delivers the Nowruz address)."
   },
   {
@@ -4712,10 +4722,10 @@
     "date": "2026-03-15",
     "statement": "At least three countries beyond Russia formally recognize Mojtaba Khamenei as Supreme Leader of Iran within 72 hours of the March 20 founding address. Russia already recognized March 9. This requires China plus two additional countries to recognize within the 72-hour window.",
     "deadline": "2026-03-23",
-    "status": "open",
+    "status": "resolved",
     "context_at_prediction": "Russia recognized Day 1 (March 9). China predicted sub-6h on March 20 (#123, 76%). The third-country prediction tests whether the cascade has structural momentum beyond states with direct material interests. Cascade coordination properties: once China recognizes, cost of going second drops for all remaining states.",
-    "resolution_note": null,
-    "outcome": null,
+    "resolution_note": "Cascade model failed entirely. China did not recognize (Day 18+ silence). Without China as anchor, no trigger for secondary recognitions. Zero countries beyond Russia recognized within 72h. Vetting system provides operational access without the recognition cost \u2014 removes material incentive for declaratory acts.",
+    "outcome": false,
     "tags": [
       "iran",
       "succession",
@@ -4737,7 +4747,8 @@
         "reason": "Cascade model broken. China is the only state that could anchor cascade. China not recognizing before March 23. Without China anchor, no trigger for other states. 50%\u219225%."
       }
     ],
-    "probability": 25
+    "probability": 25,
+    "resolved_date": "2026-03-21"
   },
   {
     "id": "2026-03-16-142",
@@ -4814,7 +4825,7 @@
   {
     "id": "2026-03-17-143",
     "date": "2026-03-17",
-    "confidence": 0.03,
+    "confidence": 0.12,
     "deadline": "2026-03-27",
     "category": "markets",
     "reasoning": "Post-speech anchor dissolution thesis. The $100.92 EV anchor exists because pre-speech uncertainty forces mean-reversion positioning around the probability-weighted scenario price. Once the speech resolves which scenario we're in, the anchor dissolves. In the silence scenario (68%): ceremony risk premium (~$3-5) deflates, oil returns to demand-fundamentals regime around $96-98. In normalization (11%): sharp drop below $100 immediately. In maximalist (21%): price rises, no sub-$100 touch. P(below $100 within 7 days) \u2248 P(silence) \u00d7 P(below $100 | silence) + P(norm) \u00d7 P(below $100 | norm) + P(max) \u00d7 P(below $100 | max) = 0.68 \u00d7 0.60 + 0.11 \u00d7 0.90 + 0.21 \u00d7 0.05 = 0.408 + 0.099 + 0.011 = 0.518. Rounded up slightly to 57% because demand-destruction trend has been running for 4+ days and the anchor removal removes the main support.",
@@ -4878,6 +4889,12 @@
         "old_confidence": 0.15,
         "new_confidence": 0.03,
         "reason": "Iraq declared force majeure at all foreign-operated oilfields. Drone strikes on two Kuwait refineries. Brent surged from $106.74 to $112+. Starting point is now $8+ above $100 threshold. Five trading days remain. Getting to $100 requires $12+ decline AND Iraq/Kuwait supply restoration. Effectively impossible. 15%\u21923%."
+      },
+      {
+        "date": "2026-03-21",
+        "old_confidence": 0.03,
+        "new_confidence": 0.12,
+        "reason": "Brent touched .48 intraday (from  open) on Netanyahu \"ending faster than people think\" + Trump \"winding down\" statements. Day low was /bin/zsh.48 from resolution. Supply disruptions unchanged (Iraq force majeure active, Kuwait hit again), but political premium deflation shows market can price  if rhetoric continues. Floor established. 3%\u219212%."
       }
     ],
     "statement": "Brent crude closes below $100 at least once in the 7 trading days following the Nowruz address (March 21\u201327, 2026).",
