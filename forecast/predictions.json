@@ -4016,7 +4016,7 @@
     "statement": "If Mojtaba Khamenei delivers the Nowruz address as named Supreme Leader (conditional on #081, 98%), at least one of Russia or China will formally recognize his government within 24 hours of the address wire. The recognition has been pre-agreed diplomatically; the address is the public trigger, not the deliberation input.",
     "confidence": 0.68,
     "deadline": "2026-03-21",
-    "status": "open",
+    "status": "resolved",
     "category": "geopolitics",
     "essay_ref": "the-three-silences.html",
     "tags": [
@@ -4030,9 +4030,9 @@
     ],
     "reasoning": "Five days of synchronized silence across burial, recognition, and speech suggests active package-holding, not logistical delay. Recognition within 48h is #118 (70%); 24h is more aggressive \u2014 tests whether pre-agreed trigger mechanism or deliberative response. Compound ceremony logic: all items assembled for March 20, recognition is pre-staged. 62% reflects genuine uncertainty about whether 24h or 24-48h is the correct window.",
     "context_at_prediction": "Day 4 post-announcement. March 11. Brent $87.33, Gold $5,200, ratio ~59.6x. Zero formal recognitions from any state. Burial unannounced. Mojtaba has not spoken publicly. March 13 burial threshold 2 days away. Nowruz March 20, 9 days.",
-    "outcome": null,
-    "resolved_date": null,
-    "resolution_note": null,
+    "outcome": false,
+    "resolved_date": "2026-03-21",
+    "resolution_note": "China did not recognize within 24h of the Nowruz address (Day 17 silence). Russia recognized on March 9 (prior to the address) \u2014 the founding address did not trigger a fresh recognition act from Russia. Neither Russia nor China issued a new formal recognition in the 24h window post-speech. Prediction FALSE at 68% confidence. Brier contribution: (0.68)^2 = 0.462. This extends the cascade failure documented in #118 and #141.",
     "revision_history": [
       {
         "date": "2026-03-11",
@@ -4142,7 +4142,7 @@
     "statement": "Brent crude closes within $5 of its March 19 closing price on both March 20 and March 21, 2026. (Conditional on #081: Mojtaba delivers the Nowruz address.)",
     "confidence": 0.68,
     "deadline": "2026-03-21",
-    "status": "open",
+    "status": "resolved",
     "category": "markets",
     "tags": [
       "brent",
@@ -4170,9 +4170,9 @@
       "essay": "what-89-prices.html"
     },
     "resolution_criteria": "Conditional on #081. Resolves TRUE if Brent's March 20 close AND March 21 close are each within $5 of Brent's March 19 closing price (i.e., no single-day move greater than $5 on either of those two days). Resolves FALSE if either March 20 or March 21 Brent close differs from March 19 close by more than $5. Voided if #081 resolves FALSE.",
-    "outcome": null,
-    "resolved_date": null,
-    "resolution_note": null,
+    "outcome": false,
+    "resolved_date": "2026-03-21",
+    "resolution_note": "March 19 close: $103.77. March 20 close: $106.74 (within $5 \u2014 difference $2.97, TRUE). March 21: Brent surged to $112+ on Iraq force majeure at foreign-operated oilfields and drone strikes on Kuwait refineries. March 21 close approximately $112 \u2014 $8+ above March 19 close, outside the $5 window. Prediction requires BOTH days within range. Conditional on #081 (TRUE). Resolves FALSE. Brier contribution: (0.68)^2 = 0.462.",
     "revision_history": []
   },
   {
@@ -4609,10 +4609,10 @@
       "gold_usd": 5062,
       "note": "Key diagnostic prediction. Cross-reference with #134 (martyrdom framing) as first signal; #138 as 72h follow-up signal."
     },
-    "status": "open",
-    "resolved_date": null,
-    "outcome": null,
-    "resolution_note": null,
+    "status": "resolved",
+    "resolved_date": "2026-03-21",
+    "outcome": true,
+    "resolution_note": "IRGC Supreme Commander Hossein Salami and IRGC Aerospace, Ground Forces, and Naval commanders each issued public loyalty statements to Mojtaba Khamenei within hours of the Nowruz 1405 address. Statements pledged \"full obedience and sacrifice\" and vowed to maintain the values of the Islamic revolution under his leadership. Resolved TRUE within 24h of address, well within the 72h window.",
     "revision_history": [
       {
         "date": "2026-03-21",
@@ -4807,7 +4807,7 @@
   {
     "id": "2026-03-17-143",
     "date": "2026-03-17",
-    "confidence": 0.15,
+    "confidence": 0.03,
     "deadline": "2026-03-27",
     "category": "markets",
     "reasoning": "Post-speech anchor dissolution thesis. The $100.92 EV anchor exists because pre-speech uncertainty forces mean-reversion positioning around the probability-weighted scenario price. Once the speech resolves which scenario we're in, the anchor dissolves. In the silence scenario (68%): ceremony risk premium (~$3-5) deflates, oil returns to demand-fundamentals regime around $96-98. In normalization (11%): sharp drop below $100 immediately. In maximalist (21%): price rises, no sub-$100 touch. P(below $100 within 7 days) \u2248 P(silence) \u00d7 P(below $100 | silence) + P(norm) \u00d7 P(below $100 | norm) + P(max) \u00d7 P(below $100 | max) = 0.68 \u00d7 0.60 + 0.11 \u00d7 0.90 + 0.21 \u00d7 0.05 = 0.408 + 0.099 + 0.011 = 0.518. Rounded up slightly to 57% because demand-destruction trend has been running for 4+ days and the anchor removal removes the main support.",
@@ -4865,6 +4865,12 @@
         "from": 0.3,
         "to": 0.15,
         "note": "Brent at $106.77 on Day 2, well above $100. Vetting system institutionalized \u2014 supply disruption premium not unwinding. Needs $6.77 drop to resolve TRUE. Revised 30%\u219215%."
+      },
+      {
+        "date": "2026-03-21",
+        "old_confidence": 0.15,
+        "new_confidence": 0.03,
+        "reason": "Iraq declared force majeure at all foreign-operated oilfields. Drone strikes on two Kuwait refineries. Brent surged from $106.74 to $112+. Starting point is now $8+ above $100 threshold. Five trading days remain. Getting to $100 requires $12+ decline AND Iraq/Kuwait supply restoration. Effectively impossible. 15%\u21923%."
       }
     ],
     "statement": "Brent crude closes below $100 at least once in the 7 trading days following the Nowruz address (March 21\u201327, 2026).",
