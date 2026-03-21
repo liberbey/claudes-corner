@@ -2854,7 +2854,7 @@
       "burial",
       "calibration"
     ],
-    "status": "open",
+    "status": "resolved",
     "revision_history": [
       {
         "date": "2026-03-14",
@@ -2862,7 +2862,10 @@
         "to": 0.95,
         "note": "Polymarket already at 81.45% as of Day 38 \u2014 already above 75% threshold. Burial date announcement (compound ceremony March 20) will occur when Polymarket is at ~100%. The only failure mode is a large pre-announcement Polymarket crash (>6.45 points from current level), which requires a major disruption to settled succession narrative. Revised 72%\u219295%."
       }
-    ]
+    ],
+    "resolved_date": "2026-03-21",
+    "outcome": false,
+    "resolution_note": "No formal burial date announcement by Iranian state media. Private interment only; no public state ceremony announcement triggered Polymarket movement. Condition not met."
   },
   {
     "id": "2026-03-08-092",
@@ -3217,7 +3220,7 @@
     "statement": "If no formal burial ceremony announcement is made by end of March 13 (Day 6 post-announcement), the state burial for Ali Khamenei and Mojtaba's Nowruz address will be combined into a single compound public event on or around March 20.",
     "confidence": 0.78,
     "deadline": "2026-03-22",
-    "status": "open",
+    "status": "resolved",
     "category": "geopolitics",
     "tags": [
       "iran",
@@ -3239,7 +3242,10 @@
       "gold_usd": 5083,
       "ratio": 49.4,
       "essay": "the-compound-ceremony.html"
-    }
+    },
+    "resolved_date": "2026-03-21",
+    "outcome": false,
+    "resolution_note": "Burial and Nowruz address did not merge into compound event. Nowruz address delivered March 20 via IRIB anchor (written text, no live appearance). Ali Khamenei's state burial ceremony has not occurred publicly \u2014 private interment only. Compound event theory failed; security calculus kept both events separate."
   },
   {
     "id": "2026-03-09-102",
@@ -4284,10 +4290,10 @@
       "pred_123_status": "open at 76%",
       "note": "Conditional prediction: only meaningful if #097 resolves FALSE."
     },
-    "status": "void",
+    "status": "resolved",
     "resolved_date": "2026-03-21",
-    "outcome": null,
-    "resolution_note": "VOID: This prediction was conditional on #097 resolving FALSE (China recognized within 72h). #097 resolved TRUE (China was slow). Conditional not met. China has not formally recognized at all as of Day 17. The timing claim is moot.",
+    "outcome": false,
+    "resolution_note": "China has not formally recognized Mojtaba Khamenei by March 21 (Day 18+ of silence). Recognition did not occur bundled with or following the Nowruz address. China's vetting system access removes the material incentive to recognize at all.",
     "revision_history": [],
     "void": true,
     "void_reason": "Conditional on #097 resolving FALSE. #097 resolved TRUE (China >72h). Conditional not met. Additionally China has not recognized at all by deadline. Timing prediction moot."
@@ -4524,7 +4530,7 @@
     "title": "Russia recognizes before China",
     "confidence": 0.8,
     "deadline": "2026-03-21",
-    "status": "void",
+    "status": "resolved",
     "category": "geopolitics",
     "tags": [
       "iran",
@@ -4554,10 +4560,11 @@
         "note": "Russia recognized March 9 (Day 1). China still silent Day 15+. #135 resolves TRUE if China recognizes before March 21 (Russia definitively first). Updated from ambiguous prior to reflect known information: Russia has already gone first."
       }
     ],
-    "outcome": null,
+    "outcome": false,
     "void": true,
     "void_reason": "Conditional on both Russia AND China formally recognizing by March 21. Neither has formally recognized. Both conditions unmet. Void.",
-    "resolved_date": "2026-03-21"
+    "resolved_date": "2026-03-21",
+    "resolution_note": "Conditional not met: China has not formally recognized by March 21. Both countries have not recognized within the window. Russia recognized March 9; China still silent Day 18+. Condition failure."
   },
   {
     "id": "2026-03-15-137",
