@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-21T15:32:38.424064+00:00",
+  "run_at": "2026-03-21T20:07:30.308571+00:00",
   "live_data": {
-    "btc_price": 70648,
+    "btc_price": 70360,
     "nvda_price": 172.7,
     "brent_price": 106.41,
     "sp500": 6506.48,
     "usdcad": 1.3723,
     "gold": 4574.9,
     "hl_btc_funding": {
-      "funding_pct_hr": 0.00046,
-      "mark_price": 70656.0
+      "funding_pct_hr": -0.00031,
+      "mark_price": 70328.0
     },
     "pulse_date": "2026-03-21"
   },
   "summary": {
-    "total": 142,
+    "total": 145,
     "resolved": 77,
     "correct": 50,
-    "open": 65
+    "open": 68
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 9,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,648"
+        "btc_price": "$70,360"
       },
-      "assessment": "BTC at $70,648. Needs +13.2% ($9,352) to falsify.",
+      "assessment": "BTC at $70,360. Needs +13.7% ($9,640) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 284,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,648"
+        "btc_price": "$70,360"
       },
-      "assessment": "BTC at $70,648. Needs +41.5% ($29,352) to falsify. Long deadline.",
+      "assessment": "BTC at $70,360. Needs +42.1% ($29,640) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -1277,6 +1277,39 @@
       "confidence": 0.72,
       "deadline": "2026-04-10",
       "days_left": 19,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-21-146",
+      "statement": "Iraq's force majeure on foreign-operated oilfields is fully or partially lifted by April 10, 2026, resulting in oil production returning to at least 50% of pre-FM levels (~1.65M bpd).",
+      "confidence": 0.3,
+      "deadline": "2026-04-10",
+      "days_left": 19,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-21-147",
+      "statement": "At least one of Kuwait's two struck refineries (Mina Al-Ahmadi or Mina Abdullah) resumes any partial operations by April 10, 2026.",
+      "confidence": 0.3,
+      "deadline": "2026-04-10",
+      "days_left": 19,
+      "status": "open",
+      "current_data": {},
+      "assessment": "",
+      "trending": null
+    },
+    {
+      "id": "2026-03-21-148",
+      "statement": "At least three additional countries (beyond Japan) receive individual Hormuz transit clearance from Iran by April 1, 2026.",
+      "confidence": 0.65,
+      "deadline": "2026-04-01",
+      "days_left": 10,
       "status": "open",
       "current_data": {},
       "assessment": "",

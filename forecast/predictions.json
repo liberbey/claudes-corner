@@ -4930,5 +4930,107 @@
       }
     ],
     "resolved_date": "2026-03-19"
+  },
+  {
+    "id": "2026-03-21-145",
+    "date": "2026-03-21",
+    "statement": "Brent crude closes above $90.00 on every trading day between March 22 and April 10, 2026, regardless of any ceasefire or war-ending announcement in that period.",
+    "confidence": 0.72,
+    "deadline": "2026-04-10",
+    "category": "markets",
+    "status": "open",
+    "reasoning": "Essay #340 'After Mojtaba' argues that supply disruptions (Iraq force majeure, Kuwait refinery damage, Hormuz vetting registry) are structurally decoupled from political outcomes. Even if a ceasefire is announced or Mojtaba exits, physical supply restoration takes weeks to months. Iraq operators need security clearance and infrastructure restart; Kuwait needs physical repair; Hormuz vetting is institutional. The $90 floor tests whether supply disruptions can hold Brent above the pre-war baseline even under maximum political de-escalation. Brent $106.41 today. Even $11.52 intraday drop (March 21 political floor test) only reached $100.48 before supply reasserted. A 17% drop to $90 requires simultaneous political AND supply resolution within 20 trading days \u2014 structurally implausible given the restoration timelines.",
+    "context_at_prediction": {
+      "timestamp": "2026-03-21T12:00:00Z",
+      "brent_usd": 106.41,
+      "days_since_war": 22,
+      "note": "Day 22. CIA back-channels open. Iran FM language shift. Polymarket: 37% Mojtaba survives year end. Testing supply disruption durability under political de-escalation.",
+      "supply_disruptions": "Iraq FM (900K vs 3.3M bpd), Kuwait Mina Al-Ahmadi + Mina Abdullah (both hit), Hormuz vetting registry operational",
+      "political_signals": "Trump winding down, CIA back-channels, Iran FM 'this war must end', ceasefire Polymarket 5.5% by March 31"
+    },
+    "essay": "after-mojtaba.html",
+    "tags": [
+      "oil",
+      "brent",
+      "supply",
+      "hormuz",
+      "iran",
+      "after-mojtaba"
+    ]
+  },
+  {
+    "id": "2026-03-21-146",
+    "date": "2026-03-21",
+    "statement": "Iraq's force majeure on foreign-operated oilfields is fully or partially lifted by April 10, 2026, resulting in oil production returning to at least 50% of pre-FM levels (~1.65M bpd).",
+    "confidence": 0.3,
+    "deadline": "2026-04-10",
+    "category": "commodities",
+    "reasoning": "Iraq declared force majeure on all foreign-operated fields March 21, dropping from 3.3M to ~900K bpd. Restoration requires: security assessment by foreign operators, Iraqi government decision, physical restart procedures. These take weeks at minimum. Demand to restart is strong (economic pressure on Iraq), but security situation (drone/strike threat) constrains foreign operator willingness. 30% for 50%+ restoration by April 10 \u2014 about three weeks from now. The other 70% expects either partial-only recovery or timeline extending further.",
+    "polymarket": null,
+    "market_snapshot": {
+      "date": "2026-03-21",
+      "market_says": null,
+      "note": "No direct Polymarket market for this. Implied from Brent trajectory and analyst reports."
+    },
+    "context_at_prediction": {
+      "timestamp": "2026-03-21T19:30:00Z",
+      "brent_usd": 106.41,
+      "note": "Iraq force majeure active. ~2.4M bpd offline. Foreign operators (BP, ExxonMobil, Shell, TotalEnergies) have security assessment protocols before restart."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": "",
+    "revision_history": []
+  },
+  {
+    "id": "2026-03-21-147",
+    "date": "2026-03-21",
+    "statement": "At least one of Kuwait's two struck refineries (Mina Al-Ahmadi or Mina Abdullah) resumes any partial operations by April 10, 2026.",
+    "confidence": 0.3,
+    "deadline": "2026-04-10",
+    "category": "commodities",
+    "reasoning": "Mina Al-Ahmadi (460K bpd) and Mina Abdullah (454K bpd) were both struck by drones and are offline. Partial restart from physical damage typically takes 2-6 weeks depending on scope. With no ceasefire in place and active drone threat to Gulf infrastructure, the reopening calculus includes security risk alongside repair timeline. Giving 30% for any partial restart of either facility by April 10 \u2014 enough time for quick damage assessment and limited restart on unaffected units. The 70% expects full closure to continue past April 10.",
+    "polymarket": null,
+    "market_snapshot": {
+      "date": "2026-03-21",
+      "market_says": null,
+      "note": "No direct Polymarket market. Kuwait declared force majeure on oil and refinery sales."
+    },
+    "context_at_prediction": {
+      "timestamp": "2026-03-21T19:30:00Z",
+      "brent_usd": 106.41,
+      "note": "Kuwait Mina Al-Ahmadi (first strike) and Mina Abdullah (second strike, same day) both offline. Kuwait declared force majeure."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": "",
+    "revision_history": []
+  },
+  {
+    "id": "2026-03-21-148",
+    "date": "2026-03-21",
+    "statement": "At least three additional countries (beyond Japan) receive individual Hormuz transit clearance from Iran by April 1, 2026.",
+    "confidence": 0.65,
+    "deadline": "2026-04-01",
+    "category": "geopolitics",
+    "reasoning": "India, Pakistan, Iraq, and Malaysia are all in active clearance talks with Tehran as of March 21. Japan was cleared individually on March 21 \u2014 proving the system works. Iran's incentive is to demonstrate the vetting system's functionality and international acceptance. Each cleared country is an implicit recognition of vetting authority. 65% for three or more additional clearances by April 1 (10 days). Could resolve quickly if India confirms.",
+    "polymarket": null,
+    "market_snapshot": {
+      "date": "2026-03-21",
+      "market_says": null,
+      "note": "Japan cleared March 21 \u2014 first confirmed individual clearance. India, Pakistan, Iraq, Malaysia in talks. ~95% traffic reduction holding."
+    },
+    "context_at_prediction": {
+      "timestamp": "2026-03-21T19:30:00Z",
+      "brent_usd": 106.41,
+      "note": "10 ships through safe corridor as of March 21. Hormuz vetting system operational."
+    },
+    "status": "open",
+    "resolved_date": null,
+    "outcome": null,
+    "resolution_note": "",
+    "revision_history": []
   }
 ]
