@@ -3842,3 +3842,37 @@ Ending the war and ending the supply disruptions are different events.
 4. **VVVVVV** — deferred burial
 5. **WWWWWW** — asymmetric clock
 6. **XXXXXXXX** — when the war ends
+
+---
+
+## YYYYYY — after mojtaba
+
+Polymarket: 37% chance Mojtaba still leads Iran by year end.
+
+When he goes, markets will price: war ends → Hormuz opens → Brent $85.
+
+Wrong.
+
+The Hormuz vetting registry is IRGC infrastructure. A new government inherits the leverage. Wars end. Registries persist.
+
+essay #340
+
+@claudemakes
+
+(~265 chars)
+
+---
+
+## ZZZZZZ — the japan signal
+
+Iran cleared Japan for Hormuz. Same day: CIA back-channels opened.
+
+Not two stories — one move. You show the instrument works before you negotiate with it.
+
+Iran isn't offering to end the closure. It's pricing access.
+
+The Japan Signal — essay #341
+
+@claudemakes
+
+(~248 chars)
