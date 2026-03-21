@@ -3708,7 +3708,7 @@
     "id": "2026-03-10-111",
     "date": "2026-03-10",
     "statement": "China formally recognizes Mojtaba Khamenei as Supreme Leader of the Islamic Republic of Iran between March 19 and March 25, 2026 \u2014 the Nowruz window. Conditional on Mojtaba delivering the Nowruz address (prediction #081).",
-    "confidence": 0.4,
+    "confidence": 0.2,
     "deadline": "2026-03-25",
     "category": "geopolitics",
     "status": "open",
@@ -3723,6 +3723,12 @@
         "from": 0.65,
         "to": 0.4,
         "note": "China Day 17 silence. No post-speech movement toward recognition. Bilateral relationship operational via Hormuz vetting \u2014 formal recognition unnecessary. Deadline March 25 still open but trajectory is strongly FALSE. Revised 65%\u219240%."
+      },
+      {
+        "date": "2026-03-21",
+        "old_confidence": 0.4,
+        "new_confidence": 0.2,
+        "reason": "China Day 18+ silence. Operational access via vetting system removes material incentive to incur declaratory costs. March 25 deadline 4 days away. Nothing changes structurally before then. 40%\u219220%."
       }
     ]
   },
@@ -4709,16 +4715,22 @@
       "recognition",
       "march20"
     ],
-    "confidence": 0.5,
+    "confidence": 0.25,
     "revision_history": [
       {
         "date": "2026-03-21",
         "old_confidence": 0.65,
         "new_confidence": 0.5,
         "reason": "China #123 resolved FALSE \u2014 not within 6h. Iraq congratulated (may count). Turkey, Pakistan mentioned positively in speech but no formal recognition found. Qatar rupture created friction with GCC/Turkey bloc. 50% with 24h remaining in 72h window."
+      },
+      {
+        "date": "2026-03-21",
+        "old_confidence": 0.5,
+        "new_confidence": 0.25,
+        "reason": "Cascade model broken. China is the only state that could anchor cascade. China not recognizing before March 23. Without China anchor, no trigger for other states. 50%\u219225%."
       }
     ],
-    "probability": 50
+    "probability": 25
   },
   {
     "id": "2026-03-16-142",

@@ -1,23 +1,23 @@
 {
-  "run_at": "2026-03-21T00:26:16.544133+00:00",
+  "run_at": "2026-03-21T01:38:48.378820+00:00",
   "live_data": {
-    "btc_price": 70692,
+    "btc_price": 70629,
     "nvda_price": 172.7,
     "brent_price": 106.77,
     "sp500": 6506.48,
     "usdcad": 1.3723,
     "gold": 4492.0,
     "hl_btc_funding": {
-      "funding_pct_hr": 0.00042,
-      "mark_price": 70676.0
+      "funding_pct_hr": 6e-05,
+      "mark_price": 70591.0
     },
     "pulse_date": "2026-03-21"
   },
   "summary": {
     "total": 141,
-    "resolved": 67,
-    "correct": 47,
-    "open": 74
+    "resolved": 68,
+    "correct": 48,
+    "open": 73
   },
   "results": [
     {
@@ -35,9 +35,9 @@
       "days_left": 9,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,692"
+        "btc_price": "$70,629"
       },
-      "assessment": "BTC at $70,692. Needs +13.2% ($9,308) to falsify.",
+      "assessment": "BTC at $70,629. Needs +13.3% ($9,371) to falsify.",
       "trending": "toward"
     },
     {
@@ -103,9 +103,9 @@
       "days_left": 284,
       "status": "open",
       "current_data": {
-        "btc_price": "$70,692"
+        "btc_price": "$70,629"
       },
-      "assessment": "BTC at $70,692. Needs +41.5% ($29,308) to falsify. Long deadline.",
+      "assessment": "BTC at $70,629. Needs +41.6% ($29,371) to falsify. Long deadline.",
       "trending": "toward"
     },
     {
@@ -1000,7 +1000,7 @@
     {
       "id": "2026-03-10-111",
       "statement": "China formally recognizes Mojtaba Khamenei as Supreme Leader of the Islamic Republic of Iran between March 19 and March 25, 2026 \u2014 the Nowruz window. Conditional on Mojtaba delivering the Nowruz address (prediction #081).",
-      "confidence": 0.65,
+      "confidence": 0.4,
       "deadline": "2026-03-25",
       "days_left": 3,
       "status": "open",
@@ -1197,14 +1197,10 @@
     },
     {
       "id": "2026-03-14-133",
-      "statement": "Conditional on Mojtaba delivering the Nowruz 1405 address (#081 TRUE): Polymarket's \"US forces enter Iran by March 31\" market closes at or below 25% YES within 48 hours of the founding address. The speech resolves counterpart uncertainty and opens the US exit declaration track, repricing ground forces downward.",
+      "status": "resolved",
+      "outcome": true,
       "confidence": 0.62,
-      "deadline": "2026-03-22",
-      "days_left": 0,
-      "status": "open",
-      "current_data": {},
-      "assessment": "",
-      "trending": null
+      "note": "Polymarket 'US forces enter Iran by March 31' dropped from 42.5% (at prediction time) to 21% within 6 hours of Nowruz address \u2014 well below the 25% threshold. 21.5-point drop. Speech resolved counterpart uncertainty exactly as modeled."
     },
     {
       "id": "2026-03-14-134",
@@ -1296,7 +1292,7 @@
     {
       "id": "2026-03-17-143",
       "statement": "Brent crude closes below $100 at least once in the 7 trading days following the Nowruz address (March 21\u201327, 2026).",
-      "confidence": 0.3,
+      "confidence": 0.15,
       "deadline": "2026-03-27",
       "days_left": 5,
       "status": "open",
