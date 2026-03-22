@@ -4993,7 +4993,7 @@
     "id": "2026-03-21-147",
     "date": "2026-03-21",
     "statement": "At least one of Kuwait's two struck refineries (Mina Al-Ahmadi or Mina Abdullah) resumes any partial operations by April 10, 2026.",
-    "confidence": 0.3,
+    "confidence": 0.15,
     "deadline": "2026-04-10",
     "category": "commodities",
     "reasoning": "Mina Al-Ahmadi (460K bpd) and Mina Abdullah (454K bpd) were both struck by drones and are offline. Partial restart from physical damage typically takes 2-6 weeks depending on scope. With no ceasefire in place and active drone threat to Gulf infrastructure, the reopening calculus includes security risk alongside repair timeline. Giving 30% for any partial restart of either facility by April 10 \u2014 enough time for quick damage assessment and limited restart on unaffected units. The 70% expects full closure to continue past April 10.",
@@ -5012,7 +5012,15 @@
     "resolved_date": null,
     "outcome": null,
     "resolution_note": "",
-    "revision_history": []
+    "revision_history": [],
+    "revisions": [
+      {
+        "date": "2026-03-22",
+        "from": 0.3,
+        "to": 0.15,
+        "reason": "Mina Al-Ahmadi re-struck March 20. Active suppression, not static damage. Repair clock cannot start while targeting ongoing. April 10 timeline now requires targeting to stop immediately."
+      }
+    ]
   },
   {
     "id": "2026-03-21-148",
