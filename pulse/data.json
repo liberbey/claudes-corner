@@ -1,23 +1,23 @@
 {
-  "fetched_at": "2026-03-22T01:51:33.847060+00:00",
+  "fetched_at": "2026-03-22T11:16:09.990240+00:00",
   "total_events": 80,
   "displayed": 40,
   "categories": {
-    "sports": 21,
+    "sports": 26,
     "other": 2,
-    "crypto": 3,
-    "politics": 6,
-    "geopolitics": 6,
     "economy": 1,
+    "crypto": 3,
+    "politics": 4,
+    "geopolitics": 3,
     "culture": 1
   },
   "markets": [
     {
       "title": "Texas Tech Red Raiders vs. Alabama Crimson Tide",
       "category": "sports",
-      "volume": 2946061.79154899,
-      "volume_24h": 2924902.173010003,
-      "uncertainty": 0.95,
+      "volume": 4088171.136696945,
+      "volume_24h": 3772224.8266160097,
+      "uncertainty": 0.97,
       "market": {
         "question": "Texas Tech Red Raiders vs. Alabama Crimson Tide",
         "outcomes": [
@@ -25,41 +25,62 @@
           "Alabama Crimson Tide"
         ],
         "prices": [
+          0.515,
+          0.485
+        ],
+        "probability": 0.515,
+        "volume": 3750728.901308946
+      },
+      "interestingness": 0.598
+    },
+    {
+      "title": "Tennessee Volunteers vs. Virginia Cavaliers",
+      "category": "sports",
+      "volume": 859860.4465710022,
+      "volume_24h": 824975.1822280001,
+      "uncertainty": 0.97,
+      "market": {
+        "question": "Tennessee Volunteers vs. Virginia Cavaliers",
+        "outcomes": [
+          "Tennessee Volunteers",
+          "Virginia Cavaliers"
+        ],
+        "prices": [
+          0.515,
+          0.485
+        ],
+        "probability": 0.515,
+        "volume": 675221.4762400023
+      },
+      "interestingness": 0.585
+    },
+    {
+      "title": "Real Madrid CF vs. Club Atl\u00e9tico de Madrid",
+      "category": "sports",
+      "volume": 498649.9353830013,
+      "volume_24h": 324727.8066969994,
+      "uncertainty": 0.95,
+      "market": {
+        "question": "Will Real Madrid CF win on 2026-03-22?",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
           0.525,
           0.475
         ],
         "probability": 0.525,
-        "volume": 2629080.946653991
-      },
-      "interestingness": 0.582
-    },
-    {
-      "title": "Bruins vs. Red Wings",
-      "category": "sports",
-      "volume": 517431.0209710023,
-      "volume_24h": 510625.77873200004,
-      "uncertainty": 0.95,
-      "market": {
-        "question": "Bruins vs. Red Wings",
-        "outcomes": [
-          "Bruins",
-          "Red Wings"
-        ],
-        "prices": [
-          0.475,
-          0.525
-        ],
-        "probability": 0.525,
-        "volume": 495154.9626610023
+        "volume": 401099.44065100135
       },
       "interestingness": 0.572
     },
     {
       "title": "Eurovision Winner 2026",
       "category": "other",
-      "volume": 25872861.43866798,
-      "volume_24h": 1532029.78077,
-      "uncertainty": 0.758,
+      "volume": 26776387.428514972,
+      "volume_24h": 1735341.8088259997,
+      "uncertainty": 0.75,
       "market": {
         "question": "Will Finland win Eurovision 2026?",
         "outcomes": [
@@ -67,82 +88,82 @@
           "No"
         ],
         "prices": [
-          0.379,
-          0.621
+          0.375,
+          0.625
         ],
-        "probability": 0.379,
-        "volume": 1492532.7775699906
+        "probability": 0.375,
+        "volume": 1497366.5463319907
       },
-      "interestingness": 0.558
+      "interestingness": 0.557
     },
     {
-      "title": "Clippers vs. Mavericks",
+      "title": "Kentucky Wildcats vs. Iowa State Cyclones",
       "category": "sports",
-      "volume": 2060134.5681860014,
-      "volume_24h": 2032061.7159649993,
+      "volume": 627280.4872129994,
+      "volume_24h": 517512.5728140004,
       "uncertainty": 0.91,
       "market": {
-        "question": "Clippers vs. Mavericks",
+        "question": "Spread: Iowa State Cyclones (-4.5)",
         "outcomes": [
-          "Clippers",
-          "Mavericks"
+          "Iowa State Cyclones",
+          "Kentucky Wildcats"
         ],
         "prices": [
-          0.455,
-          0.545
+          0.545,
+          0.455
         ],
         "probability": 0.545,
-        "volume": 1147273.805066001
+        "volume": 241840.86100300035
       },
-      "interestingness": 0.554
+      "interestingness": 0.549
     },
     {
-      "title": "Heat vs. Rockets",
+      "title": "Raptors vs. Suns",
       "category": "sports",
-      "volume": 3561833.9204880083,
-      "volume_24h": 3540308.6294190083,
-      "uncertainty": 0.89,
+      "volume": 584513.9860569997,
+      "volume_24h": 580893.2516360001,
+      "uncertainty": 0.87,
       "market": {
-        "question": "Heat vs. Rockets",
+        "question": "Raptors vs. Suns",
         "outcomes": [
-          "Heat",
-          "Rockets"
+          "Raptors",
+          "Suns"
         ],
         "prices": [
-          0.555,
-          0.445
+          0.565,
+          0.435
         ],
-        "probability": 0.555,
-        "volume": 2256093.24443101
+        "probability": 0.565,
+        "volume": 490879.2158419997
       },
-      "interestingness": 0.548
+      "interestingness": 0.524
     },
     {
-      "title": "Lightning vs. Oilers",
+      "title": "Aston Villa FC vs. West Ham United FC",
       "category": "sports",
-      "volume": 600492.5224389995,
-      "volume_24h": 595596.4100949996,
-      "uncertainty": 0.89,
+      "volume": 598854.7476950014,
+      "volume_24h": 547565.5671500004,
+      "uncertainty": 0.87,
       "market": {
-        "question": "Lightning vs. Oilers",
+        "question": "Will Aston Villa FC win on 2026-03-22?",
         "outcomes": [
-          "Lightning",
-          "Oilers"
+          "Yes",
+          "No"
         ],
         "prices": [
-          0.555,
-          0.445
+          0.565,
+          0.435
         ],
-        "probability": 0.555,
-        "volume": 548708.8656719995
+        "probability": 0.565,
+        "volume": 504037.6230990014
       },
-      "interestingness": 0.536
+      "interestingness": 0.524
     },
     {
       "title": "Hurricanes vs. Penguins",
       "category": "sports",
-      "volume": 469410.929685,
-      "volume_24h": 465847.96804,
+      "volume": 506625.3017300001,
+      "volume_24h": 499615.18399800005,
       "uncertainty": 0.85,
       "market": {
         "question": "Hurricanes vs. Penguins",
@@ -155,16 +176,16 @@
           0.425
         ],
         "probability": 0.575,
-        "volume": 457529.763338
+        "volume": 484175.9636930001
       },
       "interestingness": 0.512
     },
     {
       "title": "Will Crude Oil (CL) hit__ by end of March?",
       "category": "other",
-      "volume": 47579154.88766083,
-      "volume_24h": 1537164.8759589999,
-      "uncertainty": 0.529,
+      "volume": 48202277.69071882,
+      "volume_24h": 1593723.22365,
+      "uncertainty": 0.508,
       "market": {
         "question": "Will Crude Oil (CL) hit (HIGH) $100 by end of March?",
         "outcomes": [
@@ -172,62 +193,104 @@
           "No"
         ],
         "prices": [
-          0.7355,
-          0.2645
+          0.746,
+          0.254
         ],
-        "probability": 0.7355,
-        "volume": 9324189.549148947
+        "probability": 0.746,
+        "volume": 9399163.212244948
       },
-      "interestingness": 0.508
+      "interestingness": 0.498
     },
     {
-      "title": "What price will Bitcoin hit March 16-22?",
-      "category": "crypto",
-      "volume": 2082615.5185039996,
-      "volume_24h": 562528.134921,
-      "uncertainty": 0.8,
+      "title": "How many Fed rate cuts in 2026?",
+      "category": "economy",
+      "volume": 12150710.23522499,
+      "volume_24h": 298871.22069,
+      "uncertainty": 0.716,
       "market": {
-        "question": "Will Bitcoin dip to $68,000 March 16-22?",
+        "question": "Will no Fed rate cuts happen in 2026?",
         "outcomes": [
           "Yes",
           "No"
         ],
         "prices": [
-          0.6,
-          0.4
+          0.358,
+          0.642
         ],
-        "probability": 0.6,
-        "volume": 286710.831624
+        "probability": 0.358,
+        "volume": 2278983.8015399943
       },
-      "interestingness": 0.488
+      "interestingness": 0.478
     },
     {
-      "title": "Vanderbilt Commodores vs. Nebraska Cornhuskers",
+      "title": "St. John's Red Storm vs. Kansas Jayhawks",
       "category": "sports",
-      "volume": 4227523.377762987,
-      "volume_24h": 2076205.102031,
+      "volume": 596224.0766840001,
+      "volume_24h": 576052.613577,
+      "uncertainty": 0.79,
+      "market": {
+        "question": "St. John's Red Storm vs. Kansas Jayhawks",
+        "outcomes": [
+          "St. John's Red Storm",
+          "Kansas Jayhawks"
+        ],
+        "prices": [
+          0.605,
+          0.395
+        ],
+        "probability": 0.605,
+        "volume": 335257.36577399954
+      },
+      "interestingness": 0.476
+    },
+    {
+      "title": "Newcastle United FC vs. Sunderland AFC",
+      "category": "sports",
+      "volume": 1396928.9299760007,
+      "volume_24h": 1375986.5359130003,
       "uncertainty": 0.75,
       "market": {
-        "question": "Vanderbilt Commodores vs. Nebraska Cornhuskers",
+        "question": "Will Newcastle United FC win on 2026-03-22?",
         "outcomes": [
-          "Vanderbilt Commodores",
-          "Nebraska Cornhuskers"
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.625,
+          0.375
+        ],
+        "probability": 0.625,
+        "volume": 1237698.4627910007
+      },
+      "interestingness": 0.456
+    },
+    {
+      "title": "Newcastle United FC vs. Sunderland AFC - More Markets",
+      "category": "sports",
+      "volume": 341789.2948800001,
+      "volume_24h": 338408.88582300005,
+      "uncertainty": 0.75,
+      "market": {
+        "question": "Spread: Newcastle United FC (-1.5)",
+        "outcomes": [
+          "Newcastle United FC",
+          "Sunderland AFC"
         ],
         "prices": [
           0.375,
           0.625
         ],
         "probability": 0.625,
-        "volume": 3864817.035220987
+        "volume": 181929.54235400027
       },
-      "interestingness": 0.467
+      "interestingness": 0.451
     },
     {
       "title": "2026 NHL Stanley Cup Champion ",
       "category": "sports",
-      "volume": 54645809.989332005,
-      "volume_24h": 936925.891083,
-      "uncertainty": 0.384,
+      "volume": 55056498.763208985,
+      "volume_24h": 974853.0408310001,
+      "uncertainty": 0.382,
       "market": {
         "question": "Will the Colorado Avalanche win the 2026 NHL Stanley Cup?",
         "outcomes": [
@@ -235,19 +298,19 @@
           "No"
         ],
         "prices": [
-          0.192,
-          0.808
+          0.191,
+          0.809
         ],
-        "probability": 0.192,
-        "volume": 12908097.795645053
+        "probability": 0.191,
+        "volume": 12915537.06825803
       },
       "interestingness": 0.449
     },
     {
       "title": "UCLA Bruins vs. Connecticut Huskies",
       "category": "sports",
-      "volume": 1120778.116938005,
-      "volume_24h": 1120778.1169380015,
+      "volume": 1456139.0087310048,
+      "volume_24h": 1420407.6856630007,
       "uncertainty": 0.71,
       "market": {
         "question": "UCLA Bruins vs. Connecticut Huskies",
@@ -260,16 +323,37 @@
           0.645
         ],
         "probability": 0.645,
-        "volume": 1017470.671273005
+        "volume": 1051704.555354005
       },
-      "interestingness": 0.43
+      "interestingness": 0.432
+    },
+    {
+      "title": "What price will Bitcoin hit March 16-22?",
+      "category": "crypto",
+      "volume": 2270244.546069,
+      "volume_24h": 629160.6596039999,
+      "uncertainty": 0.7,
+      "market": {
+        "question": "Will Bitcoin dip to $68,000 March 16-22?",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.65,
+          0.35
+        ],
+        "probability": 0.65,
+        "volume": 302423.1325400005
+      },
+      "interestingness": 0.429
     },
     {
       "title": "Democratic Presidential Nominee 2028",
       "category": "politics",
-      "volume": 876330014.5012158,
-      "volume_24h": 6103601.966512,
-      "uncertainty": 0.015,
+      "volume": 881926297.69799,
+      "volume_24h": 9393434.51437,
+      "uncertainty": 0.016,
       "market": {
         "question": "Will Chelsea Clinton win the 2028 Democratic presidential nomination?",
         "outcomes": [
@@ -277,19 +361,19 @@
           "No"
         ],
         "prices": [
-          0.0075,
-          0.9925
+          0.008,
+          0.992
         ],
-        "probability": 0.0075,
-        "volume": 43675246.71679501
+        "probability": 0.008,
+        "volume": 43748955.32993501
       },
-      "interestingness": 0.409
+      "interestingness": 0.41
     },
     {
       "title": "Republican Presidential Nominee 2028",
       "category": "politics",
-      "volume": 451533865.41894704,
-      "volume_24h": 9030904.382533003,
+      "volume": 456169837.951139,
+      "volume_24h": 12020490.79065101,
       "uncertainty": 0.011,
       "market": {
         "question": "Will Mike Pence win the 2028 Republican presidential nomination?",
@@ -302,15 +386,15 @@
           0.9945
         ],
         "probability": 0.0055,
-        "volume": 30587164.748646002
+        "volume": 30684580.644646004
       },
       "interestingness": 0.407
     },
     {
       "title": "Presidential Election Winner 2028",
       "category": "politics",
-      "volume": 435974183.4195274,
-      "volume_24h": 2420581.108849,
+      "volume": 437733760.28836536,
+      "volume_24h": 2820003.869534,
       "uncertainty": 0.011,
       "market": {
         "question": "Will LeBron James win the 2028 US Presidential Election?",
@@ -323,15 +407,36 @@
           0.9945
         ],
         "probability": 0.0055,
-        "volume": 37434665.43097461
+        "volume": 37629120.403174624
       },
       "interestingness": 0.407
     },
     {
+      "title": "La Liga Winner ",
+      "category": "sports",
+      "volume": 107598527.53633967,
+      "volume_24h": 396859.45744799974,
+      "uncertainty": 0.005,
+      "market": {
+        "question": "Will Atletico Madrid win the 2025\u201326 La Liga?",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.0025,
+          0.9975
+        ],
+        "probability": 0.0025,
+        "volume": 26873654.47193185
+      },
+      "interestingness": 0.403
+    },
+    {
       "title": "2026 FIFA World Cup Winner ",
       "category": "sports",
-      "volume": 345799852.8858584,
-      "volume_24h": 5088039.23300393,
+      "volume": 348827324.3227575,
+      "volume_24h": 5038439.291953035,
       "uncertainty": 0.003,
       "market": {
         "question": "Will Uzbekistan win the 2026 FIFA World Cup?",
@@ -344,15 +449,15 @@
           0.9985
         ],
         "probability": 0.0015,
-        "volume": 24385713.850536007
+        "volume": 24461024.65853601
       },
       "interestingness": 0.402
     },
     {
       "title": "2026 NBA Champion",
       "category": "sports",
-      "volume": 251704215.29157072,
-      "volume_24h": 1936833.028139,
+      "volume": 252874799.9482088,
+      "volume_24h": 1779321.135632,
       "uncertainty": 0.003,
       "market": {
         "question": "Will the Memphis Grizzlies win the 2026 NBA Finals?",
@@ -365,36 +470,15 @@
           0.9985
         ],
         "probability": 0.0015,
-        "volume": 35378516.080182776
+        "volume": 35462007.34462384
       },
       "interestingness": 0.402
     },
     {
-      "title": "English Premier League Winner ",
-      "category": "sports",
-      "volume": 308861579.165612,
-      "volume_24h": 6338695.821435001,
-      "uncertainty": 0.0,
-      "market": {
-        "question": "Will Chelsea win the 2025\u201326 English Premier League?",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.0,
-          1.0
-        ],
-        "probability": 0.0,
-        "volume": 91279169.5885377
-      },
-      "interestingness": 0.4
-    },
-    {
       "title": "UEFA Champions League Winner ",
       "category": "sports",
-      "volume": 215810137.91178176,
-      "volume_24h": 795651.3544980001,
+      "volume": 216174264.22957176,
+      "volume_24h": 923824.0938040001,
       "uncertainty": 0.0,
       "market": {
         "question": "Will Slavia Pragu win the 2025\u201326 Champions League?",
@@ -412,11 +496,53 @@
       "interestingness": 0.4
     },
     {
+      "title": "English Premier League Winner ",
+      "category": "sports",
+      "volume": 308934167.864835,
+      "volume_24h": 367099.529013,
+      "uncertainty": 0.0,
+      "market": {
+        "question": "Will Chelsea win the 2025\u201326 English Premier League?",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.0,
+          1.0
+        ],
+        "probability": 0.0,
+        "volume": 91279169.5885377
+      },
+      "interestingness": 0.4
+    },
+    {
+      "title": "Counter-Strike: Liquid vs TheMongolz (BO3) - BLAST Open Rotterdam Group B",
+      "category": "sports",
+      "volume": 464893.7668040004,
+      "volume_24h": 464893.766804,
+      "uncertainty": 0.65,
+      "market": {
+        "question": "Counter-Strike: Liquid vs TheMongolz (BO3) - BLAST Open Rotterdam Group B",
+        "outcomes": [
+          "Liquid",
+          "TheMongolz"
+        ],
+        "prices": [
+          0.325,
+          0.675
+        ],
+        "probability": 0.675,
+        "volume": 462231.3278320004
+      },
+      "interestingness": 0.392
+    },
+    {
       "title": "NBA MVP ",
       "category": "sports",
-      "volume": 72073319.44384702,
-      "volume_24h": 507145.888525,
-      "uncertainty": 0.17,
+      "volume": 72256476.713061,
+      "volume_24h": 533629.47307,
+      "uncertainty": 0.141,
       "market": {
         "question": "Will Luka Doncic win the 2025\u20132026 NBA MVP?",
         "outcomes": [
@@ -424,40 +550,61 @@
           "No"
         ],
         "prices": [
-          0.085,
-          0.915
+          0.0705,
+          0.9295
         ],
-        "probability": 0.085,
-        "volume": 12490395.57554691
+        "probability": 0.0705,
+        "volume": 12506209.111334903
       },
-      "interestingness": 0.39
+      "interestingness": 0.374
     },
     {
-      "title": "76ers vs. Jazz",
-      "category": "sports",
-      "volume": 3449706.974097003,
-      "volume_24h": 3402341.4298289996,
-      "uncertainty": 0.59,
+      "title": "Will the Iranian regime fall by June 30?",
+      "category": "geopolitics",
+      "volume": 19908500.117129553,
+      "volume_24h": 363919.5714770004,
+      "uncertainty": 0.47,
       "market": {
-        "question": "76ers vs. Jazz",
+        "question": "Will the Iranian regime fall by June 30?",
         "outcomes": [
-          "76ers",
-          "Jazz"
+          "Yes",
+          "No"
         ],
         "prices": [
-          0.705,
-          0.295
+          0.235,
+          0.765
         ],
-        "probability": 0.705,
-        "volume": 1118952.2054940043
+        "probability": 0.235,
+        "volume": 19908570.097129554
       },
-      "interestingness": 0.368
+      "interestingness": 0.362
+    },
+    {
+      "title": "LoL: G2 Esports vs Bilibili Gaming (BO5) - First Stand Playoffs",
+      "category": "sports",
+      "volume": 1977517.046747986,
+      "volume_24h": 1977543.2686339864,
+      "uncertainty": 0.55,
+      "market": {
+        "question": "LoL: G2 Esports vs Bilibili Gaming (BO5) - First Stand Playoffs",
+        "outcomes": [
+          "G2 Esports",
+          "Bilibili Gaming"
+        ],
+        "prices": [
+          0.275,
+          0.725
+        ],
+        "probability": 0.725,
+        "volume": 1530796.2646279857
+      },
+      "interestingness": 0.338
     },
     {
       "title": "US forces enter Iran by..?",
       "category": "geopolitics",
-      "volume": 22018984.224897444,
-      "volume_24h": 1299211.3084839997,
+      "volume": 22361687.66484044,
+      "volume_24h": 1246906.4885840009,
       "uncertainty": 0.37,
       "market": {
         "question": "US forces enter Iran by March 31?",
@@ -470,15 +617,120 @@
           0.815
         ],
         "probability": 0.185,
-        "volume": 15476351.212244442
+        "volume": 15673535.815286439
       },
-      "interestingness": 0.31
+      "interestingness": 0.311
+    },
+    {
+      "title": "Miami Hurricanes vs. Purdue Boilermakers",
+      "category": "sports",
+      "volume": 421899.4631119997,
+      "volume_24h": 396071.9107999998,
+      "uncertainty": 0.51,
+      "market": {
+        "question": "Miami Hurricanes vs. Purdue Boilermakers",
+        "outcomes": [
+          "Miami Hurricanes",
+          "Purdue Boilermakers"
+        ],
+        "prices": [
+          0.255,
+          0.745
+        ],
+        "probability": 0.745,
+        "volume": 221991.9234839998
+      },
+      "interestingness": 0.308
+    },
+    {
+      "title": "Ethereum above ___ on March 22?",
+      "category": "crypto",
+      "volume": 736489.4781169998,
+      "volume_24h": 523865.39554199995,
+      "uncertainty": 0.5,
+      "market": {
+        "question": "Will the price of Ethereum be above $2,100 on March 22?",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.25,
+          0.75
+        ],
+        "probability": 0.25,
+        "volume": 118721.38110299999
+      },
+      "interestingness": 0.303
+    },
+    {
+      "title": "Trail Blazers vs. Nuggets",
+      "category": "sports",
+      "volume": 289274.4067770002,
+      "volume_24h": 285105.2722300002,
+      "uncertainty": 0.47,
+      "market": {
+        "question": "Trail Blazers vs. Nuggets",
+        "outcomes": [
+          "Trail Blazers",
+          "Nuggets"
+        ],
+        "prices": [
+          0.235,
+          0.765
+        ],
+        "probability": 0.765,
+        "volume": 194133.90557800015
+      },
+      "interestingness": 0.283
+    },
+    {
+      "title": "Como 1907 vs. Pisa SC",
+      "category": "sports",
+      "volume": 287183.8074210001,
+      "volume_24h": 279384.65442100004,
+      "uncertainty": 0.47,
+      "market": {
+        "question": "Will Como 1907 win on 2026-03-22?",
+        "outcomes": [
+          "Yes",
+          "No"
+        ],
+        "prices": [
+          0.765,
+          0.235
+        ],
+        "probability": 0.765,
+        "volume": 253216.28862600014
+      },
+      "interestingness": 0.283
+    },
+    {
+      "title": "Counter-Strike: NRG vs FURIA (BO3) - BLAST Open Rotterdam Group A",
+      "category": "sports",
+      "volume": 286926.8126230003,
+      "volume_24h": 286352.610058,
+      "uncertainty": 0.45,
+      "market": {
+        "question": "Counter-Strike: NRG vs FURIA (BO3) - BLAST Open Rotterdam Group A",
+        "outcomes": [
+          "NRG",
+          "FURIA"
+        ],
+        "prices": [
+          0.225,
+          0.775
+        ],
+        "probability": 0.775,
+        "volume": 235560.8269270003
+      },
+      "interestingness": 0.271
     },
     {
       "title": "What price will Bitcoin hit in March?",
       "category": "crypto",
-      "volume": 64798408.578263804,
-      "volume_24h": 4018289.081725,
+      "volume": 66559349.1076898,
+      "volume_24h": 4081698.9927180023,
       "uncertainty": 0.005,
       "market": {
         "question": "Will Bitcoin reach $150,000 in March?",
@@ -491,16 +743,16 @@
           0.9975
         ],
         "probability": 0.0025,
-        "volume": 20134050.49639394
+        "volume": 20645986.860559944
       },
-      "interestingness": 0.262
+      "interestingness": 0.269
     },
     {
       "title": "Augusta National Invitational - Winner ",
       "category": "sports",
-      "volume": 51021640.69562902,
-      "volume_24h": 1039954.945381,
-      "uncertainty": 0.089,
+      "volume": 51753341.78417504,
+      "volume_24h": 1375718.586901,
+      "uncertainty": 0.093,
       "market": {
         "question": "Will Xander Schauffele win the 2026 Masters tournament?",
         "outcomes": [
@@ -508,232 +760,22 @@
           "No"
         ],
         "prices": [
-          0.0445,
-          0.9555
+          0.0465,
+          0.9535
         ],
-        "probability": 0.0445,
-        "volume": 8245388.175022039
+        "probability": 0.0465,
+        "volume": 8256268.528019044
       },
-      "interestingness": 0.257
+      "interestingness": 0.263
     },
     {
       "title": "Netanyahu out by...?",
       "category": "politics",
-      "volume": 58835602.89476279,
-      "volume_24h": 3878625.4087279993,
-      "uncertainty": 0.025,
-      "market": {
-        "question": "Netanyahu out by March 31?",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.0125,
-          0.9875
-        ],
-        "probability": 0.0125,
-        "volume": 55570861.040143795
-      },
-      "interestingness": 0.25
-    },
-    {
-      "title": "US x Iran ceasefire by...?",
-      "category": "geopolitics",
-      "volume": 27998648.460584078,
-      "volume_24h": 2443845.69997,
-      "uncertainty": 0.15,
-      "market": {
-        "question": "US x Iran ceasefire by March 31?",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.075,
-          0.925
-        ],
-        "probability": 0.075,
-        "volume": 15798031.573252104
-      },
-      "interestingness": 0.202
-    },
-    {
-      "title": "Iowa Hawkeyes vs. Florida Gators",
-      "category": "sports",
-      "volume": 980029.8986169992,
-      "volume_24h": 980029.8986169997,
-      "uncertainty": 0.33,
-      "market": {
-        "question": "Iowa Hawkeyes vs. Florida Gators",
-        "outcomes": [
-          "Iowa Hawkeyes",
-          "Florida Gators"
-        ],
-        "prices": [
-          0.165,
-          0.835
-        ],
-        "probability": 0.835,
-        "volume": 896075.0881429992
-      },
-      "interestingness": 0.202
-    },
-    {
-      "title": "Will the Iranian regime fall by March 31?",
-      "category": "geopolitics",
-      "volume": 44086096.95749505,
-      "volume_24h": 1024977.7429030001,
-      "uncertainty": 0.037,
-      "market": {
-        "question": "Will the Iranian regime fall by March 31?",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.0185,
-          0.9815
-        ],
-        "probability": 0.0185,
-        "volume": 44086096.95749505
-      },
-      "interestingness": 0.199
-    },
-    {
-      "title": "Bucks vs. Suns",
-      "category": "sports",
-      "volume": 918227.0997369984,
-      "volume_24h": 889891.5979070002,
-      "uncertainty": 0.32,
-      "market": {
-        "question": "Bucks vs. Suns",
-        "outcomes": [
-          "Bucks",
-          "Suns"
-        ],
-        "prices": [
-          0.16,
-          0.84
-        ],
-        "probability": 0.84,
-        "volume": 510996.40395999834
-      },
-      "interestingness": 0.196
-    },
-    {
-      "title": "High Point Panthers vs. Arkansas Razorbacks",
-      "category": "sports",
-      "volume": 1325727.1188940003,
-      "volume_24h": 1039718.5453559997,
-      "uncertainty": 0.29,
-      "market": {
-        "question": "High Point Panthers vs. Arkansas Razorbacks",
-        "outcomes": [
-          "High Point Panthers",
-          "Arkansas Razorbacks"
-        ],
-        "prices": [
-          0.145,
-          0.855
-        ],
-        "probability": 0.855,
-        "volume": 960828.7830140004
-      },
-      "interestingness": 0.179
-    },
-    {
-      "title": "Will China invade Taiwan by end of 2026?",
-      "category": "geopolitics",
-      "volume": 12516420.061107984,
-      "volume_24h": 558296.2264850001,
-      "uncertainty": 0.214,
-      "market": {
-        "question": "Will China invade Taiwan by end of 2026?",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.107,
-          0.893
-        ],
-        "probability": 0.107,
-        "volume": 12516420.061107984
-      },
-      "interestingness": 0.178
-    },
-    {
-      "title": "Will the Iranian regime fall by April 30?",
-      "category": "geopolitics",
-      "volume": 8556780.203112952,
-      "volume_24h": 471358.6727460003,
-      "uncertainty": 0.23,
-      "market": {
-        "question": "Will the Iranian regime fall by April 30?",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.115,
-          0.885
-        ],
-        "probability": 0.115,
-        "volume": 8556780.203112952
-      },
-      "interestingness": 0.172
-    },
-    {
-      "title": "F1 Drivers' Champion",
-      "category": "sports",
-      "volume": 40212709.13673194,
-      "volume_24h": 2357113.1756740003,
-      "uncertainty": 0.009,
-      "market": {
-        "question": "Will Valtteri Bottas be the 2026 F1 Drivers' Champion?",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.0045,
-          0.9955
-        ],
-        "probability": 0.0045,
-        "volume": 3136128.0284689856
-      },
-      "interestingness": 0.166
-    },
-    {
-      "title": "Kharg Island no longer under Iranian control by...?",
-      "category": "geopolitics",
-      "volume": 3303602.9019309958,
-      "volume_24h": 487198.1997239999,
-      "uncertainty": 0.25,
-      "market": {
-        "question": "Kharg Island no longer under Iranian control by March 31?",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.125,
-          0.875
-        ],
-        "probability": 0.125,
-        "volume": 2836037.553940981
-      },
-      "interestingness": 0.163
-    },
-    {
-      "title": "Next Prime Minister of Hungary",
-      "category": "politics",
-      "volume": 33963773.09244299,
-      "volume_24h": 458690.51504,
+      "volume": 59529453.44148384,
+      "volume_24h": 3984969.6710799993,
       "uncertainty": 0.021,
       "market": {
-        "question": "Will the next Prime Minister of Hungary be L\u00e1szl\u00f3 Toroczkai?",
+        "question": "Netanyahu out by March 31?",
         "outcomes": [
           "Yes",
           "No"
@@ -743,114 +785,72 @@
           0.9895
         ],
         "probability": 0.0105,
-        "volume": 11083630.11644506
+        "volume": 56127053.67666684
       },
-      "interestingness": 0.148
+      "interestingness": 0.251
     },
     {
-      "title": "2026 NCAA Tournament Winner",
+      "title": "FC Barcelona vs. Rayo Vallecano de Madrid",
       "category": "sports",
-      "volume": 21653005.472547967,
-      "volume_24h": 2910148.9154330003,
-      "uncertainty": 0.08,
+      "volume": 1092866.6725189856,
+      "volume_24h": 910292.6532350014,
+      "uncertainty": 0.41,
       "market": {
-        "question": "Will Iowa State win the 2026 NCAA Tournament?",
+        "question": "Will FC Barcelona win on 2026-03-22?",
         "outcomes": [
           "Yes",
           "No"
         ],
         "prices": [
-          0.04,
-          0.96
+          0.795,
+          0.205
         ],
-        "probability": 0.04,
-        "volume": 1784413.3816769945
+        "probability": 0.795,
+        "volume": 1027984.8359969854
       },
-      "interestingness": 0.135
+      "interestingness": 0.25
     },
     {
-      "title": "What price will Bitcoin hit on March 21?",
-      "category": "crypto",
-      "volume": 798086.922652,
-      "volume_24h": 798086.922652,
-      "uncertainty": 0.205,
+      "title": "US x Iran ceasefire by...?",
+      "category": "geopolitics",
+      "volume": 29064829.33656707,
+      "volume_24h": 3206343.57794,
+      "uncertainty": 0.19,
       "market": {
-        "question": "Will Bitcoin dip to $68,000 on March 21?",
+        "question": "US x Iran ceasefire by March 31?",
         "outcomes": [
           "Yes",
           "No"
         ],
         "prices": [
-          0.1025,
-          0.8975
+          0.095,
+          0.905
         ],
-        "probability": 0.1025,
-        "volume": 107259.15265199995
+        "probability": 0.095,
+        "volume": 16567043.030718094
       },
-      "interestingness": 0.126
+      "interestingness": 0.23
     },
     {
-      "title": "Fed decision in April?",
-      "category": "economy",
-      "volume": 18071159.663858682,
-      "volume_24h": 2000241.4779859968,
-      "uncertainty": 0.072,
-      "market": {
-        "question": "Will the Fed increase interest rates by 25+ bps after the April 2026 meeting?",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.036,
-          0.964
-        ],
-        "probability": 0.036,
-        "volume": 4889745.003527009
-      },
-      "interestingness": 0.115
-    },
-    {
-      "title": "Elon Musk musk # tweets in April 2026?",
+      "title": "Elon Musk # tweets March 21 - March 23, 2026?",
       "category": "culture",
-      "volume": 3609750.0373360002,
-      "volume_24h": 501388.966142,
-      "uncertainty": 0.151,
+      "volume": 1300573.6248649997,
+      "volume_24h": 967259.3312420001,
+      "uncertainty": 0.33,
       "market": {
-        "question": "Will Elon Musk post 1400-1439 tweets in April 2026?",
+        "question": "Will Elon Musk post 65-89 tweets from March 21 to March 23, 2026?",
         "outcomes": [
           "Yes",
           "No"
         ],
         "prices": [
-          0.0755,
-          0.9245
+          0.165,
+          0.835
         ],
-        "probability": 0.0755,
-        "volume": 324592.96386700013
+        "probability": 0.165,
+        "volume": 175831.38250799992
       },
-      "interestingness": 0.105
-    },
-    {
-      "title": "Which party will gain most seats in Russian Parliamentary Election?",
-      "category": "politics",
-      "volume": 3683051.9370610006,
-      "volume_24h": 490100.706284,
-      "uncertainty": 0.146,
-      "market": {
-        "question": "Will the Liberal Democratic Party of Russia (LDPR) gain the most seats in the next Russian parliamentary election?",
-        "outcomes": [
-          "Yes",
-          "No"
-        ],
-        "prices": [
-          0.073,
-          0.927
-        ],
-        "probability": 0.073,
-        "volume": 1460100.0438450002
-      },
-      "interestingness": 0.102
+      "interestingness": 0.203
     }
   ]
 }
