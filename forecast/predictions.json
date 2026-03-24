@@ -748,7 +748,7 @@
     "id": "2026-02-28-022",
     "date": "2026-02-28",
     "statement": "US-Iran negotiations (any format, any channel, any level) will resume by April 15, 2026.",
-    "confidence": 0.22,
+    "confidence": 0.55,
     "deadline": "2026-04-15",
     "category": "geopolitics",
     "reasoning": "Iran's FM Araghchi explicitly signaled willingness to talk within hours of the strikes: 'attacks should stop first and then there is a possibility to talk.' Oman has been the backchannel throughout 2025-26; that infrastructure still exists. The June 2025 precedent is instructive: even the Twelve-Day War ended in 12 days via a ceasefire brokered by Trump himself. International pressure (China's immediate ceasefire call, Gulf states now under Iranian missile fire) creates urgency. The US has historical precedent of conducting backchannel talks even during active military operations. Counter-arguments: Trump's stated regime change objective is formally incompatible with negotiations that leave the regime in place; Netanyahu's maximalist goals; Iranian domestic politics (accepting talks under fire looks like surrender). But 'any format, any channel' is a low bar \u2014 even an Oman-mediated humanitarian ceasefire discussion would count. 68%: the structural incentives for both sides to explore an off-ramp are strong, but the stated objectives on both sides are incompatible with the compromise that an off-ramp would require.",
@@ -782,6 +782,12 @@
         "from": 0.35,
         "to": 0.22,
         "note": "Further revision down. Succession vacuum: with Khamenei dead (now confirmed by US defense official), no one in Iran has the authority to authorize negotiations until a new Supreme Leader is chosen. The Assembly of Experts normally takes up to 2 months to convene. Under active bombing, they can't safely meet. The FM (Araghchi) can still talk but can't commit. April 15 is only 45 days away. That's tight even for a back-channel contact, let alone real negotiations. Residual: if ceasefire happens in week 1-2, off-ramp talks become possible."
+      },
+      {
+        "date": "2026-03-24",
+        "old_confidence": 0.22,
+        "new_confidence": 0.55,
+        "reason": "Mediated contact confirmed and operational. Witkoff/Kushner in contact with Ghalibaf (former IRGC general, parliament speaker). Iran FM official confirmed receiving US points through mediators and reviewing them. The prediction requires \"any format, any channel\" \u2014 this channel is active. Revised from 22% to 55%."
       }
     ]
   },
@@ -1171,7 +1177,7 @@
     "id": "2026-03-03-034",
     "date": "2026-03-03",
     "statement": "A formal ceasefire or public de-escalation agreement between the US-Israel coalition and Iran will be announced before March 31, 2026.",
-    "confidence": 0.22,
+    "confidence": 0.32,
     "deadline": "2026-03-31",
     "category": "geopolitics",
     "reasoning": "No public communication channel between the US and Iran is known. Iran retaliated immediately after the Feb 28 strike (missiles to Israel, strikes on US bases), suggesting they have not chosen de-escalation. The War Powers 60-day clock (expires April 28) creates long-term pressure to wind down, but formal agreements require diplomacy infrastructure that was largely severed. Backchannel communication through Oman or Qatar is possible but historically slow. 22% reflects: ceasefire is plausible if Trump sees political benefit from a \"deal\", but the stated goals (destroying nuclear program, signaling deterrence) were achieved in the strike itself, reducing urgency for a formal agreement.",
@@ -1188,7 +1194,14 @@
     "resolved_date": null,
     "outcome": null,
     "resolution_note": null,
-    "revision_history": [],
+    "revision_history": [
+      {
+        "date": "2026-03-24",
+        "old_confidence": 0.22,
+        "new_confidence": 0.32,
+        "reason": "Active review of US points underway through mediated channel. IRGC-adjacent interlocutor (Ghalibaf) confirms US offer has reached military-institutional level. Face-saving formula on both sides already constructed. Seven days to deadline is short; formal announcement before March 31 requires near-term counter-offer and Trump extension of pause. Revised from 22% to 32%."
+      }
+    ],
     "notes": "Resolves true if any credible official announcement of ceasefire, formal de-escalation agreement, or mutual withdrawal of active hostilities before March 31. Informal reductions in tempo do not count."
   },
   {
@@ -4004,7 +4017,7 @@
     "id": "2026-03-11-120",
     "date": "2026-03-11",
     "title": "Gold falls >5% in 5 days post-Nowruz address",
-    "confidence": 0.4,
+    "confidence": 0.55,
     "deadline": "2026-03-27",
     "status": "open",
     "category": "markets",
@@ -4031,6 +4044,12 @@
         "old_confidence": 0.65,
         "new_confidence": 0.4,
         "reason": "Gold at $4,575 (March 21 08:30 UTC). March 19 close approximately $4,612. Need $4,381 by March 27 \u2014 additional 4.2% drop required. Iraq force majeure and Kuwait refinery strikes create upward commodity pressure. V2=TRUE de-escalation signal partially priced. Supply disruptions limit war-premium deflation pace. Was 65%."
+      },
+      {
+        "date": "2026-03-24",
+        "old_confidence": 0.4,
+        "new_confidence": 0.55,
+        "reason": "Gold ,407 vs threshold ,381 (5% below ~,612 March 19 close). Gap: $26 / 0.6%. Two trading days remaining. Deal probability being priced into commodities broadly. Revised from 40% to 55%."
       }
     ],
     "statement": "Gold falls more than 5% from its March 19 close in the first five trading days following the Nowruz address (by March 27, 2026). Conditional on prediction #081 (Mojtaba delivers the Nowruz address)."
@@ -4410,7 +4429,7 @@
   {
     "id": "2026-03-14-132",
     "statement": "Brent crude closes within $5 of its March 21, 2026 closing price on March 27, 2026",
-    "confidence": 0.45,
+    "confidence": 0.25,
     "deadline": "2026-03-27",
     "context_at_prediction": "Day 38 Sunday. Brent $98.91. 5 days to Nowruz. After founding speech resolves political uncertainty (March 20), market enters pure duration regime. No new duration data expected in first post-founding week. Recognition cascade (old framework) completes 24-48h post-speech. No back-channel signals, no War Powers deadline until April 28. Typical weekly drift at current regime: $1-2. $5 range captures no-major-event scenario. Outside range requires credible normalization OR new escalation \u2014 both low-probability in first post-founding week.",
     "tags": [
@@ -4427,6 +4446,12 @@
         "old_confidence": 0.7,
         "new_confidence": 0.45,
         "reason": "Brent dropped to $99.94 on March 23 following Trump 5-day pause announcement. March 21 close was $103.78; band is $98.78-$108.78. Current price ~$101.10 is inside the band. But high volatility: 5-day pause expires March 28 (one day after deadline). If no deal, Trump may re-escalate before March 27, pushing prices outside band. If talks appear productive, prices may stabilize in band. Downgraded from 70%\u219245%."
+      },
+      {
+        "date": "2026-03-24",
+        "old_confidence": 0.45,
+        "new_confidence": 0.25,
+        "reason": "Brent .42, below lower band bound of .78. Already outside the  window. Three days to March 27 deadline. Return to band requires re-escalation signal; against current deal-pricing trajectory. Revised from 45% to 25%."
       }
     ]
   },
