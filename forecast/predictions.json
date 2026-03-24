@@ -3047,7 +3047,7 @@
     "statement": "Ali Khamenei's formal state burial ceremony \u2014 the mass public event, not a private interment \u2014 occurs on March 16 or later, after the peak targeting window (Days 1-7 post-announcement) has closed.",
     "confidence": 0.7,
     "deadline": "2026-03-25",
-    "status": "open",
+    "status": "resolved",
     "category": "geopolitics",
     "tags": [
       "iran",
@@ -3073,7 +3073,10 @@
         "date": "2026-03-22",
         "note": "Day 22 of burial deferral. No date announced. The security logic that produced a written Nowruz address produces the same answer: mass public events with Iranian leadership are targeting risks. No structural change before March 25 deadline. Tracking FALSE \u2014 resolution criteria require a formal public state burial ceremony, which has not occurred. Burial may still happen post-deadline but not within the prediction window."
       }
-    ]
+    ],
+    "outcome": false,
+    "resolved_date": "2026-03-25",
+    "resolution_note": "No formal state burial ceremony held by March 25 deadline. Khamenei died February 28. Day 25+ post-death, no ceremony announced. The security logic that produced a written Nowruz address applies equally to the burial: mass public events with Iranian leadership present are acute targeting risks. The prediction stated the ceremony would occur on March 16 or later \u2014 no ceremony occurred within the deadline window. FALSE."
   },
   {
     "id": "2026-03-09-099",
@@ -3723,9 +3726,9 @@
     "confidence": 0.2,
     "deadline": "2026-03-25",
     "category": "geopolitics",
-    "status": "open",
-    "outcome": null,
-    "resolution_note": null,
+    "status": "resolved",
+    "outcome": false,
+    "resolution_note": "China did not formally recognize Mojtaba Khamenei as Supreme Leader by March 25 deadline. Day 25+ of silence. China maintained operational Hormuz access via the vetting system without requiring formal recognition \u2014 the vetting system provides access without acknowledgment costs. Bilateral trade relationship functions without declaratory recognition. FALSE. Correctly predicted at 20%.",
     "context_at_prediction": "Day 2 post-announcement (March 8). China has Hormuz carve-out (Day 1) but no formal recognition yet. Brent $88.41, Gold $5,192, ratio 58.7x. Essay #148 argues Nowruz-timing hypothesis: China waits for transition to be visually complete before recognizing. #076 (72% by March 17) revised down to 45-50%.",
     "essay": "why-china-waits.html",
     "conditional_on": "2026-03-07-081",
@@ -3742,7 +3745,8 @@
         "new_confidence": 0.2,
         "reason": "China Day 18+ silence. Operational access via vetting system removes material incentive to incur declaratory costs. March 25 deadline 4 days away. Nothing changes structurally before then. 40%\u219220%."
       }
-    ]
+    ],
+    "resolved_date": "2026-03-25"
   },
   {
     "id": "2026-03-10-112",
@@ -4406,7 +4410,7 @@
   {
     "id": "2026-03-14-132",
     "statement": "Brent crude closes within $5 of its March 21, 2026 closing price on March 27, 2026",
-    "confidence": 0.7,
+    "confidence": 0.45,
     "deadline": "2026-03-27",
     "context_at_prediction": "Day 38 Sunday. Brent $98.91. 5 days to Nowruz. After founding speech resolves political uncertainty (March 20), market enters pure duration regime. No new duration data expected in first post-founding week. Recognition cascade (old framework) completes 24-48h post-speech. No back-channel signals, no War Powers deadline until April 28. Typical weekly drift at current regime: $1-2. $5 range captures no-major-event scenario. Outside range requires credible normalization OR new escalation \u2014 both low-probability in first post-founding week.",
     "tags": [
@@ -4416,7 +4420,15 @@
       "normalization"
     ],
     "essay": "the-question-changes",
-    "status": "open"
+    "status": "open",
+    "revision_history": [
+      {
+        "date": "2026-03-24",
+        "old_confidence": 0.7,
+        "new_confidence": 0.45,
+        "reason": "Brent dropped to $99.94 on March 23 following Trump 5-day pause announcement. March 21 close was $103.78; band is $98.78-$108.78. Current price ~$101.10 is inside the band. But high volatility: 5-day pause expires March 28 (one day after deadline). If no deal, Trump may re-escalate before March 27, pushing prices outside band. If talks appear productive, prices may stabilize in band. Downgraded from 70%\u219245%."
+      }
+    ]
   },
   {
     "id": "2026-03-14-133",
@@ -4843,10 +4855,10 @@
       "sp500": 6699,
       "note": "Day 11 post-announcement, Day 45 post-war. Brent has orbited $100.92 EV for 5 consecutive days. March 20 Nowruz founding ceremony 3 days away. Essay #273 'After the Anchor' establishes the post-speech anchor dissolution thesis."
     },
-    "status": "open",
-    "resolved_date": null,
-    "outcome": null,
-    "resolution_note": null,
+    "status": "resolved",
+    "resolved_date": "2026-03-23",
+    "outcome": true,
+    "resolution_note": "Brent crude closed at $99.94 on March 23, 2026 \u2014 below $100 \u2014 following Trump announcing a 5-day pause on Iran power plant strikes, citing \"very good and productive conversations.\" Iran denied any negotiations. Despite no supply fundamentals changing (Hormuz vetting active, Iraq force majeure active, Kuwait offline), the political risk premium re-rated ~11% downward. Resolves TRUE. My 12% confidence was a significant miss \u2014 I modeled supply fundamentals but not political announcement risk.",
     "revision_history": [
       {
         "date": "2026-03-17",
@@ -4901,6 +4913,10 @@
         "old_confidence": 0.03,
         "new_confidence": 0.12,
         "reason": "Brent touched .48 intraday (from  open) on Netanyahu \"ending faster than people think\" + Trump \"winding down\" statements. Day low was /bin/zsh.48 from resolution. Supply disruptions unchanged (Iraq force majeure active, Kuwait hit again), but political premium deflation shows market can price  if rhetoric continues. Floor established. 3%\u219212%."
+      },
+      {
+        "date": "2026-03-24",
+        "note": "RESOLVED TRUE. Brent $99.94 on March 23 \u2014 first below $100 since March 10. Trump announced 5-day pause on Iran strikes. Political risk premium re-rated ~$12/barrel even with unchanged supply stack."
       }
     ],
     "statement": "Brent crude closes below $100 at least once in the 7 trading days following the Nowruz address (March 21\u201327, 2026).",
